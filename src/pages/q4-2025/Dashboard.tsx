@@ -1,13 +1,14 @@
-import { Lightbulb, Target, CalendarCheck, TrendingUp } from "lucide-react";
+import { Lightbulb, Target, CalendarCheck, TrendingUp, Compass, Star } from "lucide-react";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { InitiativeCard } from "@/components/dashboard/InitiativeCard";
 import { OKRCard } from "@/components/dashboard/OKRCard";
 import { initiativesQ42025, okrsQ42025, krDetailsQ42025 } from "@/data/q4-2025";
 import { strategyInfo } from "@/data/initiatives";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function DashboardQ42025() {
-  const inProgressCount = initiativesQ42025.filter((i) => i.status === "in-progress").length;
-  const backlogCount = initiativesQ42025.filter((i) => i.status === "backlog").length;
+  const notDoneCount = initiativesQ42025.filter((i) => i.status !== "done").length;
+  const doneCount = initiativesQ42025.filter((i) => i.status === "done").length;
 
   return (
     <div className="space-y-8">
@@ -16,29 +17,46 @@ export default function DashboardQ42025() {
         <p className="text-muted-foreground">Vista general del roadmap TMD Mobile Q4 2025</p>
       </div>
 
-      {/* Strategy & North Star (se mantiene la actual) */}
-      <div className="rounded-xl border bg-card p-4">
-        <div className="grid gap-2">
-          <div>
-            <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Estrategia</div>
+      {/* Strategy & North Star */}
+      <div className="grid gap-4 md:grid-cols-2">
+        <Card className="border-0 bg-gradient-to-br from-primary/5 to-primary/10 shadow-sm">
+          <CardHeader className="pb-2">
+            <div className="flex items-center gap-2">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+                <Compass className="h-4 w-4 text-primary" />
+              </div>
+              <CardTitle className="text-sm font-semibold text-primary">Estrategia</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent>
             <p className="text-sm text-foreground/80 leading-relaxed">{strategyInfo.strategy}</p>
-          </div>
-          <div>
-            <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">North Star Metric</div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-0 bg-gradient-to-br from-[hsl(var(--alegra-orange))]/5 to-[hsl(var(--alegra-orange))]/10 shadow-sm">
+          <CardHeader className="pb-2">
+            <div className="flex items-center gap-2">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[hsl(var(--alegra-orange))]/10">
+                <Star className="h-4 w-4 text-[hsl(var(--alegra-orange))]" />
+              </div>
+              <CardTitle className="text-sm font-semibold text-[hsl(var(--alegra-orange))]">North Star Metric</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent>
             <p className="text-sm text-foreground/80 leading-relaxed">{strategyInfo.northStarMetric}</p>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard title="Iniciativas Totales" value={initiativesQ42025.length} subtitle="Q4 2025" icon={Lightbulb} />
         <StatCard
-          title="En Progreso"
-          value={inProgressCount}
-          subtitle="Activas ahora"
+          title="No terminadas"
+          value={notDoneCount}
+          subtitle="Pendientes"
           icon={TrendingUp}
         />
-        <StatCard title="En Backlog" value={backlogCount} subtitle="Por iniciar" icon={CalendarCheck} />
+        <StatCard title="Terminadas" value={doneCount} subtitle="Completadas" icon={CalendarCheck} />
         <StatCard title="OKRs" value={okrsQ42025.length} subtitle="Objetivos" icon={Target} />
       </div>
 
