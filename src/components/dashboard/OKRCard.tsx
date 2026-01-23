@@ -66,6 +66,23 @@ export function OKRCard({ okr }: OKRCardProps) {
                   Target: <span className="font-medium text-foreground">{kr.target}</span>
                 </span>
               </div>
+
+              {(kr.currentResult || kr.achievedIncrease) && (
+                <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
+                  {kr.currentResult && (
+                    <span className="text-muted-foreground">
+                      Resultado actual:{" "}
+                      <span className="font-medium text-foreground">{kr.currentResult}</span>
+                    </span>
+                  )}
+                  {kr.achievedIncrease && (
+                    <span className="text-muted-foreground">
+                      Incremento logrado:{" "}
+                      <span className="font-medium text-foreground">{kr.achievedIncrease}</span>
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
           );
         })}

@@ -12,9 +12,11 @@ import type { Initiative } from "@/data/initiatives";
 
 interface InitiativeCardProps {
   initiative: Initiative;
+  /** Optional map to show full KR text in the expanded modal (key: KR id like "KR 2.1") */
+  krDetails?: Record<string, string>;
 }
 
-export function InitiativeCard({ initiative }: InitiativeCardProps) {
+export function InitiativeCard({ initiative, krDetails }: InitiativeCardProps) {
   const [isOpen, setIsOpen] = useState(false);
   const isExperience = initiative.objectiveTag === "experience";
 
@@ -152,16 +154,21 @@ export function InitiativeCard({ initiative }: InitiativeCardProps) {
               <h4 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                 Key Results Relacionados
               </h4>
-              <div className="flex flex-wrap gap-2">
+              <div className="space-y-2">
                 {initiative.keyResults.map((kr, index) => (
-                  <Badge
-                    key={index}
-                    variant="secondary"
-                    className="bg-primary/10 text-primary"
-                  >
-                    <Target className="h-3 w-3 mr-1" />
-                    {kr}
-                  </Badge>
+                  <div key={index} className="rounded-lg border bg-background p-3">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Badge variant="secondary" className="bg-primary/10 text-primary">
+                        <Target className="h-3 w-3 mr-1" />
+                        {kr}
+                      </Badge>
+                    </div>
+                    {krDetails?.[kr] && (
+                      <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                        {krDetails[kr]}
+                      </p>
+                    )}
+                  </div>
                 ))}
               </div>
             </div>
