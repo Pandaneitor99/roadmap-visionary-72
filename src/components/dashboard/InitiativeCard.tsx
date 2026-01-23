@@ -20,6 +20,13 @@ export function InitiativeCard({ initiative, krDetails }: InitiativeCardProps) {
   const [isOpen, setIsOpen] = useState(false);
   const isExperience = initiative.objectiveTag === "experience";
 
+  const statusLabel =
+    initiative.status === "in-progress"
+      ? "In Progress"
+      : initiative.status === "done"
+        ? "Done"
+        : "Backlog";
+
   return (
     <>
       <Card 
@@ -44,7 +51,7 @@ export function InitiativeCard({ initiative, krDetails }: InitiativeCardProps) {
                   : ""
               }
             >
-              {initiative.status === "in-progress" ? "In Progress" : "Backlog"}
+              {statusLabel}
             </Badge>
           </div>
           <Badge
@@ -107,7 +114,7 @@ export function InitiativeCard({ initiative, krDetails }: InitiativeCardProps) {
                         : ""
                     }
                   >
-                    {initiative.status === "in-progress" ? "In Progress" : "Backlog"}
+                    {statusLabel}
                   </Badge>
                   <Badge
                     variant="outline"

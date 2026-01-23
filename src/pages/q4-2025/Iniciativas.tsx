@@ -3,8 +3,8 @@ import { initiativesQ42025, krDetailsQ42025 } from "@/data/q4-2025";
 import { Badge } from "@/components/ui/badge";
 
 export default function IniciativasQ42025() {
-  const inProgressInitiatives = initiativesQ42025.filter((i) => i.status === "in-progress");
-  const backlogInitiatives = initiativesQ42025.filter((i) => i.status === "backlog");
+  const notDoneInitiatives = initiativesQ42025.filter((i) => i.status !== "done");
+  const doneInitiatives = initiativesQ42025.filter((i) => i.status === "done");
 
   return (
     <div className="space-y-8">
@@ -16,11 +16,11 @@ export default function IniciativasQ42025() {
 
       <div>
         <div className="flex items-center gap-2 mb-4">
-          <Badge className="bg-success text-success-foreground">In Progress</Badge>
-          <span className="text-sm text-muted-foreground">({inProgressInitiatives.length})</span>
+          <Badge className="bg-success text-success-foreground">No terminadas</Badge>
+          <span className="text-sm text-muted-foreground">({notDoneInitiatives.length})</span>
         </div>
         <div className="grid gap-6 md:grid-cols-2">
-          {inProgressInitiatives.map((initiative) => (
+          {notDoneInitiatives.map((initiative) => (
             <InitiativeCard key={initiative.id} initiative={initiative} krDetails={krDetailsQ42025} />
           ))}
         </div>
@@ -28,11 +28,11 @@ export default function IniciativasQ42025() {
 
       <div>
         <div className="flex items-center gap-2 mb-4">
-          <Badge variant="secondary">Backlog</Badge>
-          <span className="text-sm text-muted-foreground">({backlogInitiatives.length})</span>
+          <Badge variant="secondary">Terminadas</Badge>
+          <span className="text-sm text-muted-foreground">({doneInitiatives.length})</span>
         </div>
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {backlogInitiatives.map((initiative) => (
+          {doneInitiatives.map((initiative) => (
             <InitiativeCard key={initiative.id} initiative={initiative} krDetails={krDetailsQ42025} />
           ))}
         </div>

@@ -25,6 +25,13 @@ export function RoadmapGanttQ42025() {
   const items = roadmapQ42025.items as RoadmapItem[];
   const getInitiative = (id?: string) => initiativesQ42025.find((i) => i.id === id);
 
+  const rows = initiativesQ42025
+    .map((initiative) => ({
+      initiative,
+      items: items.filter((it) => it.initiativeId === initiative.id),
+    }))
+    .filter((row) => row.items.length > 0);
+
   const getItemColor = (item: RoadmapItem) => {
     if (item.objectiveTag === "experience") return "bg-[hsl(var(--badge-experience))]";
     return "bg-[hsl(var(--badge-adoption))]";
@@ -64,12 +71,15 @@ export function RoadmapGanttQ42025() {
           </div>
 
           <div className="space-y-2">
-            <RoadmapRow
-              label="Roadmap"
-              items={items}
-              onItemClick={handleItemClick}
-              getItemColor={getItemColor}
-            />
+            {rows.map((row) => (
+              <RoadmapRow
+                key={row.initiative.id}
+                label={row.initiative.title}
+                items={row.items}
+                onItemClick={handleItemClick}
+                getItemColor={getItemColor}
+              />
+            ))}
           </div>
 
           <div className="mt-6 flex flex-wrap items-center gap-4 border-t pt-4">
@@ -102,7 +112,11 @@ export function RoadmapGanttQ42025() {
                     {selectedInitiative.objectiveTag === "experience" ? "Experiencia" : "Adopción"}
                   </Badge>
                   <Badge variant={selectedInitiative.status === "in-progress" ? "default" : "secondary"}>
-                    {selectedInitiative.status === "in-progress" ? "En Progreso" : "Backlog"}
+                    {selectedInitiative.status === "in-progress"
+                      ? "En Progreso"
+                      : selectedInitiative.status === "done"
+                        ? "Done"
+                        : "Backlog"}
                   </Badge>
                 </div>
                 <DialogTitle className="text-xl">{selectedInitiative.title}</DialogTitle>

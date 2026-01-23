@@ -7,7 +7,7 @@ export const strategyInfo = {
 export interface Initiative {
   id: string;
   title: string;
-  status: "in-progress" | "backlog";
+  status: "in-progress" | "backlog" | "done";
   date: string;
   objectiveTag: "experience" | "adoption";
   objectiveText: string;

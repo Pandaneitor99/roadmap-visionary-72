@@ -10,6 +10,17 @@ interface OKRCardProps {
 export function OKRCard({ okr }: OKRCardProps) {
   const isExperience = okr.type === "experience";
 
+  const parsePercent = (value?: string) => {
+    if (!value) return null;
+    const cleaned = value
+      .toString()
+      .replace(/,/g, "")
+      .replace(/%/g, "")
+      .trim();
+    const num = Number.parseFloat(cleaned);
+    return Number.isFinite(num) ? num : null;
+  };
+
   return (
     <Card className="border-0 bg-card shadow-sm">
       <CardHeader className="pb-4">
@@ -40,7 +51,11 @@ export function OKRCard({ okr }: OKRCardProps) {
       </CardHeader>
       <CardContent className="space-y-4">
         {okr.keyResults.map((kr) => {
-          const isNegative = kr.percentage.startsWith("-");
+          const valueForBadge = kr.achievedIncrease ?? kr.percentage;
+          const parsed = parsePercent(valueForBadge);
+          const isDecrease = parsed !== null ? parsed < 0 : false;
+          const isTbd = valueForBadge.toLowerCase?.().includes("tbd") ?? false;
+
           return (
             <div key={kr.id} className="rounded-lg bg-muted/50 p-3 space-y-2">
               <div className="flex items-start justify-between gap-2">
@@ -48,13 +63,19 @@ export function OKRCard({ okr }: OKRCardProps) {
                 <Badge 
                   variant="secondary" 
                   className={`text-xs ${
-                    isNegative 
-                      ? "bg-success/10 text-success" 
-                      : "bg-[hsl(var(--alegra-orange))]/10 text-[hsl(var(--alegra-orange))]"
+                    isTbd
+                      ? "bg-muted text-muted-foreground"
+                      : isDecrease
+                        ? "bg-[hsl(var(--alegra-orange))]/10 text-[hsl(var(--alegra-orange))]"
+                        : "bg-success/10 text-success"
                   }`}
                 >
-                  {isNegative ? <TrendingDown className="h-3 w-3 mr-1" /> : <TrendingUp className="h-3 w-3 mr-1" />}
-                  {kr.percentage}
+                  {isTbd ? null : isDecrease ? (
+                    <TrendingDown className="h-3 w-3 mr-1" />
+                  ) : (
+                    <TrendingUp className="h-3 w-3 mr-1" />
+                  )}
+                  {valueForBadge}
                 </Badge>
               </div>
               <p className="text-xs text-muted-foreground">{kr.name}</p>

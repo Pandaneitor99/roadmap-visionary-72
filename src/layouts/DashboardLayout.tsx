@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/dashboard/AppSidebar";
 import { Menu } from "lucide-react";
+import alegraLogo from "@/assets/alegra-logo.png";
 
 export default function DashboardLayout() {
   return (
@@ -14,6 +15,13 @@ export default function DashboardLayout() {
               <Menu className="h-5 w-5" />
             </SidebarTrigger>
             <div className="flex-1" />
+            <img
+              src={alegraLogo}
+              alt="Alegra"
+              className="h-6 w-auto select-none"
+              loading="eager"
+              draggable={false}
+            />
           </header>
           <div className="p-6">
             <Outlet />

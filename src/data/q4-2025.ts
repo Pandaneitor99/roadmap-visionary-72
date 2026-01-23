@@ -96,7 +96,7 @@ export const initiativesQ42025: Initiative[] = [
   {
     id: "q4-2",
     title: "Onboarding",
-    status: "backlog",
+    status: "done",
     date: "Q4 2025",
     objectiveTag: "adoption",
     objectiveText:
@@ -114,7 +114,7 @@ export const initiativesQ42025: Initiative[] = [
   {
     id: "q4-3",
     title: "Calificación Google Play Store",
-    status: "backlog",
+    status: "done",
     date: "Q4 2025",
     objectiveTag: "experience",
     objectiveText:
@@ -132,7 +132,7 @@ export const initiativesQ42025: Initiative[] = [
   {
     id: "q4-4",
     title: "Sentry",
-    status: "backlog",
+    status: "done",
     date: "Q4 2025",
     objectiveTag: "experience",
     objectiveText:
@@ -150,7 +150,7 @@ export const initiativesQ42025: Initiative[] = [
   {
     id: "q4-5",
     title: "Home",
-    status: "backlog",
+    status: "done",
     date: "Q4 2025",
     objectiveTag: "experience",
     objectiveText:
