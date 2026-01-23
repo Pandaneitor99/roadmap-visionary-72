@@ -25,12 +25,22 @@ const q1MenuItems = [
   { title: "Roadmap", url: "/roadmap", icon: CalendarDays },
 ];
 
+const q4MenuItems = [
+  { title: "Dashboard", url: "/q4-2025", icon: LayoutDashboard },
+  { title: "OKRs", url: "/q4-2025/okrs", icon: Target },
+  { title: "Iniciativas", url: "/q4-2025/iniciativas", icon: Lightbulb },
+  { title: "Roadmap", url: "/q4-2025/roadmap", icon: CalendarDays },
+];
+
 export function AppSidebar() {
   const location = useLocation();
   const isQ1Route = q1MenuItems.some(item => 
     item.url === "/" ? location.pathname === "/" : location.pathname.startsWith(item.url)
   );
-  const [isOpen, setIsOpen] = useState(isQ1Route);
+  const isQ4Route = location.pathname.startsWith("/q4-2025");
+
+  const [isOpenQ1, setIsOpenQ1] = useState(isQ1Route);
+  const [isOpenQ4, setIsOpenQ4] = useState(isQ4Route);
 
   return (
     <Sidebar className="border-r-0">
@@ -47,12 +57,12 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+          <Collapsible open={isOpenQ1} onOpenChange={setIsOpenQ1}>
             <CollapsibleTrigger className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-sidebar-foreground/80 transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground">
               <FolderOpen className="h-5 w-5 text-alegra-orange" />
               <span className="flex-1 text-left">Q1 2026</span>
               <ChevronDown 
-                className={`h-4 w-4 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} 
+                className={`h-4 w-4 transition-transform duration-200 ${isOpenQ1 ? "rotate-180" : ""}`} 
               />
             </CollapsibleTrigger>
             <CollapsibleContent className="ml-4 mt-1 border-l border-sidebar-border pl-2">
@@ -64,6 +74,39 @@ export function AppSidebar() {
                         <NavLink
                           to={item.url}
                           end={item.url === "/"}
+                          className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sidebar-foreground/80 transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground"
+                          activeClassName="bg-sidebar-accent text-sidebar-primary font-medium"
+                        >
+                          <item.icon className="h-5 w-5" />
+                          <span>{item.title}</span>
+                        </NavLink>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </CollapsibleContent>
+          </Collapsible>
+
+          <div className="mt-2" />
+
+          <Collapsible open={isOpenQ4} onOpenChange={setIsOpenQ4}>
+            <CollapsibleTrigger className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-sidebar-foreground/80 transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground">
+              <FolderOpen className="h-5 w-5 text-alegra-orange" />
+              <span className="flex-1 text-left">Q4 2025</span>
+              <ChevronDown
+                className={`h-4 w-4 transition-transform duration-200 ${isOpenQ4 ? "rotate-180" : ""}`}
+              />
+            </CollapsibleTrigger>
+            <CollapsibleContent className="ml-4 mt-1 border-l border-sidebar-border pl-2">
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {q4MenuItems.map((item) => (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton asChild>
+                        <NavLink
+                          to={item.url}
+                          end={item.url === "/q4-2025"}
                           className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sidebar-foreground/80 transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground"
                           activeClassName="bg-sidebar-accent text-sidebar-primary font-medium"
                         >

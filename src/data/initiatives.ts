@@ -114,6 +114,10 @@ export interface OKR {
     baseline: string;
     target: string;
     percentage: string;
+    /** Optional (used e.g. in Q4 2025) */
+    currentResult?: string;
+    /** Optional (used e.g. in Q4 2025) */
+    achievedIncrease?: string;
   }[];
 }
 
