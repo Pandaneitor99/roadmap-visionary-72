@@ -16,7 +16,7 @@ export default function IniciativasQ42025() {
 
       <div>
         <div className="flex items-center gap-2 mb-4">
-          <Badge className="bg-success text-success-foreground">No terminadas</Badge>
+          <Badge variant="outline" className="border-amber-500 text-amber-600">No terminadas</Badge>
           <span className="text-sm text-muted-foreground">({notDoneInitiatives.length})</span>
         </div>
         <div className="grid gap-6 md:grid-cols-2">
