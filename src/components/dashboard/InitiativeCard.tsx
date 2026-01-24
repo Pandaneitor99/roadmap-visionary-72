@@ -57,13 +57,26 @@ export function InitiativeCard({ initiative, krDetails }: InitiativeCardProps) {
           <Badge
             variant="outline"
             className={`w-fit ${
-              isExperience
-                ? "border-[hsl(var(--badge-experience))] text-[hsl(var(--badge-experience))]"
-                : "border-[hsl(var(--badge-adoption))] text-[hsl(var(--badge-adoption))]"
+              initiative.objectiveTag === "non-dev"
+                ? "border-amber-500 text-amber-600"
+                : isExperience
+                  ? "border-[hsl(var(--badge-experience))] text-[hsl(var(--badge-experience))]"
+                  : "border-[hsl(var(--badge-adoption))] text-[hsl(var(--badge-adoption))]"
             }`}
           >
-            {isExperience ? "Experiencia" : "Adopción"}
+            {initiative.objectiveTag === "non-dev" ? "No desarrollo" : isExperience ? "Experiencia" : "Adopción"}
           </Badge>
+          {initiative.exampleLink && (
+            <a 
+              href={initiative.exampleLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
+            >
+              Ver ejemplo <ExternalLink className="h-3 w-3" />
+            </a>
+          )}
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
@@ -119,12 +132,14 @@ export function InitiativeCard({ initiative, krDetails }: InitiativeCardProps) {
                   <Badge
                     variant="outline"
                     className={
-                      isExperience
-                        ? "border-[hsl(var(--badge-experience))] text-[hsl(var(--badge-experience))]"
-                        : "border-[hsl(var(--badge-adoption))] text-[hsl(var(--badge-adoption))]"
+                      initiative.objectiveTag === "non-dev"
+                        ? "border-amber-500 text-amber-600"
+                        : isExperience
+                          ? "border-[hsl(var(--badge-experience))] text-[hsl(var(--badge-experience))]"
+                          : "border-[hsl(var(--badge-adoption))] text-[hsl(var(--badge-adoption))]"
                     }
                   >
-                    {isExperience ? "Experiencia" : "Adopción"}
+                    {initiative.objectiveTag === "non-dev" ? "No desarrollo" : isExperience ? "Experiencia" : "Adopción"}
                   </Badge>
                 </div>
               </div>

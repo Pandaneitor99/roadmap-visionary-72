@@ -19,6 +19,7 @@ export interface Initiative {
   dependencies: string;
   sprintStart: number;
   sprintEnd: number;
+  exampleLink?: string;
 }
 
 export const initiatives: Initiative[] = [
@@ -121,7 +122,7 @@ export const initiatives: Initiative[] = [
     sprintStart: 0,
     sprintEnd: 0,
   },
-  {
+{
     id: "7",
     title: "Creación de la sección de App en Alegra",
     status: "not-started",
@@ -136,6 +137,7 @@ export const initiatives: Initiative[] = [
     dependencies: "-",
     sprintStart: 0,
     sprintEnd: 0,
+    exampleLink: "https://linear.app/mobile",
   },
   {
     id: "8",
@@ -218,14 +220,14 @@ export const initiatives: Initiative[] = [
     sprintStart: 0,
     sprintEnd: 0,
   },
-  {
+{
     id: "13",
     title: "Adición de items",
     status: "backlog",
     date: "-",
     objectiveTag: "adoption",
     objectiveText: "Objetivo 2: Incrementar la adopción y uso recurrente de la app móvil",
-    problem: "Funcionalidad de items limitada en la app.",
+    problem: "La adición de items en factura de venta, cotizaciones y remisiones es un flujo largo y poco intuitivo que causa fricción a los usuarios.",
     hypothesis: "Si mejoramos la adición de items, aumentaremos su uso.",
     keyResults: ["KR 2.1"],
     kpis: ["Items agregados"],
@@ -387,3 +389,12 @@ export const okrs: OKR[] = [
     ],
   },
 ];
+
+export const krDetailsQ1: Record<string, string> = {
+  "KR 1.1": "Aumentar la calificación en Google Play de 4.7 a 4.9 (Base: 4.7, Target: 4.9, Incremento: 4.26%).",
+  "KR 1.2": "Aumentar la calificación en App Store de 4.3 a 4.7 (Base: 4.3, Target: 4.7, Incremento: 9.3%).",
+  "KR 1.3": "Reducir los errores críticos en producción detectados por Sentry y Amplitud en los flujos principales de 8671 a 1734 (Reducción: -85%).",
+  "KR 2.1": "Lograr que usuarios pagos que facturan en web instalen la app móvil y realicen una acción de valor desde la app (Base: 6459, Target: 8000, Incremento: 24%).",
+  "KR 2.2": "Alcanzar 30,000 facturas de venta semanales creadas desde la app móvil (Base: 23,813, Incremento: 26%).",
+  "KR 2.3": "Incrementar items creados semanales desde la app que luego son usados en facturas (Base: 3500, Target: 5000, Incremento: 42.86%).",
+};
