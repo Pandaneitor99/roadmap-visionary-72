@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { LayoutDashboard, Target, Lightbulb, CalendarDays, Smartphone, ChevronDown, FolderOpen } from "lucide-react";
+import { LayoutDashboard, Target, Lightbulb, CalendarDays, Smartphone, ChevronDown, FolderOpen, Trophy } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
 import {
@@ -30,6 +30,7 @@ const q4MenuItems = [
   { title: "OKRs", url: "/q4-2025/okrs", icon: Target },
   { title: "Iniciativas", url: "/q4-2025/iniciativas", icon: Lightbulb },
   { title: "Roadmap", url: "/q4-2025/roadmap", icon: CalendarDays },
+  { title: "Logros", url: "/q4-2025/logros", icon: Trophy },
 ];
 
 export function AppSidebar() {
