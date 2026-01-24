@@ -5,6 +5,7 @@ import googlePlayRating from "@/assets/google-play-rating.png";
 import prototipoQR from "@/assets/prototipo-qr.png";
 import onboardingScreen from "@/assets/onboarding-screen.png";
 import newHomeScreen from "@/assets/new-home-screen.png";
+import buyerPersona from "@/assets/buyer-persona.png";
 
 interface Achievement {
   id: string;
@@ -49,6 +50,8 @@ const achievements: Achievement[] = [
     title: "Investigación del Buyer Persona",
     description: "Investigación completa del buyer persona para entender mejor las necesidades y comportamientos de nuestros usuarios.",
     icon: <Users className="h-6 w-6 text-blue-500" />,
+    image: buyerPersona,
+    link: { url: "https://docs.google.com/document/d/1V8BTN6AVQC47QiM-FSLqCRQfVuDJg3K1huUVpUUF720/edit?tab=t.0", label: "Ver Documento" },
   },
   {
     id: "5",

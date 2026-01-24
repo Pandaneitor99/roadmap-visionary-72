@@ -49,9 +49,9 @@ const roadmapItems: RoadmapItem[] = [
   { id: "issues-3", title: "Issues", type: "issues", objectiveTag: "recurring", weekStart: 10, weekEnd: 10, initiativeId: "2" },
   
   // Estabilización - Mejoras generales
-  { id: "mejoras-1", title: "Mejoras Generales", type: "improvements", objectiveTag: "recurring", weekStart: 1, weekEnd: 1, initiativeId: "2" },
-  { id: "mejoras-2", title: "Mejoras Generales", type: "improvements", objectiveTag: "recurring", weekStart: 6, weekEnd: 6, initiativeId: "2" },
-  { id: "mejoras-3", title: "Mejoras Generales", type: "improvements", objectiveTag: "recurring", weekStart: 12, weekEnd: 12, initiativeId: "2" },
+  { id: "mejoras-1", title: "Mejoras Generales", type: "improvements", objectiveTag: "experience", weekStart: 1, weekEnd: 1, initiativeId: "2" },
+  { id: "mejoras-2", title: "Mejoras Generales", type: "improvements", objectiveTag: "experience", weekStart: 6, weekEnd: 6, initiativeId: "2" },
+  { id: "mejoras-3", title: "Mejoras Generales", type: "improvements", objectiveTag: "experience", weekStart: 12, weekEnd: 12, initiativeId: "2" },
 ];
 
 export function RoadmapGantt() {
@@ -61,7 +61,7 @@ export function RoadmapGantt() {
 
   const getItemColor = (item: RoadmapItem) => {
     if (item.type === "issues") return "bg-amber-500";
-    if (item.type === "improvements") return "bg-slate-400";
+    if (item.type === "improvements") return "bg-[hsl(var(--badge-experience))]";
     if (item.objectiveTag === "experience") return "bg-[hsl(var(--badge-experience))]";
     return "bg-[hsl(var(--badge-adoption))]";
   };
@@ -173,8 +173,8 @@ export function RoadmapGantt() {
               <span className="text-xs text-muted-foreground">Issues</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="h-3 w-3 rounded-full bg-slate-400" />
-              <span className="text-xs text-muted-foreground">Mejoras Generales</span>
+              <div className="h-3 w-3 rounded-full bg-[hsl(var(--badge-experience))]" />
+              <span className="text-xs text-muted-foreground">Mejoras Generales (Experiencia)</span>
             </div>
           </div>
         </div>
