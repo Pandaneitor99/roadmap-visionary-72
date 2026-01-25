@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/dashboard/AppSidebar";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Menu } from "lucide-react";
 import alegraLogo from "@/assets/alegra-logo.png";
 
@@ -24,6 +25,7 @@ export default function DashboardLayout() {
             />
           </header>
           <div className="p-6">
+            <Breadcrumbs />
             <Outlet />
           </div>
         </main>

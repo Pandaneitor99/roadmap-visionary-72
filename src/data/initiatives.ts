@@ -1,6 +1,6 @@
 // Strategy and North Star Metric
 export const strategyInfo = {
-  strategy: "Convertirse en el aliado de las pymes, extendiendo el poder de Alegra más allá del escritorio para facilitar la gestión administrativa y contable de forma simple, ágil e inmediata, desde cualquier lugar.",
+  strategy: "Convertirse en el complemento portátil del sistema Alegra, extendiendo el poder más allá del escritorio para facilitar la gestión administrativa y contable de forma simple, ágil e intuitivo, en cualquier momento y desde cualquier lugar",
   northStarMetric: "Usuarios activos que realizan acciones de valor dentro de la app (factura de venta, items, contactos, pagos, reportes etc)"
 };
 
@@ -370,7 +370,7 @@ export interface OKR {
 export const okrs: OKR[] = [
   {
     id: "obj-1",
-    objective: "Mejorar la experiencia del usuario en la app mejorando la estabilidad y reduciendo errores críticos que impactan a los usuarios activos este trimestre",
+    objective: "Reducir los errores críticos en los flujos clave de la app para garantizar una experiencia estable a los usuarios durante este trimestre.",
     type: "experience",
     keyResults: [
       { id: "kr-1.1", name: "Aumentar la calificación en Google Play", baseline: "4.7", target: "4.9", percentage: "4.26%" },
@@ -380,7 +380,7 @@ export const okrs: OKR[] = [
   },
   {
     id: "obj-2",
-    objective: "Incrementar la adopción y uso recurrente de la app móvil impulsando la creación de facturas durante el trimestre",
+    objective: "Impulsar la adopción de la app móvil mejorando el flujo de creación de facturas y de ítems para que los usuarios facturen de forma recurrente desde el móvil.",
     type: "adoption",
     keyResults: [
       { id: "kr-2.1", name: "Lograr que usuarios pagos que facturan en web instalen la app móvil y realicen una acción de valor desde la app durante el trimestre", baseline: "6459", target: "8000", percentage: "24%" },

@@ -13,6 +13,8 @@ interface Achievement {
   description: string;
   icon: React.ReactNode;
   image?: string;
+  leftImage?: string;
+  rightImage?: string;
   link?: { url: string; label: string };
   qrCode?: string;
   metrics?: { label: string; from: string; to: string }[];
@@ -35,8 +37,8 @@ const achievements: Achievement[] = [
     title: "Prototipo Low Code MVP",
     description: "Creación del prototipo Low Code como MVP para usuarios que utilizan facturación. Herramienta de prototipado y testeo de funcionalidades.",
     icon: <Rocket className="h-6 w-6 text-primary" />,
-    image: newHomeScreen,
-    qrCode: prototipoQR,
+    leftImage: newHomeScreen,
+    rightImage: prototipoQR,
     link: { url: "https://new-bank-proposal.vercel.app/", label: "Ver Prototipo" },
   },
   {
@@ -118,7 +120,28 @@ export default function LogrosQ42025() {
                 </div>
               )}
 
-              {achievement.qrCode && (
+              {/* Layout especial para prototipo: imagen izquierda, QR derecha */}
+              {achievement.leftImage && achievement.rightImage && (
+                <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
+                  <div className="flex-1 overflow-hidden rounded-md border">
+                    <img 
+                      src={achievement.leftImage} 
+                      alt={achievement.title}
+                      className="w-full h-32 object-contain"
+                    />
+                  </div>
+                  <div className="flex flex-col items-center gap-1">
+                    <img 
+                      src={achievement.rightImage} 
+                      alt="QR Code"
+                      className="w-20 h-20 object-contain"
+                    />
+                    <span className="text-[10px] text-muted-foreground text-center">Escanea QR</span>
+                  </div>
+                </div>
+              )}
+
+              {achievement.qrCode && !achievement.leftImage && (
                 <div className="flex items-center gap-4 p-3 rounded-lg bg-muted/50">
                   <img 
                     src={achievement.qrCode} 

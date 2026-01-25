@@ -5,17 +5,13 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Filter } from "lucide-react";
 
-type FilterType = "all" | "experience" | "adoption" | "non-dev";
 type StatusFilter = "all" | "in-progress" | "not-started" | "backlog";
 
 export default function Iniciativas() {
-  const [objectiveFilter, setObjectiveFilter] = useState<FilterType>("all");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
 
   const filteredInitiatives = initiatives.filter((i) => {
-    const matchesObjective = objectiveFilter === "all" || i.objectiveTag === objectiveFilter;
-    const matchesStatus = statusFilter === "all" || i.status === statusFilter;
-    return matchesObjective && matchesStatus;
+    return statusFilter === "all" || i.status === statusFilter;
   });
 
   const inProgressInitiatives = filteredInitiatives.filter(i => i.status === "in-progress");
@@ -36,87 +32,46 @@ export default function Iniciativas() {
         </p>
       </div>
 
-      {/* Filters */}
+      {/* Filters - Solo por estado */}
       <div className="flex flex-wrap items-center gap-4 p-4 rounded-lg bg-muted/50 border">
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Filter className="h-4 w-4" />
-          <span>Filtros:</span>
+          <span>Estado:</span>
         </div>
         
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-muted-foreground">Objetivo:</span>
-          <div className="flex flex-wrap gap-1">
-            <Button 
-              size="sm" 
-              variant={objectiveFilter === "all" ? "default" : "outline"}
-              onClick={() => setObjectiveFilter("all")}
-              className="h-7 text-xs"
-            >
-              Todos
-            </Button>
-            <Button 
-              size="sm" 
-              variant={objectiveFilter === "experience" ? "default" : "outline"}
-              onClick={() => setObjectiveFilter("experience")}
-              className="h-7 text-xs"
-            >
-              Experiencia
-            </Button>
-            <Button 
-              size="sm" 
-              variant={objectiveFilter === "adoption" ? "default" : "outline"}
-              onClick={() => setObjectiveFilter("adoption")}
-              className="h-7 text-xs"
-            >
-              Adopción
-            </Button>
-            <Button 
-              size="sm" 
-              variant={objectiveFilter === "non-dev" ? "default" : "outline"}
-              onClick={() => setObjectiveFilter("non-dev")}
-              className="h-7 text-xs"
-            >
-              No desarrollo
-            </Button>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-muted-foreground">Estado:</span>
-          <div className="flex flex-wrap gap-1">
-            <Button 
-              size="sm" 
-              variant={statusFilter === "all" ? "default" : "outline"}
-              onClick={() => setStatusFilter("all")}
-              className="h-7 text-xs"
-            >
-              Todos
-            </Button>
-            <Button 
-              size="sm" 
-              variant={statusFilter === "in-progress" ? "default" : "outline"}
-              onClick={() => setStatusFilter("in-progress")}
-              className="h-7 text-xs"
-            >
-              En Progreso
-            </Button>
-            <Button 
-              size="sm" 
-              variant={statusFilter === "not-started" ? "default" : "outline"}
-              onClick={() => setStatusFilter("not-started")}
-              className="h-7 text-xs"
-            >
-              Por iniciar
-            </Button>
-            <Button 
-              size="sm" 
-              variant={statusFilter === "backlog" ? "default" : "outline"}
-              onClick={() => setStatusFilter("backlog")}
-              className="h-7 text-xs"
-            >
-              Backlog
-            </Button>
-          </div>
+        <div className="flex flex-wrap gap-1">
+          <Button 
+            size="sm" 
+            variant={statusFilter === "all" ? "default" : "outline"}
+            onClick={() => setStatusFilter("all")}
+            className="h-7 text-xs"
+          >
+            Todos
+          </Button>
+          <Button 
+            size="sm" 
+            variant={statusFilter === "in-progress" ? "default" : "outline"}
+            onClick={() => setStatusFilter("in-progress")}
+            className="h-7 text-xs"
+          >
+            En Progreso
+          </Button>
+          <Button 
+            size="sm" 
+            variant={statusFilter === "not-started" ? "default" : "outline"}
+            onClick={() => setStatusFilter("not-started")}
+            className="h-7 text-xs"
+          >
+            Por iniciar
+          </Button>
+          <Button 
+            size="sm" 
+            variant={statusFilter === "backlog" ? "default" : "outline"}
+            onClick={() => setStatusFilter("backlog")}
+            className="h-7 text-xs"
+          >
+            Backlog
+          </Button>
         </div>
       </div>
 
@@ -139,7 +94,7 @@ export default function Iniciativas() {
       {devNotStartedInitiatives.length > 0 && (
         <div>
           <div className="flex items-center gap-2 mb-4">
-            <Badge variant="outline" className="border-primary text-primary">Por iniciar</Badge>
+            <Badge variant="outline" className="border-primary text-primary">Por iniciar desarrollo</Badge>
             <span className="text-sm text-muted-foreground">({devNotStartedInitiatives.length})</span>
           </div>
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
@@ -154,7 +109,7 @@ export default function Iniciativas() {
       {nonDevInitiatives.length > 0 && (
         <div>
           <div className="flex items-center gap-2 mb-4">
-            <Badge variant="outline" className="border-amber-500 text-amber-600">Por iniciar (No desarrollo)</Badge>
+            <Badge variant="outline" className="border-amber-500 text-amber-600">Por iniciar no desarrollo</Badge>
             <span className="text-sm text-muted-foreground">({nonDevInitiatives.length})</span>
           </div>
           <p className="text-xs text-muted-foreground mb-4">
