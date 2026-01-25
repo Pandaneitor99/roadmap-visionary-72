@@ -22,7 +22,7 @@ export function OKRCard({ okr }: OKRCardProps) {
   };
 
   return (
-    <Card className="border-0 bg-card shadow-sm">
+    <Card className="border-0 bg-card/80 backdrop-blur-md shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
       <CardHeader className="pb-4">
         <div className="flex items-center gap-3">
           <div

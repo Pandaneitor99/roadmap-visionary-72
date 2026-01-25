@@ -14,7 +14,7 @@ interface StatCardProps {
 
 export function StatCard({ title, value, subtitle, icon: Icon, trend }: StatCardProps) {
   return (
-    <Card className="border-0 bg-card shadow-sm">
+    <Card className="border-0 bg-card/80 backdrop-blur-md shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
       <CardContent className="p-6">
         <div className="flex items-start justify-between">
           <div className="space-y-1">
