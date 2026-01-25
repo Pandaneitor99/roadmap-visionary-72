@@ -16,7 +16,7 @@ export function Breadcrumbs() {
   
   if (pathSegments.length === 0) {
     return (
-      <nav className="flex items-center gap-1.5 text-sm text-muted-foreground mb-4">
+      <nav className="flex items-center gap-1.5 text-sm text-muted-foreground mb-4 px-3 py-2 rounded-lg bg-card/50 backdrop-blur-sm w-fit">
         <Home className="h-4 w-4" />
         <span className="text-foreground font-medium">Q1 2026</span>
         <ChevronRight className="h-3.5 w-3.5" />
@@ -51,7 +51,7 @@ export function Breadcrumbs() {
   }
 
   return (
-    <nav className="flex items-center gap-1.5 text-sm text-muted-foreground mb-4">
+    <nav className="flex items-center gap-1.5 text-sm text-muted-foreground mb-4 px-3 py-2 rounded-lg bg-card/50 backdrop-blur-sm w-fit">
       <Home className="h-4 w-4" />
       {breadcrumbs.map((crumb, index) => (
         <div key={crumb.path} className="flex items-center gap-1.5">
@@ -61,7 +61,7 @@ export function Breadcrumbs() {
           ) : (
             <Link 
               to={crumb.path} 
-              className="hover:text-foreground transition-colors"
+              className="hover:text-foreground hover:underline transition-all duration-200"
             >
               {crumb.label}
             </Link>

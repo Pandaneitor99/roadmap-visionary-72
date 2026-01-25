@@ -18,7 +18,7 @@ export default function Dashboard() {
 
       {/* Strategy & North Star */}
       <div className="grid gap-4 md:grid-cols-2">
-        <Card className="border-0 bg-gradient-to-br from-primary/5 to-primary/10 shadow-sm">
+        <Card className="border-0 bg-gradient-to-br from-primary/5 to-primary/10 backdrop-blur-md shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
           <CardHeader className="pb-2">
             <div className="flex items-center gap-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
@@ -34,7 +34,7 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        <Card className="border-0 bg-gradient-to-br from-[hsl(var(--alegra-orange))]/5 to-[hsl(var(--alegra-orange))]/10 shadow-sm">
+        <Card className="border-0 bg-gradient-to-br from-[hsl(var(--alegra-orange))]/5 to-[hsl(var(--alegra-orange))]/10 backdrop-blur-md shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
           <CardHeader className="pb-2">
             <div className="flex items-center gap-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[hsl(var(--alegra-orange))]/10">

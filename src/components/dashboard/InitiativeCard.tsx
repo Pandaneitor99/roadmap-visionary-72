@@ -30,7 +30,7 @@ export function InitiativeCard({ initiative, krDetails }: InitiativeCardProps) {
   return (
     <>
       <Card 
-        className="group relative overflow-hidden border-0 bg-card shadow-sm transition-all hover:shadow-md cursor-pointer"
+        className="group relative overflow-hidden border-0 bg-card/80 backdrop-blur-md shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:bg-card cursor-pointer"
         onClick={() => setIsOpen(true)}
       >
         <div
