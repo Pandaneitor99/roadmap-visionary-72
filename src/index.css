@@ -56,14 +56,14 @@ Alegra Brand Colors: Blue (#0066FF), Green (#00C853), Orange (#FF6B00)
     --alegra-green: 145 100% 39%;
     --alegra-orange: 24 100% 50%;
 
-    /* Sidebar - Alegra Teal */
+    /* Sidebar - Alegra Teal rgb(48, 171, 169) = hsl(179, 56%, 43%) */
     --sidebar-background: 179 56% 43%;
     --sidebar-foreground: 0 0% 100%;
     --sidebar-primary: 0 0% 100%;
     --sidebar-primary-foreground: 179 56% 43%;
-    --sidebar-accent: 179 56% 38%;
+    --sidebar-accent: 179 50% 38%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 179 56% 35%;
+    --sidebar-border: 179 40% 50%;
     --sidebar-ring: 0 0% 100%;
   }
 
