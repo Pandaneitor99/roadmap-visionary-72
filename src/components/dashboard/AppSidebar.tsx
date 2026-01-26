@@ -67,7 +67,7 @@ export function AppSidebar() {
                 style={{ transform: isOpenQ1 ? "rotate(180deg)" : "rotate(0deg)" }}
               />
             </CollapsibleTrigger>
-            <CollapsibleContent className="ml-4 mt-1 border-l-2 border-white/20 pl-3 animate-accordion-down origin-top">
+            <CollapsibleContent className="ml-4 mt-1 border-l-2 border-white/20 pl-3">
               <SidebarGroupContent>
                 <SidebarMenu>
                   {q1MenuItems.map((item, index) => (
@@ -102,7 +102,7 @@ export function AppSidebar() {
                 style={{ transform: isOpenQ4 ? "rotate(180deg)" : "rotate(0deg)" }}
               />
             </CollapsibleTrigger>
-            <CollapsibleContent className="ml-4 mt-1 border-l-2 border-white/20 pl-3 animate-accordion-down origin-top">
+            <CollapsibleContent className="ml-4 mt-1 border-l-2 border-white/20 pl-3">
               <SidebarGroupContent>
                 <SidebarMenu>
                   {q4MenuItems.map((item, index) => (
