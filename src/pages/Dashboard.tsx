@@ -1,4 +1,5 @@
-import { Lightbulb, Target, CalendarCheck, TrendingUp, Compass, Star } from "lucide-react";
+import { Lightbulb, CalendarCheck, TrendingUp, Compass, Star, Zap } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { InitiativeCard } from "@/components/dashboard/InitiativeCard";
 import { OKRCard } from "@/components/dashboard/OKRCard";
@@ -6,8 +7,9 @@ import { initiatives, okrs, strategyInfo } from "@/data/initiatives";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   const inProgressCount = initiatives.filter((i) => i.status === "in-progress").length;
-  const backlogCount = initiatives.filter((i) => i.status === "backlog").length;
+  const notStartedCount = initiatives.filter((i) => i.status === "not-started").length;
 
   return (
     <div className="space-y-8">
@@ -53,31 +55,50 @@ export default function Dashboard() {
 
       {/* Stats */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard
-          title="Iniciativas Totales"
-          value={initiatives.length}
-          subtitle="Q1 2026"
-          icon={Lightbulb}
-        />
-        <StatCard
-          title="En Progreso"
-          value={inProgressCount}
-          subtitle="Activas ahora"
-          icon={TrendingUp}
-          trend={{ value: 12, positive: true }}
-        />
-        <StatCard
-          title="En Backlog"
-          value={backlogCount}
-          subtitle="Por iniciar"
-          icon={CalendarCheck}
-        />
-        <StatCard
-          title="OKRs Activos"
-          value={okrs.length}
-          subtitle="Objetivos clave"
-          icon={Target}
-        />
+        <div 
+          className="cursor-pointer"
+          onClick={() => navigate("/iniciativas")}
+        >
+          <StatCard
+            title="Iniciativas Totales"
+            value={5}
+            subtitle="Q1 2026"
+            icon={Lightbulb}
+          />
+        </div>
+        <div 
+          className="cursor-pointer"
+          onClick={() => navigate("/iniciativas?status=in-progress")}
+        >
+          <StatCard
+            title="En Progreso"
+            value={inProgressCount}
+            subtitle="Activas ahora"
+            icon={TrendingUp}
+          />
+        </div>
+        <div 
+          className="cursor-pointer"
+          onClick={() => navigate("/iniciativas?status=not-started")}
+        >
+          <StatCard
+            title="Por iniciar"
+            value={notStartedCount}
+            subtitle="Próximas"
+            icon={CalendarCheck}
+          />
+        </div>
+        <div 
+          className="cursor-pointer"
+          onClick={() => navigate("/sprint")}
+        >
+          <StatCard
+            title="Sprint Actual"
+            value={1}
+            subtitle="En curso"
+            icon={Zap}
+          />
+        </div>
       </div>
 
       {/* OKRs Summary */}
