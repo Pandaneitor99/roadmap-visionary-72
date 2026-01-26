@@ -2,7 +2,6 @@ import { useState } from "react";
 import { LayoutDashboard, Target, Lightbulb, CalendarDays, Smartphone, ChevronDown, FolderOpen, Trophy } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
-import { Badge } from "@/components/ui/badge";
 import {
   Sidebar,
   SidebarContent,
@@ -44,10 +43,6 @@ export function AppSidebar() {
   const [isOpenQ1, setIsOpenQ1] = useState(isQ1Route);
   const [isOpenQ4, setIsOpenQ4] = useState(isQ4Route);
 
-  // Count initiatives per quarter
-  const q1Count = 5; // Active initiatives in Q1
-  const q4Count = 5; // Items in Q4
-
   return (
     <Sidebar className="border-r-0 backdrop-blur-md bg-sidebar/95">
       <SidebarHeader className="p-6">
@@ -67,9 +62,6 @@ export function AppSidebar() {
             <CollapsibleTrigger className="group flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-sidebar-foreground/90 transition-all duration-300 ease-in-out hover:bg-white/10 hover:shadow-md hover:translate-x-0.5">
               <FolderOpen className="h-5 w-5 text-alegra-orange transition-transform duration-300 group-hover:scale-110" />
               <span className="flex-1 text-left">Q1 2026</span>
-              <Badge variant="secondary" className="h-5 px-1.5 text-[10px] bg-white/20 text-sidebar-foreground border-0">
-                {q1Count}
-              </Badge>
               <ChevronDown 
                 className="h-4 w-4 transition-transform duration-300 ease-in-out" 
                 style={{ transform: isOpenQ1 ? "rotate(180deg)" : "rotate(0deg)" }}
@@ -105,9 +97,6 @@ export function AppSidebar() {
             <CollapsibleTrigger className="group flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-sidebar-foreground/90 transition-all duration-300 ease-in-out hover:bg-white/10 hover:shadow-md hover:translate-x-0.5">
               <FolderOpen className="h-5 w-5 text-alegra-orange transition-transform duration-300 group-hover:scale-110" />
               <span className="flex-1 text-left">Q4 2025</span>
-              <Badge variant="secondary" className="h-5 px-1.5 text-[10px] bg-white/20 text-sidebar-foreground border-0">
-                {q4Count}
-              </Badge>
               <ChevronDown 
                 className="h-4 w-4 transition-transform duration-300 ease-in-out"
                 style={{ transform: isOpenQ4 ? "rotate(180deg)" : "rotate(0deg)" }}

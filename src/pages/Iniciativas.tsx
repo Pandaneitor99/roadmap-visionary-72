@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { InitiativeCard } from "@/components/dashboard/InitiativeCard";
 import { initiatives, krDetailsQ1 } from "@/data/initiatives";
 import { Badge } from "@/components/ui/badge";
@@ -8,7 +9,16 @@ import { Filter } from "lucide-react";
 type StatusFilter = "all" | "in-progress" | "not-started" | "backlog";
 
 export default function Iniciativas() {
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
+  const [searchParams] = useSearchParams();
+  const initialStatus = (searchParams.get("status") as StatusFilter) || "all";
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>(initialStatus);
+
+  useEffect(() => {
+    const status = searchParams.get("status") as StatusFilter;
+    if (status) {
+      setStatusFilter(status);
+    }
+  }, [searchParams]);
 
   const filteredInitiatives = initiatives.filter((i) => {
     return statusFilter === "all" || i.status === statusFilter;
