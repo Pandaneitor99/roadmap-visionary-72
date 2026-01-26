@@ -83,14 +83,14 @@ export default function Dashboard() {
         >
           <StatCard
             title="Por iniciar"
-            value={notStartedCount}
+            value={3}
             subtitle="Próximas"
             icon={CalendarCheck}
           />
         </div>
         <div 
           className="cursor-pointer"
-          onClick={() => navigate("/sprint")}
+          onClick={() => navigate("/roadmap")}
         >
           <StatCard
             title="Sprint Actual"
