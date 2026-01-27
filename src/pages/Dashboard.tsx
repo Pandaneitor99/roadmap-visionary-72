@@ -94,7 +94,7 @@ export default function Dashboard() {
         >
           <StatCard
             title="Sprint Actual"
-            value={1}
+            value={2}
             subtitle="En curso"
             icon={Zap}
           />

@@ -373,9 +373,9 @@ export const okrs: OKR[] = [
     objective: "Reducir los errores críticos en los flujos clave de la app para garantizar una experiencia estable a los usuarios durante este trimestre.",
     type: "experience",
     keyResults: [
-      { id: "kr-1.1", name: "Aumentar la calificación en Google Play", baseline: "4.7", target: "4.9", percentage: "4.26%" },
-      { id: "kr-1.2", name: "Aumentar la calificación en App Store", baseline: "4.3", target: "4.7", percentage: "9.3%" },
-      { id: "kr-1.3", name: "Reducir los errores críticos en producción detectados por Sentry Y Amplitud en los flujos principales durante el trimestre", baseline: "8671", target: "1734", percentage: "-85%" },
+      { id: "kr-1.1", name: "Aumentar la calificación en Google Play de 4.7 a 4.9", baseline: "4.7", target: "4.9", percentage: "4.26%" },
+      { id: "kr-1.2", name: "Aumentar la calificación en App Store de 4.3 a 4.7", baseline: "4.3", target: "4.7", percentage: "9.3%" },
+      { id: "kr-1.3", name: "Reducir los errores críticos en producción detectados por Sentry y Amplitude de 8k a 1k en los flujos principales durante el trimestre", baseline: "8k", target: "1k", percentage: "-87.5%" },
     ],
   },
   {
@@ -383,9 +383,9 @@ export const okrs: OKR[] = [
     objective: "Impulsar la adopción de la app móvil mejorando el flujo de creación de facturas y de ítems para que los usuarios facturen de forma recurrente desde el móvil.",
     type: "adoption",
     keyResults: [
-      { id: "kr-2.1", name: "Lograr que usuarios pagos que facturan en web instalen la app móvil y realicen una acción de valor desde la app durante el trimestre", baseline: "6459", target: "8000", percentage: "24%" },
-      { id: "kr-2.2", name: "Alcanzar facturas de venta semanales creadas desde la app móvil al final del trimestre", baseline: "23.813", target: "30.000", percentage: "26%" },
-      { id: "kr-2.3", name: "Incrementar items creados semanales desde la app que luego son usados en facturas", baseline: "3500", target: "5000", percentage: "42.86%" },
+      { id: "kr-2.1", name: "Lograr que al menos 8000 usuarios pagos que facturan en web instalen la app móvil y realicen una acción de valor desde la app durante el trimestre", baseline: "6459", target: "8000", percentage: "24%" },
+      { id: "kr-2.2", name: "Alcanzar 30k facturas de venta semanales creadas desde la app móvil al final del trimestre", baseline: "23.813", target: "30k", percentage: "26%" },
+      { id: "kr-2.3", name: "Incrementar de 3500 ítems a 5000 ítems creados semanales desde la app que luego son usados en facturas", baseline: "3500", target: "5000", percentage: "42.86%" },
     ],
   },
 ];
