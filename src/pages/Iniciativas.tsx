@@ -24,7 +24,8 @@ export default function Iniciativas() {
     return statusFilter === "all" || i.status === statusFilter;
   });
 
-  const inProgressInitiatives = filteredInitiatives.filter(i => i.status === "in-progress");
+  const inProgressInitiatives = filteredInitiatives.filter(i => i.status === "in-progress" && i.objectiveTag !== "non-dev");
+  const inProgressNonDevInitiatives = filteredInitiatives.filter(i => i.status === "in-progress" && i.objectiveTag === "non-dev");
   const notStartedInitiatives = filteredInitiatives.filter(i => i.status === "not-started");
   const nonDevInitiatives = notStartedInitiatives.filter(i => i.objectiveTag === "non-dev");
   const devNotStartedInitiatives = notStartedInitiatives.filter(i => i.objectiveTag !== "non-dev");
@@ -85,7 +86,7 @@ export default function Iniciativas() {
         </div>
       </div>
 
-      {/* In Progress */}
+      {/* In Progress - Desarrollo */}
       {inProgressInitiatives.length > 0 && (
         <div>
           <div className="flex items-center gap-2 mb-4">
@@ -94,6 +95,21 @@ export default function Iniciativas() {
           </div>
           <div className="grid gap-6 md:grid-cols-2">
             {inProgressInitiatives.map((initiative) => (
+              <InitiativeCard key={initiative.id} initiative={initiative} krDetails={krDetailsQ1} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* In Progress - No Desarrollo */}
+      {inProgressNonDevInitiatives.length > 0 && (
+        <div>
+          <div className="flex items-center gap-2 mb-4">
+            <Badge className="bg-amber-500 text-white">En Progreso no desarrollo</Badge>
+            <span className="text-sm text-muted-foreground">({inProgressNonDevInitiatives.length})</span>
+          </div>
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {inProgressNonDevInitiatives.map((initiative) => (
               <InitiativeCard key={initiative.id} initiative={initiative} krDetails={krDetailsQ1} />
             ))}
           </div>
