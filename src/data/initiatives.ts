@@ -105,11 +105,11 @@ export const initiatives: Initiative[] = [
     sprintStart: 5,
     sprintEnd: 6,
   },
-  // === Iniciativas NO de desarrollo ===
+  // === Iniciativas NO de desarrollo - En progreso ===
   {
     id: "6",
     title: "Creación de comunidad de App",
-    status: "not-started",
+    status: "in-progress",
     date: "-",
     objectiveTag: "non-dev",
     objectiveText: "Iniciativa no de desarrollo",
@@ -119,8 +119,26 @@ export const initiatives: Initiative[] = [
     kpis: [],
     version: "Todos",
     dependencies: "-",
+    sprintStart: 1,
+    sprintEnd: 6,
+  },
+  // === Iniciativas NO de desarrollo - Por iniciar ===
+  {
+    id: "21",
+    title: "Prototipo Low Code",
+    status: "not-started",
+    date: "-",
+    objectiveTag: "non-dev",
+    objectiveText: "Iniciativa no de desarrollo",
+    problem: "Creación del prototipo Low Code para usuarios que utilizan facturación. Herramienta de prototipado y testeo de funcionalidades.",
+    hypothesis: "Vamos a probar con usuarios base este prototipo.",
+    keyResults: [],
+    kpis: [],
+    version: "Todos",
+    dependencies: "-",
     sprintStart: 0,
     sprintEnd: 0,
+    exampleLink: "https://new-bank-proposal.vercel.app/",
   },
 {
     id: "7",
