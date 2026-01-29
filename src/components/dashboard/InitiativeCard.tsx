@@ -10,32 +10,50 @@ import {
 } from "@/components/ui/dialog";
 import type { Initiative } from "@/data/initiatives";
 
-// Helper to get display tag info
-function getDefaultCategoryDisplay(initiative: Initiative) {
-  const categoryTag = initiative.categoryTag;
-  
-  if (categoryTag === "engagement") {
+// Helper to get category display info for a single tag
+function getCategoryTagDisplay(tag: string) {
+  if (tag === "engagement") {
     return { label: "Engagement", colorClass: "border-[hsl(var(--badge-engagement))] text-[hsl(var(--badge-engagement))]" };
   }
-  if (categoryTag === "experimentacion") {
+  if (tag === "experimentacion") {
     return { label: "Experimentación", colorClass: "border-[hsl(var(--alegra-orange))] text-[hsl(var(--alegra-orange))]" };
   }
-  if (categoryTag === "adopcion") {
+  if (tag === "adopcion") {
     return { label: "Adopción", colorClass: "border-[hsl(var(--badge-adoption))] text-[hsl(var(--badge-adoption))]" };
   }
-  if (categoryTag === "experiencia") {
+  if (tag === "experiencia") {
     return { label: "Experiencia", colorClass: "border-[hsl(var(--badge-experience))] text-[hsl(var(--badge-experience))]" };
+  }
+  return { label: tag, colorClass: "border-muted-foreground text-muted-foreground" };
+}
+
+// Helper to get all category displays for an initiative
+function getAllCategoryDisplays(initiative: Initiative) {
+  // First check categoryTags array
+  if (initiative.categoryTags && initiative.categoryTags.length > 0) {
+    return initiative.categoryTags.map(tag => getCategoryTagDisplay(tag));
+  }
+  
+  // Fallback to single categoryTag
+  if (initiative.categoryTag) {
+    return [getCategoryTagDisplay(initiative.categoryTag)];
   }
   
   // Fallback to objectiveTag
   if (initiative.objectiveTag === "experience") {
-    return { label: "Experiencia", colorClass: "border-[hsl(var(--badge-experience))] text-[hsl(var(--badge-experience))]" };
+    return [{ label: "Experiencia", colorClass: "border-[hsl(var(--badge-experience))] text-[hsl(var(--badge-experience))]" }];
   }
   if (initiative.objectiveTag === "adoption") {
-    return { label: "Adopción", colorClass: "border-[hsl(var(--badge-adoption))] text-[hsl(var(--badge-adoption))]" };
+    return [{ label: "Adopción", colorClass: "border-[hsl(var(--badge-adoption))] text-[hsl(var(--badge-adoption))]" }];
   }
   
-  return { label: "General", colorClass: "border-muted-foreground text-muted-foreground" };
+  return [{ label: "General", colorClass: "border-muted-foreground text-muted-foreground" }];
+}
+
+// Helper to get display tag info (legacy - returns first category)
+function getDefaultCategoryDisplay(initiative: Initiative) {
+  const displays = getAllCategoryDisplays(initiative);
+  return displays[0];
 }
 
 // Helper to get status badge info
@@ -52,33 +70,6 @@ function getDefaultStatusDisplay(status: string) {
   return { label: status, colorClass: "bg-muted text-muted-foreground" };
 }
 
-// Get accent color based on category
-function getAccentColor(initiative: Initiative) {
-  const categoryTag = initiative.categoryTag;
-  
-  if (categoryTag === "engagement") {
-    return "bg-[hsl(var(--badge-engagement))]";
-  }
-  if (categoryTag === "experimentacion") {
-    return "bg-[hsl(var(--alegra-orange))]";
-  }
-  if (categoryTag === "adopcion") {
-    return "bg-[hsl(var(--badge-adoption))]";
-  }
-  if (categoryTag === "experiencia") {
-    return "bg-[hsl(var(--badge-experience))]";
-  }
-  
-  // Fallback to objectiveTag
-  if (initiative.objectiveTag === "experience") {
-    return "bg-[hsl(var(--badge-experience))]";
-  }
-  if (initiative.objectiveTag === "adoption") {
-    return "bg-[hsl(var(--badge-adoption))]";
-  }
-  
-  return "bg-muted-foreground";
-}
 
 export interface InitiativeCardProps {
   initiative: Initiative;
@@ -98,9 +89,8 @@ export function InitiativeCard({
 }: InitiativeCardProps) {
   const [isOpen, setIsOpen] = useState(false);
   
-  const categoryDisplay = getCategoryDisplay(initiative);
+  const categoryDisplays = getAllCategoryDisplays(initiative);
   const statusDisplay = getStatusDisplay(initiative.status);
-  const accentColor = getAccentColor(initiative);
 
   return (
     <>
@@ -108,7 +98,6 @@ export function InitiativeCard({
         className="group relative overflow-hidden border-0 bg-card/80 backdrop-blur-md shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:bg-card cursor-pointer"
         onClick={() => setIsOpen(true)}
       >
-        <div className={`absolute left-0 top-0 h-full w-1 ${accentColor}`} />
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between gap-2">
             <h3 className="text-lg font-semibold leading-tight text-foreground">
@@ -118,12 +107,17 @@ export function InitiativeCard({
               {statusDisplay.label}
             </Badge>
           </div>
-          <Badge
-            variant="outline"
-            className={`w-fit ${categoryDisplay.colorClass}`}
-          >
-            {categoryDisplay.label}
-          </Badge>
+          <div className="flex flex-wrap gap-1">
+            {categoryDisplays.map((display, index) => (
+              <Badge
+                key={index}
+                variant="outline"
+                className={`w-fit ${display.colorClass}`}
+              >
+                {display.label}
+              </Badge>
+            ))}
+          </div>
           {initiative.exampleLink && (
             <a 
               href={initiative.exampleLink}
@@ -184,12 +178,15 @@ export function InitiativeCard({
                   <Badge className={statusDisplay.colorClass}>
                     {statusDisplay.label}
                   </Badge>
-                  <Badge
-                    variant="outline"
-                    className={categoryDisplay.colorClass}
-                  >
-                    {categoryDisplay.label}
-                  </Badge>
+                  {categoryDisplays.map((display, index) => (
+                    <Badge
+                      key={index}
+                      variant="outline"
+                      className={display.colorClass}
+                    >
+                      {display.label}
+                    </Badge>
+                  ))}
                 </div>
               </div>
             </div>
