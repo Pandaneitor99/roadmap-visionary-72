@@ -50,6 +50,10 @@ Alegra Brand Colors: Blue (#0066FF), Green (#00C853), Orange (#FF6B00)
     /* Badge colors - Alegra brand */
     --badge-experience: 216 100% 50%;
     --badge-adoption: 145 100% 39%;
+    --badge-engagement: 280 70% 50%;
+    --badge-experimentacion: 24 100% 50%;
+    --badge-in-progress: 179 56% 43%;
+    --badge-not-started: 215 16% 47%;
 
     /* Alegra brand specific */
     --alegra-blue: 216 100% 50%;
