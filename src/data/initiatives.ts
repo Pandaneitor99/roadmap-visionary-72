@@ -10,7 +10,9 @@ export interface Initiative {
   status: "in-progress" | "backlog" | "done" | "not-started";
   date: string;
   objectiveTag: "experience" | "adoption" | "non-dev";
-  /** Category tag for display - overrides objectiveTag display */
+  /** Category tags for display - can have multiple */
+  categoryTags?: ("engagement" | "experimentacion" | "adopcion" | "experiencia")[];
+  /** @deprecated Use categoryTags instead */
   categoryTag?: "engagement" | "experimentacion" | "adopcion" | "experiencia";
   objectiveText: string;
   problem: string;
@@ -32,7 +34,7 @@ export const initiatives: Initiative[] = [
     status: "in-progress",
     date: "04/02/2026",
     objectiveTag: "adoption",
-    categoryTag: "engagement",
+    categoryTags: ["engagement", "adopcion"],
     objectiveText: "Objetivo 2: Impulsar la adopción de la app móvil mejorando el flujo de creación de facturas y de ítems para que los usuarios facturen de forma recurrente desde el móvil.",
     problem: "Con la salida en web de la versión 4.4, la cantidad de facturas aumentó un 20%, sin embargo, en la app se mantuvo constante. Adicionalmente, la tasa de conversión es la menor de las 4 versiones (63% hoy) en comparación a otras versiones (CO 83%, RD 77%). En volumen total, también se encuentra de últimas con 1.600 facturas de venta creadas al mes.",
     hypothesis: "Si rediseñamos la factura de venta, esperamos aumentar el uso y la intención de creación de facturas, promoviendo la adopción cross-platform del producto.",
@@ -82,7 +84,7 @@ export const initiatives: Initiative[] = [
     status: "not-started",
     date: "26/03/2026",
     objectiveTag: "adoption",
-    categoryTag: "engagement",
+    categoryTags: ["engagement", "adopcion"],
     objectiveText: "Objetivo 2: Impulsar la adopción de la app móvil mejorando el flujo de creación de facturas y de ítems para que los usuarios facturen de forma recurrente desde el móvil.",
     problem: "Mientras que en Web se crean alrededor de 500k de productos al mes, en app únicamente se crean 15k. Hay una discrepancia del 40% de los campos de creación de factura entre app y web. Adicionalmente, hay una mala UX en algunos campos y datos de precios.",
     hypothesis: "Si lanzamos un nuevo diseño de creación de ítems esperamos un aumento en la creación de ítems y su uso en las facturas de venta.",
@@ -99,7 +101,7 @@ export const initiatives: Initiative[] = [
     status: "not-started",
     date: "03/04/2026",
     objectiveTag: "adoption",
-    categoryTag: "engagement",
+    categoryTags: ["engagement", "adopcion"],
     objectiveText: "Objetivo 2: Impulsar la adopción de la app móvil mejorando el flujo de creación de facturas y de ítems para que los usuarios facturen de forma recurrente desde el móvil.",
     problem: "Únicamente el 14% de los usuarios pagos en web utilizan la app para realizar una acción de valor, entre ellas factura de venta.",
     hypothesis: "Si rediseñamos la pantalla de facturación esperamos un aumento en el uso de facturación y una mayor conversión, además de realizar cross-selling a la aplicación.",
@@ -205,6 +207,7 @@ export const initiatives: Initiative[] = [
     status: "not-started",
     date: "-",
     objectiveTag: "non-dev",
+    categoryTags: ["adopcion"],
     objectiveText: "Iniciativa no de desarrollo",
     problem: "Bajo porcentaje de usuarios web que descargan la app.",
     hypothesis: "Si implementamos estrategias de G&S, aumentaremos las descargas.",
@@ -387,6 +390,38 @@ export const initiatives: Initiative[] = [
     hypothesis: "Si agregamos factura por voz, agilizaremos la creación de facturas.",
     keyResults: ["KR 2.1", "KR 2.2"],
     kpis: ["Facturas creadas por voz"],
+    version: "Todos",
+    dependencies: "-",
+    sprintStart: 0,
+    sprintEnd: 0,
+  },
+  {
+    id: "23",
+    title: "Incluir espacio contador",
+    status: "backlog",
+    date: "-",
+    objectiveTag: "adoption",
+    objectiveText: "Objetivo 2: Impulsar la adopción de la app móvil.",
+    problem: "No hay espacio contador en App.",
+    hypothesis: "Si incluimos espacio contador, facilitaremos la gestión contable desde la app.",
+    keyResults: ["KR 2.1"],
+    kpis: ["Uso de espacio contador"],
+    version: "Todos",
+    dependencies: "-",
+    sprintStart: 0,
+    sprintEnd: 0,
+  },
+  {
+    id: "24",
+    title: "Facturación de cotizaciones por voz",
+    status: "backlog",
+    date: "-",
+    objectiveTag: "adoption",
+    objectiveText: "Objetivo 2: Impulsar la adopción de la app móvil.",
+    problem: "Solicitud de usuarios para crear cotizaciones por voz.",
+    hypothesis: "Si agregamos facturación de cotizaciones por voz, facilitaremos la creación de cotizaciones.",
+    keyResults: ["KR 2.1"],
+    kpis: ["Cotizaciones creadas por voz"],
     version: "Todos",
     dependencies: "-",
     sprintStart: 0,

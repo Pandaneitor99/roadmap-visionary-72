@@ -139,23 +139,25 @@ export default function Iniciativas() {
         </Tabs>
       </div>
 
-      {/* Status filters */}
-      <div className="flex items-center gap-2">
-        <span className="text-sm text-muted-foreground mr-2">Por estado:</span>
-        {statusFilters.map((filter) => (
-          <Button
-            key={filter.value}
-            variant={statusFilter === filter.value ? "default" : "outline"}
-            size="sm"
-            onClick={() => setStatusFilter(filter.value)}
-            className={statusFilter === filter.value 
-              ? "bg-[hsl(var(--sidebar-background))] hover:bg-[hsl(var(--sidebar-background))]/90 text-white" 
-              : ""}
-          >
-            {filter.label}
-          </Button>
-        ))}
-      </div>
+      {/* Status filters - only show in Must-Haves tab */}
+      {activeTab === "must-haves" && (
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-muted-foreground mr-2">Por estado:</span>
+          {statusFilters.map((filter) => (
+            <Button
+              key={filter.value}
+              variant={statusFilter === filter.value ? "default" : "outline"}
+              size="sm"
+              onClick={() => setStatusFilter(filter.value)}
+              className={statusFilter === filter.value 
+                ? "bg-[hsl(var(--sidebar-background))] hover:bg-[hsl(var(--sidebar-background))]/90 text-white" 
+                : "hover:bg-muted-foreground/20 hover:text-foreground"}
+            >
+              {filter.label}
+            </Button>
+          ))}
+        </div>
+      )}
 
       {/* Tab Content - Must-Haves */}
       {activeTab === "must-haves" && (
