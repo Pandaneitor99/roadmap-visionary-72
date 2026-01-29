@@ -10,6 +10,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 
 type TabFilter = "must-haves" | "trade-offs";
 type StatusFilter = "todos" | "por-iniciar" | "en-progreso";
+type TradeOffFilter = "todos" | "oportunidades" | "requerimientos";
 
 // Helper to get display tag info
 function getCategoryDisplay(initiative: typeof initiatives[0]) {
@@ -58,6 +59,7 @@ export default function Iniciativas() {
   const initialTab = (searchParams.get("tab") as TabFilter) || "must-haves";
   const [activeTab, setActiveTab] = useState<TabFilter>(initialTab);
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("todos");
+  const [tradeOffFilter, setTradeOffFilter] = useState<TradeOffFilter>("todos");
   const [devOpen, setDevOpen] = useState(true);
   const [nonDevOpen, setNonDevOpen] = useState(true);
 
@@ -71,8 +73,13 @@ export default function Iniciativas() {
   // Must-Haves: todas las iniciativas menos las del backlog
   const mustHaveInitiatives = initiatives.filter(i => i.status !== "backlog");
   
-  // Trade-offs: todas las del backlog
-  const tradeOffInitiatives = initiatives.filter(i => i.status === "backlog");
+  // Trade-offs: todas las del backlog, filtradas por tipo
+  const allTradeOffInitiatives = initiatives.filter(i => i.status === "backlog");
+  const tradeOffInitiatives = tradeOffFilter === "todos" 
+    ? allTradeOffInitiatives 
+    : tradeOffFilter === "oportunidades"
+      ? allTradeOffInitiatives.filter(i => i.tradeOffType === "oportunidad")
+      : allTradeOffInitiatives.filter(i => i.tradeOffType === "requerimiento");
 
   // Apply status filter
   const filterByStatus = (items: typeof initiatives) => {
@@ -98,6 +105,12 @@ export default function Iniciativas() {
     { value: "todos", label: "Todos" },
     { value: "por-iniciar", label: "Por iniciar" },
     { value: "en-progreso", label: "En progreso" },
+  ];
+
+  const tradeOffFilters: { value: TradeOffFilter; label: string }[] = [
+    { value: "todos", label: "Todos" },
+    { value: "oportunidades", label: "Oportunidades" },
+    { value: "requerimientos", label: "Requerimientos" },
   ];
 
   return (
@@ -132,7 +145,7 @@ export default function Iniciativas() {
             >
               Trade-offs
               <Badge variant="secondary" className="ml-2 h-5 px-1.5 text-xs bg-white/20 text-inherit">
-                {tradeOffInitiatives.length}
+                {allTradeOffInitiatives.length}
               </Badge>
             </TabsTrigger>
           </TabsList>
@@ -305,6 +318,24 @@ export default function Iniciativas() {
       {/* Tab Content - Trade-offs */}
       {activeTab === "trade-offs" && (
         <div className="space-y-6">
+          {/* Trade-off type filters */}
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground mr-2">Por tipo:</span>
+            {tradeOffFilters.map((filter) => (
+              <Button
+                key={filter.value}
+                variant={tradeOffFilter === filter.value ? "default" : "outline"}
+                size="sm"
+                onClick={() => setTradeOffFilter(filter.value)}
+                className={tradeOffFilter === filter.value 
+                  ? "bg-[hsl(var(--sidebar-background))] hover:bg-[hsl(var(--sidebar-background))]/90 text-white" 
+                  : "hover:bg-muted-foreground/20 hover:text-foreground"}
+              >
+                {filter.label}
+              </Button>
+            ))}
+          </div>
+
           <div className="rounded-lg bg-muted/50 border p-4">
             <p className="text-sm text-muted-foreground">
               Iniciativas en backlog que podrían ser consideradas si hay capacidad adicional o si las prioridades cambian.
@@ -325,7 +356,7 @@ export default function Iniciativas() {
             </div>
           ) : (
             <div className="text-center py-12 text-muted-foreground">
-              No hay iniciativas en Trade-offs.
+              No hay iniciativas en Trade-offs que coincidan con el filtro.
             </div>
           )}
         </div>
