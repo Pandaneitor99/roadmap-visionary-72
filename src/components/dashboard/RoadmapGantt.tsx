@@ -387,12 +387,15 @@ function RoadmapRow({ label, items, onItemClick, getItemColor }: RoadmapRowProps
             key={week}
             onClick={() => onItemClick(item)}
             title={item.title}
-            className={`flex h-7 items-center justify-center text-[9px] font-medium text-white cursor-pointer transition-all hover:opacity-90 hover:scale-[1.02] ${getItemColor(item)} ${
+            className={`flex h-7 items-center text-[8px] font-medium text-white cursor-pointer transition-all hover:opacity-90 hover:scale-[1.02] overflow-hidden ${getItemColor(item)} ${
               isSingle ? "rounded-md" : isStart ? "rounded-l-md" : isEnd ? "rounded-r-md" : ""
             }`}
           >
             {isStart && (
-              <span className="truncate px-0.5 overflow-hidden whitespace-nowrap" style={{ textOverflow: 'ellipsis' }}>
+              <span 
+                className="block w-full px-1 overflow-hidden whitespace-nowrap"
+                style={{ textOverflow: 'ellipsis' }}
+              >
                 {item.title}
               </span>
             )}
