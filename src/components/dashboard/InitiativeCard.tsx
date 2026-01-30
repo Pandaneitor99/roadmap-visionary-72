@@ -9,6 +9,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import type { Initiative } from "@/data/initiatives";
+import newHomeScreen from "@/assets/new-home-screen.png";
+import prototipoQR from "@/assets/prototipo-qr.png";
 
 // Helper to get category display info for a single tag
 function getCategoryTagDisplay(tag: string) {
@@ -281,6 +283,32 @@ export function InitiativeCard({
                 <p className="text-sm font-medium">{initiative.dependencies}</p>
               </div>
             </div>
+
+            {/* Prototipo Low Code images */}
+            {initiative.exampleImage && initiative.qrImage && (
+              <div className="space-y-2">
+                <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  Prototipo
+                </h4>
+                <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
+                  <div className="flex-1 overflow-hidden rounded-md border">
+                    <img 
+                      src={newHomeScreen} 
+                      alt={initiative.title}
+                      className="w-full h-32 object-contain"
+                    />
+                  </div>
+                  <div className="flex flex-col items-center gap-1">
+                    <img 
+                      src={prototipoQR} 
+                      alt="QR Code"
+                      className="w-20 h-20 object-contain"
+                    />
+                    <span className="text-[10px] text-muted-foreground text-center">Escanea QR</span>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Fecha */}
             {initiative.date !== "-" && (

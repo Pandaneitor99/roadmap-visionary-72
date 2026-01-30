@@ -1,13 +1,13 @@
 // Strategy and North Star Metric
 export const strategyInfo = {
-  strategy: "Convertirse en el complemento portátil del sistema Alegra, extendiendo el poder más allá del escritorio para facilitar la gestión administrativa y contable de forma simple, ágil e intuitivo, en cualquier momento y desde cualquier lugar",
+  strategy: "Convertirse en el complemento portátil del sistema Alegra, extendiendo el poder más allá del escritorio, para facilitar la gestión administrativa y contable para Pymes, de forma simple, ágil e intuitiva, en cualquier momento y desde cualquier lugar.",
   northStarMetric: "Usuarios activos que realizan acciones de valor dentro de la app (factura de venta, items, contactos, pagos, reportes etc)"
 };
 
 export interface Initiative {
   id: string;
   title: string;
-  status: "in-progress" | "backlog" | "done" | "not-started";
+  status: "in-progress" | "backlog" | "done" | "not-started" | "should-have";
   date: string;
   objectiveTag: "experience" | "adoption" | "non-dev";
   /** Category tags for display - can have multiple */
@@ -26,6 +26,8 @@ export interface Initiative {
   sprintStart: number;
   sprintEnd: number;
   exampleLink?: string;
+  exampleImage?: string;
+  qrImage?: string;
 }
 
 export const initiatives: Initiative[] = [
@@ -150,6 +152,8 @@ export const initiatives: Initiative[] = [
     sprintStart: 1,
     sprintEnd: 6,
     exampleLink: "https://new-bank-proposal.vercel.app/",
+    exampleImage: "new-home-screen",
+    qrImage: "prototipo-qr",
   },
 {
     id: "7",
@@ -220,11 +224,11 @@ export const initiatives: Initiative[] = [
     sprintStart: 0,
     sprintEnd: 0,
   },
-  // === Backlog - Oportunidades ===
+  // === Should-Haves ===
   {
     id: "11",
     title: "Rediseño Facturación República Dominicana",
-    status: "backlog",
+    status: "should-have",
     date: "-",
     objectiveTag: "adoption",
     tradeOffType: "oportunidad",
@@ -241,7 +245,7 @@ export const initiatives: Initiative[] = [
   {
     id: "12",
     title: "Rediseño Facturación México",
-    status: "backlog",
+    status: "should-have",
     date: "-",
     objectiveTag: "adoption",
     tradeOffType: "oportunidad",
@@ -258,7 +262,7 @@ export const initiatives: Initiative[] = [
   {
     id: "13",
     title: "Adición de items",
-    status: "backlog",
+    status: "should-have",
     date: "-",
     objectiveTag: "adoption",
     tradeOffType: "oportunidad",
@@ -292,7 +296,7 @@ export const initiatives: Initiative[] = [
   {
     id: "22",
     title: "Contactabilidad de Soporte",
-    status: "backlog",
+    status: "should-have",
     date: "-",
     objectiveTag: "experience",
     tradeOffType: "oportunidad",

@@ -9,6 +9,7 @@ interface OKRCardProps {
 
 export function OKRCard({ okr }: OKRCardProps) {
   const isExperience = okr.type === "experience";
+  const isAdoption = okr.type === "adoption";
 
   const parsePercent = (value?: string) => {
     if (!value) return null;
@@ -35,16 +36,26 @@ export function OKRCard({ okr }: OKRCardProps) {
             <TrendingUp className="h-5 w-5" />
           </div>
           <div className="flex-1">
-            <Badge
-              variant="outline"
-              className={`mb-2 ${
-                isExperience
-                  ? "border-[hsl(var(--badge-experience))] text-[hsl(var(--badge-experience))]"
-                  : "border-[hsl(var(--badge-adoption))] text-[hsl(var(--badge-adoption))]"
-              }`}
-            >
-              {isExperience ? "Experiencia" : "Adopción"}
-            </Badge>
+            <div className="flex flex-wrap items-center gap-2 mb-2">
+              <Badge
+                variant="outline"
+                className={`${
+                  isExperience
+                    ? "border-[hsl(var(--badge-experience))] text-[hsl(var(--badge-experience))]"
+                    : "border-[hsl(var(--badge-adoption))] text-[hsl(var(--badge-adoption))]"
+                }`}
+              >
+                {isExperience ? "Experiencia" : "Adopción"}
+              </Badge>
+              {isAdoption && (
+                <Badge
+                  variant="outline"
+                  className="border-[hsl(var(--badge-engagement))] text-[hsl(var(--badge-engagement))]"
+                >
+                  Engagement
+                </Badge>
+              )}
+            </div>
             <CardTitle className="text-sm font-semibold leading-tight">{okr.objective}</CardTitle>
           </div>
         </div>

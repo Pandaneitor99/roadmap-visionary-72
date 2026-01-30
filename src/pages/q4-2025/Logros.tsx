@@ -22,6 +22,13 @@ interface Achievement {
 
 const achievements: Achievement[] = [
   {
+    id: "5",
+    title: "Lanzamiento del Nuevo Onboarding",
+    description: "Nuevo flujo de onboarding unificado entre app y web, con segmentación correcta de usuarios Core y Lite.",
+    icon: <Trophy className="h-6 w-6 text-amber-500" />,
+    image: onboardingScreen,
+  },
+  {
     id: "1",
     title: "Calificación Google Play",
     description: "Aumentamos significativamente la calificación de la app en Google Play, superando las 100 calificaciones nuevas.",
@@ -54,13 +61,6 @@ const achievements: Achievement[] = [
     icon: <Users className="h-6 w-6 text-blue-500" />,
     image: buyerPersona,
     link: { url: "https://docs.google.com/document/d/1V8BTN6AVQC47QiM-FSLqCRQfVuDJg3K1huUVpUUF720/edit?tab=t.0", label: "Ver Documento" },
-  },
-  {
-    id: "5",
-    title: "Lanzamiento del Nuevo Onboarding",
-    description: "Nuevo flujo de onboarding unificado entre app y web, con segmentación correcta de usuarios Core y Lite.",
-    icon: <Trophy className="h-6 w-6 text-amber-500" />,
-    image: onboardingScreen,
   },
   {
     id: "6",
