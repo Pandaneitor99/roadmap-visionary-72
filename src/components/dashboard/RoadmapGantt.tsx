@@ -99,7 +99,7 @@ export function RoadmapGantt() {
 
   return (
     <>
-      <div className="overflow-x-auto rounded-xl bg-card p-4 shadow-sm">
+      <div className="overflow-x-auto rounded-2xl bg-card/60 backdrop-blur-md border border-white/10 p-4 shadow-lg">
         <div className="min-w-[1200px]">
           {/* Header - Sprints */}
           <div className="mb-2 grid grid-cols-[140px_repeat(13,1fr)] gap-0.5">
@@ -107,7 +107,7 @@ export function RoadmapGantt() {
             {sprints.map((sprint) => (
               <div
                 key={sprint.id}
-                className="rounded bg-muted px-1 py-1.5 text-center"
+                className="rounded-lg bg-gradient-to-b from-white/10 to-white/5 backdrop-blur-sm border border-white/10 px-1 py-1.5 text-center shadow-sm"
               >
                 <div className="text-xs font-medium text-foreground">{sprint.label}</div>
                 <div className="text-[9px] text-muted-foreground leading-tight">{sprint.dates}</div>
@@ -121,9 +121,9 @@ export function RoadmapGantt() {
             {Array.from({ length: 26 }, (_, i) => (
               <div
                 key={i}
-                className="rounded bg-muted/50 px-0.5 py-0.5 text-center text-[9px] text-muted-foreground"
+                className="rounded-md bg-gradient-to-b from-white/5 to-transparent backdrop-blur-sm border border-white/5 px-0.5 py-0.5 text-center text-[9px] text-muted-foreground"
               >
-                S{i + 1}
+                W{i + 1}
               </div>
             ))}
           </div>
@@ -229,14 +229,14 @@ export function RoadmapGantt() {
           </div>
 
           {/* Legend */}
-          <div className="mt-4 flex flex-wrap items-center gap-3 border-t pt-3">
+          <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-white/10 pt-3">
             <div className="flex items-center gap-1.5">
               <div className="h-2.5 w-2.5 rounded-full bg-[hsl(var(--badge-experience))]" />
               <span className="text-[10px] text-muted-foreground">Experiencia</span>
             </div>
             <div className="flex items-center gap-1.5">
               <div className="h-2.5 w-2.5 rounded-full bg-[hsl(var(--badge-adoption))]" />
-              <span className="text-[10px] text-muted-foreground">Adopción</span>
+              <span className="text-[10px] text-muted-foreground">Adopción y Engagement</span>
             </div>
             <div className="flex items-center gap-1.5">
               <div className="h-2.5 w-2.5 rounded-full bg-amber-500" />
@@ -364,7 +364,13 @@ interface RoadmapRowProps {
 function RoadmapRow({ label, items, onItemClick, getItemColor }: RoadmapRowProps) {
   return (
     <div className="grid grid-cols-[140px_repeat(26,1fr)] items-center gap-0.5">
-      <div className="truncate text-xs font-medium text-foreground pr-1">{label}</div>
+      <div 
+        className="truncate text-xs font-medium text-foreground pr-1 overflow-hidden whitespace-nowrap" 
+        style={{ textOverflow: 'ellipsis' }}
+        title={label}
+      >
+        {label}
+      </div>
       {Array.from({ length: 26 }, (_, weekIndex) => {
         const week = weekIndex + 1;
         const item = items.find(i => week >= i.weekStart && week <= i.weekEnd);
@@ -380,12 +386,13 @@ function RoadmapRow({ label, items, onItemClick, getItemColor }: RoadmapRowProps
           <div
             key={week}
             onClick={() => onItemClick(item)}
+            title={item.title}
             className={`flex h-7 items-center justify-center text-[9px] font-medium text-white cursor-pointer transition-all hover:opacity-90 hover:scale-[1.02] ${getItemColor(item)} ${
-              isSingle ? "rounded" : isStart ? "rounded-l" : isEnd ? "rounded-r" : ""
+              isSingle ? "rounded-md" : isStart ? "rounded-l-md" : isEnd ? "rounded-r-md" : ""
             }`}
           >
             {isStart && (
-              <span className="truncate px-0.5">
+              <span className="truncate px-0.5 overflow-hidden whitespace-nowrap" style={{ textOverflow: 'ellipsis' }}>
                 {item.title}
               </span>
             )}
