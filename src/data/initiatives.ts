@@ -402,7 +402,7 @@ export const initiatives: Initiative[] = [
     status: "backlog",
     date: "-",
     objectiveTag: "adoption",
-    tradeOffType: "requerimiento",
+    tradeOffType: "oportunidad",
     objectiveText: "Objetivo 2: Impulsar la adopción de la app móvil mejorando el flujo de creación de facturas y de ítems para que los usuarios facturen de forma recurrente desde el móvil.",
     problem: "Crear facturas manualmente es lento para algunos usuarios.",
     hypothesis: "Si agregamos factura por voz, agilizaremos la creación de facturas.",

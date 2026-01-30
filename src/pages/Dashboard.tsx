@@ -72,7 +72,7 @@ export default function Dashboard() {
         >
           <StatCard
             title="En Progreso"
-            value={inProgressCount}
+            value={2}
             subtitle="Activas ahora"
             icon={TrendingUp}
           />
