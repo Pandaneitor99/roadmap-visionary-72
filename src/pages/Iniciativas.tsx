@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
-type TabFilter = "must-haves" | "trade-offs";
+type TabFilter = "must-haves" | "should-haves" | "trade-offs";
 type StatusFilter = "todos" | "por-iniciar" | "en-progreso";
 type TradeOffFilter = "todos" | "oportunidades" | "requerimientos";
 
@@ -45,7 +45,7 @@ function getStatusDisplay(status: string) {
   if (status === "in-progress") {
     return { label: "En Progreso", colorClass: "bg-[hsl(var(--sidebar-background))] text-white" };
   }
-  if (status === "not-started" || status === "backlog") {
+  if (status === "not-started" || status === "backlog" || status === "should-have") {
     return { label: "Por iniciar", colorClass: "bg-muted text-muted-foreground" };
   }
   if (status === "done") {
@@ -70,8 +70,11 @@ export default function Iniciativas() {
     }
   }, [searchParams]);
 
-  // Must-Haves: todas las iniciativas menos las del backlog
-  const mustHaveInitiatives = initiatives.filter(i => i.status !== "backlog");
+  // Must-Haves: todas las iniciativas que no son backlog ni should-have
+  const mustHaveInitiatives = initiatives.filter(i => i.status !== "backlog" && i.status !== "should-have");
+  
+  // Should-Haves: iniciativas marcadas como should-have
+  const shouldHaveInitiatives = initiatives.filter(i => i.status === "should-have");
   
   // Trade-offs: todas las del backlog, filtradas por tipo
   const allTradeOffInitiatives = initiatives.filter(i => i.status === "backlog");
@@ -137,6 +140,15 @@ export default function Iniciativas() {
               Must-Haves
               <Badge variant="secondary" className="ml-2 h-5 px-1.5 text-xs bg-white/20 text-inherit">
                 {mustHaveInitiatives.length}
+              </Badge>
+            </TabsTrigger>
+            <TabsTrigger 
+              value="should-haves" 
+              className="data-[state=active]:bg-[hsl(var(--sidebar-background))] data-[state=active]:text-white data-[state=inactive]:bg-muted data-[state=inactive]:text-muted-foreground px-4 py-2 rounded-md font-medium transition-all"
+            >
+              Should-Haves
+              <Badge variant="secondary" className="ml-2 h-5 px-1.5 text-xs bg-white/20 text-inherit">
+                {shouldHaveInitiatives.length}
               </Badge>
             </TabsTrigger>
             <TabsTrigger 
@@ -312,6 +324,61 @@ export default function Iniciativas() {
               No hay iniciativas que coincidan con el filtro seleccionado.
             </div>
           )}
+        </div>
+      )}
+
+      {/* Tab Content - Should-Haves */}
+      {activeTab === "should-haves" && (
+        <div className="space-y-6">
+          {/* Trade-off type filters */}
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground mr-2">Por tipo:</span>
+            {tradeOffFilters.map((filter) => (
+              <Button
+                key={filter.value}
+                variant={tradeOffFilter === filter.value ? "default" : "outline"}
+                size="sm"
+                onClick={() => setTradeOffFilter(filter.value)}
+                className={tradeOffFilter === filter.value 
+                  ? "bg-[hsl(var(--sidebar-background))] hover:bg-[hsl(var(--sidebar-background))]/90 text-white" 
+                  : "hover:bg-muted-foreground/20 hover:text-foreground"}
+              >
+                {filter.label}
+              </Button>
+            ))}
+          </div>
+
+          <div className="rounded-lg bg-muted/50 border p-4">
+            <p className="text-sm text-muted-foreground">
+              Iniciativas importantes que se implementarán si hay capacidad adicional durante el semestre.
+            </p>
+          </div>
+
+          {(() => {
+            const filteredShouldHaves = tradeOffFilter === "todos" 
+              ? shouldHaveInitiatives 
+              : tradeOffFilter === "oportunidades"
+                ? shouldHaveInitiatives.filter(i => i.tradeOffType === "oportunidad")
+                : shouldHaveInitiatives.filter(i => i.tradeOffType === "requerimiento");
+
+            return filteredShouldHaves.length > 0 ? (
+              <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+                {filteredShouldHaves.map((initiative) => (
+                  <InitiativeCard 
+                    key={initiative.id} 
+                    initiative={initiative} 
+                    krDetails={krDetailsQ1}
+                    getCategoryDisplay={getCategoryDisplay}
+                    getStatusDisplay={getStatusDisplay}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                No hay iniciativas en Should-Haves que coincidan con el filtro.
+              </div>
+            );
+          })()}
         </div>
       )}
 

@@ -49,7 +49,8 @@ export default function OKRs() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
-        {okrs.map((okr) => (
+        {/* Adoption first (right side visually on desktop), then Experience */}
+        {okrs.slice().reverse().map((okr) => (
           <OKRCard key={okr.id} okr={okr} />
         ))}
       </div>
