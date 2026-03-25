@@ -564,6 +564,9 @@ interface RoadmapRowProps {
   onRowDragStart: (e: React.DragEvent, rowId: string) => void;
   onRowDragOver: (e: React.DragEvent) => void;
   onRowDrop: (e: React.DragEvent, rowId: string) => void;
+  onResizeStart: (e: React.MouseEvent, itemId: string, edge: "start" | "end") => void;
+  onResizeMove: (rowId: string, week: number) => void;
+  resizingItemId: string | null;
 }
 
 function RoadmapRow({
@@ -580,6 +583,9 @@ function RoadmapRow({
   onRowDragStart,
   onRowDragOver,
   onRowDrop,
+  onResizeStart,
+  onResizeMove,
+  resizingItemId,
 }: RoadmapRowProps) {
   return (
     <div
@@ -587,17 +593,31 @@ function RoadmapRow({
       onDragOver={onRowDragOver}
       onDrop={e => onRowDrop(e, row.id)}
     >
-      {/* Row label with grip handle */}
+      {/* Row label with grip handle and edit button */}
       <div
-        className="flex items-center gap-1 truncate text-xs font-medium text-foreground pr-1 cursor-grab active:cursor-grabbing"
+        className="group/label flex items-center gap-1 truncate text-xs font-medium text-foreground pr-1 cursor-grab active:cursor-grabbing"
         draggable
         onDragStart={e => onRowDragStart(e, row.id)}
         title={row.label}
       >
         <GripVertical className="h-3 w-3 text-muted-foreground flex-shrink-0 opacity-40 hover:opacity-100 transition-opacity" />
-        <span className="overflow-hidden whitespace-nowrap" style={{ textOverflow: "ellipsis" }}>
+        <span className="overflow-hidden whitespace-nowrap flex-1" style={{ textOverflow: "ellipsis" }}>
           {row.label}
         </span>
+        {items.length > 0 && (
+          <button
+            onClick={e => {
+              e.stopPropagation();
+              onEditItem(items[0]);
+            }}
+            className="opacity-0 group-hover/label:opacity-100 transition-opacity flex-shrink-0 hover:bg-muted rounded p-0.5"
+            title="Editar iniciativa"
+            draggable={false}
+            onDragStart={e => e.stopPropagation()}
+          >
+            <Pencil className="h-3 w-3 text-muted-foreground" />
+          </button>
+        )}
       </div>
 
       {/* Week cells */}
@@ -608,6 +628,7 @@ function RoadmapRow({
         const isEnd = item?.weekEnd === week;
         const isSingle = item && item.weekStart === item.weekEnd;
         const isDropHere = dropTarget?.rowId === row.id && dropTarget?.week === week && !item;
+        const isResizing = item && resizingItemId === item.id;
 
         if (!item) {
           return (
@@ -621,6 +642,9 @@ function RoadmapRow({
               onDragOver={e => onDragOver(e, row.id, week)}
               onDragLeave={onDragLeave}
               onDrop={e => onDrop(e, row.id, week)}
+              onMouseMove={() => {
+                if (resizingItemId) onResizeMove(row.id, week);
+              }}
             />
           );
         }
@@ -628,34 +652,43 @@ function RoadmapRow({
         return (
           <div
             key={week}
-            draggable
-            onDragStart={e => onDragStart(e, item, week)}
+            draggable={!isResizing}
+            onDragStart={e => {
+              if (isResizing) { e.preventDefault(); return; }
+              onDragStart(e, item, week);
+            }}
             onClick={() => onItemClick(item)}
+            onMouseMove={() => {
+              if (resizingItemId === item.id) onResizeMove(row.id, week);
+            }}
             title={item.title}
             className={`group relative flex h-7 items-center text-[8px] font-medium text-white cursor-grab active:cursor-grabbing transition-all hover:opacity-90 hover:scale-[1.02] overflow-hidden ${getItemColor(item)} ${
               isSingle ? "rounded-md" : isStart ? "rounded-l-md" : isEnd ? "rounded-r-md" : ""
             }`}
           >
+            {/* Left resize handle */}
+            {isStart && (
+              <div
+                className="absolute left-0 top-0 bottom-0 w-1.5 cursor-col-resize z-10 hover:bg-white/30 transition-colors"
+                onMouseDown={e => onResizeStart(e, item.id, "start")}
+                draggable={false}
+              />
+            )}
             {isStart && (
               <span
-                className="block w-full px-1 overflow-hidden whitespace-nowrap"
+                className="block w-full px-2 overflow-hidden whitespace-nowrap"
                 style={{ textOverflow: "ellipsis" }}
               >
                 {item.title}
               </span>
             )}
-            {/* Edit button on hover - only on end cell */}
+            {/* Right resize handle */}
             {isEnd && (
-              <button
-                onClick={e => {
-                  e.stopPropagation();
-                  onEditItem(item);
-                }}
-                className="absolute right-0.5 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-black/30 rounded p-0.5"
-                title="Editar"
-              >
-                <Pencil className="h-3 w-3 text-white" />
-              </button>
+              <div
+                className="absolute right-0 top-0 bottom-0 w-1.5 cursor-col-resize z-10 hover:bg-white/30 transition-colors"
+                onMouseDown={e => onResizeStart(e, item.id, "end")}
+                draggable={false}
+              />
             )}
           </div>
         );
