@@ -90,7 +90,14 @@ const initialItems: RoadmapItem[] = [
 
 interface DragState {
   item: RoadmapItem;
-  offsetWeek: number; // which week within the block was grabbed
+  offsetWeek: number;
+}
+
+interface ResizeState {
+  itemId: string;
+  edge: "start" | "end";
+  originalStart: number;
+  originalEnd: number;
 }
 
 export function RoadmapGantt() {
