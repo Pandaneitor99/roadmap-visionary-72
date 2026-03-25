@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { initiatives } from "@/data/initiatives";
 import {
   Dialog,
@@ -8,7 +8,17 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, MapPin, Users, Target, Lightbulb, AlertCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Calendar, MapPin, Users, Target, Lightbulb, AlertCircle, Pencil, GripVertical } from "lucide-react";
 
 const sprints = [
   { id: 1, label: "S1", dates: "Ene 5 - Ene 18", weeks: [1, 2] },
@@ -26,7 +36,7 @@ const sprints = [
   { id: 13, label: "S13", dates: "Jun 22 - Jul 5", weeks: [25, 26] },
 ];
 
-interface RoadmapItem {
+export interface RoadmapItem {
   id: string;
   title: string;
   type: "feature" | "issues" | "improvements";
@@ -34,52 +44,63 @@ interface RoadmapItem {
   weekStart: number;
   weekEnd: number;
   initiativeId?: string;
+  rowId: string;
 }
 
-const roadmapItems: RoadmapItem[] = [
-  // Onboarding
-  { id: "onboarding", title: "Onboarding", type: "feature", objectiveTag: "adoption", weekStart: 3, weekEnd: 3, initiativeId: "onboarding" },
-  
-  // Rediseño Facturación Costa Rica
-  { id: "cr-mvp", title: "Rediseño Facturación CR 4.4", type: "feature", objectiveTag: "adoption", weekStart: 4, weekEnd: 6, initiativeId: "1" },
-  { id: "cr-v2", title: "Rediseño Facturación CR V2", type: "feature", objectiveTag: "adoption", weekStart: 7, weekEnd: 7, initiativeId: "1" },
-  
-  // Creación de Items
-  { id: "items", title: "Creación de Items", type: "feature", objectiveTag: "adoption", weekStart: 8, weekEnd: 10, initiativeId: "4" },
-  
-  // Calificación Tiendas
-  { id: "rating", title: "Calificación Tiendas app", type: "feature", objectiveTag: "experience", weekStart: 10, weekEnd: 10, initiativeId: "3" },
-  
-  // Rediseño Facturación Colombia
-  { id: "co", title: "Rediseño Facturación Colombia", type: "feature", objectiveTag: "adoption", weekStart: 11, weekEnd: 13, initiativeId: "5" },
-  
-  // Rediseño Facturación República Dominicana
-  { id: "rd", title: "Rediseño Facturación RD", type: "feature", objectiveTag: "adoption", weekStart: 15, weekEnd: 16, initiativeId: "11" },
-  
-  // Adición de Ítems
-  { id: "adicion-items", title: "Adición de Ítems", type: "feature", objectiveTag: "adoption", weekStart: 17, weekEnd: 20, initiativeId: "13" },
-  
-  // Soporte
-  { id: "soporte", title: "Soporte", type: "feature", objectiveTag: "experience", weekStart: 21, weekEnd: 22, initiativeId: "22" },
-  
-  // Rediseño Facturación México
-  { id: "mx", title: "Rediseño Facturación MX", type: "feature", objectiveTag: "adoption", weekStart: 23, weekEnd: 24, initiativeId: "12" },
-  
-  // Estabilización - Issues
-  { id: "issues-1", title: "Issues", type: "issues", objectiveTag: "recurring", weekStart: 2, weekEnd: 2, initiativeId: "2" },
-  { id: "issues-2", title: "Issues", type: "issues", objectiveTag: "recurring", weekStart: 7, weekEnd: 7, initiativeId: "2" },
-  { id: "issues-3", title: "Issues", type: "issues", objectiveTag: "recurring", weekStart: 14, weekEnd: 14, initiativeId: "2" },
-  { id: "issues-4", title: "Issues", type: "issues", objectiveTag: "recurring", weekStart: 25, weekEnd: 25, initiativeId: "2" },
-  
-  // Estabilización - Mejoras generales
-  { id: "mejoras-1", title: "Mejoras", type: "improvements", objectiveTag: "experience", weekStart: 1, weekEnd: 1, initiativeId: "2" },
-  { id: "mejoras-2", title: "Mejoras", type: "improvements", objectiveTag: "experience", weekStart: 6, weekEnd: 6, initiativeId: "2" },
-  { id: "mejoras-3", title: "Mejoras", type: "improvements", objectiveTag: "experience", weekStart: 14, weekEnd: 14, initiativeId: "2" },
-  { id: "mejoras-4", title: "Mejoras", type: "improvements", objectiveTag: "experience", weekStart: 26, weekEnd: 26, initiativeId: "2" },
+interface RowDef {
+  id: string;
+  label: string;
+  section: "must" | "should" | "stabilization";
+}
+
+const initialRows: RowDef[] = [
+  { id: "onboarding", label: "Onboarding", section: "must" },
+  { id: "cr", label: "Rediseño Fact. CR", section: "must" },
+  { id: "items", label: "Creación de Items", section: "must" },
+  { id: "rating", label: "Calificación Tiendas", section: "must" },
+  { id: "co", label: "Rediseño Fact. CO", section: "must" },
+  { id: "rd", label: "Rediseño Fact. RD", section: "should" },
+  { id: "adicion-items", label: "Adición de Ítems", section: "should" },
+  { id: "soporte", label: "Soporte", section: "should" },
+  { id: "mx", label: "Rediseño Fact. MX", section: "should" },
+  { id: "issues", label: "Estabilización - Issues", section: "stabilization" },
+  { id: "mejoras", label: "Estabilización - Mejoras", section: "stabilization" },
 ];
 
+const initialItems: RoadmapItem[] = [
+  { id: "onboarding", title: "Onboarding", type: "feature", objectiveTag: "adoption", weekStart: 3, weekEnd: 3, initiativeId: "onboarding", rowId: "onboarding" },
+  { id: "cr-mvp", title: "Rediseño Facturación CR 4.4", type: "feature", objectiveTag: "adoption", weekStart: 4, weekEnd: 6, initiativeId: "1", rowId: "cr" },
+  { id: "cr-v2", title: "Rediseño Facturación CR V2", type: "feature", objectiveTag: "adoption", weekStart: 7, weekEnd: 7, initiativeId: "1", rowId: "cr" },
+  { id: "items", title: "Creación de Items", type: "feature", objectiveTag: "adoption", weekStart: 8, weekEnd: 10, initiativeId: "4", rowId: "items" },
+  { id: "rating", title: "Calificación Tiendas app", type: "feature", objectiveTag: "experience", weekStart: 10, weekEnd: 10, initiativeId: "3", rowId: "rating" },
+  { id: "co", title: "Rediseño Facturación Colombia", type: "feature", objectiveTag: "adoption", weekStart: 11, weekEnd: 13, initiativeId: "5", rowId: "co" },
+  { id: "rd", title: "Rediseño Facturación RD", type: "feature", objectiveTag: "adoption", weekStart: 15, weekEnd: 16, initiativeId: "11", rowId: "rd" },
+  { id: "adicion-items", title: "Adición de Ítems", type: "feature", objectiveTag: "adoption", weekStart: 17, weekEnd: 20, initiativeId: "13", rowId: "adicion-items" },
+  { id: "soporte", title: "Soporte", type: "feature", objectiveTag: "experience", weekStart: 21, weekEnd: 22, initiativeId: "22", rowId: "soporte" },
+  { id: "mx", title: "Rediseño Facturación MX", type: "feature", objectiveTag: "adoption", weekStart: 23, weekEnd: 24, initiativeId: "12", rowId: "mx" },
+  { id: "issues-1", title: "Issues", type: "issues", objectiveTag: "recurring", weekStart: 2, weekEnd: 2, initiativeId: "2", rowId: "issues" },
+  { id: "issues-2", title: "Issues", type: "issues", objectiveTag: "recurring", weekStart: 7, weekEnd: 7, initiativeId: "2", rowId: "issues" },
+  { id: "issues-3", title: "Issues", type: "issues", objectiveTag: "recurring", weekStart: 14, weekEnd: 14, initiativeId: "2", rowId: "issues" },
+  { id: "issues-4", title: "Issues", type: "issues", objectiveTag: "recurring", weekStart: 25, weekEnd: 25, initiativeId: "2", rowId: "issues" },
+  { id: "mejoras-1", title: "Mejoras", type: "improvements", objectiveTag: "experience", weekStart: 1, weekEnd: 1, initiativeId: "2", rowId: "mejoras" },
+  { id: "mejoras-2", title: "Mejoras", type: "improvements", objectiveTag: "experience", weekStart: 6, weekEnd: 6, initiativeId: "2", rowId: "mejoras" },
+  { id: "mejoras-3", title: "Mejoras", type: "improvements", objectiveTag: "experience", weekStart: 14, weekEnd: 14, initiativeId: "2", rowId: "mejoras" },
+  { id: "mejoras-4", title: "Mejoras", type: "improvements", objectiveTag: "experience", weekStart: 26, weekEnd: 26, initiativeId: "2", rowId: "mejoras" },
+];
+
+interface DragState {
+  item: RoadmapItem;
+  offsetWeek: number; // which week within the block was grabbed
+}
+
 export function RoadmapGantt() {
+  const [items, setItems] = useState<RoadmapItem[]>(initialItems);
+  const [rows, setRows] = useState<RowDef[]>(initialRows);
   const [selectedInitiative, setSelectedInitiative] = useState<typeof initiatives[0] | null>(null);
+  const [editingItem, setEditingItem] = useState<RoadmapItem | null>(null);
+  const [dropTarget, setDropTarget] = useState<{ rowId: string; week: number } | null>(null);
+  const dragRef = useRef<DragState | null>(null);
+  const [dragRowId, setDragRowId] = useState<string | null>(null);
 
   const getInitiative = (id?: string) => initiatives.find(i => i.id === id);
 
@@ -97,12 +118,129 @@ export function RoadmapGantt() {
     }
   };
 
+  // --- Drag and Drop for items ---
+  const handleDragStart = useCallback((e: React.DragEvent, item: RoadmapItem, week: number) => {
+    const offsetWeek = week - item.weekStart;
+    dragRef.current = { item, offsetWeek };
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", item.id);
+  }, []);
+
+  const handleDragOver = useCallback((e: React.DragEvent, rowId: string, week: number) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    setDropTarget({ rowId, week });
+  }, []);
+
+  const handleDragLeave = useCallback(() => {
+    setDropTarget(null);
+  }, []);
+
+  const handleDrop = useCallback((e: React.DragEvent, targetRowId: string, targetWeek: number) => {
+    e.preventDefault();
+    setDropTarget(null);
+    const drag = dragRef.current;
+    if (!drag) return;
+
+    const duration = drag.item.weekEnd - drag.item.weekStart;
+    const newStart = targetWeek - drag.offsetWeek;
+    const newEnd = newStart + duration;
+
+    // Clamp within 1-26
+    if (newStart < 1 || newEnd > 26) return;
+
+    // Check for collisions in target row (excluding the dragged item)
+    const rowItems = items.filter(i => i.rowId === targetRowId && i.id !== drag.item.id);
+    const hasCollision = rowItems.some(i =>
+      (newStart >= i.weekStart && newStart <= i.weekEnd) ||
+      (newEnd >= i.weekStart && newEnd <= i.weekEnd) ||
+      (newStart <= i.weekStart && newEnd >= i.weekEnd)
+    );
+    if (hasCollision) return;
+
+    setItems(prev => prev.map(i =>
+      i.id === drag.item.id
+        ? { ...i, weekStart: newStart, weekEnd: newEnd, rowId: targetRowId }
+        : i
+    ));
+    dragRef.current = null;
+  }, [items]);
+
+  // --- Row reorder drag ---
+  const handleRowDragStart = useCallback((e: React.DragEvent, rowId: string) => {
+    setDragRowId(rowId);
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/row", rowId);
+  }, []);
+
+  const handleRowDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+  }, []);
+
+  const handleRowDrop = useCallback((e: React.DragEvent, targetRowId: string) => {
+    e.preventDefault();
+    if (!dragRowId || dragRowId === targetRowId) {
+      setDragRowId(null);
+      return;
+    }
+    setRows(prev => {
+      const newRows = [...prev];
+      const fromIdx = newRows.findIndex(r => r.id === dragRowId);
+      const toIdx = newRows.findIndex(r => r.id === targetRowId);
+      if (fromIdx === -1 || toIdx === -1) return prev;
+      const [moved] = newRows.splice(fromIdx, 1);
+      newRows.splice(toIdx, 0, moved);
+      return newRows;
+    });
+    setDragRowId(null);
+  }, [dragRowId]);
+
+  // --- Edit item ---
+  const handleEditSave = useCallback(() => {
+    if (!editingItem) return;
+    setItems(prev => prev.map(i => i.id === editingItem.id ? editingItem : i));
+    setEditingItem(null);
+  }, [editingItem]);
+
+  const renderSection = (sectionRows: RowDef[], sectionLabel?: string) => (
+    <>
+      {sectionLabel && (
+        <div className="text-xs font-medium text-muted-foreground mb-1 pl-1">{sectionLabel}</div>
+      )}
+      {sectionRows.map(row => {
+        const rowItems = items.filter(i => i.rowId === row.id);
+        return (
+          <RoadmapRow
+            key={row.id}
+            row={row}
+            items={rowItems}
+            onItemClick={handleItemClick}
+            getItemColor={getItemColor}
+            onDragStart={handleDragStart}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            onEditItem={setEditingItem}
+            dropTarget={dropTarget}
+            onRowDragStart={handleRowDragStart}
+            onRowDragOver={handleRowDragOver}
+            onRowDrop={handleRowDrop}
+          />
+        );
+      })}
+    </>
+  );
+
+  const mustRows = rows.filter(r => r.section === "must");
+  const shouldRows = rows.filter(r => r.section === "should");
+  const stabRows = rows.filter(r => r.section === "stabilization");
+
   return (
     <>
       <div className="overflow-x-auto rounded-2xl bg-card/60 backdrop-blur-md border border-white/10 p-4 shadow-lg">
         <div className="min-w-[1200px]">
           {/* Header - Sprints */}
-          <div className="mb-2 grid grid-cols-[140px_repeat(13,1fr)] gap-0.5">
+          <div className="mb-2 grid grid-cols-[160px_repeat(13,1fr)] gap-0.5">
             <div className="text-xs font-medium text-muted-foreground">Iniciativa</div>
             {sprints.map((sprint) => (
               <div
@@ -116,7 +254,7 @@ export function RoadmapGantt() {
           </div>
 
           {/* Sub-header - Weeks */}
-          <div className="mb-3 grid grid-cols-[140px_repeat(26,1fr)] gap-0.5">
+          <div className="mb-3 grid grid-cols-[160px_repeat(26,1fr)] gap-0.5">
             <div></div>
             {Array.from({ length: 26 }, (_, i) => (
               <div
@@ -128,104 +266,15 @@ export function RoadmapGantt() {
             ))}
           </div>
 
-          {/* Feature Rows */}
+          {/* Rows */}
           <div className="space-y-1">
-            {/* Onboarding */}
-            <RoadmapRow
-              label="Onboarding"
-              items={roadmapItems.filter(i => i.id === "onboarding")}
-              onItemClick={handleItemClick}
-              getItemColor={getItemColor}
-            />
+            {renderSection(mustRows)}
 
-            {/* Rediseño Facturación Costa Rica */}
-            <RoadmapRow
-              label="Rediseño Fact. CR"
-              items={roadmapItems.filter(i => i.id.startsWith("cr-"))}
-              onItemClick={handleItemClick}
-              getItemColor={getItemColor}
-            />
-
-            {/* Creación de Items */}
-            <RoadmapRow
-              label="Creación de Items"
-              items={roadmapItems.filter(i => i.id === "items")}
-              onItemClick={handleItemClick}
-              getItemColor={getItemColor}
-            />
-
-            {/* Calificación Tiendas */}
-            <RoadmapRow
-              label="Calificación Tiendas"
-              items={roadmapItems.filter(i => i.id === "rating")}
-              onItemClick={handleItemClick}
-              getItemColor={getItemColor}
-            />
-
-            {/* Rediseño Facturación Colombia */}
-            <RoadmapRow
-              label="Rediseño Fact. CO"
-              items={roadmapItems.filter(i => i.id === "co")}
-              onItemClick={handleItemClick}
-              getItemColor={getItemColor}
-            />
-
-            {/* Separator */}
             <div className="border-t border-border my-2" />
-            
-            {/* Should-Haves Section */}
-            <div className="text-xs font-medium text-muted-foreground mb-1 pl-1">Should-Haves</div>
+            {renderSection(shouldRows, "Should-Haves")}
 
-            {/* Rediseño Facturación República Dominicana */}
-            <RoadmapRow
-              label="Rediseño Fact. RD"
-              items={roadmapItems.filter(i => i.id === "rd")}
-              onItemClick={handleItemClick}
-              getItemColor={getItemColor}
-            />
-
-            {/* Adición de Ítems */}
-            <RoadmapRow
-              label="Adición de Ítems"
-              items={roadmapItems.filter(i => i.id === "adicion-items")}
-              onItemClick={handleItemClick}
-              getItemColor={getItemColor}
-            />
-
-            {/* Soporte */}
-            <RoadmapRow
-              label="Soporte"
-              items={roadmapItems.filter(i => i.id === "soporte")}
-              onItemClick={handleItemClick}
-              getItemColor={getItemColor}
-            />
-
-            {/* Rediseño Facturación México */}
-            <RoadmapRow
-              label="Rediseño Fact. MX"
-              items={roadmapItems.filter(i => i.id === "mx")}
-              onItemClick={handleItemClick}
-              getItemColor={getItemColor}
-            />
-
-            {/* Separator */}
             <div className="border-t border-border my-2" />
-
-            {/* Estabilización - Issues */}
-            <RoadmapRow
-              label="Estabilización - Issues"
-              items={roadmapItems.filter(i => i.id.startsWith("issues-"))}
-              onItemClick={handleItemClick}
-              getItemColor={getItemColor}
-            />
-
-            {/* Estabilización - Mejoras */}
-            <RoadmapRow
-              label="Estabilización - Mejoras"
-              items={roadmapItems.filter(i => i.id.startsWith("mejoras-"))}
-              onItemClick={handleItemClick}
-              getItemColor={getItemColor}
-            />
+            {renderSection(stabRows)}
           </div>
 
           {/* Legend */}
@@ -246,11 +295,14 @@ export function RoadmapGantt() {
               <div className="h-2.5 w-2.5 rounded-full bg-[hsl(var(--badge-experience))]" />
               <span className="text-[10px] text-muted-foreground">Mejoras</span>
             </div>
+            <div className="ml-auto flex items-center gap-1.5 text-[10px] text-muted-foreground">
+              <GripVertical className="h-3 w-3" /> Arrastra filas · Arrastra bloques para mover
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Initiative Modal */}
+      {/* Initiative Detail Modal */}
       <Dialog open={!!selectedInitiative} onOpenChange={() => setSelectedInitiative(null)}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           {selectedInitiative && (
@@ -278,7 +330,6 @@ export function RoadmapGantt() {
               </DialogHeader>
 
               <div className="space-y-4 mt-4">
-                {/* Meta info */}
                 <div className="flex flex-wrap gap-4 text-sm">
                   <div className="flex items-center gap-1.5 text-muted-foreground">
                     <Calendar className="h-4 w-4" />
@@ -296,7 +347,6 @@ export function RoadmapGantt() {
                   )}
                 </div>
 
-                {/* Problem */}
                 <div className="space-y-1.5">
                   <div className="flex items-center gap-1.5 text-sm font-medium">
                     <AlertCircle className="h-4 w-4 text-destructive" />
@@ -307,7 +357,6 @@ export function RoadmapGantt() {
                   </p>
                 </div>
 
-                {/* Hypothesis */}
                 <div className="space-y-1.5">
                   <div className="flex items-center gap-1.5 text-sm font-medium">
                     <Lightbulb className="h-4 w-4 text-amber-500" />
@@ -318,7 +367,6 @@ export function RoadmapGantt() {
                   </p>
                 </div>
 
-                {/* Key Results */}
                 <div className="space-y-1.5">
                   <div className="flex items-center gap-1.5 text-sm font-medium">
                     <Target className="h-4 w-4 text-primary" />
@@ -333,7 +381,6 @@ export function RoadmapGantt() {
                   </div>
                 </div>
 
-                {/* KPIs */}
                 <div className="space-y-1.5">
                   <div className="text-sm font-medium">KPIs Impactados</div>
                   <ul className="text-sm text-muted-foreground space-y-1 pl-5">
@@ -350,54 +397,197 @@ export function RoadmapGantt() {
           )}
         </DialogContent>
       </Dialog>
+
+      {/* Edit Item Modal */}
+      <Dialog open={!!editingItem} onOpenChange={() => setEditingItem(null)}>
+        <DialogContent className="max-w-md">
+          {editingItem && (
+            <>
+              <DialogHeader>
+                <DialogTitle>Editar Iniciativa</DialogTitle>
+                <DialogDescription>Modifica las propiedades del bloque en el roadmap.</DialogDescription>
+              </DialogHeader>
+              <div className="space-y-4 mt-4">
+                <div className="space-y-2">
+                  <Label>Título</Label>
+                  <Input
+                    value={editingItem.title}
+                    onChange={e => setEditingItem({ ...editingItem, title: e.target.value })}
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Tipo</Label>
+                    <Select
+                      value={editingItem.type}
+                      onValueChange={v => setEditingItem({ ...editingItem, type: v as RoadmapItem["type"] })}
+                    >
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="feature">Feature</SelectItem>
+                        <SelectItem value="issues">Issues</SelectItem>
+                        <SelectItem value="improvements">Mejoras</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Objetivo</Label>
+                    <Select
+                      value={editingItem.objectiveTag}
+                      onValueChange={v => setEditingItem({ ...editingItem, objectiveTag: v as RoadmapItem["objectiveTag"] })}
+                    >
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="adoption">Adopción</SelectItem>
+                        <SelectItem value="experience">Experiencia</SelectItem>
+                        <SelectItem value="recurring">Recurrente</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Semana inicio</Label>
+                    <Input
+                      type="number"
+                      min={1}
+                      max={26}
+                      value={editingItem.weekStart}
+                      onChange={e => setEditingItem({ ...editingItem, weekStart: Number(e.target.value) })}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Semana fin</Label>
+                    <Input
+                      type="number"
+                      min={editingItem.weekStart}
+                      max={26}
+                      value={editingItem.weekEnd}
+                      onChange={e => setEditingItem({ ...editingItem, weekEnd: Number(e.target.value) })}
+                    />
+                  </div>
+                </div>
+                <div className="flex justify-end gap-2 pt-2">
+                  <Button variant="outline" onClick={() => setEditingItem(null)}>Cancelar</Button>
+                  <Button onClick={handleEditSave}>Guardar</Button>
+                </div>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
 
+// --- Row Component ---
+
 interface RoadmapRowProps {
-  label: string;
+  row: RowDef;
   items: RoadmapItem[];
   onItemClick: (item: RoadmapItem) => void;
   getItemColor: (item: RoadmapItem) => string;
+  onDragStart: (e: React.DragEvent, item: RoadmapItem, week: number) => void;
+  onDragOver: (e: React.DragEvent, rowId: string, week: number) => void;
+  onDragLeave: () => void;
+  onDrop: (e: React.DragEvent, rowId: string, week: number) => void;
+  onEditItem: (item: RoadmapItem) => void;
+  dropTarget: { rowId: string; week: number } | null;
+  onRowDragStart: (e: React.DragEvent, rowId: string) => void;
+  onRowDragOver: (e: React.DragEvent) => void;
+  onRowDrop: (e: React.DragEvent, rowId: string) => void;
 }
 
-function RoadmapRow({ label, items, onItemClick, getItemColor }: RoadmapRowProps) {
+function RoadmapRow({
+  row,
+  items,
+  onItemClick,
+  getItemColor,
+  onDragStart,
+  onDragOver,
+  onDragLeave,
+  onDrop,
+  onEditItem,
+  dropTarget,
+  onRowDragStart,
+  onRowDragOver,
+  onRowDrop,
+}: RoadmapRowProps) {
   return (
-    <div className="grid grid-cols-[140px_repeat(26,1fr)] items-center gap-0.5">
-      <div 
-        className="truncate text-xs font-medium text-foreground pr-1 overflow-hidden whitespace-nowrap" 
-        style={{ textOverflow: 'ellipsis' }}
-        title={label}
+    <div
+      className="grid grid-cols-[160px_repeat(26,1fr)] items-center gap-0.5"
+      onDragOver={onRowDragOver}
+      onDrop={e => onRowDrop(e, row.id)}
+    >
+      {/* Row label with grip handle */}
+      <div
+        className="flex items-center gap-1 truncate text-xs font-medium text-foreground pr-1 cursor-grab active:cursor-grabbing"
+        draggable
+        onDragStart={e => onRowDragStart(e, row.id)}
+        title={row.label}
       >
-        {label}
+        <GripVertical className="h-3 w-3 text-muted-foreground flex-shrink-0 opacity-40 hover:opacity-100 transition-opacity" />
+        <span className="overflow-hidden whitespace-nowrap" style={{ textOverflow: "ellipsis" }}>
+          {row.label}
+        </span>
       </div>
+
+      {/* Week cells */}
       {Array.from({ length: 26 }, (_, weekIndex) => {
         const week = weekIndex + 1;
         const item = items.find(i => week >= i.weekStart && week <= i.weekEnd);
         const isStart = item?.weekStart === week;
         const isEnd = item?.weekEnd === week;
         const isSingle = item && item.weekStart === item.weekEnd;
+        const isDropHere = dropTarget?.rowId === row.id && dropTarget?.week === week && !item;
 
         if (!item) {
-          return <div key={week} className="h-7" />;
+          return (
+            <div
+              key={week}
+              className={`h-7 rounded-sm transition-colors ${
+                isDropHere
+                  ? "bg-primary/20 border border-dashed border-primary/40"
+                  : "hover:bg-white/5"
+              }`}
+              onDragOver={e => onDragOver(e, row.id, week)}
+              onDragLeave={onDragLeave}
+              onDrop={e => onDrop(e, row.id, week)}
+            />
+          );
         }
 
         return (
           <div
             key={week}
+            draggable
+            onDragStart={e => onDragStart(e, item, week)}
             onClick={() => onItemClick(item)}
             title={item.title}
-            className={`flex h-7 items-center text-[8px] font-medium text-white cursor-pointer transition-all hover:opacity-90 hover:scale-[1.02] overflow-hidden ${getItemColor(item)} ${
+            className={`group relative flex h-7 items-center text-[8px] font-medium text-white cursor-grab active:cursor-grabbing transition-all hover:opacity-90 hover:scale-[1.02] overflow-hidden ${getItemColor(item)} ${
               isSingle ? "rounded-md" : isStart ? "rounded-l-md" : isEnd ? "rounded-r-md" : ""
             }`}
           >
             {isStart && (
-              <span 
+              <span
                 className="block w-full px-1 overflow-hidden whitespace-nowrap"
-                style={{ textOverflow: 'ellipsis' }}
+                style={{ textOverflow: "ellipsis" }}
               >
                 {item.title}
               </span>
+            )}
+            {/* Edit button on hover - only on end cell */}
+            {isEnd && (
+              <button
+                onClick={e => {
+                  e.stopPropagation();
+                  onEditItem(item);
+                }}
+                className="absolute right-0.5 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-black/30 rounded p-0.5"
+                title="Editar"
+              >
+                <Pencil className="h-3 w-3 text-white" />
+              </button>
             )}
           </div>
         );
