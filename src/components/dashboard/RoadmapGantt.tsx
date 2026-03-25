@@ -111,6 +111,8 @@ export function RoadmapGantt() {
   const [dragRowId, setDragRowId] = useState<string | null>(null);
   const [resizingItemId, setResizingItemId] = useState<string | null>(null);
 
+  const getInitiative = (id?: string) => initiatives.find(i => i.id === id);
+
   const getItemColor = (item: RoadmapItem) => {
     if (item.type === "issues") return "bg-amber-500";
     if (item.type === "improvements") return "bg-[hsl(var(--badge-experience))]";
@@ -124,6 +126,62 @@ export function RoadmapGantt() {
       setSelectedInitiative(initiative);
     }
   };
+
+  // --- Resize handlers ---
+  const handleResizeStart = useCallback((e: React.MouseEvent, itemId: string, edge: "start" | "end") => {
+    e.preventDefault();
+    e.stopPropagation();
+    const item = items.find(i => i.id === itemId);
+    if (!item) return;
+    resizeRef.current = { itemId, edge, originalStart: item.weekStart, originalEnd: item.weekEnd };
+    setResizingItemId(itemId);
+  }, [items]);
+
+  const handleResizeMove = useCallback((rowId: string, week: number) => {
+    const resize = resizeRef.current;
+    if (!resize) return;
+
+    const item = items.find(i => i.id === resize.itemId);
+    if (!item) return;
+
+    let newStart = item.weekStart;
+    let newEnd = item.weekEnd;
+
+    if (resize.edge === "start") {
+      newStart = Math.max(1, Math.min(week, item.weekEnd)); // can't go past end
+    } else {
+      newEnd = Math.min(26, Math.max(week, item.weekStart)); // can't go before start
+    }
+
+    // Check collisions
+    const rowItems = items.filter(i => i.rowId === rowId && i.id !== resize.itemId);
+    const hasCollision = rowItems.some(i =>
+      (newStart >= i.weekStart && newStart <= i.weekEnd) ||
+      (newEnd >= i.weekStart && newEnd <= i.weekEnd) ||
+      (newStart <= i.weekStart && newEnd >= i.weekEnd)
+    );
+    if (hasCollision) return;
+
+    setItems(prev => prev.map(i =>
+      i.id === resize.itemId ? { ...i, weekStart: newStart, weekEnd: newEnd } : i
+    ));
+  }, [items]);
+
+  const handleResizeEnd = useCallback(() => {
+    resizeRef.current = null;
+    setResizingItemId(null);
+  }, []);
+
+  // Global mouseup to end resize
+  useEffect(() => {
+    const onMouseUp = () => {
+      if (resizeRef.current) {
+        handleResizeEnd();
+      }
+    };
+    window.addEventListener("mouseup", onMouseUp);
+    return () => window.removeEventListener("mouseup", onMouseUp);
+  }, [handleResizeEnd]);
 
   // --- Drag and Drop for items ---
   const handleDragStart = useCallback((e: React.DragEvent, item: RoadmapItem, week: number) => {
