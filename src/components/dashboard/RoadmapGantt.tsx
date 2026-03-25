@@ -290,6 +290,9 @@ export function RoadmapGantt() {
             onRowDragStart={handleRowDragStart}
             onRowDragOver={handleRowDragOver}
             onRowDrop={handleRowDrop}
+            onResizeStart={handleResizeStart}
+            onResizeMove={handleResizeMove}
+            resizingItemId={resizingItemId}
           />
         );
       })}
