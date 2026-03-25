@@ -107,9 +107,9 @@ export function RoadmapGantt() {
   const [editingItem, setEditingItem] = useState<RoadmapItem | null>(null);
   const [dropTarget, setDropTarget] = useState<{ rowId: string; week: number } | null>(null);
   const dragRef = useRef<DragState | null>(null);
+  const resizeRef = useRef<ResizeState | null>(null);
   const [dragRowId, setDragRowId] = useState<string | null>(null);
-
-  const getInitiative = (id?: string) => initiatives.find(i => i.id === id);
+  const [resizingItemId, setResizingItemId] = useState<string | null>(null);
 
   const getItemColor = (item: RoadmapItem) => {
     if (item.type === "issues") return "bg-amber-500";
