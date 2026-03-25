@@ -364,7 +364,7 @@ export function RoadmapGantt() {
               <span className="text-[10px] text-muted-foreground">Mejoras</span>
             </div>
             <div className="ml-auto flex items-center gap-1.5 text-[10px] text-muted-foreground">
-              <GripVertical className="h-3 w-3" /> Arrastra filas · Arrastra bloques para mover
+              <GripVertical className="h-3 w-3" /> Arrastra filas · Arrastra bloques · Arrastra bordes para redimensionar
             </div>
           </div>
         </div>
