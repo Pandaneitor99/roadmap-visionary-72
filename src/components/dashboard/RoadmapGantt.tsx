@@ -384,6 +384,15 @@ export function RoadmapGantt() {
   const shouldRows = rows.filter(r => r.section === "should");
   const stabRows = rows.filter(r => r.section === "stabilization");
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+        <span className="ml-2 text-sm text-muted-foreground">Cargando roadmap...</span>
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="overflow-x-auto rounded-2xl bg-card/60 backdrop-blur-md border border-white/10 p-4 shadow-lg">
