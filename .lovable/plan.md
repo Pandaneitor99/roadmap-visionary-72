@@ -1,39 +1,55 @@
 
 
-## Plan: Conectar proyecto a Supabase
+## Plan: Crear tablas del Roadmap en Supabase y poblar datos iniciales
 
-### Resumen
+### Situacion
 
-Conectar la aplicacion existente a la instancia de Supabase proporcionada por el usuario para habilitar persistencia de datos (roadmap interactivo, etc.).
-
-### Datos de conexion
-
-- **URL**: `https://wiektajetbbnejurnazd.supabase.co`
-- **Publishable Key**: `sb_publishable_Bm4kv3NZZGmCOwlNtIC0Kg_s5O5wKPo`
-
-La publishable key es publica y segura para incluir en el codigo fuente.
+La app intenta leer/escribir en `roadmap_rows` y `roadmap_items` pero las tablas no existen en Supabase. Hay que crearlas via migracion y luego insertar los datos iniciales.
 
 ### Pasos
 
-**1. Instalar dependencia `@supabase/supabase-js`**
+**1. Crear migracion con el esquema de las dos tablas**
 
-**2. Crear archivo de integracion `src/integrations/supabase/client.ts`**
-- Configurar el cliente Supabase con la URL y la anon key proporcionadas
+```sql
+CREATE TABLE public.roadmap_rows (
+  id text PRIMARY KEY,
+  label text NOT NULL,
+  section text NOT NULL DEFAULT 'must',
+  sort_order integer NOT NULL DEFAULT 0,
+  updated_at timestamptz DEFAULT now()
+);
 
-**3. Crear archivo de tipos `src/integrations/supabase/types.ts`**
-- Placeholder inicial para los tipos de la base de datos (se actualizara cuando se creen tablas)
+CREATE TABLE public.roadmap_items (
+  id text PRIMARY KEY,
+  title text NOT NULL,
+  type text NOT NULL DEFAULT 'feature',
+  objective_tag text NOT NULL DEFAULT 'adoption',
+  week_start integer NOT NULL,
+  week_end integer NOT NULL,
+  initiative_id text,
+  row_id text REFERENCES public.roadmap_rows(id) ON DELETE CASCADE,
+  updated_at timestamptz DEFAULT now()
+);
 
-**4. Crear archivo index `src/integrations/supabase/index.ts`**
-- Re-exportar el cliente para uso centralizado
+ALTER TABLE public.roadmap_rows ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.roadmap_items ENABLE ROW LEVEL SECURITY;
 
-### Archivos a crear/modificar
+CREATE POLICY "Allow all on roadmap_rows" ON public.roadmap_rows FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow all on roadmap_items" ON public.roadmap_items FOR ALL USING (true) WITH CHECK (true);
+```
 
-- `src/integrations/supabase/client.ts` — cliente Supabase
-- `src/integrations/supabase/types.ts` — tipos de BD
-- `src/integrations/supabase/index.ts` — barrel export
-- `package.json` — agregar `@supabase/supabase-js`
+**2. Insertar datos iniciales (seed)**
 
-### Siguiente paso
+Insertar las filas y los items del roadmap Q1 actual para que la app cargue con los datos correctos desde Supabase.
 
-Una vez conectado, se podran crear las tablas `roadmap_items` y `roadmap_rows` para persistir los cambios del roadmap.
+### Detalle tecnico
+
+- Se usa una migracion para crear las tablas (cambio de esquema)
+- Se usa el insert tool para poblar los datos iniciales
+- Las politicas RLS permiten acceso publico (no hay autenticacion en la app)
+
+### Archivos
+
+- Nueva migracion SQL (esquema)
+- Sin cambios en el codigo frontend (ya tiene la logica de fetch/upsert)
 
