@@ -104,6 +104,7 @@ interface ResizeState {
 export function RoadmapGantt() {
   const [items, setItems] = useState<RoadmapItem[]>(initialItems);
   const [rows, setRows] = useState<RowDef[]>(initialRows);
+  const [loading, setLoading] = useState(true);
   const [selectedInitiative, setSelectedInitiative] = useState<typeof initiatives[0] | null>(null);
   const [editingItem, setEditingItem] = useState<RoadmapItem | null>(null);
   const [dropTarget, setDropTarget] = useState<{ rowId: string; week: number } | null>(null);
@@ -111,6 +112,79 @@ export function RoadmapGantt() {
   const resizeRef = useRef<ResizeState | null>(null);
   const [dragRowId, setDragRowId] = useState<string | null>(null);
   const [resizingItemId, setResizingItemId] = useState<string | null>(null);
+
+  // Load data from Supabase on mount
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const [rowsRes, itemsRes] = await Promise.all([
+          supabase.from("roadmap_rows").select("*").order("sort_order"),
+          supabase.from("roadmap_items").select("*"),
+        ]);
+
+        if (rowsRes.data && rowsRes.data.length > 0) {
+          setRows(rowsRes.data.map((r: any) => ({
+            id: r.id,
+            label: r.label,
+            section: r.section as RowDef["section"],
+          })));
+        }
+
+        if (itemsRes.data && itemsRes.data.length > 0) {
+          setItems(itemsRes.data.map((i: any) => ({
+            id: i.id,
+            title: i.title,
+            type: i.type as RoadmapItem["type"],
+            objectiveTag: i.objective_tag as RoadmapItem["objectiveTag"],
+            weekStart: i.week_start,
+            weekEnd: i.week_end,
+            initiativeId: i.initiative_id,
+            rowId: i.row_id,
+          })));
+        }
+      } catch (err) {
+        console.log("Using local data (Supabase not available):", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, []);
+
+  // Persist item to Supabase
+  const saveItem = useCallback(async (item: RoadmapItem) => {
+    try {
+      await supabase.from("roadmap_items").upsert({
+        id: item.id,
+        title: item.title,
+        type: item.type,
+        objective_tag: item.objectiveTag,
+        week_start: item.weekStart,
+        week_end: item.weekEnd,
+        initiative_id: item.initiativeId || null,
+        row_id: item.rowId,
+        updated_at: new Date().toISOString(),
+      });
+    } catch (err) {
+      console.error("Error saving item:", err);
+    }
+  }, []);
+
+  // Persist rows order to Supabase
+  const saveRows = useCallback(async (newRows: RowDef[]) => {
+    try {
+      const updates = newRows.map((r, idx) => ({
+        id: r.id,
+        label: r.label,
+        section: r.section,
+        sort_order: idx,
+        updated_at: new Date().toISOString(),
+      }));
+      await supabase.from("roadmap_rows").upsert(updates);
+    } catch (err) {
+      console.error("Error saving rows:", err);
+    }
+  }, []);
 
   const getInitiative = (id?: string) => initiatives.find(i => i.id === id);
 
