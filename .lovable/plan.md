@@ -1,42 +1,39 @@
 
 
-## Plan: Roadmap interactivo con drag-and-drop y edicion de iniciativas
+## Plan: Conectar proyecto a Supabase
 
 ### Resumen
 
-Convertir el roadmap actual (estatico) en un tablero interactivo donde:
-1. Los bloques de iniciativas se pueden arrastrar horizontalmente (cambiar semanas) y verticalmente (cambiar fila/iniciativa)
-2. Al hacer doble clic o mediante un boton de edicion, se pueden modificar el titulo, tipo, y semanas de cada item
+Conectar la aplicacion existente a la instancia de Supabase proporcionada por el usuario para habilitar persistencia de datos (roadmap interactivo, etc.).
 
-### Cambios tecnicos
+### Datos de conexion
 
-**1. Convertir `roadmapItems` de constante a estado**
-- Mover `roadmapItems` a un `useState` dentro de `RoadmapGantt`
-- Definir las filas (rows) como un array de estado tambien, para permitir reordenamiento
+- **URL**: `https://wiektajetbbnejurnazd.supabase.co`
+- **Publishable Key**: `sb_publishable_Bm4kv3NZZGmCOwlNtIC0Kg_s5O5wKPo`
 
-**2. Implementar drag-and-drop nativo (HTML5 Drag API)**
-- No se necesita libreria externa. Usar `draggable`, `onDragStart`, `onDragOver`, `onDrop` en las celdas del grid
-- Al iniciar drag: guardar el item y su posicion actual
-- Al soltar sobre una celda vacia: recalcular `weekStart`/`weekEnd` del item segun la columna destino, y reasignar la fila si cambio
-- Restricciones: no permitir que un bloque multi-semana se salga del rango 1-26
-- Feedback visual: highlight de la celda destino durante el drag con un borde o fondo temporal
+La publishable key es publica y segura para incluir en el codigo fuente.
 
-**3. Implementar edicion inline de iniciativas**
-- Al hacer clic en un item, ademas del modal existente, agregar un boton de "Editar" (icono lapiz) que abre un Dialog de edicion
-- Campos editables: titulo, tipo (feature/issues/improvements), objectiveTag, weekStart, weekEnd
-- Usar `Input` y `Select` existentes del proyecto
-- Al guardar, actualizar el estado local de `roadmapItems`
+### Pasos
 
-**4. Reorganizacion de filas por drag**
-- Cada fila tendra un area de drag en el label (icono grip)
-- Al arrastrar una fila completa, se reordena visualmente
+**1. Instalar dependencia `@supabase/supabase-js`**
 
-### Archivos a modificar
+**2. Crear archivo de integracion `src/integrations/supabase/client.ts`**
+- Configurar el cliente Supabase con la URL y la anon key proporcionadas
 
-- `src/components/dashboard/RoadmapGantt.tsx` — toda la logica de estado, drag-and-drop, y modal de edicion
+**3. Crear archivo de tipos `src/integrations/supabase/types.ts`**
+- Placeholder inicial para los tipos de la base de datos (se actualizara cuando se creen tablas)
 
-### Consideraciones
-- Los datos son solo en memoria (estado local). No hay backend, asi que los cambios se pierden al recargar la pagina
-- Se mantiene el modal existente de detalle de iniciativa; se agrega un boton de edicion dentro de el
-- El estilo glassmorphism y la estructura visual actual se preservan
+**4. Crear archivo index `src/integrations/supabase/index.ts`**
+- Re-exportar el cliente para uso centralizado
+
+### Archivos a crear/modificar
+
+- `src/integrations/supabase/client.ts` — cliente Supabase
+- `src/integrations/supabase/types.ts` — tipos de BD
+- `src/integrations/supabase/index.ts` — barrel export
+- `package.json` — agregar `@supabase/supabase-js`
+
+### Siguiente paso
+
+Una vez conectado, se podran crear las tablas `roadmap_items` y `roadmap_rows` para persistir los cambios del roadmap.
 
