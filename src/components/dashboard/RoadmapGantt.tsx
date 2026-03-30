@@ -308,6 +308,7 @@ export function RoadmapGantt() {
     ));
     saveItem(updatedItem);
     dragRef.current = null;
+  }, [items, saveItem]);
 
   // --- Row reorder drag ---
   const handleRowDragStart = useCallback((e: React.DragEvent, rowId: string) => {
@@ -333,15 +334,17 @@ export function RoadmapGantt() {
       if (fromIdx === -1 || toIdx === -1) return prev;
       const [moved] = newRows.splice(fromIdx, 1);
       newRows.splice(toIdx, 0, moved);
+      saveRows(newRows);
       return newRows;
     });
     setDragRowId(null);
-  }, [dragRowId]);
+  }, [dragRowId, saveRows]);
 
   // --- Edit item ---
   const handleEditSave = useCallback(() => {
     if (!editingItem) return;
     setItems(prev => prev.map(i => i.id === editingItem.id ? editingItem : i));
+    saveItem(editingItem);
     setEditingItem(null);
   }, [editingItem]);
 
