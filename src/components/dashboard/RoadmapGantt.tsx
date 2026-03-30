@@ -243,9 +243,13 @@ export function RoadmapGantt() {
   }, [items]);
 
   const handleResizeEnd = useCallback(() => {
+    if (resizeRef.current) {
+      const item = items.find(i => i.id === resizeRef.current?.itemId);
+      if (item) saveItem(item);
+    }
     resizeRef.current = null;
     setResizingItemId(null);
-  }, []);
+  }, [items, saveItem]);
 
   // Global mouseup to end resize
   useEffect(() => {
