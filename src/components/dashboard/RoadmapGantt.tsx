@@ -302,13 +302,12 @@ export function RoadmapGantt() {
     );
     if (hasCollision) return;
 
+    const updatedItem = { ...drag.item, weekStart: newStart, weekEnd: newEnd, rowId: targetRowId };
     setItems(prev => prev.map(i =>
-      i.id === drag.item.id
-        ? { ...i, weekStart: newStart, weekEnd: newEnd, rowId: targetRowId }
-        : i
+      i.id === drag.item.id ? updatedItem : i
     ));
+    saveItem(updatedItem);
     dragRef.current = null;
-  }, [items]);
 
   // --- Row reorder drag ---
   const handleRowDragStart = useCallback((e: React.DragEvent, rowId: string) => {
