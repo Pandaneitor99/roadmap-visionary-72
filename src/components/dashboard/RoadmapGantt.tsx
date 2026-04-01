@@ -973,10 +973,6 @@ function RoadmapRow({
   onResizeMove,
   resizingItemId,
   onCellClick,
-  onDeleteRow,
-  onMoveRow,
-  isFirst,
-  isLast,
 }: RoadmapRowProps) {
   return (
     <div
