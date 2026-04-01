@@ -954,7 +954,7 @@ interface RoadmapRowProps {
 
 function RoadmapRow({
   row,
-  items,
+  totalWeeks,
   onItemClick,
   getItemColor,
   onDragStart,
