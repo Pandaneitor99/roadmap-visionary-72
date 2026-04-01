@@ -991,50 +991,17 @@ function RoadmapRow({
         <span className="overflow-hidden whitespace-nowrap flex-1" style={{ textOverflow: "ellipsis" }}>
           {row.label}
         </span>
-        <div className="opacity-0 group-hover/label:opacity-100 transition-opacity flex items-center gap-0 flex-shrink-0">
-          {!isFirst && (
-            <button
-              onClick={e => { e.stopPropagation(); onMoveRow(row.id, "up"); }}
-              className="hover:bg-muted rounded p-0.5"
-              title="Mover arriba"
-              draggable={false}
-              onDragStart={e => e.stopPropagation()}
-            >
-              <ArrowUp className="h-2.5 w-2.5 text-muted-foreground" />
-            </button>
-          )}
-          {!isLast && (
-            <button
-              onClick={e => { e.stopPropagation(); onMoveRow(row.id, "down"); }}
-              className="hover:bg-muted rounded p-0.5"
-              title="Mover abajo"
-              draggable={false}
-              onDragStart={e => e.stopPropagation()}
-            >
-              <ArrowDown className="h-2.5 w-2.5 text-muted-foreground" />
-            </button>
-          )}
-          {items.length > 0 && (
-            <button
-              onClick={e => { e.stopPropagation(); onEditItem(items[0]); }}
-              className="hover:bg-muted rounded p-0.5"
-              title="Editar iniciativa"
-              draggable={false}
-              onDragStart={e => e.stopPropagation()}
-            >
-              <Pencil className="h-2.5 w-2.5 text-muted-foreground" />
-            </button>
-          )}
+        {items.length > 0 && (
           <button
-            onClick={e => { e.stopPropagation(); onDeleteRow(row); }}
-            className="hover:bg-destructive/10 rounded p-0.5"
-            title="Eliminar fila"
+            onClick={e => { e.stopPropagation(); onEditItem(items[0]); }}
+            className="opacity-0 group-hover/label:opacity-100 transition-opacity hover:bg-muted rounded p-0.5 flex-shrink-0"
+            title="Editar iniciativa"
             draggable={false}
             onDragStart={e => e.stopPropagation()}
           >
-            <Trash2 className="h-2.5 w-2.5 text-destructive" />
+            <Pencil className="h-2.5 w-2.5 text-muted-foreground" />
           </button>
-        </div>
+        )}
       </div>
 
       {/* Week cells */}
