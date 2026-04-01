@@ -553,9 +553,9 @@ export function RoadmapGantt() {
           </div>
 
           {/* Sub-header - Weeks */}
-          <div className="mb-3 grid grid-cols-[160px_repeat(26,1fr)] gap-0.5">
+          <div className="mb-3" style={{ display: "grid", gridTemplateColumns: `160px repeat(${totalWeeks}, 1fr)`, gap: "2px" }}>
             <div></div>
-            {Array.from({ length: 26 }, (_, i) => (
+            {Array.from({ length: totalWeeks }, (_, i) => (
               <div
                 key={i}
                 className="rounded-md bg-gradient-to-b from-white/5 to-transparent backdrop-blur-sm border border-white/5 px-0.5 py-0.5 text-center text-[9px] text-muted-foreground"
