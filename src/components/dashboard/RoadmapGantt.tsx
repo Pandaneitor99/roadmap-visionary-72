@@ -29,7 +29,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Calendar, MapPin, Users, Target, Lightbulb, AlertCircle, Pencil, GripVertical, Loader2, Plus, Trash2, ArrowUp, ArrowDown } from "lucide-react";
+import { Calendar, MapPin, Users, Target, Lightbulb, AlertCircle, Pencil, GripVertical, Loader2, Plus, Trash2 } from "lucide-react";
 
 const sprints = [
   { id: 1, label: "S1", dates: "Ene 5 - Ene 18", weeks: [1, 2] },
