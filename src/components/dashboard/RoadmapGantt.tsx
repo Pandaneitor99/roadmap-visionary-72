@@ -900,23 +900,6 @@ export function RoadmapGantt() {
         </AlertDialogContent>
       </AlertDialog>
 
-      {/* Delete Row Confirmation */}
-      <AlertDialog open={!!deletingRow} onOpenChange={() => setDeletingRow(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>¿Eliminar fila?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Se eliminará la fila "{deletingRow?.label}" y todas sus celdas. Esta acción no se puede deshacer.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={handleConfirmDeleteRow} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-              Eliminar
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </>
   );
 }
