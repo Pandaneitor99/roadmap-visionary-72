@@ -430,7 +430,7 @@ export function RoadmapGantt() {
     const newStart = targetWeek - drag.offsetWeek;
     const newEnd = newStart + duration;
 
-    if (newStart < 1 || newEnd > 26) return;
+    if (newStart < 1) return;
 
     const rowItems = items.filter(i => i.rowId === targetRowId && i.id !== drag.item.id);
     const hasCollision = rowItems.some(i =>
