@@ -470,6 +470,8 @@ export function RoadmapGantt() {
       const fromIdx = newRows.findIndex(r => r.id === dragRowId);
       const toIdx = newRows.findIndex(r => r.id === targetRowId);
       if (fromIdx === -1 || toIdx === -1) return prev;
+      // Adopt the target row's section
+      newRows[fromIdx] = { ...newRows[fromIdx], section: newRows[toIdx].section };
       const [moved] = newRows.splice(fromIdx, 1);
       newRows.splice(toIdx, 0, moved);
       saveRows(newRows);
