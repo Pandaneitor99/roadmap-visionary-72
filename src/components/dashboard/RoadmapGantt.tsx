@@ -31,21 +31,31 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Calendar, MapPin, Users, Target, Lightbulb, AlertCircle, Pencil, GripVertical, Loader2, Plus, Trash2 } from "lucide-react";
 
-const sprints = [
-  { id: 1, label: "S1", dates: "Ene 5 - Ene 18", weeks: [1, 2] },
-  { id: 2, label: "S2", dates: "Ene 19 - Feb 1", weeks: [3, 4] },
-  { id: 3, label: "S3", dates: "Feb 2 - Feb 15", weeks: [5, 6] },
-  { id: 4, label: "S4", dates: "Feb 16 - Mar 1", weeks: [7, 8] },
-  { id: 5, label: "S5", dates: "Mar 2 - Mar 15", weeks: [9, 10] },
-  { id: 6, label: "S6", dates: "Mar 16 - Mar 29", weeks: [11, 12] },
-  { id: 7, label: "S7", dates: "Mar 30 - Apr 12", weeks: [13, 14] },
-  { id: 8, label: "S8", dates: "Apr 13 - Apr 26", weeks: [15, 16] },
-  { id: 9, label: "S9", dates: "Apr 27 - May 10", weeks: [17, 18] },
-  { id: 10, label: "S10", dates: "May 11 - May 24", weeks: [19, 20] },
-  { id: 11, label: "S11", dates: "May 25 - Jun 7", weeks: [21, 22] },
-  { id: 12, label: "S12", dates: "Jun 8 - Jun 21", weeks: [23, 24] },
-  { id: 13, label: "S13", dates: "Jun 22 - Jul 5", weeks: [25, 26] },
-];
+// Base date: Monday Jan 5 2026
+const BASE_DATE = new Date(2026, 0, 5); // Jan 5, 2026
+
+const MONTH_NAMES_ES = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+
+function generateSprints(count: number) {
+  return Array.from({ length: count }, (_, i) => {
+    const startDay = new Date(BASE_DATE);
+    startDay.setDate(startDay.getDate() + i * 14); // each sprint = 2 weeks
+    const endDay = new Date(startDay);
+    endDay.setDate(endDay.getDate() + 13); // 14 days total (Mon to Sun next week)
+
+    const startStr = `${MONTH_NAMES_ES[startDay.getMonth()]} ${startDay.getDate()}`;
+    const endStr = `${MONTH_NAMES_ES[endDay.getMonth()]} ${endDay.getDate()}`;
+
+    return {
+      id: i + 1,
+      label: `S${i + 1}`,
+      dates: `${startStr} - ${endStr}`,
+      weeks: [i * 2 + 1, i * 2 + 2] as [number, number],
+    };
+  });
+}
+
+const INITIAL_SPRINT_COUNT = 13;
 
 export interface RoadmapItem {
   id: string;
@@ -121,6 +131,9 @@ export function RoadmapGantt() {
   const dragRef = useRef<DragState | null>(null);
   const resizeRef = useRef<ResizeState | null>(null);
   const [dragRowId, setDragRowId] = useState<string | null>(null);
+  const [sprintCount, setSprintCount] = useState(INITIAL_SPRINT_COUNT);
+  const sprints = generateSprints(sprintCount);
+  const totalWeeks = sprintCount * 2;
   const [resizingItemId, setResizingItemId] = useState<string | null>(null);
 
   // New item creation state
@@ -354,7 +367,7 @@ export function RoadmapGantt() {
     if (resize.edge === "start") {
       newStart = Math.max(1, Math.min(week, item.weekEnd));
     } else {
-      newEnd = Math.min(26, Math.max(week, item.weekStart));
+      newEnd = Math.max(week, item.weekStart);
     }
 
     const rowItems = items.filter(i => i.rowId === rowId && i.id !== resize.itemId);
@@ -417,7 +430,7 @@ export function RoadmapGantt() {
     const newStart = targetWeek - drag.offsetWeek;
     const newEnd = newStart + duration;
 
-    if (newStart < 1 || newEnd > 26) return;
+    if (newStart < 1) return;
 
     const rowItems = items.filter(i => i.rowId === targetRowId && i.id !== drag.item.id);
     const hasCollision = rowItems.some(i =>
@@ -457,6 +470,8 @@ export function RoadmapGantt() {
       const fromIdx = newRows.findIndex(r => r.id === dragRowId);
       const toIdx = newRows.findIndex(r => r.id === targetRowId);
       if (fromIdx === -1 || toIdx === -1) return prev;
+      // Adopt the target row's section
+      newRows[fromIdx] = { ...newRows[fromIdx], section: newRows[toIdx].section };
       const [moved] = newRows.splice(fromIdx, 1);
       newRows.splice(toIdx, 0, moved);
       saveRows(newRows);
@@ -485,6 +500,7 @@ export function RoadmapGantt() {
             key={row.id}
             row={row}
             items={rowItems}
+            totalWeeks={totalWeeks}
             onItemClick={handleItemClick}
             getItemColor={getItemColor}
             onDragStart={handleDragStart}
@@ -524,7 +540,7 @@ export function RoadmapGantt() {
       <div className="overflow-x-auto rounded-2xl bg-card/60 backdrop-blur-md border border-white/10 p-4 shadow-lg">
         <div className="min-w-[1200px]">
           {/* Header - Sprints */}
-          <div className="mb-2 grid grid-cols-[160px_repeat(13,1fr)] gap-0.5">
+          <div className="mb-2" style={{ display: "grid", gridTemplateColumns: `160px repeat(${sprintCount}, 1fr)`, gap: "2px" }}>
             <div className="text-xs font-medium text-muted-foreground">Iniciativa</div>
             {sprints.map((sprint) => (
               <div
@@ -538,9 +554,9 @@ export function RoadmapGantt() {
           </div>
 
           {/* Sub-header - Weeks */}
-          <div className="mb-3 grid grid-cols-[160px_repeat(26,1fr)] gap-0.5">
+          <div className="mb-3" style={{ display: "grid", gridTemplateColumns: `160px repeat(${totalWeeks}, 1fr)`, gap: "2px" }}>
             <div></div>
-            {Array.from({ length: 26 }, (_, i) => (
+            {Array.from({ length: totalWeeks }, (_, i) => (
               <div
                 key={i}
                 className="rounded-md bg-gradient-to-b from-white/5 to-transparent backdrop-blur-sm border border-white/5 px-0.5 py-0.5 text-center text-[9px] text-muted-foreground"
@@ -561,8 +577,8 @@ export function RoadmapGantt() {
             {renderSection(stabRows)}
           </div>
 
-          {/* Add Row Button */}
-          <div className="mt-3 flex justify-start">
+          {/* Add Row / Add Sprint Buttons */}
+          <div className="mt-3 flex justify-start gap-2">
             <Button
               variant="ghost"
               size="sm"
@@ -571,6 +587,15 @@ export function RoadmapGantt() {
             >
               <Plus className="h-3 w-3" />
               Agregar fila
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-xs text-muted-foreground hover:text-foreground gap-1"
+              onClick={() => setSprintCount(prev => prev + 1)}
+            >
+              <Plus className="h-3 w-3" />
+              Agregar sprint
             </Button>
           </div>
 
@@ -749,7 +774,7 @@ export function RoadmapGantt() {
                     <Input
                       type="number"
                       min={1}
-                      max={26}
+                      max={totalWeeks}
                       value={editingItem.weekStart}
                       onChange={e => setEditingItem({ ...editingItem, weekStart: Number(e.target.value) })}
                     />
@@ -759,7 +784,7 @@ export function RoadmapGantt() {
                     <Input
                       type="number"
                       min={editingItem.weekStart}
-                      max={26}
+                      max={totalWeeks}
                       value={editingItem.weekEnd}
                       onChange={e => setEditingItem({ ...editingItem, weekEnd: Number(e.target.value) })}
                     />
@@ -909,6 +934,7 @@ export function RoadmapGantt() {
 interface RoadmapRowProps {
   row: RowDef;
   items: RoadmapItem[];
+  totalWeeks: number;
   onItemClick: (item: RoadmapItem) => void;
   getItemColor: (item: RoadmapItem) => string;
   onDragStart: (e: React.DragEvent, item: RoadmapItem, week: number) => void;
@@ -929,6 +955,7 @@ interface RoadmapRowProps {
 function RoadmapRow({
   row,
   items,
+  totalWeeks,
   onItemClick,
   getItemColor,
   onDragStart,
@@ -947,7 +974,7 @@ function RoadmapRow({
 }: RoadmapRowProps) {
   return (
     <div
-      className="grid grid-cols-[160px_repeat(26,1fr)] items-center gap-0.5"
+      style={{ display: "grid", gridTemplateColumns: `160px repeat(${totalWeeks}, 1fr)`, gap: "2px", alignItems: "center" }}
       onDragOver={onRowDragOver}
       onDrop={e => onRowDrop(e, row.id)}
     >
@@ -976,7 +1003,7 @@ function RoadmapRow({
       </div>
 
       {/* Week cells */}
-      {Array.from({ length: 26 }, (_, weekIndex) => {
+      {Array.from({ length: totalWeeks }, (_, weekIndex) => {
         const week = weekIndex + 1;
         const item = items.find(i => week >= i.weekStart && week <= i.weekEnd);
         const isStart = item?.weekStart === week;
