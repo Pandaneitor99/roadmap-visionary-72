@@ -131,6 +131,9 @@ export function RoadmapGantt() {
   const dragRef = useRef<DragState | null>(null);
   const resizeRef = useRef<ResizeState | null>(null);
   const [dragRowId, setDragRowId] = useState<string | null>(null);
+  const [sprintCount, setSprintCount] = useState(INITIAL_SPRINT_COUNT);
+  const sprints = generateSprints(sprintCount);
+  const totalWeeks = sprintCount * 2;
   const [resizingItemId, setResizingItemId] = useState<string | null>(null);
 
   // New item creation state
