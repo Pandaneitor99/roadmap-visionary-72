@@ -784,7 +784,7 @@ export function RoadmapGantt() {
                     <Input
                       type="number"
                       min={editingItem.weekStart}
-                      max={26}
+                      max={totalWeeks}
                       value={editingItem.weekEnd}
                       onChange={e => setEditingItem({ ...editingItem, weekEnd: Number(e.target.value) })}
                     />
