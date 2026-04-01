@@ -500,6 +500,7 @@ export function RoadmapGantt() {
             key={row.id}
             row={row}
             items={rowItems}
+            totalWeeks={totalWeeks}
             onItemClick={handleItemClick}
             getItemColor={getItemColor}
             onDragStart={handleDragStart}
