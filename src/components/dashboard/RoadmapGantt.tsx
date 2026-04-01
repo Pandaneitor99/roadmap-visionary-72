@@ -576,8 +576,8 @@ export function RoadmapGantt() {
             {renderSection(stabRows)}
           </div>
 
-          {/* Add Row Button */}
-          <div className="mt-3 flex justify-start">
+          {/* Add Row / Add Sprint Buttons */}
+          <div className="mt-3 flex justify-start gap-2">
             <Button
               variant="ghost"
               size="sm"
@@ -586,6 +586,15 @@ export function RoadmapGantt() {
             >
               <Plus className="h-3 w-3" />
               Agregar fila
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-xs text-muted-foreground hover:text-foreground gap-1"
+              onClick={() => setSprintCount(prev => prev + 1)}
+            >
+              <Plus className="h-3 w-3" />
+              Agregar sprint
             </Button>
           </div>
 
