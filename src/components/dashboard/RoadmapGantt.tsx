@@ -29,7 +29,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Calendar, MapPin, Users, Target, Lightbulb, AlertCircle, Pencil, GripVertical, Loader2, Plus, Trash2, ArrowUp, ArrowDown } from "lucide-react";
+import { Calendar, MapPin, Users, Target, Lightbulb, AlertCircle, Pencil, GripVertical, Loader2, Plus, Trash2 } from "lucide-react";
 
 const sprints = [
   { id: 1, label: "S1", dates: "Ene 5 - Ene 18", weeks: [1, 2] },
@@ -139,7 +139,7 @@ export function RoadmapGantt() {
   const [newRowData, setNewRowData] = useState({ label: "", section: "must" as RowDef["section"] });
 
   // Delete row confirmation
-  const [deletingRow, setDeletingRow] = useState<RowDef | null>(null);
+  
 
   // Load data from Supabase on mount
   useEffect(() => {
@@ -316,18 +316,6 @@ export function RoadmapGantt() {
     setShowAddRow(false);
   }, [newRowData, saveNewRow]);
 
-  // --- Delete Row ---
-  const handleConfirmDeleteRow = useCallback(() => {
-    if (!deletingRow) return;
-    setItems(prev => prev.filter(i => i.rowId !== deletingRow.id));
-    setRows(prev => {
-      const updated = prev.filter(r => r.id !== deletingRow.id);
-      saveRows(updated);
-      return updated;
-    });
-    deleteRowFromDb(deletingRow.id);
-    setDeletingRow(null);
-  }, [deletingRow, deleteRowFromDb, saveRows]);
 
   // --- Move Row Up/Down ---
   const moveRow = useCallback((rowId: string, direction: "up" | "down") => {
@@ -512,10 +500,6 @@ export function RoadmapGantt() {
             onResizeMove={handleResizeMove}
             resizingItemId={resizingItemId}
             onCellClick={handleCellClick}
-            onDeleteRow={setDeletingRow}
-            onMoveRow={moveRow}
-            isFirst={idx === 0}
-            isLast={idx === sectionRows.length - 1}
           />
         );
       })}
@@ -916,23 +900,6 @@ export function RoadmapGantt() {
         </AlertDialogContent>
       </AlertDialog>
 
-      {/* Delete Row Confirmation */}
-      <AlertDialog open={!!deletingRow} onOpenChange={() => setDeletingRow(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>¿Eliminar fila?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Se eliminará la fila "{deletingRow?.label}" y todas sus celdas. Esta acción no se puede deshacer.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={handleConfirmDeleteRow} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-              Eliminar
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </>
   );
 }
@@ -957,10 +924,6 @@ interface RoadmapRowProps {
   onResizeMove: (rowId: string, week: number) => void;
   resizingItemId: string | null;
   onCellClick: (rowId: string, week: number) => void;
-  onDeleteRow: (row: RowDef) => void;
-  onMoveRow: (rowId: string, direction: "up" | "down") => void;
-  isFirst: boolean;
-  isLast: boolean;
 }
 
 function RoadmapRow({
@@ -981,10 +944,6 @@ function RoadmapRow({
   onResizeMove,
   resizingItemId,
   onCellClick,
-  onDeleteRow,
-  onMoveRow,
-  isFirst,
-  isLast,
 }: RoadmapRowProps) {
   return (
     <div
@@ -1003,50 +962,17 @@ function RoadmapRow({
         <span className="overflow-hidden whitespace-nowrap flex-1" style={{ textOverflow: "ellipsis" }}>
           {row.label}
         </span>
-        <div className="opacity-0 group-hover/label:opacity-100 transition-opacity flex items-center gap-0 flex-shrink-0">
-          {!isFirst && (
-            <button
-              onClick={e => { e.stopPropagation(); onMoveRow(row.id, "up"); }}
-              className="hover:bg-muted rounded p-0.5"
-              title="Mover arriba"
-              draggable={false}
-              onDragStart={e => e.stopPropagation()}
-            >
-              <ArrowUp className="h-2.5 w-2.5 text-muted-foreground" />
-            </button>
-          )}
-          {!isLast && (
-            <button
-              onClick={e => { e.stopPropagation(); onMoveRow(row.id, "down"); }}
-              className="hover:bg-muted rounded p-0.5"
-              title="Mover abajo"
-              draggable={false}
-              onDragStart={e => e.stopPropagation()}
-            >
-              <ArrowDown className="h-2.5 w-2.5 text-muted-foreground" />
-            </button>
-          )}
-          {items.length > 0 && (
-            <button
-              onClick={e => { e.stopPropagation(); onEditItem(items[0]); }}
-              className="hover:bg-muted rounded p-0.5"
-              title="Editar iniciativa"
-              draggable={false}
-              onDragStart={e => e.stopPropagation()}
-            >
-              <Pencil className="h-2.5 w-2.5 text-muted-foreground" />
-            </button>
-          )}
+        {items.length > 0 && (
           <button
-            onClick={e => { e.stopPropagation(); onDeleteRow(row); }}
-            className="hover:bg-destructive/10 rounded p-0.5"
-            title="Eliminar fila"
+            onClick={e => { e.stopPropagation(); onEditItem(items[0]); }}
+            className="opacity-0 group-hover/label:opacity-100 transition-opacity hover:bg-muted rounded p-0.5 flex-shrink-0"
+            title="Editar iniciativa"
             draggable={false}
             onDragStart={e => e.stopPropagation()}
           >
-            <Trash2 className="h-2.5 w-2.5 text-destructive" />
+            <Pencil className="h-2.5 w-2.5 text-muted-foreground" />
           </button>
-        </div>
+        )}
       </div>
 
       {/* Week cells */}
