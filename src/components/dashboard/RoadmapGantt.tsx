@@ -953,10 +953,6 @@ interface RoadmapRowProps {
   onResizeMove: (rowId: string, week: number) => void;
   resizingItemId: string | null;
   onCellClick: (rowId: string, week: number) => void;
-  onDeleteRow: (row: RowDef) => void;
-  onMoveRow: (rowId: string, direction: "up" | "down") => void;
-  isFirst: boolean;
-  isLast: boolean;
 }
 
 function RoadmapRow({
