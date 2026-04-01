@@ -1003,7 +1003,7 @@ function RoadmapRow({
       </div>
 
       {/* Week cells */}
-      {Array.from({ length: 26 }, (_, weekIndex) => {
+      {Array.from({ length: totalWeeks }, (_, weekIndex) => {
         const week = weekIndex + 1;
         const item = items.find(i => week >= i.weekStart && week <= i.weekEnd);
         const isStart = item?.weekStart === week;
