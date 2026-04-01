@@ -512,10 +512,6 @@ export function RoadmapGantt() {
             onResizeMove={handleResizeMove}
             resizingItemId={resizingItemId}
             onCellClick={handleCellClick}
-            onDeleteRow={setDeletingRow}
-            onMoveRow={moveRow}
-            isFirst={idx === 0}
-            isLast={idx === sectionRows.length - 1}
           />
         );
       })}
