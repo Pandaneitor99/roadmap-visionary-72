@@ -31,21 +31,31 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Calendar, MapPin, Users, Target, Lightbulb, AlertCircle, Pencil, GripVertical, Loader2, Plus, Trash2 } from "lucide-react";
 
-const sprints = [
-  { id: 1, label: "S1", dates: "Ene 5 - Ene 18", weeks: [1, 2] },
-  { id: 2, label: "S2", dates: "Ene 19 - Feb 1", weeks: [3, 4] },
-  { id: 3, label: "S3", dates: "Feb 2 - Feb 15", weeks: [5, 6] },
-  { id: 4, label: "S4", dates: "Feb 16 - Mar 1", weeks: [7, 8] },
-  { id: 5, label: "S5", dates: "Mar 2 - Mar 15", weeks: [9, 10] },
-  { id: 6, label: "S6", dates: "Mar 16 - Mar 29", weeks: [11, 12] },
-  { id: 7, label: "S7", dates: "Mar 30 - Apr 12", weeks: [13, 14] },
-  { id: 8, label: "S8", dates: "Apr 13 - Apr 26", weeks: [15, 16] },
-  { id: 9, label: "S9", dates: "Apr 27 - May 10", weeks: [17, 18] },
-  { id: 10, label: "S10", dates: "May 11 - May 24", weeks: [19, 20] },
-  { id: 11, label: "S11", dates: "May 25 - Jun 7", weeks: [21, 22] },
-  { id: 12, label: "S12", dates: "Jun 8 - Jun 21", weeks: [23, 24] },
-  { id: 13, label: "S13", dates: "Jun 22 - Jul 5", weeks: [25, 26] },
-];
+// Base date: Monday Jan 5 2026
+const BASE_DATE = new Date(2026, 0, 5); // Jan 5, 2026
+
+const MONTH_NAMES_ES = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+
+function generateSprints(count: number) {
+  return Array.from({ length: count }, (_, i) => {
+    const startDay = new Date(BASE_DATE);
+    startDay.setDate(startDay.getDate() + i * 14); // each sprint = 2 weeks
+    const endDay = new Date(startDay);
+    endDay.setDate(endDay.getDate() + 13); // 14 days total (Mon to Sun next week)
+
+    const startStr = `${MONTH_NAMES_ES[startDay.getMonth()]} ${startDay.getDate()}`;
+    const endStr = `${MONTH_NAMES_ES[endDay.getMonth()]} ${endDay.getDate()}`;
+
+    return {
+      id: i + 1,
+      label: `S${i + 1}`,
+      dates: `${startStr} - ${endStr}`,
+      weeks: [i * 2 + 1, i * 2 + 2] as [number, number],
+    };
+  });
+}
+
+const INITIAL_SPRINT_COUNT = 13;
 
 export interface RoadmapItem {
   id: string;
