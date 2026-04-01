@@ -974,7 +974,7 @@ function RoadmapRow({
 }: RoadmapRowProps) {
   return (
     <div
-      className="grid grid-cols-[160px_repeat(26,1fr)] items-center gap-0.5"
+      style={{ display: "grid", gridTemplateColumns: `160px repeat(${totalWeeks}, 1fr)`, gap: "2px", alignItems: "center" }}
       onDragOver={onRowDragOver}
       onDrop={e => onRowDrop(e, row.id)}
     >
