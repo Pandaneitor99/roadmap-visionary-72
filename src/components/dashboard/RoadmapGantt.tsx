@@ -367,7 +367,7 @@ export function RoadmapGantt() {
     if (resize.edge === "start") {
       newStart = Math.max(1, Math.min(week, item.weekEnd));
     } else {
-      newEnd = Math.min(26, Math.max(week, item.weekStart));
+      newEnd = Math.max(week, item.weekStart);
     }
 
     const rowItems = items.filter(i => i.rowId === rowId && i.id !== resize.itemId);
