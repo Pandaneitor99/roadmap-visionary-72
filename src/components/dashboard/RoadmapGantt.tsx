@@ -19,7 +19,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Calendar, MapPin, Users, Target, Lightbulb, AlertCircle, Pencil, GripVertical, Loader2 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Calendar, MapPin, Users, Target, Lightbulb, AlertCircle, Pencil, GripVertical, Loader2, Plus, Trash2, ArrowUp, ArrowDown } from "lucide-react";
 
 const sprints = [
   { id: 1, label: "S1", dates: "Ene 5 - Ene 18", weeks: [1, 2] },
@@ -113,6 +123,24 @@ export function RoadmapGantt() {
   const [dragRowId, setDragRowId] = useState<string | null>(null);
   const [resizingItemId, setResizingItemId] = useState<string | null>(null);
 
+  // New item creation state
+  const [creatingItem, setCreatingItem] = useState<{ rowId: string; week: number } | null>(null);
+  const [newItemData, setNewItemData] = useState<Partial<RoadmapItem>>({
+    title: "",
+    type: "feature",
+    objectiveTag: "adoption",
+  });
+
+  // Delete confirmation
+  const [deletingItem, setDeletingItem] = useState<RoadmapItem | null>(null);
+
+  // Add row state
+  const [showAddRow, setShowAddRow] = useState(false);
+  const [newRowData, setNewRowData] = useState({ label: "", section: "must" as RowDef["section"] });
+
+  // Delete row confirmation
+  const [deletingRow, setDeletingRow] = useState<RowDef | null>(null);
+
   // Load data from Supabase on mount
   useEffect(() => {
     const loadData = async () => {
@@ -170,6 +198,15 @@ export function RoadmapGantt() {
     }
   }, []);
 
+  // Delete item from Supabase
+  const deleteItemFromDb = useCallback(async (itemId: string) => {
+    try {
+      await supabase.from("roadmap_items").delete().eq("id", itemId);
+    } catch (err) {
+      console.error("Error deleting item:", err);
+    }
+  }, []);
+
   // Persist rows order to Supabase
   const saveRows = useCallback(async (newRows: RowDef[]) => {
     try {
@@ -183,6 +220,30 @@ export function RoadmapGantt() {
       await supabase.from("roadmap_rows").upsert(updates);
     } catch (err) {
       console.error("Error saving rows:", err);
+    }
+  }, []);
+
+  // Save a single new row to Supabase
+  const saveNewRow = useCallback(async (row: RowDef, sortOrder: number) => {
+    try {
+      await supabase.from("roadmap_rows").upsert({
+        id: row.id,
+        label: row.label,
+        section: row.section,
+        sort_order: sortOrder,
+        updated_at: new Date().toISOString(),
+      });
+    } catch (err) {
+      console.error("Error saving new row:", err);
+    }
+  }, []);
+
+  // Delete row from Supabase (cascade deletes items)
+  const deleteRowFromDb = useCallback(async (rowId: string) => {
+    try {
+      await supabase.from("roadmap_rows").delete().eq("id", rowId);
+    } catch (err) {
+      console.error("Error deleting row:", err);
     }
   }, []);
 
@@ -201,6 +262,86 @@ export function RoadmapGantt() {
       setSelectedInitiative(initiative);
     }
   };
+
+  // --- Create Item ---
+  const handleCellClick = useCallback((rowId: string, week: number) => {
+    // Only create if cell is empty
+    const existing = items.find(i => i.rowId === rowId && week >= i.weekStart && week <= i.weekEnd);
+    if (existing) return;
+    setCreatingItem({ rowId, week });
+    setNewItemData({ title: "", type: "feature", objectiveTag: "adoption" });
+  }, [items]);
+
+  const handleCreateItem = useCallback(() => {
+    if (!creatingItem || !newItemData.title?.trim()) return;
+    const newId = `item-${Date.now()}`;
+    const newItem: RoadmapItem = {
+      id: newId,
+      title: newItemData.title!.trim(),
+      type: newItemData.type as RoadmapItem["type"] || "feature",
+      objectiveTag: newItemData.objectiveTag as RoadmapItem["objectiveTag"] || "adoption",
+      weekStart: creatingItem.week,
+      weekEnd: creatingItem.week,
+      rowId: creatingItem.rowId,
+    };
+    setItems(prev => [...prev, newItem]);
+    saveItem(newItem);
+    setCreatingItem(null);
+  }, [creatingItem, newItemData, saveItem]);
+
+  // --- Delete Item ---
+  const handleConfirmDelete = useCallback(() => {
+    if (!deletingItem) return;
+    setItems(prev => prev.filter(i => i.id !== deletingItem.id));
+    deleteItemFromDb(deletingItem.id);
+    setDeletingItem(null);
+    setEditingItem(null);
+  }, [deletingItem, deleteItemFromDb]);
+
+  // --- Add Row ---
+  const handleAddRow = useCallback(() => {
+    if (!newRowData.label.trim()) return;
+    const newId = `row-${Date.now()}`;
+    const newRow: RowDef = {
+      id: newId,
+      label: newRowData.label.trim(),
+      section: newRowData.section,
+    };
+    setRows(prev => {
+      const updated = [...prev, newRow];
+      saveNewRow(newRow, updated.length - 1);
+      return updated;
+    });
+    setNewRowData({ label: "", section: "must" });
+    setShowAddRow(false);
+  }, [newRowData, saveNewRow]);
+
+  // --- Delete Row ---
+  const handleConfirmDeleteRow = useCallback(() => {
+    if (!deletingRow) return;
+    setItems(prev => prev.filter(i => i.rowId !== deletingRow.id));
+    setRows(prev => {
+      const updated = prev.filter(r => r.id !== deletingRow.id);
+      saveRows(updated);
+      return updated;
+    });
+    deleteRowFromDb(deletingRow.id);
+    setDeletingRow(null);
+  }, [deletingRow, deleteRowFromDb, saveRows]);
+
+  // --- Move Row Up/Down ---
+  const moveRow = useCallback((rowId: string, direction: "up" | "down") => {
+    setRows(prev => {
+      const idx = prev.findIndex(r => r.id === rowId);
+      if (idx === -1) return prev;
+      const targetIdx = direction === "up" ? idx - 1 : idx + 1;
+      if (targetIdx < 0 || targetIdx >= prev.length) return prev;
+      const newRows = [...prev];
+      [newRows[idx], newRows[targetIdx]] = [newRows[targetIdx], newRows[idx]];
+      saveRows(newRows);
+      return newRows;
+    });
+  }, [saveRows]);
 
   // --- Resize handlers ---
   const handleResizeStart = useCallback((e: React.MouseEvent, itemId: string, edge: "start" | "end") => {
@@ -223,12 +364,11 @@ export function RoadmapGantt() {
     let newEnd = item.weekEnd;
 
     if (resize.edge === "start") {
-      newStart = Math.max(1, Math.min(week, item.weekEnd)); // can't go past end
+      newStart = Math.max(1, Math.min(week, item.weekEnd));
     } else {
-      newEnd = Math.min(26, Math.max(week, item.weekStart)); // can't go before start
+      newEnd = Math.min(26, Math.max(week, item.weekStart));
     }
 
-    // Check collisions
     const rowItems = items.filter(i => i.rowId === rowId && i.id !== resize.itemId);
     const hasCollision = rowItems.some(i =>
       (newStart >= i.weekStart && newStart <= i.weekEnd) ||
@@ -251,7 +391,6 @@ export function RoadmapGantt() {
     setResizingItemId(null);
   }, [items, saveItem]);
 
-  // Global mouseup to end resize
   useEffect(() => {
     const onMouseUp = () => {
       if (resizeRef.current) {
@@ -290,10 +429,8 @@ export function RoadmapGantt() {
     const newStart = targetWeek - drag.offsetWeek;
     const newEnd = newStart + duration;
 
-    // Clamp within 1-26
     if (newStart < 1 || newEnd > 26) return;
 
-    // Check for collisions in target row (excluding the dragged item)
     const rowItems = items.filter(i => i.rowId === targetRowId && i.id !== drag.item.id);
     const hasCollision = rowItems.some(i =>
       (newStart >= i.weekStart && newStart <= i.weekEnd) ||
@@ -346,14 +483,14 @@ export function RoadmapGantt() {
     setItems(prev => prev.map(i => i.id === editingItem.id ? editingItem : i));
     saveItem(editingItem);
     setEditingItem(null);
-  }, [editingItem]);
+  }, [editingItem, saveItem]);
 
   const renderSection = (sectionRows: RowDef[], sectionLabel?: string) => (
     <>
       {sectionLabel && (
         <div className="text-xs font-medium text-muted-foreground mb-1 pl-1">{sectionLabel}</div>
       )}
-      {sectionRows.map(row => {
+      {sectionRows.map((row, idx) => {
         const rowItems = items.filter(i => i.rowId === row.id);
         return (
           <RoadmapRow
@@ -374,6 +511,11 @@ export function RoadmapGantt() {
             onResizeStart={handleResizeStart}
             onResizeMove={handleResizeMove}
             resizingItemId={resizingItemId}
+            onCellClick={handleCellClick}
+            onDeleteRow={setDeletingRow}
+            onMoveRow={moveRow}
+            isFirst={idx === 0}
+            isLast={idx === sectionRows.length - 1}
           />
         );
       })}
@@ -435,6 +577,19 @@ export function RoadmapGantt() {
             {renderSection(stabRows)}
           </div>
 
+          {/* Add Row Button */}
+          <div className="mt-3 flex justify-start">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-xs text-muted-foreground hover:text-foreground gap-1"
+              onClick={() => setShowAddRow(true)}
+            >
+              <Plus className="h-3 w-3" />
+              Agregar fila
+            </Button>
+          </div>
+
           {/* Legend */}
           <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-white/10 pt-3">
             <div className="flex items-center gap-1.5">
@@ -454,7 +609,8 @@ export function RoadmapGantt() {
               <span className="text-[10px] text-muted-foreground">Mejoras</span>
             </div>
             <div className="ml-auto flex items-center gap-1.5 text-[10px] text-muted-foreground">
-              <GripVertical className="h-3 w-3" /> Arrastra filas · Arrastra bloques · Arrastra bordes para redimensionar
+              <Plus className="h-3 w-3" /> Clic celda vacía para crear ·
+              <GripVertical className="h-3 w-3" /> Arrastra filas y bloques
             </div>
           </div>
         </div>
@@ -625,15 +781,158 @@ export function RoadmapGantt() {
                     />
                   </div>
                 </div>
-                <div className="flex justify-end gap-2 pt-2">
-                  <Button variant="outline" onClick={() => setEditingItem(null)}>Cancelar</Button>
-                  <Button onClick={handleEditSave}>Guardar</Button>
+                <div className="flex justify-between pt-2">
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={() => setDeletingItem(editingItem)}
+                    className="gap-1"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                    Eliminar
+                  </Button>
+                  <div className="flex gap-2">
+                    <Button variant="outline" onClick={() => setEditingItem(null)}>Cancelar</Button>
+                    <Button onClick={handleEditSave}>Guardar</Button>
+                  </div>
                 </div>
               </div>
             </>
           )}
         </DialogContent>
       </Dialog>
+
+      {/* Create Item Modal */}
+      <Dialog open={!!creatingItem} onOpenChange={() => setCreatingItem(null)}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Nueva Celda</DialogTitle>
+            <DialogDescription>
+              Crear un nuevo bloque en semana W{creatingItem?.week} de la fila "{rows.find(r => r.id === creatingItem?.rowId)?.label}".
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 mt-4">
+            <div className="space-y-2">
+              <Label>Título</Label>
+              <Input
+                value={newItemData.title || ""}
+                onChange={e => setNewItemData({ ...newItemData, title: e.target.value })}
+                placeholder="Nombre de la celda"
+                autoFocus
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Tipo</Label>
+                <Select
+                  value={newItemData.type || "feature"}
+                  onValueChange={v => setNewItemData({ ...newItemData, type: v as RoadmapItem["type"] })}
+                >
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="feature">Feature</SelectItem>
+                    <SelectItem value="issues">Issues</SelectItem>
+                    <SelectItem value="improvements">Mejoras</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>Objetivo</Label>
+                <Select
+                  value={newItemData.objectiveTag || "adoption"}
+                  onValueChange={v => setNewItemData({ ...newItemData, objectiveTag: v as RoadmapItem["objectiveTag"] })}
+                >
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="adoption">Adopción</SelectItem>
+                    <SelectItem value="experience">Experiencia</SelectItem>
+                    <SelectItem value="recurring">Recurrente</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="flex justify-end gap-2 pt-2">
+              <Button variant="outline" onClick={() => setCreatingItem(null)}>Cancelar</Button>
+              <Button onClick={handleCreateItem} disabled={!newItemData.title?.trim()}>Crear</Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Add Row Modal */}
+      <Dialog open={showAddRow} onOpenChange={setShowAddRow}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Nueva Fila</DialogTitle>
+            <DialogDescription>Agregar una nueva fila de iniciativa al roadmap.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 mt-4">
+            <div className="space-y-2">
+              <Label>Nombre</Label>
+              <Input
+                value={newRowData.label}
+                onChange={e => setNewRowData({ ...newRowData, label: e.target.value })}
+                placeholder="Nombre de la iniciativa"
+                autoFocus
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Sección</Label>
+              <Select
+                value={newRowData.section}
+                onValueChange={v => setNewRowData({ ...newRowData, section: v as RowDef["section"] })}
+              >
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="must">Must-Have</SelectItem>
+                  <SelectItem value="should">Should-Have</SelectItem>
+                  <SelectItem value="stabilization">Estabilización</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex justify-end gap-2 pt-2">
+              <Button variant="outline" onClick={() => setShowAddRow(false)}>Cancelar</Button>
+              <Button onClick={handleAddRow} disabled={!newRowData.label.trim()}>Agregar</Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Item Confirmation */}
+      <AlertDialog open={!!deletingItem} onOpenChange={() => setDeletingItem(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Eliminar celda?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Se eliminará "{deletingItem?.title}" del roadmap. Esta acción no se puede deshacer.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Delete Row Confirmation */}
+      <AlertDialog open={!!deletingRow} onOpenChange={() => setDeletingRow(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Eliminar fila?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Se eliminará la fila "{deletingRow?.label}" y todas sus celdas. Esta acción no se puede deshacer.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmDeleteRow} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }
@@ -657,6 +956,11 @@ interface RoadmapRowProps {
   onResizeStart: (e: React.MouseEvent, itemId: string, edge: "start" | "end") => void;
   onResizeMove: (rowId: string, week: number) => void;
   resizingItemId: string | null;
+  onCellClick: (rowId: string, week: number) => void;
+  onDeleteRow: (row: RowDef) => void;
+  onMoveRow: (rowId: string, direction: "up" | "down") => void;
+  isFirst: boolean;
+  isLast: boolean;
 }
 
 function RoadmapRow({
@@ -676,6 +980,11 @@ function RoadmapRow({
   onResizeStart,
   onResizeMove,
   resizingItemId,
+  onCellClick,
+  onDeleteRow,
+  onMoveRow,
+  isFirst,
+  isLast,
 }: RoadmapRowProps) {
   return (
     <div
@@ -683,9 +992,9 @@ function RoadmapRow({
       onDragOver={onRowDragOver}
       onDrop={e => onRowDrop(e, row.id)}
     >
-      {/* Row label with grip handle and edit button */}
+      {/* Row label with grip handle, edit, delete, and move buttons */}
       <div
-        className="group/label flex items-center gap-1 truncate text-xs font-medium text-foreground pr-1 cursor-grab active:cursor-grabbing"
+        className="group/label flex items-center gap-0.5 truncate text-xs font-medium text-foreground pr-1 cursor-grab active:cursor-grabbing"
         draggable
         onDragStart={e => onRowDragStart(e, row.id)}
         title={row.label}
@@ -694,20 +1003,50 @@ function RoadmapRow({
         <span className="overflow-hidden whitespace-nowrap flex-1" style={{ textOverflow: "ellipsis" }}>
           {row.label}
         </span>
-        {items.length > 0 && (
+        <div className="opacity-0 group-hover/label:opacity-100 transition-opacity flex items-center gap-0 flex-shrink-0">
+          {!isFirst && (
+            <button
+              onClick={e => { e.stopPropagation(); onMoveRow(row.id, "up"); }}
+              className="hover:bg-muted rounded p-0.5"
+              title="Mover arriba"
+              draggable={false}
+              onDragStart={e => e.stopPropagation()}
+            >
+              <ArrowUp className="h-2.5 w-2.5 text-muted-foreground" />
+            </button>
+          )}
+          {!isLast && (
+            <button
+              onClick={e => { e.stopPropagation(); onMoveRow(row.id, "down"); }}
+              className="hover:bg-muted rounded p-0.5"
+              title="Mover abajo"
+              draggable={false}
+              onDragStart={e => e.stopPropagation()}
+            >
+              <ArrowDown className="h-2.5 w-2.5 text-muted-foreground" />
+            </button>
+          )}
+          {items.length > 0 && (
+            <button
+              onClick={e => { e.stopPropagation(); onEditItem(items[0]); }}
+              className="hover:bg-muted rounded p-0.5"
+              title="Editar iniciativa"
+              draggable={false}
+              onDragStart={e => e.stopPropagation()}
+            >
+              <Pencil className="h-2.5 w-2.5 text-muted-foreground" />
+            </button>
+          )}
           <button
-            onClick={e => {
-              e.stopPropagation();
-              onEditItem(items[0]);
-            }}
-            className="opacity-0 group-hover/label:opacity-100 transition-opacity flex-shrink-0 hover:bg-muted rounded p-0.5"
-            title="Editar iniciativa"
+            onClick={e => { e.stopPropagation(); onDeleteRow(row); }}
+            className="hover:bg-destructive/10 rounded p-0.5"
+            title="Eliminar fila"
             draggable={false}
             onDragStart={e => e.stopPropagation()}
           >
-            <Pencil className="h-3 w-3 text-muted-foreground" />
+            <Trash2 className="h-2.5 w-2.5 text-destructive" />
           </button>
-        )}
+        </div>
       </div>
 
       {/* Week cells */}
@@ -724,7 +1063,7 @@ function RoadmapRow({
           return (
             <div
               key={week}
-              className={`h-7 rounded-sm transition-colors ${
+              className={`h-7 rounded-sm transition-colors cursor-pointer group/cell ${
                 isDropHere
                   ? "bg-primary/20 border border-dashed border-primary/40"
                   : "hover:bg-white/5"
@@ -735,7 +1074,12 @@ function RoadmapRow({
               onMouseMove={() => {
                 if (resizingItemId) onResizeMove(row.id, week);
               }}
-            />
+              onClick={() => onCellClick(row.id, week)}
+            >
+              <div className="h-full w-full flex items-center justify-center opacity-0 group-hover/cell:opacity-40 transition-opacity">
+                <Plus className="h-3 w-3 text-muted-foreground" />
+              </div>
+            </div>
           );
         }
 
