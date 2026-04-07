@@ -42,6 +42,17 @@ export function Breadcrumbs() {
     } else {
       breadcrumbs[0].label = "Dashboard";
     }
+  } else if (isQ2) {
+    breadcrumbs.push({ label: "Q2 2026", path: "/q2-2026" });
+    if (pathSegments.length > 1) {
+      const subPage = pathSegments[1];
+      breadcrumbs.push({ 
+        label: routeLabels[subPage] || subPage, 
+        path: `/${pathSegments.join("/")}` 
+      });
+    } else {
+      breadcrumbs[0].label = "Dashboard";
+    }
   } else {
     breadcrumbs.push({ label: "Q1 2026", path: "/" });
     const currentPage = pathSegments[0];
