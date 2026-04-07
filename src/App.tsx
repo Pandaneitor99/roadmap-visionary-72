@@ -40,6 +40,12 @@ const App = () => (
             <Route path="/q4-2025/iniciativas" element={<IniciativasQ42025 />} />
             <Route path="/q4-2025/roadmap" element={<RoadmapQ42025 />} />
             <Route path="/q4-2025/logros" element={<LogrosQ42025 />} />
+
+            {/* Q2 2026 */}
+            <Route path="/q2-2026" element={<DashboardQ22026 />} />
+            <Route path="/q2-2026/okrs" element={<OKRsQ22026 />} />
+            <Route path="/q2-2026/iniciativas" element={<IniciativasQ22026 />} />
+            <Route path="/q2-2026/roadmap" element={<RoadmapQ22026 />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -45,9 +45,11 @@ export function AppSidebar() {
   const isQ1Route = q1MenuItems.some(item => 
     item.url === "/" ? location.pathname === "/" : location.pathname.startsWith(item.url)
   );
+  const isQ2Route = location.pathname.startsWith("/q2-2026");
   const isQ4Route = location.pathname.startsWith("/q4-2025");
 
   const [isOpenQ1, setIsOpenQ1] = useState(isQ1Route);
+  const [isOpenQ2, setIsOpenQ2] = useState(isQ2Route);
   const [isOpenQ4, setIsOpenQ4] = useState(isQ4Route);
 
   return (
