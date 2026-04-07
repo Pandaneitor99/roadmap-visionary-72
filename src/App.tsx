@@ -13,6 +13,10 @@ import OKRsQ42025 from "./pages/q4-2025/OKRs";
 import IniciativasQ42025 from "./pages/q4-2025/Iniciativas";
 import RoadmapQ42025 from "./pages/q4-2025/Roadmap";
 import LogrosQ42025 from "./pages/q4-2025/Logros";
+import DashboardQ22026 from "./pages/q2-2026/Dashboard";
+import OKRsQ22026 from "./pages/q2-2026/OKRs";
+import IniciativasQ22026 from "./pages/q2-2026/Iniciativas";
+import RoadmapQ22026 from "./pages/q2-2026/Roadmap";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
