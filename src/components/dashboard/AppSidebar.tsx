@@ -25,6 +25,13 @@ const q1MenuItems = [
   { title: "Roadmap", url: "/roadmap", icon: CalendarDays },
 ];
 
+const q2MenuItems = [
+  { title: "Dashboard", url: "/q2-2026", icon: LayoutDashboard },
+  { title: "OKRs", url: "/q2-2026/okrs", icon: Target },
+  { title: "Iniciativas", url: "/q2-2026/iniciativas", icon: Lightbulb },
+  { title: "Roadmap", url: "/q2-2026/roadmap", icon: CalendarDays },
+];
+
 const q4MenuItems = [
   { title: "Dashboard", url: "/q4-2025", icon: LayoutDashboard },
   { title: "OKRs", url: "/q4-2025/okrs", icon: Target },
