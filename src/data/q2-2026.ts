@@ -1,11 +1,4 @@
-import type { Initiative } from "./initiatives";
-
-export interface OKR {
-  id: string;
-  title: string;
-  objective: string;
-  keyResults: { id: string; title: string; current: number; target: number }[];
-}
+import type { Initiative, OKR } from "./initiatives";
 
 // Placeholder data - to be filled
 export const initiativesQ22026: Initiative[] = [];

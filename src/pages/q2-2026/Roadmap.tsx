@@ -10,7 +10,7 @@ export default function RoadmapQ22026() {
         </p>
       </div>
 
-      <RoadmapGantt quarter="q2-2026" />
+      <RoadmapGantt />
     </div>
   );
 }
