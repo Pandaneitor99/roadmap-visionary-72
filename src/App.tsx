@@ -13,6 +13,10 @@ import OKRsQ42025 from "./pages/q4-2025/OKRs";
 import IniciativasQ42025 from "./pages/q4-2025/Iniciativas";
 import RoadmapQ42025 from "./pages/q4-2025/Roadmap";
 import LogrosQ42025 from "./pages/q4-2025/Logros";
+import DashboardQ22026 from "./pages/q2-2026/Dashboard";
+import OKRsQ22026 from "./pages/q2-2026/OKRs";
+import IniciativasQ22026 from "./pages/q2-2026/Iniciativas";
+import RoadmapQ22026 from "./pages/q2-2026/Roadmap";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,6 +40,12 @@ const App = () => (
             <Route path="/q4-2025/iniciativas" element={<IniciativasQ42025 />} />
             <Route path="/q4-2025/roadmap" element={<RoadmapQ42025 />} />
             <Route path="/q4-2025/logros" element={<LogrosQ42025 />} />
+
+            {/* Q2 2026 */}
+            <Route path="/q2-2026" element={<DashboardQ22026 />} />
+            <Route path="/q2-2026/okrs" element={<OKRsQ22026 />} />
+            <Route path="/q2-2026/iniciativas" element={<IniciativasQ22026 />} />
+            <Route path="/q2-2026/roadmap" element={<RoadmapQ22026 />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
