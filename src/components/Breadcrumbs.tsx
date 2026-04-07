@@ -26,7 +26,8 @@ export function Breadcrumbs() {
   }
 
   const isQ4 = pathSegments[0] === "q4-2025";
-  const quarterLabel = isQ4 ? "Q4 2025" : "Q1 2026";
+  const isQ2 = pathSegments[0] === "q2-2026";
+  const quarterLabel = isQ4 ? "Q4 2025" : isQ2 ? "Q2 2026" : "Q1 2026";
   
   const breadcrumbs: { label: string; path: string }[] = [];
   
