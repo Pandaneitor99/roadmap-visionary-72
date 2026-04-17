@@ -545,7 +545,7 @@ export function RoadmapGantt() {
             {sprints.map((sprint) => (
               <div
                 key={sprint.id}
-                className="rounded-lg bg-gradient-to-b from-white/10 to-white/5 backdrop-blur-sm border border-white/10 px-1 py-1.5 text-center shadow-sm"
+                className="rounded-md bg-card border border-border px-1 py-1.5 text-center shadow-sm"
               >
                 <div className="text-xs font-medium text-foreground">{sprint.label}</div>
                 <div className="text-[9px] text-muted-foreground leading-tight">{sprint.dates}</div>
@@ -559,7 +559,7 @@ export function RoadmapGantt() {
             {Array.from({ length: totalWeeks }, (_, i) => (
               <div
                 key={i}
-                className="rounded-md bg-gradient-to-b from-white/5 to-transparent backdrop-blur-sm border border-white/5 px-0.5 py-0.5 text-center text-[9px] text-muted-foreground"
+                className="rounded-sm bg-card/60 border border-border/50 px-0.5 py-0.5 text-center text-[9px] text-muted-foreground"
               >
                 W{i + 1}
               </div>
