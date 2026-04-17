@@ -1019,7 +1019,7 @@ function RoadmapRow({
               className={`h-7 rounded-sm transition-colors cursor-pointer group/cell ${
                 isDropHere
                   ? "bg-primary/20 border border-dashed border-primary/40"
-                  : "hover:bg-white/5"
+                  : "bg-card hover:bg-card/70 border border-border/50"
               }`}
               onDragOver={e => onDragOver(e, row.id, week)}
               onDragLeave={onDragLeave}
