@@ -537,7 +537,7 @@ export function RoadmapGantt() {
 
   return (
     <>
-      <div className="overflow-x-auto rounded-2xl bg-card/60 backdrop-blur-md border border-white/10 p-4 shadow-lg">
+      <div className="overflow-x-auto rounded-2xl bg-muted/40 border border-border p-4 shadow-sm">
         <div className="min-w-[1200px]">
           {/* Header - Sprints */}
           <div className="mb-2" style={{ display: "grid", gridTemplateColumns: `160px repeat(${sprintCount}, 1fr)`, gap: "2px" }}>
@@ -545,7 +545,7 @@ export function RoadmapGantt() {
             {sprints.map((sprint) => (
               <div
                 key={sprint.id}
-                className="rounded-lg bg-gradient-to-b from-white/10 to-white/5 backdrop-blur-sm border border-white/10 px-1 py-1.5 text-center shadow-sm"
+                className="rounded-md bg-card border border-border px-1 py-1.5 text-center shadow-sm"
               >
                 <div className="text-xs font-medium text-foreground">{sprint.label}</div>
                 <div className="text-[9px] text-muted-foreground leading-tight">{sprint.dates}</div>
@@ -559,7 +559,7 @@ export function RoadmapGantt() {
             {Array.from({ length: totalWeeks }, (_, i) => (
               <div
                 key={i}
-                className="rounded-md bg-gradient-to-b from-white/5 to-transparent backdrop-blur-sm border border-white/5 px-0.5 py-0.5 text-center text-[9px] text-muted-foreground"
+                className="rounded-sm bg-card/60 border border-border/50 px-0.5 py-0.5 text-center text-[9px] text-muted-foreground"
               >
                 W{i + 1}
               </div>
@@ -600,7 +600,7 @@ export function RoadmapGantt() {
           </div>
 
           {/* Legend */}
-          <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-white/10 pt-3">
+          <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-border pt-3">
             <div className="flex items-center gap-1.5">
               <div className="h-2.5 w-2.5 rounded-full bg-[hsl(var(--badge-experience))]" />
               <span className="text-[10px] text-muted-foreground">Experiencia</span>
@@ -1019,7 +1019,7 @@ function RoadmapRow({
               className={`h-7 rounded-sm transition-colors cursor-pointer group/cell ${
                 isDropHere
                   ? "bg-primary/20 border border-dashed border-primary/40"
-                  : "hover:bg-white/5"
+                  : "bg-card hover:bg-card/70 border border-border/50"
               }`}
               onDragOver={e => onDragOver(e, row.id, week)}
               onDragLeave={onDragLeave}
