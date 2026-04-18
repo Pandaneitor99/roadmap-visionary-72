@@ -12,7 +12,7 @@ export default function DashboardLayout() {
         <AppSidebar />
         <main className="flex-1 overflow-auto">
           <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background/95 px-6 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-            <SidebarTrigger className="lg:hidden">
+            <SidebarTrigger>
               <Menu className="h-5 w-5" />
             </SidebarTrigger>
             <div className="flex-1" />
