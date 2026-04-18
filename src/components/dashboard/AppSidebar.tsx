@@ -43,6 +43,8 @@ const q4MenuItems = [
 
 export function AppSidebar() {
   const location = useLocation();
+  const { state } = useSidebar();
+  const collapsed = state === "collapsed";
   const isQ1Route = q1MenuItems.some(item => 
     item.url === "/" ? location.pathname === "/" : location.pathname.startsWith(item.url)
   );
@@ -54,16 +56,18 @@ export function AppSidebar() {
   const [isOpenQ4, setIsOpenQ4] = useState(isQ4Route);
 
   return (
-    <Sidebar className="border-r-0 backdrop-blur-md bg-sidebar/95">
+    <Sidebar collapsible="icon" className="border-r-0 backdrop-blur-md bg-sidebar/95">
       <SidebarHeader className="p-6">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/20 shadow-lg backdrop-blur-sm">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/20 shadow-lg backdrop-blur-sm">
             <Smartphone className="h-5 w-5 text-sidebar-foreground" />
           </div>
-          <div>
-            <h1 className="text-lg font-bold text-sidebar-foreground">TMD Mobile</h1>
-            <p className="text-xs text-sidebar-foreground/60">Roadmap 2026</p>
-          </div>
+          {!collapsed && (
+            <div>
+              <h1 className="text-lg font-bold text-sidebar-foreground">TMD Mobile</h1>
+              <p className="text-xs text-sidebar-foreground/60">Roadmap 2026</p>
+            </div>
+          )}
         </div>
       </SidebarHeader>
       <SidebarContent>
