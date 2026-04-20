@@ -93,7 +93,7 @@ export default function IniciativasQ22026() {
               <Badge variant="secondary" className="ml-2 h-5 px-1.5 text-xs bg-white/20 text-inherit">{mustHaveInitiatives.length}</Badge>
             </TabsTrigger>
             <TabsTrigger value="should-haves" className="data-[state=active]:bg-[hsl(var(--sidebar-background))] data-[state=active]:text-white data-[state=inactive]:bg-muted data-[state=inactive]:text-muted-foreground px-4 py-2 rounded-md font-medium transition-all">
-              Should-Haves
+              Q2
               <Badge variant="secondary" className="ml-2 h-5 px-1.5 text-xs bg-white/20 text-inherit">{shouldHaveInitiatives.length}</Badge>
             </TabsTrigger>
             <TabsTrigger value="trade-offs" className="data-[state=active]:bg-[hsl(var(--sidebar-background))] data-[state=active]:text-white data-[state=inactive]:bg-muted data-[state=inactive]:text-muted-foreground px-4 py-2 rounded-md font-medium transition-all">
@@ -241,7 +241,7 @@ export default function IniciativasQ22026() {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-12 text-muted-foreground">No hay iniciativas en Should-Haves que coincidan con el filtro.</div>
+              <div className="text-center py-12 text-muted-foreground">No hay iniciativas en Q2 que coincidan con el filtro.</div>
             );
           })()}
         </div>
