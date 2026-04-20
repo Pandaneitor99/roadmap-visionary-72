@@ -57,10 +57,10 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon" className="border-r-0 backdrop-blur-md bg-sidebar/95">
-      <SidebarHeader className="p-6">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/20 shadow-lg backdrop-blur-sm">
-            <Smartphone className="h-5 w-5 text-sidebar-foreground" />
+      <SidebarHeader className={collapsed ? "p-2" : "p-6"}>
+        <div className={`flex items-center gap-3 ${collapsed ? "justify-center" : ""}`}>
+          <div className={`flex shrink-0 items-center justify-center rounded-lg bg-white/20 shadow-lg backdrop-blur-sm ${collapsed ? "h-8 w-8" : "h-10 w-10"}`}>
+            <Smartphone className={collapsed ? "h-4 w-4 text-sidebar-foreground" : "h-5 w-5 text-sidebar-foreground"} />
           </div>
           {!collapsed && (
             <div>
