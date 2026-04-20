@@ -516,6 +516,7 @@ export function RoadmapGantt() {
             onResizeMove={handleResizeMove}
             resizingItemId={resizingItemId}
             onCellClick={handleCellClick}
+            onDeleteItem={setDeletingItem}
           />
         );
       })}
@@ -571,7 +572,7 @@ export function RoadmapGantt() {
             {renderSection(mustRows)}
 
             <div className="border-t border-border my-2" />
-            {renderSection(shouldRows, "Should-Haves")}
+            {renderSection(shouldRows, "Q2")}
 
             <div className="border-t border-border my-2" />
             {renderSection(stabRows)}
@@ -950,6 +951,7 @@ interface RoadmapRowProps {
   onResizeMove: (rowId: string, week: number) => void;
   resizingItemId: string | null;
   onCellClick: (rowId: string, week: number) => void;
+  onDeleteItem: (item: RoadmapItem) => void;
 }
 
 function RoadmapRow({
@@ -971,6 +973,7 @@ function RoadmapRow({
   onResizeMove,
   resizingItemId,
   onCellClick,
+  onDeleteItem,
 }: RoadmapRowProps) {
   return (
     <div
@@ -1045,14 +1048,30 @@ function RoadmapRow({
               onDragStart(e, item, week);
             }}
             onClick={() => onItemClick(item)}
+            onContextMenu={e => {
+              e.preventDefault();
+              onDeleteItem(item);
+            }}
             onMouseMove={() => {
               if (resizingItemId === item.id) onResizeMove(row.id, week);
             }}
-            title={item.title}
+            title={`${item.title} · Clic derecho para eliminar`}
             className={`group relative flex h-7 items-center text-[8px] font-medium text-white cursor-grab active:cursor-grabbing transition-all hover:opacity-90 hover:scale-[1.02] overflow-hidden ${getItemColor(item)} ${
               isSingle ? "rounded-md" : isStart ? "rounded-l-md" : isEnd ? "rounded-r-md" : ""
             }`}
           >
+            {/* Delete button on hover (only on start cell) */}
+            {isStart && (
+              <button
+                onClick={e => { e.stopPropagation(); onDeleteItem(item); }}
+                onMouseDown={e => e.stopPropagation()}
+                draggable={false}
+                className="absolute top-0.5 right-0.5 z-20 opacity-0 group-hover:opacity-100 transition-opacity bg-black/40 hover:bg-destructive rounded p-0.5"
+                title="Eliminar celda"
+              >
+                <Trash2 className="h-2.5 w-2.5 text-white" />
+              </button>
+            )}
             {/* Left resize handle */}
             {isStart && (
               <div
