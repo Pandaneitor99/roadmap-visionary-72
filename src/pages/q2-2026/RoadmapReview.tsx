@@ -333,9 +333,40 @@ function Section2() {
               Monthly Active Customers (MAC)
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-neutral-600">
-              Usuarios pagos únicos que ejecutan al menos una acción crítica de negocio en la app
-              cada mes (facturar, gastar, cotizar, contactar, etc.).
+              Usuarios pagos únicos que ejecutan al menos una acción crítica de negocio en la app cada mes.
             </p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {[
+                { label: "Facturas", isNew: false },
+                { label: "Cotizar", isNew: false },
+                { label: "Contactos", isNew: false },
+                { label: "Items", isNew: false },
+                { label: "Remisiones", isNew: false },
+                { label: "Pagos", isNew: false },
+                { label: "Reportes", isNew: false },
+                { label: "Búsquedas", isNew: true },
+                { label: "Gráficos", isNew: true },
+              ].map((action) => (
+                <span
+                  key={action.label}
+                  className="relative inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium text-neutral-700"
+                  style={{
+                    borderColor: `${ALEGRA_GREEN}40`,
+                    backgroundColor: `${ALEGRA_GREEN}08`,
+                  }}
+                >
+                  {action.label}
+                  {action.isNew && (
+                    <span
+                      className="ml-1.5 rounded-full px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-white"
+                      style={{ backgroundColor: ALEGRA_GREEN }}
+                    >
+                      Nuevo
+                    </span>
+                  )}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </div>
