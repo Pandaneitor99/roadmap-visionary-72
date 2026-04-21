@@ -1,9 +1,19 @@
 import { useState, useEffect, useCallback } from "react";
-import { ChevronLeft, ChevronRight, Sparkles, TrendingUp, TrendingDown, Wrench, ClipboardList } from "lucide-react";
+import { ChevronLeft, ChevronRight, Sparkles, TrendingUp, TrendingDown, Wrench, ClipboardList, Star, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { okrs } from "@/data/initiatives";
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+} from "recharts";
 
 const sections = [
   { id: 1, title: "Visión estratégica", short: "Visión" },
