@@ -293,3 +293,292 @@ function PlaceholderSection({ title }: { title: string }) {
     </div>
   );
 }
+
+// === Sección 4: Resultados del período ===
+
+const devInitiativesS4 = [
+  {
+    title: "Rediseño Facturación Costa Rica",
+    tags: ["Engagement", "Adopción"],
+    problem:
+      "Con la salida en web de la versión 4.4, la cantidad de facturas aumentó un 20%, sin embargo, en la app se mantuvo constante. Adicionalmente, la tasa de conversión es la menor de las 4 versiones (63% hoy).",
+    krs: ["KR 2.1", "KR 2.2", "KR 2.3"],
+  },
+  {
+    title: "Estabilización",
+    tags: ["Experiencia"],
+    problem:
+      "Semanalmente se presentan alrededor de 8k errores que se reportan conjuntamente en Sentry y Amplitude.",
+    krs: ["KR 1.3"],
+  },
+  {
+    title: "Onboarding del Q4",
+    tags: ["Adopción"],
+    problem:
+      "Continuación del trabajo de onboarding iniciado en Q4 para mejorar la activación de nuevos usuarios en la app.",
+    krs: ["KR 2.1"],
+  },
+  {
+    title: "Búsqueda de documentos e información",
+    tags: ["Experiencia"],
+    problem:
+      "Los usuarios no pueden encontrar fácilmente sus documentos e información dentro de la app, generando fricción en la consulta.",
+    krs: ["KR 1.3"],
+  },
+  {
+    title: "Compartir y descargar remisiones",
+    tags: ["Adopción"],
+    problem:
+      "Falta la capacidad de compartir y descargar remisiones desde la app, limitando la operación móvil del usuario.",
+    krs: ["KR 2.2"],
+  },
+  {
+    title: "Llenado automático campos contactos",
+    tags: ["Experiencia", "Adopción"],
+    problem:
+      "El llenado manual de campos en contactos es tedioso y aumenta la fricción al crear un nuevo contacto.",
+    krs: ["KR 2.1"],
+  },
+  {
+    title: "Home — acciones rápidas",
+    tags: ["Engagement"],
+    problem:
+      "El home actual no facilita el acceso rápido a las acciones más usadas por los usuarios.",
+    krs: ["KR 2.2"],
+  },
+];
+
+const nonDevInitiativesS4 = [
+  {
+    title: "Creación de la sección de App en Alegra",
+    tags: ["Adopción"],
+    problem: "No existe una sección dedicada para la app en la plataforma de Alegra.",
+  },
+  {
+    title: "Testeo de push notification dentro de la app",
+    tags: ["Engagement"],
+    problem: "No se han probado las notificaciones push de forma estructurada.",
+  },
+  {
+    title: "G&S para incentivar descarga de usuarios web",
+    tags: ["Adopción"],
+    problem: "Bajo porcentaje de usuarios web que descargan la app.",
+  },
+];
+
+function Section4() {
+  // Tomamos los 2 OKRs (errores críticos = obj-1 experience, adopción/engagement = obj-2 adoption)
+  const okr1 = okrs.find((o) => o.id === "obj-1");
+  const okr2 = okrs.find((o) => o.id === "obj-2");
+
+  return (
+    <div className="space-y-12">
+      {/* OKRs Block */}
+      <div>
+        <div className="mb-5 flex items-center gap-2">
+          <div
+            className="h-1 w-10 rounded-full"
+            style={{ backgroundColor: ALEGRA_GREEN }}
+          />
+          <h2 className="text-lg font-bold text-neutral-900">OKRs del período</h2>
+        </div>
+        <div className="grid gap-5 md:grid-cols-2">
+          {okr1 && <OKRMiniCard okr={okr1} kind="experience" />}
+          {okr2 && <OKRMiniCard okr={okr2} kind="adoption" />}
+        </div>
+      </div>
+
+      {/* Iniciativas: Desarrollo */}
+      <div>
+        <div className="mb-5 flex items-center gap-3">
+          <div
+            className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-white"
+            style={{ backgroundColor: ALEGRA_GREEN }}
+          >
+            <Wrench className="h-3.5 w-3.5" />
+            Desarrollo
+          </div>
+          <div className="h-px flex-1 bg-neutral-200" />
+          <span className="text-xs text-neutral-500">
+            {devInitiativesS4.length} iniciativas
+          </span>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {devInitiativesS4.map((i, idx) => (
+            <SimpleInitiativeCard key={idx} {...i} />
+          ))}
+        </div>
+      </div>
+
+      {/* Iniciativas: No Desarrollo */}
+      <div>
+        <div className="mb-5 flex items-center gap-3">
+          <div className="inline-flex items-center gap-2 rounded-full bg-neutral-900 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-white">
+            <ClipboardList className="h-3.5 w-3.5" />
+            No Desarrollo
+          </div>
+          <div className="h-px flex-1 bg-neutral-200" />
+          <span className="text-xs text-neutral-500">
+            {nonDevInitiativesS4.length} iniciativas
+          </span>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {nonDevInitiativesS4.map((i, idx) => (
+            <SimpleInitiativeCard key={idx} {...i} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function OKRMiniCard({
+  okr,
+  kind,
+}: {
+  okr: (typeof okrs)[number];
+  kind: "experience" | "adoption";
+}) {
+  const isExp = kind === "experience";
+  return (
+    <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+      <div className="flex items-center gap-2">
+        <Badge
+          variant="outline"
+          className="border-neutral-300 text-[10px] font-bold uppercase tracking-wider"
+          style={{
+            borderColor: isExp ? "#0066FF" : ALEGRA_GREEN,
+            color: isExp ? "#0066FF" : ALEGRA_GREEN,
+          }}
+        >
+          {isExp ? "Experiencia" : "Adopción"}
+        </Badge>
+        {!isExp && (
+          <Badge
+            variant="outline"
+            className="text-[10px] font-bold uppercase tracking-wider"
+            style={{ borderColor: "#FF6B00", color: "#FF6B00" }}
+          >
+            Engagement
+          </Badge>
+        )}
+      </div>
+      <p className="mt-3 text-sm font-semibold leading-snug text-neutral-900">
+        {okr.objective}
+      </p>
+      <div className="mt-4 space-y-2.5">
+        {okr.keyResults.map((kr) => {
+          const num = Number.parseFloat(kr.percentage.replace(/[%,]/g, ""));
+          const isDecrease = Number.isFinite(num) && num < 0;
+          return (
+            <div
+              key={kr.id}
+              className="rounded-lg bg-neutral-50 p-3"
+            >
+              <div className="flex items-start justify-between gap-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-neutral-700">
+                  {kr.id.toUpperCase()}
+                </span>
+                <span
+                  className={cn(
+                    "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold",
+                    isDecrease
+                      ? "bg-orange-100 text-orange-700"
+                      : "bg-emerald-100 text-emerald-700",
+                  )}
+                >
+                  {isDecrease ? (
+                    <TrendingDown className="h-3 w-3" />
+                  ) : (
+                    <TrendingUp className="h-3 w-3" />
+                  )}
+                  {kr.percentage}
+                </span>
+              </div>
+              <p className="mt-1 text-xs leading-relaxed text-neutral-600">
+                {kr.name}
+              </p>
+              <div className="mt-2 flex items-center justify-between text-[11px] text-neutral-500">
+                <span>
+                  Base:{" "}
+                  <span className="font-semibold text-neutral-800">
+                    {kr.baseline}
+                  </span>
+                </span>
+                <span>
+                  Target:{" "}
+                  <span className="font-semibold text-neutral-800">
+                    {kr.target}
+                  </span>
+                </span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function SimpleInitiativeCard({
+  title,
+  tags,
+  problem,
+  krs,
+}: {
+  title: string;
+  tags: string[];
+  problem: string;
+  krs?: string[];
+}) {
+  const tagColor = (t: string) => {
+    if (t === "Engagement") return "#FF6B00";
+    if (t === "Adopción") return ALEGRA_GREEN;
+    if (t === "Experiencia") return "#0066FF";
+    return "#737373";
+  };
+  return (
+    <div className="group flex h-full flex-col rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+      <h3 className="text-sm font-bold leading-snug text-neutral-900">
+        {title}
+      </h3>
+      <div className="mt-2 flex flex-wrap gap-1">
+        {tags.map((t) => (
+          <Badge
+            key={t}
+            variant="outline"
+            className="text-[10px] font-semibold"
+            style={{ borderColor: tagColor(t), color: tagColor(t) }}
+          >
+            {t}
+          </Badge>
+        ))}
+      </div>
+      <div className="mt-3">
+        <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">
+          Problema
+        </p>
+        <p className="mt-1 text-xs leading-relaxed text-neutral-600 line-clamp-3">
+          {problem}
+        </p>
+      </div>
+      {krs && krs.length > 0 && (
+        <div className="mt-auto pt-3">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">
+            Key Results
+          </p>
+          <div className="mt-1 flex flex-wrap gap-1">
+            {krs.map((kr) => (
+              <span
+                key={kr}
+                className="rounded-full bg-neutral-100 px-2 py-0.5 text-[10px] font-medium text-neutral-700"
+              >
+                {kr}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
