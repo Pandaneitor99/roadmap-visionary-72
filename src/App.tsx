@@ -17,6 +17,7 @@ import DashboardQ22026 from "./pages/q2-2026/Dashboard";
 import OKRsQ22026 from "./pages/q2-2026/OKRs";
 import IniciativasQ22026 from "./pages/q2-2026/Iniciativas";
 import RoadmapQ22026 from "./pages/q2-2026/Roadmap";
+import RoadmapReviewQ22026 from "./pages/q2-2026/RoadmapReview";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
