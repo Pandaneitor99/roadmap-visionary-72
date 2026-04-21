@@ -31,6 +31,7 @@ const q2MenuItems = [
   { title: "OKRs", url: "/q2-2026/okrs", icon: Target },
   { title: "Iniciativas", url: "/q2-2026/iniciativas", icon: Lightbulb },
   { title: "Roadmap", url: "/q2-2026/roadmap", icon: CalendarDays },
+  { title: "Roadmap Review", url: "/q2-2026/roadmap-review", icon: Presentation },
 ];
 
 const q4MenuItems = [
