@@ -47,6 +47,7 @@ const App = () => (
             <Route path="/q2-2026/okrs" element={<OKRsQ22026 />} />
             <Route path="/q2-2026/iniciativas" element={<IniciativasQ22026 />} />
             <Route path="/q2-2026/roadmap" element={<RoadmapQ22026 />} />
+            <Route path="/q2-2026/roadmap-review" element={<RoadmapReviewQ22026 />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
