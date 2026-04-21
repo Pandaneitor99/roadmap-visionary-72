@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { LayoutDashboard, Target, Lightbulb, CalendarDays, Smartphone, ChevronDown, FolderOpen, Trophy } from "lucide-react";
+import { LayoutDashboard, Target, Lightbulb, CalendarDays, Smartphone, ChevronDown, FolderOpen, Trophy, Presentation } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
 import {
