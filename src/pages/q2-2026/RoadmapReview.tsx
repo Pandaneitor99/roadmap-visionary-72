@@ -100,6 +100,8 @@ export default function RoadmapReview() {
         <div className="min-h-[60vh]">
           {current === 0 ? (
             <Section1 />
+          ) : current === 1 ? (
+            <Section2 />
           ) : current === 3 ? (
             <Section4 />
           ) : (
