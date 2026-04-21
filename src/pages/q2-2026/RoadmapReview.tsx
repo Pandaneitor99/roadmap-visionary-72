@@ -1,9 +1,19 @@
 import { useState, useEffect, useCallback } from "react";
-import { ChevronLeft, ChevronRight, Sparkles, TrendingUp, TrendingDown, Wrench, ClipboardList } from "lucide-react";
+import { ChevronLeft, ChevronRight, Sparkles, TrendingUp, TrendingDown, Wrench, ClipboardList, Star, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { okrs } from "@/data/initiatives";
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+} from "recharts";
 
 const sections = [
   { id: 1, title: "Visión estratégica", short: "Visión" },
@@ -90,6 +100,8 @@ export default function RoadmapReview() {
         <div className="min-h-[60vh]">
           {current === 0 ? (
             <Section1 />
+          ) : current === 1 ? (
+            <Section2 />
           ) : current === 3 ? (
             <Section4 />
           ) : (
@@ -275,6 +287,168 @@ function TradeoffCell({
       }
     >
       {children}
+    </div>
+  );
+}
+
+// === Sección 2: North Star (MAC - Tendencia) ===
+
+const macTrendData = [
+  { month: "Oct '25", Pagos: 7601, CORE: 4553, LITE: 3030 },
+  { month: "Nov '25", Pagos: 7496, CORE: 4436, LITE: 2945 },
+  { month: "Dic '25", Pagos: 7974, CORE: 4668, LITE: 3254 },
+  { month: "Ene '26", Pagos: 7504, CORE: 4393, LITE: 2997 },
+  { month: "Feb '26", Pagos: 7570, CORE: 4427, LITE: 3048 },
+  { month: "Mar '26", Pagos: 7977, CORE: 4936, LITE: 3412 },
+];
+
+function Section2() {
+  const last = macTrendData[macTrendData.length - 1];
+  const first = macTrendData[0];
+  const deltaPct = (((last.Pagos - first.Pagos) / first.Pagos) * 100).toFixed(1);
+  const positive = Number(deltaPct) >= 0;
+
+  return (
+    <div className="space-y-8">
+      {/* North Star definition */}
+      <div
+        className="rounded-2xl border border-neutral-200 bg-white p-8 shadow-sm"
+        style={{ borderLeft: `4px solid ${ALEGRA_GREEN}` }}
+      >
+        <div className="flex items-start gap-3">
+          <div
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
+            style={{ backgroundColor: `${ALEGRA_GREEN}15` }}
+          >
+            <Star className="h-5 w-5" style={{ color: ALEGRA_GREEN }} />
+          </div>
+          <div>
+            <p
+              className="text-xs font-semibold uppercase tracking-[0.2em]"
+              style={{ color: ALEGRA_GREEN }}
+            >
+              North Star Metric
+            </p>
+            <h2 className="mt-1 text-2xl font-bold text-neutral-900">
+              Monthly Active Customers (MAC)
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-neutral-600">
+              Usuarios pagos únicos que ejecutan al menos una acción crítica de negocio en la app
+              cada mes (facturar, gastar, cotizar, contactar, etc.).
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* MAC Trend Chart */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm md:p-8">
+        <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <h3 className="text-lg font-bold text-neutral-900">MAC — Tendencia</h3>
+            <p className="mt-1 text-xs text-neutral-500">
+              Últimos 6 meses · Usuarios Pagos, segmentados por CORE y LITE
+            </p>
+          </div>
+          <div className="flex items-center gap-6">
+            <div>
+              <p className="text-xs font-medium text-neutral-500">MAC actual</p>
+              <p className="text-2xl font-bold text-neutral-900">
+                {last.Pagos.toLocaleString("es-CO")}
+              </p>
+            </div>
+            <div>
+              <p className="text-xs font-medium text-neutral-500">vs Oct '25</p>
+              <p
+                className={cn(
+                  "flex items-center gap-1 text-2xl font-bold",
+                  positive ? "text-emerald-600" : "text-red-600",
+                )}
+              >
+                {positive ? (
+                  <TrendingUp className="h-5 w-5" />
+                ) : (
+                  <TrendingDown className="h-5 w-5" />
+                )}
+                {positive ? "+" : ""}
+                {deltaPct}%
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="h-[360px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={macTrendData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+              <XAxis
+                dataKey="month"
+                stroke="#6b7280"
+                tick={{ fontSize: 12 }}
+                axisLine={{ stroke: "#e5e7eb" }}
+                tickLine={false}
+              />
+              <YAxis
+                stroke="#6b7280"
+                tick={{ fontSize: 12 }}
+                axisLine={false}
+                tickLine={false}
+                tickFormatter={(v) => v.toLocaleString("es-CO")}
+              />
+              <Tooltip
+                contentStyle={{
+                  borderRadius: 8,
+                  border: "1px solid #e5e7eb",
+                  fontSize: 12,
+                }}
+                formatter={(v: number) => v.toLocaleString("es-CO")}
+              />
+              <Legend
+                iconType="circle"
+                wrapperStyle={{ fontSize: 12, paddingTop: 12 }}
+              />
+              <Line
+                type="monotone"
+                dataKey="Pagos"
+                name="Usuarios Pagos"
+                stroke={ALEGRA_GREEN}
+                strokeWidth={3}
+                dot={{ r: 4, fill: ALEGRA_GREEN }}
+                activeDot={{ r: 6 }}
+              />
+              <Line
+                type="monotone"
+                dataKey="CORE"
+                stroke="#1f2937"
+                strokeWidth={2}
+                dot={{ r: 3 }}
+              />
+              <Line
+                type="monotone"
+                dataKey="LITE"
+                stroke="#9ca3af"
+                strokeWidth={2}
+                dot={{ r: 3 }}
+                strokeDasharray="4 4"
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="mt-4 flex items-center justify-between border-t border-neutral-100 pt-4">
+          <p className="text-[11px] text-neutral-400">
+            Fuente: Amplitude · Eventos críticos de negocio en la app móvil
+          </p>
+          <a
+            href="https://app.amplitude.com/analytics/alegra/chart/wy27awa1"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-xs font-medium text-neutral-500 hover:text-neutral-900"
+          >
+            Ver en Amplitude
+            <ExternalLink className="h-3 w-3" />
+          </a>
+        </div>
+      </div>
     </div>
   );
 }
