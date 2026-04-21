@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
-import { ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
+import { ChevronLeft, ChevronRight, Sparkles, TrendingUp, TrendingDown, Wrench, ClipboardList } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { okrs } from "@/data/initiatives";
 
 const sections = [
   { id: 1, title: "Visión estratégica", short: "Visión" },
@@ -86,7 +88,13 @@ export default function RoadmapReview() {
 
         {/* Slide body */}
         <div className="min-h-[60vh]">
-          {current === 0 ? <Section1 /> : <PlaceholderSection title={section.title} />}
+          {current === 0 ? (
+            <Section1 />
+          ) : current === 3 ? (
+            <Section4 />
+          ) : (
+            <PlaceholderSection title={section.title} />
+          )}
         </div>
 
         {/* Navigation footer */}
