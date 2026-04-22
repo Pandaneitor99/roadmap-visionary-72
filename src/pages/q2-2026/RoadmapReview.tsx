@@ -1102,6 +1102,54 @@ function TasaAdopcion() {
         </div>
       </div>
 
+      {/* Progreso global: Tasa Real vs Tasa de Adopción */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+        <div className="mb-4 flex items-center justify-between">
+          <div>
+            <h4 className="text-sm font-bold text-neutral-900">
+              Tasa de Adopción global — Marzo 2026
+            </h4>
+            <p className="mt-0.5 text-xs text-neutral-500">
+              % de usuarios pagos activos que entran a la app o realizan una acción
+            </p>
+          </div>
+          <a
+            href="https://app.amplitude.com/analytics/alegra/chart/rbp5ch2z"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+          >
+            Amplitude <ExternalLink className="h-3 w-3" />
+          </a>
+        </div>
+        <div className="space-y-4">
+          <div>
+            <div className="mb-1 flex items-center justify-between text-xs">
+              <span className="font-medium text-neutral-700">Tasa de Adopción (MAU APP / MAC WEB)</span>
+              <span className="font-bold text-[#0066FF]">{tasaAdopcion}%</span>
+            </div>
+            <div className="relative h-6 w-full overflow-hidden rounded-full bg-neutral-100">
+              <div
+                className="absolute left-0 top-0 h-full rounded-full"
+                style={{ width: `${tasaAdopcion}%`, backgroundColor: "#0066FF" }}
+              />
+            </div>
+          </div>
+          <div>
+            <div className="mb-1 flex items-center justify-between text-xs">
+              <span className="font-medium text-neutral-700">Tasa de Adopción Real (MAC APP / MAC WEB)</span>
+              <span className="font-bold" style={{ color: ALEGRA_GREEN }}>{tasaReal}%</span>
+            </div>
+            <div className="relative h-6 w-full overflow-hidden rounded-full bg-neutral-100">
+              <div
+                className="absolute left-0 top-0 h-full rounded-full"
+                style={{ width: `${tasaReal}%`, backgroundColor: ALEGRA_GREEN }}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Chart por país */}
       <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
         <div className="mb-4 flex items-center justify-between">
