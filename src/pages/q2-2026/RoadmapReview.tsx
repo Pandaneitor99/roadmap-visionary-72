@@ -995,7 +995,7 @@ function TasaAdopcion() {
           <p className="mt-2 text-xs text-neutral-500">MAU APP / MAC WEB</p>
           <p className="mt-3 text-4xl font-bold text-neutral-900">{tasaAdopcion}%</p>
           <p className="mt-2 text-xs text-neutral-500">
-            {wauApp.toLocaleString("es-CO")} usuarios entran a la app cada mes sobre {wacWeb.toLocaleString("es-CO")} pagos activos en web.
+            % de usuarios pagos web que entran a la app cada mes (Marzo 2026).
           </p>
         </div>
 
@@ -1012,7 +1012,7 @@ function TasaAdopcion() {
           <p className="mt-2 text-xs text-neutral-500">MAC APP / MAC WEB</p>
           <p className="mt-3 text-4xl font-bold text-neutral-900">{tasaReal}%</p>
           <p className="mt-2 text-xs text-neutral-500">
-            {wacApp.toLocaleString("es-CO")} usuarios realizan al menos una acción de valor en la app sobre {wacWeb.toLocaleString("es-CO")} pagos activos en web.
+            % de usuarios pagos web que realizan al menos una acción de valor en la app (Marzo 2026).
           </p>
         </div>
       </div>
