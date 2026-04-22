@@ -17,7 +17,7 @@ import {
   Pie,
   Cell,
 } from "recharts";
-import clustersImage from "@/assets/clusters-sos-base.png";
+
 import { initiativeDetailMap } from "./initiativeDetails";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
