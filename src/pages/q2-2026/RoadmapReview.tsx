@@ -652,192 +652,146 @@ function Section2() {
         </div>
       </div>
 
-      {/* MAC Trend Chart */}
-      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm md:p-8">
-        <div className="mb-4 flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <h3 className="text-lg font-bold text-neutral-900">MAC — Tendencia</h3>
-            <p className="mt-1 text-xs text-neutral-500">
-              Últimos 6 meses · Usuarios Pagos, segmentados por CORE y LITE
+      {/* MAC Trend Chart + side cards */}
+      <div className="grid gap-6 lg:grid-cols-4">
+        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm md:p-8 lg:col-span-3">
+          <div className="mb-4 flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <h3 className="text-lg font-bold text-neutral-900">MAC — Tendencia</h3>
+              <p className="mt-1 text-xs text-neutral-500">
+                Últimos 6 meses · Usuarios Pagos, segmentados por CORE y LITE
+              </p>
+            </div>
+          </div>
+
+          {/* Toggle entre las dos vistas de MAC */}
+          <div className="mb-5 inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1">
+            <button
+              onClick={() => setTrendVariant("full")}
+              className={cn(
+                "rounded-md px-3 py-1.5 text-xs font-semibold transition-all",
+                trendVariant === "full"
+                  ? "bg-white text-neutral-900 shadow-sm"
+                  : "text-neutral-500 hover:text-neutral-700",
+              )}
+            >
+              MAC — Tendencia
+            </button>
+            <button
+              onClick={() => setTrendVariant("sinExtras")}
+              className={cn(
+                "rounded-md px-3 py-1.5 text-xs font-semibold transition-all",
+                trendVariant === "sinExtras"
+                  ? "bg-white text-neutral-900 shadow-sm"
+                  : "text-neutral-500 hover:text-neutral-700",
+              )}
+            >
+              Sin búsqueda ni gráficos
+            </button>
+          </div>
+
+          <div className="h-[360px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={macTrendData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                <XAxis
+                  dataKey="month"
+                  stroke="#6b7280"
+                  tick={{ fontSize: 12 }}
+                  axisLine={{ stroke: "#e5e7eb" }}
+                  tickLine={false}
+                />
+                <YAxis
+                  stroke="#6b7280"
+                  tick={{ fontSize: 12 }}
+                  axisLine={false}
+                  tickLine={false}
+                  tickFormatter={(v) => v.toLocaleString("es-CO")}
+                />
+                <Tooltip
+                  contentStyle={{
+                    borderRadius: 8,
+                    border: "1px solid #e5e7eb",
+                    fontSize: 12,
+                  }}
+                  formatter={(v: number) => v.toLocaleString("es-CO")}
+                />
+                <Legend
+                  iconType="circle"
+                  wrapperStyle={{ fontSize: 12, paddingTop: 12 }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="Pagos"
+                  name="Usuarios Pagos"
+                  stroke={ALEGRA_GREEN}
+                  strokeWidth={3}
+                  dot={{ r: 4, fill: ALEGRA_GREEN }}
+                  activeDot={{ r: 6 }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="CORE"
+                  stroke="#1f2937"
+                  strokeWidth={2}
+                  dot={{ r: 3 }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="LITE"
+                  stroke="#9ca3af"
+                  strokeWidth={2}
+                  dot={{ r: 3 }}
+                  strokeDasharray="4 4"
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+
+          <div className="mt-4 flex items-center justify-between border-t border-neutral-100 pt-4">
+            <p className="text-[11px] text-neutral-400">
+              Fuente: Amplitude ·{" "}
+              {trendVariant === "full"
+                ? "Eventos críticos de negocio (incluye búsquedas y gráficos)"
+                : "Eventos críticos sin incluir búsquedas ni gráficos"}
             </p>
-          </div>
-          <div className="flex items-center gap-6">
-            <div>
-              <p className="text-xs font-medium text-neutral-500">MAC actual</p>
-              <p className="text-2xl font-bold text-neutral-900">
-                {last.Pagos.toLocaleString("es-CO")}
-              </p>
-            </div>
-            <div>
-              <p className="text-xs font-medium text-neutral-500">vs Oct '25</p>
-              <p
-                className={cn(
-                  "flex items-center gap-1 text-2xl font-bold",
-                  positive ? "text-emerald-600" : "text-red-600",
-                )}
-              >
-                {positive ? (
-                  <TrendingUp className="h-5 w-5" />
-                ) : (
-                  <TrendingDown className="h-5 w-5" />
-                )}
-                {positive ? "+" : ""}
-                {deltaPct}%
-              </p>
-            </div>
+            <a
+              href={
+                trendVariant === "full"
+                  ? "https://app.amplitude.com/analytics/alegra/chart/wy27awa1"
+                  : "https://app.amplitude.com/analytics/alegra/chart/yhghuf5q"
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-xs font-medium text-neutral-500 hover:text-neutral-900"
+            >
+              Ver en Amplitude
+              <ExternalLink className="h-3 w-3" />
+            </a>
           </div>
         </div>
 
-        {/* Toggle entre las dos vistas de MAC */}
-        <div className="mb-5 inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1">
-          <button
-            onClick={() => setTrendVariant("full")}
-            className={cn(
-              "rounded-md px-3 py-1.5 text-xs font-semibold transition-all",
-              trendVariant === "full"
-                ? "bg-white text-neutral-900 shadow-sm"
-                : "text-neutral-500 hover:text-neutral-700",
-            )}
-          >
-            MAC — Tendencia
-          </button>
-          <button
-            onClick={() => setTrendVariant("sinExtras")}
-            className={cn(
-              "rounded-md px-3 py-1.5 text-xs font-semibold transition-all",
-              trendVariant === "sinExtras"
-                ? "bg-white text-neutral-900 shadow-sm"
-                : "text-neutral-500 hover:text-neutral-700",
-            )}
-          >
-            Sin búsqueda ni gráficos
-          </button>
-        </div>
-
-        <div className="h-[360px] w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={macTrendData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
-              <XAxis
-                dataKey="month"
-                stroke="#6b7280"
-                tick={{ fontSize: 12 }}
-                axisLine={{ stroke: "#e5e7eb" }}
-                tickLine={false}
-              />
-              <YAxis
-                stroke="#6b7280"
-                tick={{ fontSize: 12 }}
-                axisLine={false}
-                tickLine={false}
-                tickFormatter={(v) => v.toLocaleString("es-CO")}
-              />
-              <Tooltip
-                contentStyle={{
-                  borderRadius: 8,
-                  border: "1px solid #e5e7eb",
-                  fontSize: 12,
-                }}
-                formatter={(v: number) => v.toLocaleString("es-CO")}
-              />
-              <Legend
-                iconType="circle"
-                wrapperStyle={{ fontSize: 12, paddingTop: 12 }}
-              />
-              <Line
-                type="monotone"
-                dataKey="Pagos"
-                name="Usuarios Pagos"
-                stroke={ALEGRA_GREEN}
-                strokeWidth={3}
-                dot={{ r: 4, fill: ALEGRA_GREEN }}
-                activeDot={{ r: 6 }}
-              />
-              <Line
-                type="monotone"
-                dataKey="CORE"
-                stroke="#1f2937"
-                strokeWidth={2}
-                dot={{ r: 3 }}
-              />
-              <Line
-                type="monotone"
-                dataKey="LITE"
-                stroke="#9ca3af"
-                strokeWidth={2}
-                dot={{ r: 3 }}
-                strokeDasharray="4 4"
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-
-        <div className="mt-4 flex items-center justify-between border-t border-neutral-100 pt-4">
-          <p className="text-[11px] text-neutral-400">
-            Fuente: Amplitude ·{" "}
-            {trendVariant === "full"
-              ? "Eventos críticos de negocio (incluye búsquedas y gráficos)"
-              : "Eventos críticos sin incluir búsquedas ni gráficos"}
-          </p>
-          <a
-            href={
-              trendVariant === "full"
-                ? "https://app.amplitude.com/analytics/alegra/chart/wy27awa1"
-                : "https://app.amplitude.com/analytics/alegra/chart/yhghuf5q"
-            }
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1 text-xs font-medium text-neutral-500 hover:text-neutral-900"
-          >
-            Ver en Amplitude
-            <ExternalLink className="h-3 w-3" />
-          </a>
-        </div>
-      </div>
-
-      {/* Cards CORE / LITE con variación */}
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div
-          className="rounded-2xl border bg-white p-5 shadow-sm"
-          style={{ borderLeft: `4px solid #1f2937` }}
-        >
-          <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
-            MAC Core actual
-          </p>
-          <p className="mt-2 text-3xl font-bold text-neutral-900">
-            {last.CORE.toLocaleString("es-CO")}
-          </p>
-          <p
-            className={cn(
-              "mt-1 flex items-center gap-1 text-sm font-bold",
-              coreUp ? "text-emerald-600" : "text-red-600",
-            )}
-          >
-            {coreUp ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
-            {coreUp ? "+" : ""}{coreDelta}%
-            <span className="ml-1 text-[11px] font-medium text-neutral-500">vs Oct '25</span>
-          </p>
-        </div>
-        <div
-          className="rounded-2xl border bg-white p-5 shadow-sm"
-          style={{ borderLeft: `4px solid #9ca3af` }}
-        >
-          <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
-            MAC Lite actual
-          </p>
-          <p className="mt-2 text-3xl font-bold text-neutral-900">
-            {last.LITE.toLocaleString("es-CO")}
-          </p>
-          <p
-            className={cn(
-              "mt-1 flex items-center gap-1 text-sm font-bold",
-              liteUp ? "text-emerald-600" : "text-red-600",
-            )}
-          >
-            {liteUp ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
-            {liteUp ? "+" : ""}{liteDelta}%
-            <span className="ml-1 text-[11px] font-medium text-neutral-500">vs Oct '25</span>
-          </p>
+        {/* Cards laterales: dinámicas según el toggle */}
+        <div className="flex flex-col gap-4 lg:col-span-1">
+          <SideMetricCard
+            label="MAC actual"
+            value={last.Pagos}
+            delta={Number(deltaPct)}
+            color={ALEGRA_GREEN}
+            highlight
+          />
+          <SideMetricCard
+            label="MAC Core actual"
+            value={last.CORE}
+            delta={Number(coreDelta)}
+            color="#1f2937"
+          />
+          <SideMetricCard
+            label="MAC Lite actual"
+            value={last.LITE}
+            delta={Number(liteDelta)}
+            color="#9ca3af"
+          />
         </div>
       </div>
 
