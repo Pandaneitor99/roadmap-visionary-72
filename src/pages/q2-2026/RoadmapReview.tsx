@@ -795,6 +795,52 @@ function Section2() {
         </div>
       </div>
 
+      {/* Cards CORE / LITE con variación */}
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div
+          className="rounded-2xl border bg-white p-5 shadow-sm"
+          style={{ borderLeft: `4px solid #1f2937` }}
+        >
+          <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
+            MAC Core actual
+          </p>
+          <p className="mt-2 text-3xl font-bold text-neutral-900">
+            {last.CORE.toLocaleString("es-CO")}
+          </p>
+          <p
+            className={cn(
+              "mt-1 flex items-center gap-1 text-sm font-bold",
+              coreUp ? "text-emerald-600" : "text-red-600",
+            )}
+          >
+            {coreUp ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
+            {coreUp ? "+" : ""}{coreDelta}%
+            <span className="ml-1 text-[11px] font-medium text-neutral-500">vs Oct '25</span>
+          </p>
+        </div>
+        <div
+          className="rounded-2xl border bg-white p-5 shadow-sm"
+          style={{ borderLeft: `4px solid #9ca3af` }}
+        >
+          <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
+            MAC Lite actual
+          </p>
+          <p className="mt-2 text-3xl font-bold text-neutral-900">
+            {last.LITE.toLocaleString("es-CO")}
+          </p>
+          <p
+            className={cn(
+              "mt-1 flex items-center gap-1 text-sm font-bold",
+              liteUp ? "text-emerald-600" : "text-red-600",
+            )}
+          >
+            {liteUp ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
+            {liteUp ? "+" : ""}{liteDelta}%
+            <span className="ml-1 text-[11px] font-medium text-neutral-500">vs Oct '25</span>
+          </p>
+        </div>
+      </div>
+
       {/* Variación por país: Marzo vs Octubre */}
       <div>
         <h3 className="mb-3 text-base font-bold text-neutral-900">
