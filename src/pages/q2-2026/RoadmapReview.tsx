@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { ChevronLeft, ChevronRight, Sparkles, TrendingUp, TrendingDown, Wrench, ClipboardList, Star, ExternalLink } from "lucide-react";
+import { ChevronLeft, ChevronRight, Sparkles, TrendingUp, TrendingDown, Wrench, ClipboardList, Star, ExternalLink, Users, AlertTriangle, Heart, Target, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -13,7 +13,11 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
+  PieChart,
+  Pie,
+  Cell,
 } from "recharts";
+import clustersImage from "@/assets/clusters-sos-base.png";
 
 const sections = [
   { id: 1, title: "Visión estratégica", short: "Visión" },
@@ -102,6 +106,8 @@ export default function RoadmapReview() {
             <Section1 />
           ) : current === 1 ? (
             <Section2 />
+          ) : current === 2 ? (
+            <Section3 />
           ) : current === 3 ? (
             <Section4 />
           ) : (
