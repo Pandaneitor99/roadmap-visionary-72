@@ -1364,11 +1364,13 @@ function SimpleInitiativeCard({
   tags,
   problem,
   krs,
+  onClick,
 }: {
   title: string;
   tags: string[];
   problem: string;
   krs?: string[];
+  onClick?: () => void;
 }) {
   const tagColor = (t: string) => {
     if (t === "Engagement") return "#FF6B00";
@@ -1377,10 +1379,24 @@ function SimpleInitiativeCard({
     return "#737373";
   };
   return (
-    <div className="group flex h-full flex-col rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
-      <h3 className="text-sm font-bold leading-snug text-neutral-900">
-        {title}
-      </h3>
+    <div
+      onClick={onClick}
+      className={cn(
+        "group flex h-full flex-col rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md",
+        onClick && "cursor-pointer hover:border-emerald-300",
+      )}
+    >
+      <div className="flex items-start justify-between gap-2">
+        <h3 className="text-sm font-bold leading-snug text-neutral-900">{title}</h3>
+        {onClick && (
+          <span
+            className="shrink-0 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white"
+            style={{ backgroundColor: ALEGRA_GREEN }}
+          >
+            Métricas
+          </span>
+        )}
+      </div>
       <div className="mt-2 flex flex-wrap gap-1">
         {tags.map((t) => (
           <Badge
