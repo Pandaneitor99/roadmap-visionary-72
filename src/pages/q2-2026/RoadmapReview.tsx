@@ -1532,7 +1532,7 @@ function EngagementScatter() {
 
   // Escalas
   const maxX = 60;
-  const maxY = 30;
+  const maxY = 50;
   const xToPx = (x: number) => padL + (x / maxX) * innerW;
   const yToPx = (y: number) => padT + innerH - (y / maxY) * innerH;
 
