@@ -550,7 +550,7 @@ function TradeoffCell({
 
 // === Sección 2: North Star (MAC - Tendencia) ===
 
-const macTrendData = [
+const macTrendDataFull = [
   { month: "Oct '25", Pagos: 7601, CORE: 4553, LITE: 3030 },
   { month: "Nov '25", Pagos: 7496, CORE: 4436, LITE: 2945 },
   { month: "Dic '25", Pagos: 7974, CORE: 4668, LITE: 3254 },
@@ -559,7 +559,27 @@ const macTrendData = [
   { month: "Mar '26", Pagos: 7977, CORE: 4936, LITE: 3412 },
 ];
 
+// Sin Búsqueda ni gráficos (chart yhghuf5q)
+const macTrendDataSinExtras = [
+  { month: "Oct '25", Pagos: 7108, CORE: 3972, LITE: 2398 },
+  { month: "Nov '25", Pagos: 7017, CORE: 3798, LITE: 2263 },
+  { month: "Dic '25", Pagos: 7442, CORE: 3953, LITE: 2509 },
+  { month: "Ene '26", Pagos: 7004, CORE: 3688, LITE: 2292 },
+  { month: "Feb '26", Pagos: 7071, CORE: 3721, LITE: 2331 },
+  { month: "Mar '26", Pagos: 7384, CORE: 4117, LITE: 2600 },
+];
+
+// Variación por país: Marzo '26 vs Octubre '25
+const countryVariation = [
+  { country: "Colombia", march: 5128, october: 4892, color: ALEGRA_GREEN },
+  { country: "República Dominicana", march: 1197, october: 1135, color: "#0066FF" },
+  { country: "México", march: 728, october: 677, color: "#FF6B00" },
+  { country: "Costa Rica", march: 235, october: 232, color: "#06B6D4" },
+];
+
 function Section2() {
+  const [trendVariant, setTrendVariant] = useState<"full" | "sinExtras">("full");
+  const macTrendData = trendVariant === "full" ? macTrendDataFull : macTrendDataSinExtras;
   const last = macTrendData[macTrendData.length - 1];
   const first = macTrendData[0];
   const deltaPct = (((last.Pagos - first.Pagos) / first.Pagos) * 100).toFixed(1);
