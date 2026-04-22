@@ -303,6 +303,10 @@ export function BusquedaDetail() {
           title="Búsqueda de facturas — Totales"
           subtitle="Mensual · últimos 6 meses"
           url="https://app.amplitude.com/analytics/alegra/chart/g3zsws0s"
+          statLabel="Último mes"
+          statValue={lastVal(busquedaFacturasTotales, "v")}
+          statDelta={pctDelta(busquedaFacturasTotales, "v")}
+          statBaselineLabel="vs Oct '25"
         >
           <LineChart data={busquedaFacturasTotales}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -316,6 +320,10 @@ export function BusquedaDetail() {
           title="Búsqueda de facturas — Uniques"
           subtitle="Usuarios únicos por mes"
           url="https://app.amplitude.com/analytics/alegra/chart/iztonip4"
+          statLabel="Último mes"
+          statValue={lastVal(busquedaFacturasUniques, "v")}
+          statDelta={pctDelta(busquedaFacturasUniques, "v")}
+          statBaselineLabel="vs Oct '25"
         >
           <LineChart data={busquedaFacturasUniques}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -329,6 +337,10 @@ export function BusquedaDetail() {
           title="Uso del componente del buscador"
           subtitle="Uniques semanales"
           url="https://app.amplitude.com/analytics/alegra/chart/z9b4txww"
+          statLabel="Última sem"
+          statValue={lastVal(usoBuscador, "v")}
+          statDelta={pctDelta(usoBuscador, "v")}
+          statBaselineLabel="vs 22-Feb"
         >
           <LineChart data={usoBuscador}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -342,6 +354,10 @@ export function BusquedaDetail() {
           title="Búsqueda cotizaciones — Únicos"
           subtitle="Lanzamiento reciente"
           url="https://app.amplitude.com/analytics/alegra/chart/on3tt73l"
+          statLabel="Última sem"
+          statValue={lastVal(busquedaCotizacionesUniques, "v")}
+          statDelta={pctDelta(busquedaCotizacionesUniques, "v")}
+          statBaselineLabel="vs lanzamiento"
         >
           <BarChart data={busquedaCotizacionesUniques}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -354,6 +370,10 @@ export function BusquedaDetail() {
         <ChartCard
           title="Búsqueda cotizaciones — Totales"
           url="https://app.amplitude.com/analytics/alegra/chart/lj96ul5q"
+          statLabel="Última sem"
+          statValue={lastVal(busquedaCotizacionesTotales, "v")}
+          statDelta={pctDelta(busquedaCotizacionesTotales, "v")}
+          statBaselineLabel="vs lanzamiento"
         >
           <BarChart data={busquedaCotizacionesTotales}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
