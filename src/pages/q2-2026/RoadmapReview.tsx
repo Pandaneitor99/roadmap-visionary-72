@@ -17,7 +17,7 @@ import {
   Pie,
   Cell,
 } from "recharts";
-import clustersImage from "@/assets/clusters-sos-base.png";
+
 import { initiativeDetailMap } from "./initiativeDetails";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
@@ -550,7 +550,7 @@ function TradeoffCell({
 
 // === Sección 2: North Star (MAC - Tendencia) ===
 
-const macTrendData = [
+const macTrendDataFull = [
   { month: "Oct '25", Pagos: 7601, CORE: 4553, LITE: 3030 },
   { month: "Nov '25", Pagos: 7496, CORE: 4436, LITE: 2945 },
   { month: "Dic '25", Pagos: 7974, CORE: 4668, LITE: 3254 },
@@ -559,7 +559,27 @@ const macTrendData = [
   { month: "Mar '26", Pagos: 7977, CORE: 4936, LITE: 3412 },
 ];
 
+// Sin Búsqueda ni gráficos (chart yhghuf5q)
+const macTrendDataSinExtras = [
+  { month: "Oct '25", Pagos: 7108, CORE: 3972, LITE: 2398 },
+  { month: "Nov '25", Pagos: 7017, CORE: 3798, LITE: 2263 },
+  { month: "Dic '25", Pagos: 7442, CORE: 3953, LITE: 2509 },
+  { month: "Ene '26", Pagos: 7004, CORE: 3688, LITE: 2292 },
+  { month: "Feb '26", Pagos: 7071, CORE: 3721, LITE: 2331 },
+  { month: "Mar '26", Pagos: 7384, CORE: 4117, LITE: 2600 },
+];
+
+// Variación por país: Marzo '26 vs Octubre '25
+const countryVariation = [
+  { country: "Colombia", march: 5128, october: 4892, color: ALEGRA_GREEN },
+  { country: "República Dominicana", march: 1197, october: 1135, color: "#0066FF" },
+  { country: "México", march: 728, october: 677, color: "#FF6B00" },
+  { country: "Costa Rica", march: 235, october: 232, color: "#06B6D4" },
+];
+
 function Section2() {
+  const [trendVariant, setTrendVariant] = useState<"full" | "sinExtras">("full");
+  const macTrendData = trendVariant === "full" ? macTrendDataFull : macTrendDataSinExtras;
   const last = macTrendData[macTrendData.length - 1];
   const first = macTrendData[0];
   const deltaPct = (((last.Pagos - first.Pagos) / first.Pagos) * 100).toFixed(1);
@@ -630,7 +650,7 @@ function Section2() {
 
       {/* MAC Trend Chart */}
       <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm md:p-8">
-        <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+        <div className="mb-4 flex flex-wrap items-end justify-between gap-4">
           <div>
             <h3 className="text-lg font-bold text-neutral-900">MAC — Tendencia</h3>
             <p className="mt-1 text-xs text-neutral-500">
@@ -662,6 +682,32 @@ function Section2() {
               </p>
             </div>
           </div>
+        </div>
+
+        {/* Toggle entre las dos vistas de MAC */}
+        <div className="mb-5 inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1">
+          <button
+            onClick={() => setTrendVariant("full")}
+            className={cn(
+              "rounded-md px-3 py-1.5 text-xs font-semibold transition-all",
+              trendVariant === "full"
+                ? "bg-white text-neutral-900 shadow-sm"
+                : "text-neutral-500 hover:text-neutral-700",
+            )}
+          >
+            MAC — Tendencia
+          </button>
+          <button
+            onClick={() => setTrendVariant("sinExtras")}
+            className={cn(
+              "rounded-md px-3 py-1.5 text-xs font-semibold transition-all",
+              trendVariant === "sinExtras"
+                ? "bg-white text-neutral-900 shadow-sm"
+                : "text-neutral-500 hover:text-neutral-700",
+            )}
+          >
+            Sin búsqueda ni gráficos
+          </button>
         </div>
 
         <div className="h-[360px] w-full">
@@ -724,10 +770,17 @@ function Section2() {
 
         <div className="mt-4 flex items-center justify-between border-t border-neutral-100 pt-4">
           <p className="text-[11px] text-neutral-400">
-            Fuente: Amplitude · Eventos críticos de negocio en la app móvil
+            Fuente: Amplitude ·{" "}
+            {trendVariant === "full"
+              ? "Eventos críticos de negocio (incluye búsquedas y gráficos)"
+              : "Eventos críticos sin incluir búsquedas ni gráficos"}
           </p>
           <a
-            href="https://app.amplitude.com/analytics/alegra/chart/wy27awa1"
+            href={
+              trendVariant === "full"
+                ? "https://app.amplitude.com/analytics/alegra/chart/wy27awa1"
+                : "https://app.amplitude.com/analytics/alegra/chart/yhghuf5q"
+            }
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1 text-xs font-medium text-neutral-500 hover:text-neutral-900"
@@ -738,11 +791,58 @@ function Section2() {
         </div>
       </div>
 
+      {/* Variación por país: Marzo vs Octubre */}
+      <div>
+        <h3 className="mb-3 text-base font-bold text-neutral-900">
+          MAC por país — Marzo '26 vs Octubre '25
+        </h3>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {countryVariation.map((c) => {
+            const delta = ((c.march - c.october) / c.october) * 100;
+            const isUp = delta >= 0;
+            return (
+              <div
+                key={c.country}
+                className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+                style={{ borderTop: `3px solid ${c.color}` }}
+              >
+                <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
+                  {c.country}
+                </p>
+                <p className="mt-2 text-3xl font-bold text-neutral-900">
+                  {c.march.toLocaleString("es-CO")}
+                </p>
+                <p
+                  className={cn(
+                    "mt-1 flex items-center gap-1 text-sm font-bold",
+                    isUp ? "text-emerald-600" : "text-red-600",
+                  )}
+                >
+                  {isUp ? (
+                    <TrendingUp className="h-4 w-4" />
+                  ) : (
+                    <TrendingDown className="h-4 w-4" />
+                  )}
+                  {isUp ? "+" : ""}
+                  {delta.toFixed(1)}%
+                  <span className="ml-1 text-[11px] font-medium text-neutral-500">
+                    vs Oct '25
+                  </span>
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
       {/* MAC por país: Line + Pie */}
       <MacPorPais />
 
       {/* Tasa de Adopción */}
       <TasaAdopcion />
+
+      {/* % Participación de App */}
+      <ParticipacionApp />
     </div>
   );
 }
@@ -867,14 +967,9 @@ const adoptionByCountry = [
 ];
 
 function TasaAdopcion() {
-  // Apr 2026: WAC APP=4933, WAU APP=8907, WAC WEB=29828
-  const wacApp = 4933;
-  const wauApp = 8907;
-  const wacWeb = 29828;
-  const macUsersApp = 7977;
-  const macWeb = wacWeb;
-  const tasaAdopcion = ((wauApp / wacWeb) * 100).toFixed(1); // MAU APP / MAC WEB
-  const tasaReal = ((wacApp / wacWeb) * 100).toFixed(1); // MAC APP / MAC WEB
+  // Marzo 2026 (chart rbp5ch2z): Ingresan a la app 31.85%, Realizan acción 22.10%
+  const tasaAdopcion = "31.1"; // MAU APP / MAC WEB
+  const tasaReal = "22.1"; // MAC APP / MAC WEB
 
   return (
     <div className="space-y-6">
@@ -900,7 +995,7 @@ function TasaAdopcion() {
           <p className="mt-2 text-xs text-neutral-500">MAU APP / MAC WEB</p>
           <p className="mt-3 text-4xl font-bold text-neutral-900">{tasaAdopcion}%</p>
           <p className="mt-2 text-xs text-neutral-500">
-            {wauApp.toLocaleString("es-CO")} usuarios entran a la app cada mes sobre {wacWeb.toLocaleString("es-CO")} pagos activos en web.
+            % de usuarios pagos web que entran a la app cada mes (Marzo 2026).
           </p>
         </div>
 
@@ -917,7 +1012,7 @@ function TasaAdopcion() {
           <p className="mt-2 text-xs text-neutral-500">MAC APP / MAC WEB</p>
           <p className="mt-3 text-4xl font-bold text-neutral-900">{tasaReal}%</p>
           <p className="mt-2 text-xs text-neutral-500">
-            {wacApp.toLocaleString("es-CO")} usuarios realizan al menos una acción de valor en la app sobre {wacWeb.toLocaleString("es-CO")} pagos activos en web.
+            % de usuarios pagos web que realizan al menos una acción de valor en la app (Marzo 2026).
           </p>
         </div>
       </div>
@@ -974,7 +1069,41 @@ function TasaAdopcion() {
   );
 }
 
-// === Sección 3: Base de usuarios y MRR ===
+// === % Participación de App ===
+
+function ParticipacionApp() {
+  return (
+    <div>
+      <h3 className="mb-3 text-base font-bold text-neutral-900">
+        % de participación de app
+      </h3>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div
+          className="rounded-2xl border bg-white p-6 shadow-sm"
+          style={{ borderLeft: `4px solid ${ALEGRA_GREEN}` }}
+        >
+          <div className="flex items-center gap-2">
+            <Star className="h-4 w-4" style={{ color: ALEGRA_GREEN }} />
+            <span
+              className="text-[10px] font-bold uppercase tracking-wider"
+              style={{ color: ALEGRA_GREEN }}
+            >
+              Facturas de venta
+            </span>
+          </div>
+          <p className="mt-2 text-xs text-neutral-500">
+            % de facturas de venta totales (web + app) creadas desde la app móvil
+          </p>
+          <p className="mt-3 text-4xl font-bold text-neutral-900">7.57%</p>
+          <p className="mt-2 text-xs text-neutral-500">
+            Aún hay un techo amplio de adopción frente al volumen total de facturación.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 
 function Section3() {
   return (
@@ -1070,40 +1199,125 @@ function Section3() {
         </div>
       </div>
 
-      {/* Clusters image */}
-      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-        <div className="mb-4 flex items-center justify-between">
-          <div>
-            <h3 className="text-base font-bold text-neutral-900">
-              Clusters BASE y SOS
-            </h3>
-            <p className="mt-1 text-xs text-neutral-500">
-              Análisis de comportamiento · 7,703 usuarios totales
+      {/* Clusters - bubble visualization */}
+      <ClustersBubbles />
+    </div>
+  );
+}
+
+// === Clusters BASE / SOS - bubble visualization ===
+
+function ClustersBubbles() {
+  // SOS = 62%, BASE = 38% (proporcional al tamaño del círculo via radio)
+  const sosPct = 62;
+  const basePct = 38;
+  // El área del círculo es proporcional al porcentaje => radio ∝ √pct
+  const sosRadius = Math.sqrt(sosPct) * 22; // px
+  const baseRadius = Math.sqrt(basePct) * 22;
+
+  return (
+    <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm md:p-8">
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h3 className="text-base font-bold text-neutral-900">
+            Clusters BASE y SOS
+          </h3>
+          <p className="mt-1 text-xs text-neutral-500">
+            Tamaño relativo de cada cluster · Análisis de comportamiento de usuarios pagos activos
+          </p>
+        </div>
+        <a
+          href="https://app.amplitude.com/analytics/alegra/chart/w4dmwazb"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+        >
+          Amplitude <ExternalLink className="h-3 w-3" />
+        </a>
+      </div>
+
+      {/* Bolitas */}
+      <div className="flex flex-col items-center justify-center gap-10 py-6 md:flex-row md:gap-16">
+        {/* SOS */}
+        <div className="flex flex-col items-center">
+          <div
+            className="flex items-center justify-center rounded-full text-white shadow-lg transition-transform hover:scale-105"
+            style={{
+              width: `${sosRadius * 2}px`,
+              height: `${sosRadius * 2}px`,
+              background: `radial-gradient(circle at 30% 30%, #FF8A3D, #FF6B00)`,
+              boxShadow: "0 12px 30px -8px rgba(255,107,0,0.45)",
+            }}
+          >
+            <div className="text-center">
+              <p className="text-4xl font-bold leading-none md:text-5xl">{sosPct}%</p>
+              <p className="mt-1 text-[11px] font-bold uppercase tracking-widest opacity-90">
+                SOS
+              </p>
+            </div>
+          </div>
+          <div className="mt-4 max-w-[220px] text-center">
+            <p className="text-xs font-semibold text-neutral-700">
+              Web-first · usan app para emergencia
+            </p>
+            <p className="mt-1 text-[11px] text-neutral-500">
+              Eventos de web · Reportes · Búsqueda de factura
             </p>
           </div>
-          <a
-            href="https://app.amplitude.com/analytics/alegra/chart/w4dmwazb"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
-          >
-            Amplitude <ExternalLink className="h-3 w-3" />
-          </a>
         </div>
-        <img
-          src={clustersImage}
-          alt="Clusters BASE y SOS - distribución y caracterización de usuarios"
-          className="w-full rounded-lg border border-neutral-200"
-        />
-        <div className="mt-4 grid gap-3 text-xs text-neutral-600 md:grid-cols-2">
-          <div className="rounded-lg bg-neutral-50 p-3">
-            <p className="font-bold text-neutral-900">Cluster 1 (67%)</p>
-            <p className="mt-1">Eventos de web · Reportes en App · Busca factura de venta app</p>
+
+        {/* BASE */}
+        <div className="flex flex-col items-center">
+          <div
+            className="flex items-center justify-center rounded-full text-white shadow-lg transition-transform hover:scale-105"
+            style={{
+              width: `${baseRadius * 2}px`,
+              height: `${baseRadius * 2}px`,
+              background: `radial-gradient(circle at 30% 30%, #2DD4A6, ${ALEGRA_GREEN})`,
+              boxShadow: `0 12px 30px -8px rgba(0,179,134,0.45)`,
+            }}
+          >
+            <div className="text-center">
+              <p className="text-3xl font-bold leading-none md:text-4xl">{basePct}%</p>
+              <p className="mt-1 text-[11px] font-bold uppercase tracking-widest opacity-90">
+                BASE
+              </p>
+            </div>
           </div>
-          <div className="rounded-lg bg-neutral-50 p-3">
-            <p className="font-bold text-neutral-900">Cluster 2 (33%)</p>
-            <p className="mt-1">Factura de venta App · Item en App · Contactos en App · Cotizaciones App</p>
+          <div className="mt-4 max-w-[220px] text-center">
+            <p className="text-xs font-semibold text-neutral-700">
+              Mobile-first · app es su herramienta principal
+            </p>
+            <p className="mt-1 text-[11px] text-neutral-500">
+              Facturas · Items · Contactos · Cotizaciones en App
+            </p>
           </div>
+        </div>
+      </div>
+
+      {/* Detalle inferior */}
+      <div className="mt-2 grid gap-3 border-t border-neutral-100 pt-5 text-xs text-neutral-600 md:grid-cols-2">
+        <div
+          className="rounded-lg p-3"
+          style={{ backgroundColor: "#FF6B0010" }}
+        >
+          <p className="font-bold" style={{ color: "#FF6B00" }}>
+            Cluster SOS — 62%
+          </p>
+          <p className="mt-1 text-neutral-600">
+            Eventos de web · Reportes en App · Busca factura de venta en app
+          </p>
+        </div>
+        <div
+          className="rounded-lg p-3"
+          style={{ backgroundColor: `${ALEGRA_GREEN}10` }}
+        >
+          <p className="font-bold" style={{ color: ALEGRA_GREEN }}>
+            Cluster BASE — 38%
+          </p>
+          <p className="mt-1 text-neutral-600">
+            Factura de venta App · Item en App · Contactos en App · Cotizaciones App
+          </p>
         </div>
       </div>
     </div>
