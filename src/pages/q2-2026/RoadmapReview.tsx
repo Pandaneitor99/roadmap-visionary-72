@@ -584,6 +584,10 @@ function Section2() {
   const first = macTrendData[0];
   const deltaPct = (((last.Pagos - first.Pagos) / first.Pagos) * 100).toFixed(1);
   const positive = Number(deltaPct) >= 0;
+  const coreDelta = (((last.CORE - first.CORE) / first.CORE) * 100).toFixed(1);
+  const liteDelta = (((last.LITE - first.LITE) / first.LITE) * 100).toFixed(1);
+  const coreUp = Number(coreDelta) >= 0;
+  const liteUp = Number(liteDelta) >= 0;
 
   return (
     <div className="space-y-8">
