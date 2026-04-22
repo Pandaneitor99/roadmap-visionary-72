@@ -477,6 +477,10 @@ export function RemisionesDetail() {
         <ChartCard
           title="Remisiones totales — Semanal"
           url="https://app.amplitude.com/analytics/alegra/chart/000rbdus"
+          statLabel="Última sem"
+          statValue={lastVal(remisionesTotales, "v")}
+          statDelta={pctDelta(remisionesTotales, "v")}
+          statBaselineLabel="vs 22-Feb"
         >
           <BarChart data={remisionesTotales}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -490,6 +494,10 @@ export function RemisionesDetail() {
           title="App vs Web Remisiones"
           subtitle="% de remisiones creadas en App"
           url="https://app.amplitude.com/analytics/alegra/chart/eosl7cg8"
+          statLabel="Último mes"
+          statValue={`${lastVal(appVsWebRemisiones, "pct").toFixed(2)}%`}
+          statDelta={pctDelta(appVsWebRemisiones, "pct")}
+          statBaselineLabel="vs Oct '25"
         >
           <LineChart data={appVsWebRemisiones}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
