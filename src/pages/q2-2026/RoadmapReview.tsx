@@ -1198,19 +1198,17 @@ const nonDevInitiativesS4 = [
 ];
 
 function Section4() {
-  // Tomamos los 2 OKRs (errores críticos = obj-1 experience, adopción/engagement = obj-2 adoption)
   const okr1 = okrs.find((o) => o.id === "obj-1");
   const okr2 = okrs.find((o) => o.id === "obj-2");
+  const [openInit, setOpenInit] = useState<string | null>(null);
+  const DetailComp = openInit ? initiativeDetailMap[openInit] : null;
 
   return (
     <div className="space-y-12">
       {/* OKRs Block */}
       <div>
         <div className="mb-5 flex items-center gap-2">
-          <div
-            className="h-1 w-10 rounded-full"
-            style={{ backgroundColor: ALEGRA_GREEN }}
-          />
+          <div className="h-1 w-10 rounded-full" style={{ backgroundColor: ALEGRA_GREEN }} />
           <h2 className="text-lg font-bold text-neutral-900">OKRs del período</h2>
         </div>
         <div className="grid gap-5 md:grid-cols-2">
@@ -1230,13 +1228,15 @@ function Section4() {
             Desarrollo
           </div>
           <div className="h-px flex-1 bg-neutral-200" />
-          <span className="text-xs text-neutral-500">
-            {devInitiativesS4.length} iniciativas
-          </span>
+          <span className="text-xs text-neutral-500">{devInitiativesS4.length} iniciativas</span>
         </div>
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {devInitiativesS4.map((i, idx) => (
-            <SimpleInitiativeCard key={idx} {...i} />
+            <SimpleInitiativeCard
+              key={idx}
+              {...i}
+              onClick={initiativeDetailMap[i.title] ? () => setOpenInit(i.title) : undefined}
+            />
           ))}
         </div>
       </div>
@@ -1249,9 +1249,7 @@ function Section4() {
             No Desarrollo
           </div>
           <div className="h-px flex-1 bg-neutral-200" />
-          <span className="text-xs text-neutral-500">
-            {nonDevInitiativesS4.length} iniciativas
-          </span>
+          <span className="text-xs text-neutral-500">{nonDevInitiativesS4.length} iniciativas</span>
         </div>
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {nonDevInitiativesS4.map((i, idx) => (
@@ -1259,6 +1257,16 @@ function Section4() {
           ))}
         </div>
       </div>
+
+      {/* Detail dialog */}
+      <Dialog open={!!openInit} onOpenChange={(o) => !o && setOpenInit(null)}>
+        <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold text-neutral-900">{openInit}</DialogTitle>
+          </DialogHeader>
+          {DetailComp && <DetailComp />}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
