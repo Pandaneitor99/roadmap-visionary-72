@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { ChevronLeft, ChevronRight, Sparkles, TrendingUp, TrendingDown, Wrench, ClipboardList, Star, ExternalLink } from "lucide-react";
+import { ChevronLeft, ChevronRight, Sparkles, TrendingUp, TrendingDown, Wrench, ClipboardList, Star, ExternalLink, Users, AlertTriangle, Heart, Target, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -13,7 +13,11 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
+  PieChart,
+  Pie,
+  Cell,
 } from "recharts";
+import clustersImage from "@/assets/clusters-sos-base.png";
 
 const sections = [
   { id: 1, title: "Visión estratégica", short: "Visión" },
@@ -102,6 +106,8 @@ export default function RoadmapReview() {
             <Section1 />
           ) : current === 1 ? (
             <Section2 />
+          ) : current === 2 ? (
+            <Section3 />
           ) : current === 3 ? (
             <Section4 />
           ) : (
@@ -258,6 +264,255 @@ function Section1() {
               la app.
             </TradeoffCell>
           </div>
+        </div>
+      </div>
+
+      {/* Segmentos Objetivo */}
+      <SegmentosObjetivo />
+    </div>
+  );
+}
+
+// === Segmentos Objetivo (interactivo) ===
+
+type Segmento = {
+  id: string;
+  nombre: string;
+  badge: string;
+  tamano: string;
+  dolor: string;
+  alternativa: string;
+  prioridad: "Máxima" | "Alta" | "Media";
+  color: string;
+  problema: string;
+  costos: string[];
+  valor: string;
+};
+
+const segmentos: Segmento[] = [
+  {
+    id: "base",
+    nombre: "Pyme BASE",
+    badge: "Móvil-first",
+    tamano: "~40% del MAC (~2,924 usuarios)",
+    dolor: "Muy alto",
+    alternativa: "Web Alegra cuando tiene PC",
+    prioridad: "Máxima",
+    color: ALEGRA_GREEN,
+    problema:
+      "Su herramienta central — la app — tiene funcionalidades faltantes dentro de los módulos, funcionalidades de core web faltantes, falta de información en la factura de venta (especialmente al agregar productos) y cuando algo falla no tiene alternativa inmediata.",
+    costos: [
+      "Pierde trazabilidad de ventas y problemas contables al no poder facturar frente al cliente.",
+      "Negocio y cliente frustrado al no contar con la información y documentos importantes.",
+      "No conocer cuánto le deben ni quién le debe.",
+      "Alta concentración de riesgo de churn.",
+    ],
+    valor:
+      "Facturar en ≤90 segundos, descargarlo y compartirlo con el cliente al frente. Saber de un vistazo que el negocio está al día. Tener un control completo de la venta y del gasto.",
+  },
+  {
+    id: "sos",
+    nombre: "Pyme SOS",
+    badge: "Web-first",
+    tamano: "~60% del MAC (~4,700 usuarios)",
+    dolor: "Medio",
+    alternativa: "Vuelve al PC, pierde la venta",
+    prioridad: "Alta",
+    color: "#FF6B00",
+    problema:
+      "No tiene una razón poderosa para cambiar su hábito. La app se percibe como 'más limitada y complicada que la web'. Cuando la necesita (está fuera del computador), la experiencia lo decepciona y refuerza el comportamiento de volver al PC.",
+    costos: [
+      "Pierde la oportunidad de facturar o consultar estado al instante — depende del PC.",
+      "Costos de re-trabajo al tener que ir al PC para registrar lo que no puede hacer en la app.",
+      "Baja percepción de utilidad de la app y pensamiento negativo hacia la marca.",
+      "Baja concentración de riesgo de churn.",
+    ],
+    valor:
+      "Una primera experiencia tan fluida que el usuario quiera volver. Una razón para tener la app instalada que no sea la emergencia, sino la conveniencia cotidiana.",
+  },
+  {
+    id: "nuevos",
+    nombre: "Nuevos usuarios web",
+    badge: "Sin app",
+    tamano: "70% de usuarios web no usan la app",
+    dolor: "Medio",
+    alternativa: "No usan app",
+    prioridad: "Media",
+    color: "#0066FF",
+    problema:
+      "70% de usuarios web nunca han instalado o probado la app. No la conocen o no la encuentran como una opción real para sus operaciones diarias.",
+    costos: [
+      "Oportunidad de adopción no capturada — base potencial enorme sin activar.",
+      "Pierden la conveniencia móvil para acciones críticas.",
+      "Menor engagement transversal con el ecosistema Alegra.",
+    ],
+    valor:
+      "Visibilidad y descubrimiento de la app dentro del ecosistema Alegra. Una primera experiencia que muestre el valor inmediato de tener la app a la mano.",
+  },
+  {
+    id: "contador",
+    nombre: "Contador",
+    badge: "Sub-servido",
+    tamano: "Subrepresentado",
+    dolor: "Medio",
+    alternativa: "Reportes en web, llamadas al cliente",
+    prioridad: "Media",
+    color: "#7C3AED",
+    problema:
+      "No tiene un panel de control móvil real. Para saber el estado de los negocios de sus clientes, necesita el PC. Las alertas, validaciones y aprobaciones no llegan al celular de forma estructurada.",
+    costos: [
+      "Dependencia total del escritorio para supervisión básica.",
+      "No puede supervisar múltiples empresas simultáneamente en movimiento.",
+      "El tiempo de respuesta a sus clientes crece, afectando la calidad del servicio.",
+    ],
+    valor:
+      "Panel de control en el bolsillo. Estado de los negocios de sus clientes en segundos. Validaciones y alertas que llegan sin buscarlas.",
+  },
+];
+
+function SegmentosObjetivo() {
+  const [selected, setSelected] = useState<string>("base");
+  const seg = segmentos.find((s) => s.id === selected)!;
+
+  return (
+    <div>
+      <h2 className="mb-2 text-lg font-bold text-neutral-900">Segmentos objetivo</h2>
+      <p className="mb-5 text-sm text-neutral-600">
+        Selecciona un segmento para ver sus dolores y el valor que creamos.
+      </p>
+
+      {/* Tabla resumen */}
+      <div className="mb-6 overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
+        <div className="grid grid-cols-12 border-b border-neutral-200 bg-neutral-50 px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-neutral-600">
+          <div className="col-span-3">Segmento</div>
+          <div className="col-span-3">Tamaño</div>
+          <div className="col-span-2">Nivel de dolor</div>
+          <div className="col-span-3">Alternativa actual</div>
+          <div className="col-span-1 text-right">Prioridad</div>
+        </div>
+        {segmentos.map((s) => {
+          const active = s.id === selected;
+          return (
+            <button
+              key={s.id}
+              onClick={() => setSelected(s.id)}
+              className={cn(
+                "grid w-full grid-cols-12 items-center border-b border-neutral-100 px-5 py-3 text-left text-xs transition-all last:border-b-0 hover:bg-neutral-50",
+                active && "bg-emerald-50/40",
+              )}
+              style={active ? { boxShadow: `inset 3px 0 0 ${s.color}` } : undefined}
+            >
+              <div className="col-span-3 font-semibold text-neutral-900">
+                {s.nombre}
+                <span className="ml-2 text-[10px] font-medium text-neutral-500">
+                  {s.badge}
+                </span>
+              </div>
+              <div className="col-span-3 text-neutral-600">{s.tamano}</div>
+              <div className="col-span-2 text-neutral-600">{s.dolor}</div>
+              <div className="col-span-3 text-neutral-600">{s.alternativa}</div>
+              <div className="col-span-1 text-right">
+                <span
+                  className="inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold uppercase text-white"
+                  style={{
+                    backgroundColor:
+                      s.prioridad === "Máxima"
+                        ? ALEGRA_GREEN
+                        : s.prioridad === "Alta"
+                          ? "#FF6B00"
+                          : "#737373",
+                  }}
+                >
+                  {s.prioridad}
+                </span>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Cards de segmentos clickeables */}
+      <div className="mb-6 grid gap-3 md:grid-cols-4">
+        {segmentos.map((s) => {
+          const active = s.id === selected;
+          return (
+            <button
+              key={s.id}
+              onClick={() => setSelected(s.id)}
+              className={cn(
+                "rounded-xl border p-4 text-left transition-all hover:-translate-y-0.5 hover:shadow-md",
+                active
+                  ? "border-2 shadow-md"
+                  : "border-neutral-200 bg-white shadow-sm",
+              )}
+              style={
+                active
+                  ? { borderColor: s.color, backgroundColor: `${s.color}08` }
+                  : undefined
+              }
+            >
+              <div className="flex items-center gap-2">
+                <Users className="h-4 w-4" style={{ color: s.color }} />
+                <span
+                  className="text-[10px] font-bold uppercase tracking-wider"
+                  style={{ color: s.color }}
+                >
+                  {s.badge}
+                </span>
+              </div>
+              <h3 className="mt-2 text-sm font-bold text-neutral-900">{s.nombre}</h3>
+              <p className="mt-1 text-[11px] text-neutral-500">{s.tamano}</p>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Detalle: Dolores y Valor Creado */}
+      <div className="grid gap-5 md:grid-cols-2">
+        {/* Dolor / Problema */}
+        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="h-4 w-4 text-orange-500" />
+            <span className="text-[10px] font-bold uppercase tracking-wider text-orange-600">
+              Dolor · {seg.nombre}
+            </span>
+          </div>
+          <p className="mt-3 text-sm leading-relaxed text-neutral-800">
+            {seg.problema}
+          </p>
+          <p className="mt-5 text-[10px] font-bold uppercase tracking-wider text-neutral-400">
+            Costo actual del problema
+          </p>
+          <ul className="mt-2 space-y-2">
+            {seg.costos.map((c, i) => (
+              <li
+                key={i}
+                className="flex gap-2 text-xs leading-relaxed text-neutral-600"
+              >
+                <span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-orange-400" />
+                {c}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Valor creado */}
+        <div
+          className="rounded-2xl border bg-white p-6 shadow-sm"
+          style={{ borderColor: `${seg.color}40` }}
+        >
+          <div className="flex items-center gap-2">
+            <Heart className="h-4 w-4" style={{ color: seg.color }} />
+            <span
+              className="text-[10px] font-bold uppercase tracking-wider"
+              style={{ color: seg.color }}
+            >
+              Valor que creamos
+            </span>
+          </div>
+          <p className="mt-3 text-sm leading-relaxed text-neutral-800">
+            {seg.valor}
+          </p>
         </div>
       </div>
     </div>
@@ -478,6 +733,375 @@ function Section2() {
             Ver en Amplitude
             <ExternalLink className="h-3 w-3" />
           </a>
+        </div>
+      </div>
+
+      {/* MAC por país: Line + Pie */}
+      <MacPorPais />
+
+      {/* Tasa de Adopción */}
+      <TasaAdopcion />
+    </div>
+  );
+}
+
+// === MAC por país (Line + Pie) ===
+
+const macLinePerCountry = [
+  { month: "Oct '25", Colombia: 4892, "República Dominicana": 1135, México: 677, "Costa Rica": 232 },
+  { month: "Nov '25", Colombia: 4882, "República Dominicana": 1084, México: 667, "Costa Rica": 225 },
+  { month: "Dic '25", Colombia: 5254, "República Dominicana": 1124, México: 729, "Costa Rica": 209 },
+  { month: "Ene '26", Colombia: 4842, "República Dominicana": 1083, México: 659, "Costa Rica": 227 },
+  { month: "Feb '26", Colombia: 4925, "República Dominicana": 1111, México: 657, "Costa Rica": 222 },
+  { month: "Mar '26", Colombia: 5128, "República Dominicana": 1197, México: 728, "Costa Rica": 235 },
+];
+
+const macPieData = [
+  { name: "Colombia", value: 5132, color: ALEGRA_GREEN },
+  { name: "República Dominicana", value: 1199, color: "#0066FF" },
+  { name: "México", value: 728, color: "#FF6B00" },
+  { name: "Panamá", value: 278, color: "#7C3AED" },
+  { name: "Costa Rica", value: 235, color: "#06B6D4" },
+  { name: "Argentina", value: 189, color: "#F59E0B" },
+  { name: "Perú", value: 90, color: "#EC4899" },
+  { name: "Otros", value: 152, color: "#9CA3AF" },
+];
+
+const macPieTotal = macPieData.reduce((s, d) => s + d.value, 0);
+
+function MacPorPais() {
+  return (
+    <div className="grid gap-6 lg:grid-cols-5">
+      {/* Line per country */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm lg:col-span-3">
+        <div className="mb-2 flex items-center justify-between">
+          <div>
+            <h3 className="text-base font-bold text-neutral-900">MAC — Tendencia por país</h3>
+            <p className="mt-1 text-xs text-neutral-500">
+              Últimos 6 meses · Top 4 países por volumen
+            </p>
+          </div>
+          <a
+            href="https://app.amplitude.com/analytics/alegra/chart/gxbjwfwt"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+          >
+            Amplitude <ExternalLink className="h-3 w-3" />
+          </a>
+        </div>
+        <div className="h-[280px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={macLinePerCountry} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+              <XAxis dataKey="month" stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={{ stroke: "#e5e7eb" }} tickLine={false} />
+              <YAxis stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
+              <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} />
+              <Legend iconType="circle" wrapperStyle={{ fontSize: 11, paddingTop: 8 }} />
+              <Line type="monotone" dataKey="Colombia" stroke={ALEGRA_GREEN} strokeWidth={3} dot={{ r: 3 }} />
+              <Line type="monotone" dataKey="República Dominicana" stroke="#0066FF" strokeWidth={2} dot={{ r: 3 }} />
+              <Line type="monotone" dataKey="México" stroke="#FF6B00" strokeWidth={2} dot={{ r: 3 }} />
+              <Line type="monotone" dataKey="Costa Rica" stroke="#06B6D4" strokeWidth={2} dot={{ r: 3 }} />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Pie per country */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm lg:col-span-2">
+        <div className="mb-2 flex items-center justify-between">
+          <div>
+            <h3 className="text-base font-bold text-neutral-900">MAC — Distribución por país</h3>
+            <p className="mt-1 text-xs text-neutral-500">Marzo 2026</p>
+          </div>
+          <a
+            href="https://app.amplitude.com/analytics/alegra/chart/0ixf9ww7"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+          >
+            Amplitude <ExternalLink className="h-3 w-3" />
+          </a>
+        </div>
+        <div className="h-[220px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie data={macPieData} dataKey="value" nameKey="name" innerRadius={45} outerRadius={85} paddingAngle={2}>
+                {macPieData.map((entry) => (
+                  <Cell key={entry.name} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip
+                contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }}
+                formatter={(v: number) => `${v.toLocaleString("es-CO")} (${((v / macPieTotal) * 100).toFixed(1)}%)`}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="mt-3 grid grid-cols-2 gap-x-3 gap-y-1 text-[11px]">
+          {macPieData.slice(0, 6).map((d) => (
+            <div key={d.name} className="flex items-center gap-1.5">
+              <span className="h-2 w-2 rounded-full" style={{ backgroundColor: d.color }} />
+              <span className="text-neutral-600">{d.name}</span>
+              <span className="ml-auto font-semibold text-neutral-900">
+                {((d.value / macPieTotal) * 100).toFixed(0)}%
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// === Tasa de Adopción ===
+
+const adoptionByCountry = [
+  { country: "Colombia", wac: 15.4, wau: 32.7 },
+  { country: "Rep. Dominicana", wac: 31.1, wau: 56.4 },
+  { country: "México", wac: 17.3, wau: 33.8 },
+  { country: "Panamá", wac: 27.8, wau: 49.5 },
+  { country: "Costa Rica", wac: 20.0, wau: 38.0 },
+];
+
+function TasaAdopcion() {
+  // Apr 2026: WAC APP=4933, WAU APP=8907, WAC WEB=29828
+  const wacApp = 4933;
+  const wauApp = 8907;
+  const wacWeb = 29828;
+  const macUsersApp = 7977;
+  const macWeb = wacWeb;
+  const tasaAdopcion = ((wauApp / wacWeb) * 100).toFixed(1); // MAU APP / MAC WEB
+  const tasaReal = ((wacApp / wacWeb) * 100).toFixed(1); // MAC APP / MAC WEB
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h3 className="text-lg font-bold text-neutral-900">Tasa de Adopción</h3>
+        <p className="mt-1 text-sm text-neutral-600">
+          % de usuarios pagos web que entran a la app y/o realizan acciones de valor.
+        </p>
+      </div>
+
+      {/* KPIs */}
+      <div className="grid gap-4 md:grid-cols-2">
+        <div
+          className="rounded-2xl border bg-white p-6 shadow-sm"
+          style={{ borderLeft: `4px solid #0066FF` }}
+        >
+          <div className="flex items-center gap-2">
+            <Target className="h-4 w-4" style={{ color: "#0066FF" }} />
+            <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: "#0066FF" }}>
+              Tasa de Adopción
+            </span>
+          </div>
+          <p className="mt-2 text-xs text-neutral-500">MAU APP / MAC WEB</p>
+          <p className="mt-3 text-4xl font-bold text-neutral-900">{tasaAdopcion}%</p>
+          <p className="mt-2 text-xs text-neutral-500">
+            {wauApp.toLocaleString("es-CO")} usuarios entran a la app cada mes sobre {wacWeb.toLocaleString("es-CO")} pagos activos en web.
+          </p>
+        </div>
+
+        <div
+          className="rounded-2xl border bg-white p-6 shadow-sm"
+          style={{ borderLeft: `4px solid ${ALEGRA_GREEN}` }}
+        >
+          <div className="flex items-center gap-2">
+            <Star className="h-4 w-4" style={{ color: ALEGRA_GREEN }} />
+            <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: ALEGRA_GREEN }}>
+              Tasa de Adopción Real
+            </span>
+          </div>
+          <p className="mt-2 text-xs text-neutral-500">MAC APP / MAC WEB</p>
+          <p className="mt-3 text-4xl font-bold text-neutral-900">{tasaReal}%</p>
+          <p className="mt-2 text-xs text-neutral-500">
+            {wacApp.toLocaleString("es-CO")} usuarios realizan al menos una acción de valor en la app sobre {wacWeb.toLocaleString("es-CO")} pagos activos en web.
+          </p>
+        </div>
+      </div>
+
+      {/* Chart por país */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+        <div className="mb-4 flex items-center justify-between">
+          <div>
+            <h4 className="text-sm font-bold text-neutral-900">
+              % Usuarios pagos activos por país
+            </h4>
+            <p className="mt-0.5 text-xs text-neutral-500">
+              Marzo 2026 · Tasa de Adopción (entran a la app) y Tasa Real (acciones de valor)
+            </p>
+          </div>
+          <a
+            href="https://app.amplitude.com/analytics/alegra/chart/hqcerbqk"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+          >
+            Amplitude <ExternalLink className="h-3 w-3" />
+          </a>
+        </div>
+        <div className="space-y-3">
+          {adoptionByCountry.map((c) => (
+            <div key={c.country}>
+              <div className="mb-1 flex items-center justify-between text-xs">
+                <span className="font-medium text-neutral-700">{c.country}</span>
+                <div className="flex gap-3">
+                  <span className="text-[#0066FF]">
+                    Adopción <strong>{c.wau.toFixed(1)}%</strong>
+                  </span>
+                  <span style={{ color: ALEGRA_GREEN }}>
+                    Real <strong>{c.wac.toFixed(1)}%</strong>
+                  </span>
+                </div>
+              </div>
+              <div className="relative h-5 w-full overflow-hidden rounded-full bg-neutral-100">
+                <div
+                  className="absolute left-0 top-0 h-full rounded-full"
+                  style={{ width: `${Math.min(c.wau, 100)}%`, backgroundColor: "#0066FF40" }}
+                />
+                <div
+                  className="absolute left-0 top-0 h-full rounded-full"
+                  style={{ width: `${Math.min(c.wac, 100)}%`, backgroundColor: ALEGRA_GREEN }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// === Sección 3: Base de usuarios y MRR ===
+
+function Section3() {
+  return (
+    <div className="space-y-8">
+      {/* Header bloque */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+        <div className="flex items-start gap-3">
+          <div
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
+            style={{ backgroundColor: `${ALEGRA_GREEN}15` }}
+          >
+            <Users className="h-5 w-5" style={{ color: ALEGRA_GREEN }} />
+          </div>
+          <div>
+            <p
+              className="text-xs font-semibold uppercase tracking-[0.2em]"
+              style={{ color: ALEGRA_GREEN }}
+            >
+              Segmentación de usuarios
+            </p>
+            <h2 className="mt-1 text-2xl font-bold text-neutral-900">
+              BASE vs SOS
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-neutral-600">
+              Hoy tenemos dos clusters claros de usuarios pagos activos en la app móvil. Conocer su comportamiento nos permite priorizar qué experiencia profundizar.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Cards SOS / BASE con % */}
+      <div className="grid gap-5 md:grid-cols-2">
+        {/* SOS */}
+        <div
+          className="relative overflow-hidden rounded-2xl border bg-white p-6 shadow-sm"
+          style={{ borderTop: `4px solid #FF6B00` }}
+        >
+          <div className="flex items-start justify-between">
+            <div>
+              <span
+                className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white"
+                style={{ backgroundColor: "#FF6B00" }}
+              >
+                <AlertTriangle className="h-3 w-3" /> SOS
+              </span>
+              <h3 className="mt-3 text-xl font-bold text-neutral-900">
+                Utilizan la app para una emergencia
+              </h3>
+            </div>
+            <div className="text-right">
+              <p className="text-3xl font-bold" style={{ color: "#FF6B00" }}>
+                62%
+              </p>
+              <p className="text-[10px] uppercase tracking-wider text-neutral-500">
+                de usuarios
+              </p>
+            </div>
+          </div>
+          <p className="mt-4 text-sm leading-relaxed text-neutral-700">
+            Usuario que utiliza la <strong>web el +90%</strong> del tiempo y el restante utilizan la <strong>app para casos de emergencia</strong> con clientes, <strong>cuando no tienen el computador</strong> a la mano, o cuando quiere <strong>ver su estado del negocio</strong> de manera rápida.
+          </p>
+        </div>
+
+        {/* BASE */}
+        <div
+          className="relative overflow-hidden rounded-2xl border bg-white p-6 shadow-sm"
+          style={{ borderTop: `4px solid ${ALEGRA_GREEN}` }}
+        >
+          <div className="flex items-start justify-between">
+            <div>
+              <span
+                className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white"
+                style={{ backgroundColor: ALEGRA_GREEN }}
+              >
+                <Star className="h-3 w-3" /> BASE
+              </span>
+              <h3 className="mt-3 text-xl font-bold text-neutral-900">
+                Utilizan la app como su principal herramienta
+              </h3>
+            </div>
+            <div className="text-right">
+              <p className="text-3xl font-bold" style={{ color: ALEGRA_GREEN }}>
+                38%
+              </p>
+              <p className="text-[10px] uppercase tracking-wider text-neutral-500">
+                de usuarios
+              </p>
+            </div>
+          </div>
+          <p className="mt-4 text-sm leading-relaxed text-neutral-700">
+            Es un usuario que utiliza la <strong>app el 90%</strong> del tiempo para <strong>crear facturas</strong> y compartirlas, y llevar una <strong>leve gestión de su negocio</strong>. El % restante utiliza web para funcionalidades que sólo están en web.
+          </p>
+        </div>
+      </div>
+
+      {/* Clusters image */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+        <div className="mb-4 flex items-center justify-between">
+          <div>
+            <h3 className="text-base font-bold text-neutral-900">
+              Clusters BASE y SOS
+            </h3>
+            <p className="mt-1 text-xs text-neutral-500">
+              Análisis de comportamiento · 7,703 usuarios totales
+            </p>
+          </div>
+          <a
+            href="https://app.amplitude.com/analytics/alegra/chart/w4dmwazb"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+          >
+            Amplitude <ExternalLink className="h-3 w-3" />
+          </a>
+        </div>
+        <img
+          src={clustersImage}
+          alt="Clusters BASE y SOS - distribución y caracterización de usuarios"
+          className="w-full rounded-lg border border-neutral-200"
+        />
+        <div className="mt-4 grid gap-3 text-xs text-neutral-600 md:grid-cols-2">
+          <div className="rounded-lg bg-neutral-50 p-3">
+            <p className="font-bold text-neutral-900">Cluster 1 (67%)</p>
+            <p className="mt-1">Eventos de web · Reportes en App · Busca factura de venta app</p>
+          </div>
+          <div className="rounded-lg bg-neutral-50 p-3">
+            <p className="font-bold text-neutral-900">Cluster 2 (33%)</p>
+            <p className="mt-1">Factura de venta App · Item en App · Contactos en App · Cotizaciones App</p>
+          </div>
         </div>
       </div>
     </div>
