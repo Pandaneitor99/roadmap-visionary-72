@@ -155,37 +155,97 @@ const ChartCard = ({
   subtitle,
   url,
   children,
+  statLabel,
+  statValue,
+  statDelta,
+  statBaselineLabel = "vs primer mes",
+  statSuffix = "",
+  invertDelta = false,
 }: {
   title: string;
   subtitle?: string;
   url?: string;
   children: React.ReactNode;
-}) => (
-  <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm">
-    <div className="mb-2 flex items-start justify-between gap-2">
-      <div>
-        <h4 className="text-sm font-bold text-neutral-900">{title}</h4>
-        {subtitle && <p className="text-[11px] text-neutral-500">{subtitle}</p>}
+  statLabel?: string;
+  statValue?: string | number;
+  statDelta?: number; // porcentaje
+  statBaselineLabel?: string;
+  statSuffix?: string;
+  invertDelta?: boolean; // true cuando bajar es bueno (errores, TTC)
+}) => {
+  const showStat = statValue !== undefined;
+  const positive = statDelta !== undefined ? (invertDelta ? statDelta < 0 : statDelta >= 0) : true;
+  return (
+    <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm">
+      <div className="mb-2 flex items-start justify-between gap-2">
+        <div>
+          <h4 className="text-sm font-bold text-neutral-900">{title}</h4>
+          {subtitle && <p className="text-[11px] text-neutral-500">{subtitle}</p>}
+        </div>
+        {url && (
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-neutral-400 hover:text-neutral-700"
+            title="Abrir en Amplitude"
+          >
+            <ExternalLink className="h-3.5 w-3.5" />
+          </a>
+        )}
       </div>
-      {url && (
-        <a
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-neutral-400 hover:text-neutral-700"
-          title="Abrir en Amplitude"
-        >
-          <ExternalLink className="h-3.5 w-3.5" />
-        </a>
-      )}
+      <div className={showStat ? "grid grid-cols-1 gap-3 md:grid-cols-[1fr_auto]" : ""}>
+        <div className="h-48">
+          <ResponsiveContainer width="100%" height="100%">
+            {children as any}
+          </ResponsiveContainer>
+        </div>
+        {showStat && (
+          <div className="flex flex-col justify-center rounded-lg border border-neutral-100 bg-neutral-50/60 p-3 md:min-w-[140px]">
+            {statLabel && (
+              <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">
+                {statLabel}
+              </p>
+            )}
+            <p className="mt-1 text-2xl font-bold text-neutral-900">
+              {typeof statValue === "number" ? statValue.toLocaleString("es-CO") : statValue}
+              {statSuffix}
+            </p>
+            {statDelta !== undefined && (
+              <p
+                className={`mt-1 flex items-center gap-1 text-xs font-bold ${
+                  positive ? "text-emerald-600" : "text-red-600"
+                }`}
+              >
+                {positive ? (
+                  <TrendingUp className="h-3.5 w-3.5" />
+                ) : (
+                  <TrendingDown className="h-3.5 w-3.5" />
+                )}
+                {statDelta >= 0 ? "+" : ""}
+                {statDelta.toFixed(1)}%
+                <span className="ml-0.5 text-[10px] font-medium text-neutral-500">
+                  {statBaselineLabel}
+                </span>
+              </p>
+            )}
+          </div>
+        )}
+      </div>
     </div>
-    <div className="h-48">
-      <ResponsiveContainer width="100%" height="100%">
-        {children as any}
-      </ResponsiveContainer>
-    </div>
-  </div>
-);
+  );
+};
+
+// Helper para calcular % delta entre primer y último valor
+function pctDelta(arr: { v?: number; pct?: number; s?: number }[], key: "v" | "pct" | "s") {
+  const first = arr[0]?.[key] ?? 0;
+  const last = arr[arr.length - 1]?.[key] ?? 0;
+  if (!first) return 0;
+  return ((last - first) / first) * 100;
+}
+function lastVal(arr: { v?: number; pct?: number; s?: number }[], key: "v" | "pct" | "s") {
+  return arr[arr.length - 1]?.[key] ?? 0;
+}
 
 const Insights = ({ items }: { items: string[] }) => (
   <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-4">
