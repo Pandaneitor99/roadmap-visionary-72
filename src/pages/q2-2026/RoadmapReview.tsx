@@ -1605,7 +1605,7 @@ function EngagementScatter() {
             </g>
           ))}
           {/* Etiquetas eje Y */}
-          {[0, 5, 10, 15, 20, 25, 30].map((v) => (
+          {[0, 10, 20, 30, 40, 50].map((v) => (
             <g key={v}>
               <text x={padL - 6} y={yToPx(v) + 3} fontSize="10" fill="#6b7280" textAnchor="end">{v}</text>
               <line x1={padL - 4} y1={yToPx(v)} x2={padL} y2={yToPx(v)} stroke="#9ca3af" />
