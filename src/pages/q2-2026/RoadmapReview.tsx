@@ -1122,33 +1122,70 @@ function TasaAdopcion() {
 // === % Participación de App ===
 
 function ParticipacionApp() {
+  const items = [
+    {
+      label: "Facturas de venta",
+      value: 7.57,
+      delta: -3.8,
+      color: ALEGRA_GREEN,
+      desc: "% de facturas totales (web + app) creadas desde la app móvil",
+    },
+    {
+      label: "Cotizaciones",
+      value: 15.4,
+      delta: 3.94,
+      color: "#0066FF",
+      desc: "% de cotizaciones totales (web + app) creadas desde la app móvil",
+    },
+    {
+      label: "Remisiones",
+      value: 8.96,
+      delta: 6.9,
+      color: "#FF6B00",
+      desc: "% de remisiones totales (web + app) creadas desde la app móvil",
+    },
+  ];
+
   return (
     <div>
       <h3 className="mb-3 text-base font-bold text-neutral-900">
         % de participación de app
       </h3>
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div
-          className="rounded-2xl border bg-white p-6 shadow-sm"
-          style={{ borderLeft: `4px solid ${ALEGRA_GREEN}` }}
-        >
-          <div className="flex items-center gap-2">
-            <Star className="h-4 w-4" style={{ color: ALEGRA_GREEN }} />
-            <span
-              className="text-[10px] font-bold uppercase tracking-wider"
-              style={{ color: ALEGRA_GREEN }}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {items.map((it) => {
+          const isUp = it.delta >= 0;
+          return (
+            <div
+              key={it.label}
+              className="rounded-2xl border bg-white p-6 shadow-sm"
+              style={{ borderLeft: `4px solid ${it.color}` }}
             >
-              Facturas de venta
-            </span>
-          </div>
-          <p className="mt-2 text-xs text-neutral-500">
-            % de facturas de venta totales (web + app) creadas desde la app móvil
-          </p>
-          <p className="mt-3 text-4xl font-bold text-neutral-900">7.57%</p>
-          <p className="mt-2 text-xs text-neutral-500">
-            Aún hay un techo amplio de adopción frente al volumen total de facturación.
-          </p>
-        </div>
+              <div className="flex items-center gap-2">
+                <Star className="h-4 w-4" style={{ color: it.color }} />
+                <span
+                  className="text-[10px] font-bold uppercase tracking-wider"
+                  style={{ color: it.color }}
+                >
+                  {it.label}
+                </span>
+              </div>
+              <p className="mt-2 text-xs text-neutral-500">{it.desc}</p>
+              <p className="mt-3 text-4xl font-bold text-neutral-900">
+                {it.value.toLocaleString("es-CO")}%
+              </p>
+              <p
+                className={cn(
+                  "mt-1 flex items-center gap-1 text-sm font-bold",
+                  isUp ? "text-emerald-600" : "text-red-600",
+                )}
+              >
+                {isUp ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
+                {isUp ? "+" : ""}{it.delta.toFixed(2)}%
+                <span className="ml-1 text-[11px] font-medium text-neutral-500">vs Oct '25</span>
+              </p>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
