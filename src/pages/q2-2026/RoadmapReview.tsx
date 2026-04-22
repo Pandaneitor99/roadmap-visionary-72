@@ -18,6 +18,8 @@ import {
   Cell,
 } from "recharts";
 import clustersImage from "@/assets/clusters-sos-base.png";
+import { initiativeDetailMap } from "./initiativeDetails";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const sections = [
   { id: 1, title: "Visión estratégica", short: "Visión" },
