@@ -584,6 +584,10 @@ function Section2() {
   const first = macTrendData[0];
   const deltaPct = (((last.Pagos - first.Pagos) / first.Pagos) * 100).toFixed(1);
   const positive = Number(deltaPct) >= 0;
+  const coreDelta = (((last.CORE - first.CORE) / first.CORE) * 100).toFixed(1);
+  const liteDelta = (((last.LITE - first.LITE) / first.LITE) * 100).toFixed(1);
+  const coreUp = Number(coreDelta) >= 0;
+  const liteUp = Number(liteDelta) >= 0;
 
   return (
     <div className="space-y-8">
@@ -788,6 +792,52 @@ function Section2() {
             Ver en Amplitude
             <ExternalLink className="h-3 w-3" />
           </a>
+        </div>
+      </div>
+
+      {/* Cards CORE / LITE con variación */}
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div
+          className="rounded-2xl border bg-white p-5 shadow-sm"
+          style={{ borderLeft: `4px solid #1f2937` }}
+        >
+          <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
+            MAC Core actual
+          </p>
+          <p className="mt-2 text-3xl font-bold text-neutral-900">
+            {last.CORE.toLocaleString("es-CO")}
+          </p>
+          <p
+            className={cn(
+              "mt-1 flex items-center gap-1 text-sm font-bold",
+              coreUp ? "text-emerald-600" : "text-red-600",
+            )}
+          >
+            {coreUp ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
+            {coreUp ? "+" : ""}{coreDelta}%
+            <span className="ml-1 text-[11px] font-medium text-neutral-500">vs Oct '25</span>
+          </p>
+        </div>
+        <div
+          className="rounded-2xl border bg-white p-5 shadow-sm"
+          style={{ borderLeft: `4px solid #9ca3af` }}
+        >
+          <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
+            MAC Lite actual
+          </p>
+          <p className="mt-2 text-3xl font-bold text-neutral-900">
+            {last.LITE.toLocaleString("es-CO")}
+          </p>
+          <p
+            className={cn(
+              "mt-1 flex items-center gap-1 text-sm font-bold",
+              liteUp ? "text-emerald-600" : "text-red-600",
+            )}
+          >
+            {liteUp ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
+            {liteUp ? "+" : ""}{liteDelta}%
+            <span className="ml-1 text-[11px] font-medium text-neutral-500">vs Oct '25</span>
+          </p>
         </div>
       </div>
 
@@ -1072,33 +1122,70 @@ function TasaAdopcion() {
 // === % Participación de App ===
 
 function ParticipacionApp() {
+  const items = [
+    {
+      label: "Facturas de venta",
+      value: 7.57,
+      delta: -3.8,
+      color: ALEGRA_GREEN,
+      desc: "% de facturas totales (web + app) creadas desde la app móvil",
+    },
+    {
+      label: "Cotizaciones",
+      value: 15.4,
+      delta: 3.94,
+      color: "#0066FF",
+      desc: "% de cotizaciones totales (web + app) creadas desde la app móvil",
+    },
+    {
+      label: "Remisiones",
+      value: 8.96,
+      delta: 6.9,
+      color: "#FF6B00",
+      desc: "% de remisiones totales (web + app) creadas desde la app móvil",
+    },
+  ];
+
   return (
     <div>
       <h3 className="mb-3 text-base font-bold text-neutral-900">
         % de participación de app
       </h3>
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div
-          className="rounded-2xl border bg-white p-6 shadow-sm"
-          style={{ borderLeft: `4px solid ${ALEGRA_GREEN}` }}
-        >
-          <div className="flex items-center gap-2">
-            <Star className="h-4 w-4" style={{ color: ALEGRA_GREEN }} />
-            <span
-              className="text-[10px] font-bold uppercase tracking-wider"
-              style={{ color: ALEGRA_GREEN }}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {items.map((it) => {
+          const isUp = it.delta >= 0;
+          return (
+            <div
+              key={it.label}
+              className="rounded-2xl border bg-white p-6 shadow-sm"
+              style={{ borderLeft: `4px solid ${it.color}` }}
             >
-              Facturas de venta
-            </span>
-          </div>
-          <p className="mt-2 text-xs text-neutral-500">
-            % de facturas de venta totales (web + app) creadas desde la app móvil
-          </p>
-          <p className="mt-3 text-4xl font-bold text-neutral-900">7.57%</p>
-          <p className="mt-2 text-xs text-neutral-500">
-            Aún hay un techo amplio de adopción frente al volumen total de facturación.
-          </p>
-        </div>
+              <div className="flex items-center gap-2">
+                <Star className="h-4 w-4" style={{ color: it.color }} />
+                <span
+                  className="text-[10px] font-bold uppercase tracking-wider"
+                  style={{ color: it.color }}
+                >
+                  {it.label}
+                </span>
+              </div>
+              <p className="mt-2 text-xs text-neutral-500">{it.desc}</p>
+              <p className="mt-3 text-4xl font-bold text-neutral-900">
+                {it.value.toLocaleString("es-CO")}%
+              </p>
+              <p
+                className={cn(
+                  "mt-1 flex items-center gap-1 text-sm font-bold",
+                  isUp ? "text-emerald-600" : "text-red-600",
+                )}
+              >
+                {isUp ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
+                {isUp ? "+" : ""}{it.delta.toFixed(2)}%
+                <span className="ml-1 text-[11px] font-medium text-neutral-500">vs Oct '25</span>
+              </p>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -1106,6 +1193,8 @@ function ParticipacionApp() {
 
 
 function Section3() {
+  const [tab, setTab] = useState<"negocio" | "comportamiento">("negocio");
+
   return (
     <div className="space-y-8">
       {/* Header bloque */}
@@ -1125,15 +1214,49 @@ function Section3() {
               Segmentación de usuarios
             </p>
             <h2 className="mt-1 text-2xl font-bold text-neutral-900">
-              BASE vs SOS
+              Base de usuarios
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-neutral-600">
-              Hoy tenemos dos clusters claros de usuarios pagos activos en la app móvil. Conocer su comportamiento nos permite priorizar qué experiencia profundizar.
+              Analizamos a los usuarios pagos activos en la app desde dos lentes complementarios: por <strong>tipo de negocio</strong> (Core / Lite) y por <strong>comportamiento</strong> (BASE / SOS).
             </p>
           </div>
         </div>
       </div>
 
+      {/* Tabs */}
+      <div className="inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1">
+        <button
+          onClick={() => setTab("negocio")}
+          className={cn(
+            "rounded-md px-4 py-2 text-xs font-semibold transition-all",
+            tab === "negocio"
+              ? "bg-white text-neutral-900 shadow-sm"
+              : "text-neutral-500 hover:text-neutral-700",
+          )}
+        >
+          Negocio · Core y Lite
+        </button>
+        <button
+          onClick={() => setTab("comportamiento")}
+          className={cn(
+            "rounded-md px-4 py-2 text-xs font-semibold transition-all",
+            tab === "comportamiento"
+              ? "bg-white text-neutral-900 shadow-sm"
+              : "text-neutral-500 hover:text-neutral-700",
+          )}
+        >
+          Comportamiento · BASE y SOS
+        </button>
+      </div>
+
+      {tab === "comportamiento" ? <ComportamientoView /> : <NegocioView />}
+    </div>
+  );
+}
+
+function ComportamientoView() {
+  return (
+    <div className="space-y-8">
       {/* Cards SOS / BASE con % */}
       <div className="grid gap-5 md:grid-cols-2">
         {/* SOS */}
@@ -1201,6 +1324,351 @@ function Section3() {
 
       {/* Clusters - bubble visualization */}
       <ClustersBubbles />
+    </div>
+  );
+}
+
+// === Negocio: Core / Lite ===
+
+const macCoreLiteTrend = [
+  { month: "Oct '25", CORE: 4553, LITE: 3030 },
+  { month: "Nov '25", CORE: 4436, LITE: 2945 },
+  { month: "Dic '25", CORE: 4668, LITE: 3254 },
+  { month: "Ene '26", CORE: 4393, LITE: 2997 },
+  { month: "Feb '26", CORE: 4427, LITE: 3048 },
+  { month: "Mar '26", CORE: 4936, LITE: 3412 },
+];
+
+const corePieData = [
+  { name: "CORE", value: 4936, color: ALEGRA_GREEN },
+  { name: "LITE", value: 3412, color: "#9ca3af" },
+];
+const corePieTotal = corePieData.reduce((s, d) => s + d.value, 0);
+
+// Engagement por funcionalidad — CORE y LITE (Adopción %MAU vs Frecuencia)
+// Eventos en español, número en la bolita = orden por adopción
+type EngagementEvent = {
+  num: number;
+  label: string;
+  adoption: number; // % MAU
+  frequency: number; // avg perform
+};
+const coreEvents: EngagementEvent[] = [
+  { num: 1, label: "Crear factura", adoption: 56.3, frequency: 25.4 },
+  { num: 2, label: "Buscar factura", adoption: 32.8, frequency: 20.3 },
+  { num: 3, label: "Crear cotización", adoption: 27.5, frequency: 16.8 },
+  { num: 4, label: "Crear contacto", adoption: 27.4, frequency: 6.9 },
+  { num: 5, label: "Crear ítem", adoption: 22.8, frequency: 8.4 },
+  { num: 6, label: "Crear remisión", adoption: 3.6, frequency: 27.3 },
+  { num: 7, label: "Crear gasto", adoption: 2.4, frequency: 8.7 },
+  { num: 8, label: "Crear factura de proveedor", adoption: 2.5, frequency: 9.7 },
+];
+const liteEvents: EngagementEvent[] = [
+  { num: 1, label: "Crear factura", adoption: 48.2, frequency: 18.5 },
+  { num: 2, label: "Buscar factura", adoption: 24.1, frequency: 14.2 },
+  { num: 3, label: "Crear contacto", adoption: 19.8, frequency: 5.4 },
+  { num: 4, label: "Crear ítem", adoption: 15.6, frequency: 6.1 },
+  { num: 5, label: "Crear cotización", adoption: 12.4, frequency: 9.3 },
+  { num: 6, label: "Crear remisión", adoption: 2.8, frequency: 22.1 },
+];
+
+function NegocioView() {
+  const last = macCoreLiteTrend[macCoreLiteTrend.length - 1];
+  const first = macCoreLiteTrend[0];
+  const coreDelta = (((last.CORE - first.CORE) / first.CORE) * 100).toFixed(1);
+  const liteDelta = (((last.LITE - first.LITE) / first.LITE) * 100).toFixed(1);
+  const coreUp = Number(coreDelta) >= 0;
+  const liteUp = Number(liteDelta) >= 0;
+
+  return (
+    <div className="space-y-8">
+      {/* MAC Trend Core/Lite + variación cards */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm md:p-8">
+        <div className="mb-4 flex items-end justify-between">
+          <div>
+            <h3 className="text-lg font-bold text-neutral-900">
+              MAC — Tendencia CORE y LITE
+            </h3>
+            <p className="mt-1 text-xs text-neutral-500">
+              Últimos 6 meses · Usuarios pagos activos por tipo de negocio
+            </p>
+          </div>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div
+            className="rounded-xl border bg-white p-4"
+            style={{ borderLeft: `4px solid ${ALEGRA_GREEN}` }}
+          >
+            <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
+              MAC Core
+            </p>
+            <p className="mt-1 text-2xl font-bold text-neutral-900">
+              {last.CORE.toLocaleString("es-CO")}
+            </p>
+            <p
+              className={cn(
+                "mt-1 flex items-center gap-1 text-xs font-bold",
+                coreUp ? "text-emerald-600" : "text-red-600",
+              )}
+            >
+              {coreUp ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
+              {coreUp ? "+" : ""}{coreDelta}% vs Oct '25
+            </p>
+          </div>
+          <div
+            className="rounded-xl border bg-white p-4"
+            style={{ borderLeft: `4px solid #9ca3af` }}
+          >
+            <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
+              MAC Lite
+            </p>
+            <p className="mt-1 text-2xl font-bold text-neutral-900">
+              {last.LITE.toLocaleString("es-CO")}
+            </p>
+            <p
+              className={cn(
+                "mt-1 flex items-center gap-1 text-xs font-bold",
+                liteUp ? "text-emerald-600" : "text-red-600",
+              )}
+            >
+              {liteUp ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
+              {liteUp ? "+" : ""}{liteDelta}% vs Oct '25
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-6 h-[300px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={macCoreLiteTrend} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+              <XAxis dataKey="month" stroke="#6b7280" tick={{ fontSize: 12 }} axisLine={{ stroke: "#e5e7eb" }} tickLine={false} />
+              <YAxis stroke="#6b7280" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} tickFormatter={(v) => v.toLocaleString("es-CO")} />
+              <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => v.toLocaleString("es-CO")} />
+              <Legend iconType="circle" wrapperStyle={{ fontSize: 12, paddingTop: 12 }} />
+              <Line type="monotone" dataKey="CORE" stroke={ALEGRA_GREEN} strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+              <Line type="monotone" dataKey="LITE" stroke="#9ca3af" strokeWidth={2} dot={{ r: 3 }} strokeDasharray="4 4" />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Pie Core vs Lite */}
+      <div className="grid gap-6 lg:grid-cols-2">
+        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+          <h3 className="text-base font-bold text-neutral-900">
+            Distribución CORE vs LITE
+          </h3>
+          <p className="mt-1 text-xs text-neutral-500">Marzo 2026</p>
+          <div className="h-[240px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie data={corePieData} dataKey="value" nameKey="name" innerRadius={55} outerRadius={95} paddingAngle={3} label={(e: any) => `${e.name}: ${((e.value / corePieTotal) * 100).toFixed(0)}%`}>
+                  {corePieData.map((e) => (
+                    <Cell key={e.name} fill={e.color} />
+                  ))}
+                </Pie>
+                <Tooltip
+                  contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }}
+                  formatter={(v: number) => `${v.toLocaleString("es-CO")} (${((v / corePieTotal) * 100).toFixed(1)}%)`}
+                />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="mt-2 grid grid-cols-2 gap-3 text-xs">
+            {corePieData.map((d) => (
+              <div key={d.name} className="flex items-center gap-2">
+                <span className="h-3 w-3 rounded-full" style={{ backgroundColor: d.color }} />
+                <span className="font-semibold text-neutral-900">{d.name}</span>
+                <span className="ml-auto text-neutral-600">
+                  {d.value.toLocaleString("es-CO")}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Resumen Engagement */}
+        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+          <h3 className="text-base font-bold text-neutral-900">
+            Engagement por funcionalidad
+          </h3>
+          <p className="mt-1 text-xs text-neutral-500">
+            Eje X: Adopción (%MAU) · Eje Y: Frecuencia (avg perform). Tamaño = adopción. Líneas guía: %MAU 27.45 · Frec 9.65
+          </p>
+          <div className="mt-3 space-y-2 text-xs text-neutral-600">
+            <p>
+              <span className="font-bold text-neutral-900">CORE</span> ({coreEvents.length} eventos): el cuadrante alto-derecho concentra "Crear factura" y "Buscar factura".
+            </p>
+            <p>
+              <span className="font-bold text-neutral-900">LITE</span> ({liteEvents.length} eventos): patrón similar pero con menor adopción. Solo "Crear factura" supera la mediana.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Engagement scatter bubble chart */}
+      <EngagementScatter />
+    </div>
+  );
+}
+
+// Cuadrante de engagement con bolitas estilo Amplitude
+function EngagementScatter() {
+  // Dimensiones lógicas
+  const W = 720;
+  const H = 420;
+  const padL = 40;
+  const padR = 20;
+  const padT = 20;
+  const padB = 40;
+  const innerW = W - padL - padR;
+  const innerH = H - padT - padB;
+
+  // Escalas
+  const maxX = 60;
+  const maxY = 30;
+  const xToPx = (x: number) => padL + (x / maxX) * innerW;
+  const yToPx = (y: number) => padT + innerH - (y / maxY) * innerH;
+
+  const medX = 27.45;
+  const medY = 9.65;
+
+  type Point = EngagementEvent & { type: "CORE" | "LITE" };
+  const points: Point[] = [
+    ...coreEvents.map((e) => ({ ...e, type: "CORE" as const })),
+    ...liteEvents.map((e) => ({ ...e, type: "LITE" as const })),
+  ];
+
+  // Radio en función del tamaño (frecuencia + adoption ligeros)
+  const radius = (p: Point) => 12 + Math.min(18, p.adoption * 0.25);
+
+  return (
+    <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+      <div className="mb-4 flex items-start justify-between gap-4 flex-wrap">
+        <div>
+          <h3 className="text-base font-bold text-neutral-900">
+            Engagement por funcionalidad — CORE vs LITE
+          </h3>
+          <p className="mt-1 text-xs text-neutral-500">
+            Adopción (%MAU) vs Frecuencia (avg time performed). Líneas guía: %MAU 27.45 · Frecuencia 9.65
+          </p>
+        </div>
+        <div className="flex items-center gap-4 text-xs">
+          <div className="flex items-center gap-1.5">
+            <span
+              className="inline-block h-3 w-3 rounded-full"
+              style={{ backgroundColor: ALEGRA_GREEN }}
+            />
+            <span className="font-semibold text-neutral-700">CORE</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span
+              className="inline-block h-3 w-3 rounded-full"
+              style={{ backgroundColor: "#0066FF" }}
+            />
+            <span className="font-semibold text-neutral-700">LITE</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="overflow-x-auto">
+        <svg viewBox={`0 0 ${W} ${H}`} className="h-[420px] w-full min-w-[640px]">
+          {/* Cuadrantes background */}
+          <rect x={padL} y={padT} width={xToPx(medX) - padL} height={yToPx(medY) - padT} fill="#FEF3C7" opacity="0.4" />
+          <rect x={xToPx(medX)} y={padT} width={padL + innerW - xToPx(medX)} height={yToPx(medY) - padT} fill="#D1FAE5" opacity="0.4" />
+          <rect x={padL} y={yToPx(medY)} width={xToPx(medX) - padL} height={padT + innerH - yToPx(medY)} fill="#FED7AA" opacity="0.4" />
+          <rect x={xToPx(medX)} y={yToPx(medY)} width={padL + innerW - xToPx(medX)} height={padT + innerH - yToPx(medY)} fill="#E5E7EB" opacity="0.4" />
+
+          {/* Ejes */}
+          <line x1={padL} y1={padT + innerH} x2={padL + innerW} y2={padT + innerH} stroke="#9ca3af" strokeWidth="1" />
+          <line x1={padL} y1={padT} x2={padL} y2={padT + innerH} stroke="#9ca3af" strokeWidth="1" />
+
+          {/* Líneas medianas */}
+          <line x1={xToPx(medX)} y1={padT} x2={xToPx(medX)} y2={padT + innerH} stroke="#6b7280" strokeWidth="1" strokeDasharray="4 3" />
+          <line x1={padL} y1={yToPx(medY)} x2={padL + innerW} y2={yToPx(medY)} stroke="#6b7280" strokeWidth="1" strokeDasharray="4 3" />
+
+          {/* Labels mediana */}
+          <text x={xToPx(medX) + 4} y={padT + 12} fontSize="10" fill="#6b7280">Mediana %MAU: {medX}</text>
+          <text x={padL + innerW - 8} y={yToPx(medY) - 4} fontSize="10" fill="#6b7280" textAnchor="end">Mediana Frec: {medY}</text>
+
+          {/* Etiquetas eje X */}
+          {[0, 10, 20, 30, 40, 50, 60].map((v) => (
+            <g key={v}>
+              <text x={xToPx(v)} y={padT + innerH + 16} fontSize="10" fill="#6b7280" textAnchor="middle">{v}</text>
+              <line x1={xToPx(v)} y1={padT + innerH} x2={xToPx(v)} y2={padT + innerH + 4} stroke="#9ca3af" />
+            </g>
+          ))}
+          {/* Etiquetas eje Y */}
+          {[0, 5, 10, 15, 20, 25, 30].map((v) => (
+            <g key={v}>
+              <text x={padL - 6} y={yToPx(v) + 3} fontSize="10" fill="#6b7280" textAnchor="end">{v}</text>
+              <line x1={padL - 4} y1={yToPx(v)} x2={padL} y2={yToPx(v)} stroke="#9ca3af" />
+            </g>
+          ))}
+
+          {/* Bolitas */}
+          {points.map((p, i) => {
+            const cx = xToPx(p.adoption);
+            const cy = yToPx(p.frequency);
+            const r = radius(p);
+            const fill = p.type === "CORE" ? ALEGRA_GREEN : "#0066FF";
+            return (
+              <g key={`${p.type}-${i}`}>
+                <circle
+                  cx={cx}
+                  cy={cy}
+                  r={r}
+                  fill={fill}
+                  fillOpacity="0.85"
+                  stroke="white"
+                  strokeWidth="2"
+                />
+                <text x={cx} y={cy + 3} fontSize="11" fontWeight="bold" fill="white" textAnchor="middle">
+                  {p.num}
+                </text>
+                <title>{`${p.type} · ${p.label} — Adopción ${p.adoption}% · Frec ${p.frequency}`}</title>
+              </g>
+            );
+          })}
+
+          {/* Etiquetas ejes */}
+          <text x={padL + innerW / 2} y={H - 6} fontSize="11" fill="#374151" textAnchor="middle" fontWeight="600">Adopción (%MAU)</text>
+          <text x={12} y={padT + innerH / 2} fontSize="11" fill="#374151" textAnchor="middle" fontWeight="600" transform={`rotate(-90 12 ${padT + innerH / 2})`}>Frecuencia (avg time performed)</text>
+        </svg>
+      </div>
+
+      {/* Leyenda numerada */}
+      <div className="mt-4 grid gap-x-6 gap-y-1 text-[11px] sm:grid-cols-2">
+        <div>
+          <p className="mb-1 text-[10px] font-bold uppercase tracking-wider" style={{ color: ALEGRA_GREEN }}>CORE</p>
+          {coreEvents.map((e) => (
+            <div key={e.num} className="flex items-center gap-2">
+              <span className="flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-bold text-white" style={{ backgroundColor: ALEGRA_GREEN }}>{e.num}</span>
+              <span className="text-neutral-700">{e.label}</span>
+            </div>
+          ))}
+        </div>
+        <div>
+          <p className="mb-1 text-[10px] font-bold uppercase tracking-wider" style={{ color: "#0066FF" }}>LITE</p>
+          {liteEvents.map((e) => (
+            <div key={e.num} className="flex items-center gap-2">
+              <span className="flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-bold text-white" style={{ backgroundColor: "#0066FF" }}>{e.num}</span>
+              <span className="text-neutral-700">{e.label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-4 flex items-center justify-end">
+        <a
+          href="https://app.amplitude.com/analytics/alegra"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+        >
+          Fuente: Engagement por funcionalidad MAC CORE / MAU LITE · Amplitude <ExternalLink className="h-3 w-3" />
+        </a>
+      </div>
     </div>
   );
 }

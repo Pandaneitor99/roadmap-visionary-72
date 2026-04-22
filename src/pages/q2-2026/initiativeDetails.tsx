@@ -14,7 +14,7 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
-import { ExternalLink, TrendingUp, Lightbulb } from "lucide-react";
+import { ExternalLink, TrendingUp, TrendingDown, Lightbulb } from "lucide-react";
 
 const ALEGRA_GREEN = "#00B386";
 const BLUE = "#0066FF";
@@ -155,37 +155,97 @@ const ChartCard = ({
   subtitle,
   url,
   children,
+  statLabel,
+  statValue,
+  statDelta,
+  statBaselineLabel = "vs primer mes",
+  statSuffix = "",
+  invertDelta = false,
 }: {
   title: string;
   subtitle?: string;
   url?: string;
   children: React.ReactNode;
-}) => (
-  <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm">
-    <div className="mb-2 flex items-start justify-between gap-2">
-      <div>
-        <h4 className="text-sm font-bold text-neutral-900">{title}</h4>
-        {subtitle && <p className="text-[11px] text-neutral-500">{subtitle}</p>}
+  statLabel?: string;
+  statValue?: string | number;
+  statDelta?: number; // porcentaje
+  statBaselineLabel?: string;
+  statSuffix?: string;
+  invertDelta?: boolean; // true cuando bajar es bueno (errores, TTC)
+}) => {
+  const showStat = statValue !== undefined;
+  const positive = statDelta !== undefined ? (invertDelta ? statDelta < 0 : statDelta >= 0) : true;
+  return (
+    <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm">
+      <div className="mb-2 flex items-start justify-between gap-2">
+        <div>
+          <h4 className="text-sm font-bold text-neutral-900">{title}</h4>
+          {subtitle && <p className="text-[11px] text-neutral-500">{subtitle}</p>}
+        </div>
+        {url && (
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-neutral-400 hover:text-neutral-700"
+            title="Abrir en Amplitude"
+          >
+            <ExternalLink className="h-3.5 w-3.5" />
+          </a>
+        )}
       </div>
-      {url && (
-        <a
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-neutral-400 hover:text-neutral-700"
-          title="Abrir en Amplitude"
-        >
-          <ExternalLink className="h-3.5 w-3.5" />
-        </a>
-      )}
+      <div className={showStat ? "grid grid-cols-1 gap-3 md:grid-cols-[1fr_auto]" : ""}>
+        <div className="h-48">
+          <ResponsiveContainer width="100%" height="100%">
+            {children as any}
+          </ResponsiveContainer>
+        </div>
+        {showStat && (
+          <div className="flex flex-col justify-center rounded-lg border border-neutral-100 bg-neutral-50/60 p-3 md:min-w-[140px]">
+            {statLabel && (
+              <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">
+                {statLabel}
+              </p>
+            )}
+            <p className="mt-1 text-2xl font-bold text-neutral-900">
+              {typeof statValue === "number" ? statValue.toLocaleString("es-CO") : statValue}
+              {statSuffix}
+            </p>
+            {statDelta !== undefined && (
+              <p
+                className={`mt-1 flex items-center gap-1 text-xs font-bold ${
+                  positive ? "text-emerald-600" : "text-red-600"
+                }`}
+              >
+                {positive ? (
+                  <TrendingUp className="h-3.5 w-3.5" />
+                ) : (
+                  <TrendingDown className="h-3.5 w-3.5" />
+                )}
+                {statDelta >= 0 ? "+" : ""}
+                {statDelta.toFixed(1)}%
+                <span className="ml-0.5 text-[10px] font-medium text-neutral-500">
+                  {statBaselineLabel}
+                </span>
+              </p>
+            )}
+          </div>
+        )}
+      </div>
     </div>
-    <div className="h-48">
-      <ResponsiveContainer width="100%" height="100%">
-        {children as any}
-      </ResponsiveContainer>
-    </div>
-  </div>
-);
+  );
+};
+
+// Helper para calcular % delta entre primer y último valor
+function pctDelta(arr: { v?: number; pct?: number; s?: number }[], key: "v" | "pct" | "s") {
+  const first = arr[0]?.[key] ?? 0;
+  const last = arr[arr.length - 1]?.[key] ?? 0;
+  if (!first) return 0;
+  return ((last - first) / first) * 100;
+}
+function lastVal(arr: { v?: number; pct?: number; s?: number }[], key: "v" | "pct" | "s") {
+  return arr[arr.length - 1]?.[key] ?? 0;
+}
 
 const Insights = ({ items }: { items: string[] }) => (
   <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-4">
@@ -243,6 +303,10 @@ export function BusquedaDetail() {
           title="Búsqueda de facturas — Totales"
           subtitle="Mensual · últimos 6 meses"
           url="https://app.amplitude.com/analytics/alegra/chart/g3zsws0s"
+          statLabel="Último mes"
+          statValue={lastVal(busquedaFacturasTotales, "v")}
+          statDelta={pctDelta(busquedaFacturasTotales, "v")}
+          statBaselineLabel="vs Oct '25"
         >
           <LineChart data={busquedaFacturasTotales}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -256,6 +320,10 @@ export function BusquedaDetail() {
           title="Búsqueda de facturas — Uniques"
           subtitle="Usuarios únicos por mes"
           url="https://app.amplitude.com/analytics/alegra/chart/iztonip4"
+          statLabel="Último mes"
+          statValue={lastVal(busquedaFacturasUniques, "v")}
+          statDelta={pctDelta(busquedaFacturasUniques, "v")}
+          statBaselineLabel="vs Oct '25"
         >
           <LineChart data={busquedaFacturasUniques}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -269,6 +337,10 @@ export function BusquedaDetail() {
           title="Uso del componente del buscador"
           subtitle="Uniques semanales"
           url="https://app.amplitude.com/analytics/alegra/chart/z9b4txww"
+          statLabel="Última sem"
+          statValue={lastVal(usoBuscador, "v")}
+          statDelta={pctDelta(usoBuscador, "v")}
+          statBaselineLabel="vs 22-Feb"
         >
           <LineChart data={usoBuscador}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -282,6 +354,10 @@ export function BusquedaDetail() {
           title="Búsqueda cotizaciones — Únicos"
           subtitle="Lanzamiento reciente"
           url="https://app.amplitude.com/analytics/alegra/chart/on3tt73l"
+          statLabel="Última sem"
+          statValue={lastVal(busquedaCotizacionesUniques, "v")}
+          statDelta={pctDelta(busquedaCotizacionesUniques, "v")}
+          statBaselineLabel="vs lanzamiento"
         >
           <BarChart data={busquedaCotizacionesUniques}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -294,6 +370,10 @@ export function BusquedaDetail() {
         <ChartCard
           title="Búsqueda cotizaciones — Totales"
           url="https://app.amplitude.com/analytics/alegra/chart/lj96ul5q"
+          statLabel="Última sem"
+          statValue={lastVal(busquedaCotizacionesTotales, "v")}
+          statDelta={pctDelta(busquedaCotizacionesTotales, "v")}
+          statBaselineLabel="vs lanzamiento"
         >
           <BarChart data={busquedaCotizacionesTotales}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -332,11 +412,24 @@ export function EstabilizacionDetail() {
               <ExternalLink className="h-3.5 w-3.5" />
             </a>
           </div>
-          <iframe
-            src="https://app.amplitude.com/analytics/share/embed/cnbbpxr5"
-            className="h-48 w-full rounded border-0"
-            title="Errores API Weekly"
-          />
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-[1fr_auto]">
+            <iframe
+              src="https://app.amplitude.com/analytics/share/embed/cnbbpxr5"
+              className="h-48 w-full rounded border-0"
+              title="Errores API Weekly"
+            />
+            <div className="flex flex-col justify-center rounded-lg border border-neutral-100 bg-neutral-50/60 p-3 md:min-w-[140px]">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">
+                Última sem
+              </p>
+              <p className="mt-1 text-2xl font-bold text-neutral-900">~8K</p>
+              <p className="mt-1 flex items-center gap-1 text-xs font-bold text-emerald-600">
+                <TrendingDown className="h-3.5 w-3.5" />
+                -12.0%
+                <span className="ml-0.5 text-[10px] font-medium text-neutral-500">vs baseline</span>
+              </p>
+            </div>
+          </div>
         </div>
         <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm">
           <div className="mb-2 flex items-start justify-between">
@@ -350,11 +443,20 @@ export function EstabilizacionDetail() {
               <ExternalLink className="h-3.5 w-3.5" />
             </a>
           </div>
-          <iframe
-            src="https://app.amplitude.com/analytics/share/embed/70xrqgyp"
-            className="h-48 w-full rounded border-0"
-            title="Errores API por error"
-          />
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-[1fr_auto]">
+            <iframe
+              src="https://app.amplitude.com/analytics/share/embed/70xrqgyp"
+              className="h-48 w-full rounded border-0"
+              title="Errores API por error"
+            />
+            <div className="flex flex-col justify-center rounded-lg border border-neutral-100 bg-neutral-50/60 p-3 md:min-w-[140px]">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">
+                Top error
+              </p>
+              <p className="mt-1 text-lg font-bold text-neutral-900">DIAN-CO</p>
+              <p className="mt-1 text-[11px] text-neutral-500">~45% del total</p>
+            </div>
+          </div>
         </div>
       </div>
       <Insights
@@ -375,6 +477,10 @@ export function RemisionesDetail() {
         <ChartCard
           title="Remisiones totales — Semanal"
           url="https://app.amplitude.com/analytics/alegra/chart/000rbdus"
+          statLabel="Última sem"
+          statValue={lastVal(remisionesTotales, "v")}
+          statDelta={pctDelta(remisionesTotales, "v")}
+          statBaselineLabel="vs 22-Feb"
         >
           <BarChart data={remisionesTotales}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -388,6 +494,10 @@ export function RemisionesDetail() {
           title="App vs Web Remisiones"
           subtitle="% de remisiones creadas en App"
           url="https://app.amplitude.com/analytics/alegra/chart/eosl7cg8"
+          statLabel="Último mes"
+          statValue={`${lastVal(appVsWebRemisiones, "pct").toFixed(2)}%`}
+          statDelta={pctDelta(appVsWebRemisiones, "pct")}
+          statBaselineLabel="vs Oct '25"
         >
           <LineChart data={appVsWebRemisiones}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -477,90 +587,113 @@ export function HomeDetail() {
         ]}
       />
 
-      <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm">
-        <div className="h-72">
-          <ResponsiveContainer width="100%" height="100%">
-            {tab === "funcionalidades" ? (
-              <LineChart data={funcionalidadesHome}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
-                <YAxis tick={{ fontSize: 10 }} />
-                <Tooltip />
-                <Legend wrapperStyle={{ fontSize: 10 }} />
-                <Line type="monotone" dataKey="Sidebar" stroke={ALEGRA_GREEN} strokeWidth={2} />
-                <Line type="monotone" dataKey="Mas" stroke={BLUE} strokeWidth={2} />
-                <Line type="monotone" dataKey="QuickActions" stroke={ORANGE} strokeWidth={2} />
-                <Line type="monotone" dataKey="Rango" stroke="#9333EA" />
-                <Line type="monotone" dataKey="Perfil" stroke="#F59E0B" />
-                <Line type="monotone" dataKey="G. Ventas" stroke="#06B6D4" />
-                <Line type="monotone" dataKey="G. Trans" stroke="#EC4899" />
-              </LineChart>
-            ) : tab === "quick" ? (
-              <BarChart data={funcionalidadesHome}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
-                <YAxis tick={{ fontSize: 10 }} />
-                <Tooltip />
-                <Bar dataKey="QuickActions" fill={ORANGE} />
-              </BarChart>
-            ) : tab === "fnFactura" ? (
-              <LineChart data={funnelHomeFactura}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
-                <YAxis tick={{ fontSize: 10 }} unit="%" />
-                <Tooltip formatter={(v: number) => `${v.toFixed(2)}%`} />
-                <Line type="monotone" dataKey="pct" stroke={ALEGRA_GREEN} strokeWidth={2} />
-              </LineChart>
-            ) : tab === "fnContactos" ? (
-              <LineChart data={funnelHomeContactos}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
-                <YAxis tick={{ fontSize: 10 }} unit="%" />
-                <Tooltip formatter={(v: number) => `${v.toFixed(2)}%`} />
-                <Line type="monotone" dataKey="pct" stroke={BLUE} strokeWidth={2} />
-              </LineChart>
-            ) : tab === "fnCotizacion" ? (
-              <iframe
-                src="https://app.amplitude.com/analytics/share/embed/j5qy0tqd"
-                className="h-full w-full rounded border-0"
-                title="Funnel Cotización"
-              />
-            ) : tab === "fnItem" ? (
-              <LineChart data={funnelHomeItem}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
-                <YAxis tick={{ fontSize: 10 }} unit="%" />
-                <Tooltip formatter={(v: number) => `${v.toFixed(2)}%`} />
-                <Line type="monotone" dataKey="pct" stroke={ORANGE} strokeWidth={2} />
-              </LineChart>
-            ) : tab === "ttcFactura" ? (
-              <LineChart data={ttcFactura}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
-                <YAxis tick={{ fontSize: 10 }} unit="s" />
-                <Tooltip formatter={(v: number) => `${v.toLocaleString()}s`} />
-                <Line type="monotone" dataKey="s" stroke={ALEGRA_GREEN} strokeWidth={2} />
-              </LineChart>
-            ) : tab === "ttcCotizacion" ? (
-              <iframe
-                src="https://app.amplitude.com/analytics/share/embed/phd97cxa"
-                className="h-full w-full rounded border-0"
-                title="TTC Cotización"
-              />
-            ) : (
-              <iframe
-                src="https://app.amplitude.com/analytics/share/embed/a3cwza0t"
-                className="h-full w-full rounded border-0"
-                title="TTC Item"
-              />
-            )}
-          </ResponsiveContainer>
-        </div>
-        <div className="mt-2 flex items-center gap-1 text-[11px] text-neutral-500">
-          <TrendingUp className="h-3 w-3" />
-          Fuente: Amplitude · cohort Usuarios Pagos
-        </div>
-      </div>
+      {(() => {
+        const stat = (() => {
+          if (tab === "funcionalidades") {
+            const last = funcionalidadesHome[funcionalidadesHome.length - 1];
+            return { label: "Sidebar última sem", value: last.Sidebar.toLocaleString("es-CO"), delta: ((last.Sidebar - funcionalidadesHome[0].Sidebar) / funcionalidadesHome[0].Sidebar) * 100 };
+          }
+          if (tab === "quick") {
+            const last = funcionalidadesHome[funcionalidadesHome.length - 1].QuickActions;
+            return { label: "Quick Actions sem", value: last.toLocaleString("es-CO"), delta: 0, hideDelta: true, note: "Lanzado 12-Abr" };
+          }
+          if (tab === "fnFactura") return { label: "Funnel actual", value: `${lastVal(funnelHomeFactura, "pct").toFixed(2)}%`, delta: pctDelta(funnelHomeFactura, "pct") };
+          if (tab === "fnContactos") return { label: "Funnel actual", value: `${lastVal(funnelHomeContactos, "pct").toFixed(2)}%`, delta: pctDelta(funnelHomeContactos, "pct") };
+          if (tab === "fnItem") return { label: "Funnel actual", value: `${lastVal(funnelHomeItem, "pct").toFixed(2)}%`, delta: pctDelta(funnelHomeItem, "pct") };
+          if (tab === "ttcFactura") return { label: "TTC actual", value: `${lastVal(ttcFactura, "s").toLocaleString("es-CO")}s`, delta: pctDelta(ttcFactura, "s"), invert: true };
+          return null;
+        })();
+        return (
+          <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm">
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-[1fr_auto]">
+              <div className="h-72">
+                <ResponsiveContainer width="100%" height="100%">
+                  {tab === "funcionalidades" ? (
+                    <LineChart data={funcionalidadesHome}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                      <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
+                      <YAxis tick={{ fontSize: 10 }} />
+                      <Tooltip />
+                      <Legend wrapperStyle={{ fontSize: 10 }} />
+                      <Line type="monotone" dataKey="Sidebar" stroke={ALEGRA_GREEN} strokeWidth={2} />
+                      <Line type="monotone" dataKey="Mas" stroke={BLUE} strokeWidth={2} />
+                      <Line type="monotone" dataKey="QuickActions" stroke={ORANGE} strokeWidth={2} />
+                      <Line type="monotone" dataKey="Rango" stroke="#9333EA" />
+                      <Line type="monotone" dataKey="Perfil" stroke="#F59E0B" />
+                      <Line type="monotone" dataKey="G. Ventas" stroke="#06B6D4" />
+                      <Line type="monotone" dataKey="G. Trans" stroke="#EC4899" />
+                    </LineChart>
+                  ) : tab === "quick" ? (
+                    <BarChart data={funcionalidadesHome}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                      <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
+                      <YAxis tick={{ fontSize: 10 }} />
+                      <Tooltip />
+                      <Bar dataKey="QuickActions" fill={ORANGE} />
+                    </BarChart>
+                  ) : tab === "fnFactura" ? (
+                    <LineChart data={funnelHomeFactura}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                      <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
+                      <YAxis tick={{ fontSize: 10 }} unit="%" />
+                      <Tooltip formatter={(v: number) => `${v.toFixed(2)}%`} />
+                      <Line type="monotone" dataKey="pct" stroke={ALEGRA_GREEN} strokeWidth={2} />
+                    </LineChart>
+                  ) : tab === "fnContactos" ? (
+                    <LineChart data={funnelHomeContactos}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                      <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
+                      <YAxis tick={{ fontSize: 10 }} unit="%" />
+                      <Tooltip formatter={(v: number) => `${v.toFixed(2)}%`} />
+                      <Line type="monotone" dataKey="pct" stroke={BLUE} strokeWidth={2} />
+                    </LineChart>
+                  ) : tab === "fnCotizacion" ? (
+                    <iframe src="https://app.amplitude.com/analytics/share/embed/j5qy0tqd" className="h-full w-full rounded border-0" title="Funnel Cotización" />
+                  ) : tab === "fnItem" ? (
+                    <LineChart data={funnelHomeItem}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                      <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
+                      <YAxis tick={{ fontSize: 10 }} unit="%" />
+                      <Tooltip formatter={(v: number) => `${v.toFixed(2)}%`} />
+                      <Line type="monotone" dataKey="pct" stroke={ORANGE} strokeWidth={2} />
+                    </LineChart>
+                  ) : tab === "ttcFactura" ? (
+                    <LineChart data={ttcFactura}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                      <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
+                      <YAxis tick={{ fontSize: 10 }} unit="s" />
+                      <Tooltip formatter={(v: number) => `${v.toLocaleString()}s`} />
+                      <Line type="monotone" dataKey="s" stroke={ALEGRA_GREEN} strokeWidth={2} />
+                    </LineChart>
+                  ) : tab === "ttcCotizacion" ? (
+                    <iframe src="https://app.amplitude.com/analytics/share/embed/phd97cxa" className="h-full w-full rounded border-0" title="TTC Cotización" />
+                  ) : (
+                    <iframe src="https://app.amplitude.com/analytics/share/embed/a3cwza0t" className="h-full w-full rounded border-0" title="TTC Item" />
+                  )}
+                </ResponsiveContainer>
+              </div>
+              {stat && (
+                <div className="flex flex-col justify-center rounded-lg border border-neutral-100 bg-neutral-50/60 p-3 md:min-w-[160px]">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">{stat.label}</p>
+                  <p className="mt-1 text-2xl font-bold text-neutral-900">{stat.value}</p>
+                  {!stat.hideDelta && (
+                    <p className={`mt-1 flex items-center gap-1 text-xs font-bold ${(stat.invert ? stat.delta < 0 : stat.delta >= 0) ? "text-emerald-600" : "text-red-600"}`}>
+                      {(stat.invert ? stat.delta < 0 : stat.delta >= 0) ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
+                      {stat.delta >= 0 ? "+" : ""}{stat.delta.toFixed(1)}%
+                      <span className="ml-0.5 text-[10px] font-medium text-neutral-500">vs primera sem</span>
+                    </p>
+                  )}
+                  {stat.note && <p className="mt-1 text-[10px] text-neutral-500">{stat.note}</p>}
+                </div>
+              )}
+            </div>
+            <div className="mt-2 flex items-center gap-1 text-[11px] text-neutral-500">
+              <TrendingUp className="h-3 w-3" />
+              Fuente: Amplitude · cohort Usuarios Pagos
+            </div>
+          </div>
+        );
+      })()}
 
       <Insights
         items={[
