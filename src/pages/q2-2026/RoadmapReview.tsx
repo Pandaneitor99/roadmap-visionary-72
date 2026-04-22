@@ -577,8 +577,52 @@ const countryVariation = [
   { country: "Costa Rica", march: 235, october: 232, color: "#06B6D4" },
 ];
 
+function SideMetricCard({
+  label,
+  value,
+  delta,
+  color,
+  highlight,
+}: {
+  label: string;
+  value: number;
+  delta: number;
+  color: string;
+  highlight?: boolean;
+}) {
+  const up = delta >= 0;
+  return (
+    <div
+      className={cn(
+        "rounded-2xl border bg-white p-4 shadow-sm transition-all",
+        highlight && "ring-2 ring-emerald-100",
+      )}
+      style={{ borderLeft: `4px solid ${color}` }}
+    >
+      <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">
+        {label}
+      </p>
+      <p className="mt-1.5 text-2xl font-bold text-neutral-900">
+        {value.toLocaleString("es-CO")}
+      </p>
+      <p
+        className={cn(
+          "mt-1 flex items-center gap-1 text-xs font-bold",
+          up ? "text-emerald-600" : "text-red-600",
+        )}
+      >
+        {up ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
+        {up ? "+" : ""}
+        {delta.toFixed(1)}%
+        <span className="ml-1 text-[10px] font-medium text-neutral-500">vs Oct '25</span>
+      </p>
+    </div>
+  );
+}
+
 function Section2() {
   const [trendVariant, setTrendVariant] = useState<"full" | "sinExtras">("full");
+  const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
   const macTrendData = trendVariant === "full" ? macTrendDataFull : macTrendDataSinExtras;
   const last = macTrendData[macTrendData.length - 1];
   const first = macTrendData[0];
@@ -652,208 +696,181 @@ function Section2() {
         </div>
       </div>
 
-      {/* MAC Trend Chart */}
-      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm md:p-8">
-        <div className="mb-4 flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <h3 className="text-lg font-bold text-neutral-900">MAC — Tendencia</h3>
-            <p className="mt-1 text-xs text-neutral-500">
-              Últimos 6 meses · Usuarios Pagos, segmentados por CORE y LITE
+      {/* MAC Trend Chart + side cards */}
+      <div className="grid gap-6 lg:grid-cols-4">
+        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm md:p-8 lg:col-span-3">
+          <div className="mb-4 flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <h3 className="text-lg font-bold text-neutral-900">MAC — Tendencia</h3>
+              <p className="mt-1 text-xs text-neutral-500">
+                Últimos 6 meses · Usuarios Pagos, segmentados por CORE y LITE
+              </p>
+            </div>
+          </div>
+
+          {/* Toggle entre las dos vistas de MAC */}
+          <div className="mb-5 inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1">
+            <button
+              onClick={() => setTrendVariant("full")}
+              className={cn(
+                "rounded-md px-3 py-1.5 text-xs font-semibold transition-all",
+                trendVariant === "full"
+                  ? "bg-white text-neutral-900 shadow-sm"
+                  : "text-neutral-500 hover:text-neutral-700",
+              )}
+            >
+              MAC — Tendencia
+            </button>
+            <button
+              onClick={() => setTrendVariant("sinExtras")}
+              className={cn(
+                "rounded-md px-3 py-1.5 text-xs font-semibold transition-all",
+                trendVariant === "sinExtras"
+                  ? "bg-white text-neutral-900 shadow-sm"
+                  : "text-neutral-500 hover:text-neutral-700",
+              )}
+            >
+              Sin búsqueda ni gráficos
+            </button>
+          </div>
+
+          <div className="h-[360px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={macTrendData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                <XAxis
+                  dataKey="month"
+                  stroke="#6b7280"
+                  tick={{ fontSize: 12 }}
+                  axisLine={{ stroke: "#e5e7eb" }}
+                  tickLine={false}
+                />
+                <YAxis
+                  stroke="#6b7280"
+                  tick={{ fontSize: 12 }}
+                  axisLine={false}
+                  tickLine={false}
+                  tickFormatter={(v) => v.toLocaleString("es-CO")}
+                />
+                <Tooltip
+                  contentStyle={{
+                    borderRadius: 8,
+                    border: "1px solid #e5e7eb",
+                    fontSize: 12,
+                  }}
+                  formatter={(v: number) => v.toLocaleString("es-CO")}
+                />
+                <Legend
+                  iconType="circle"
+                  wrapperStyle={{ fontSize: 12, paddingTop: 12 }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="Pagos"
+                  name="Usuarios Pagos"
+                  stroke={ALEGRA_GREEN}
+                  strokeWidth={3}
+                  dot={{ r: 4, fill: ALEGRA_GREEN }}
+                  activeDot={{ r: 6 }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="CORE"
+                  stroke="#1f2937"
+                  strokeWidth={2}
+                  dot={{ r: 3 }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="LITE"
+                  stroke="#9ca3af"
+                  strokeWidth={2}
+                  dot={{ r: 3 }}
+                  strokeDasharray="4 4"
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+
+          <div className="mt-4 flex items-center justify-between border-t border-neutral-100 pt-4">
+            <p className="text-[11px] text-neutral-400">
+              Fuente: Amplitude ·{" "}
+              {trendVariant === "full"
+                ? "Eventos críticos de negocio (incluye búsquedas y gráficos)"
+                : "Eventos críticos sin incluir búsquedas ni gráficos"}
             </p>
-          </div>
-          <div className="flex items-center gap-6">
-            <div>
-              <p className="text-xs font-medium text-neutral-500">MAC actual</p>
-              <p className="text-2xl font-bold text-neutral-900">
-                {last.Pagos.toLocaleString("es-CO")}
-              </p>
-            </div>
-            <div>
-              <p className="text-xs font-medium text-neutral-500">vs Oct '25</p>
-              <p
-                className={cn(
-                  "flex items-center gap-1 text-2xl font-bold",
-                  positive ? "text-emerald-600" : "text-red-600",
-                )}
-              >
-                {positive ? (
-                  <TrendingUp className="h-5 w-5" />
-                ) : (
-                  <TrendingDown className="h-5 w-5" />
-                )}
-                {positive ? "+" : ""}
-                {deltaPct}%
-              </p>
-            </div>
+            <a
+              href={
+                trendVariant === "full"
+                  ? "https://app.amplitude.com/analytics/alegra/chart/wy27awa1"
+                  : "https://app.amplitude.com/analytics/alegra/chart/yhghuf5q"
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-xs font-medium text-neutral-500 hover:text-neutral-900"
+            >
+              Ver en Amplitude
+              <ExternalLink className="h-3 w-3" />
+            </a>
           </div>
         </div>
 
-        {/* Toggle entre las dos vistas de MAC */}
-        <div className="mb-5 inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1">
-          <button
-            onClick={() => setTrendVariant("full")}
-            className={cn(
-              "rounded-md px-3 py-1.5 text-xs font-semibold transition-all",
-              trendVariant === "full"
-                ? "bg-white text-neutral-900 shadow-sm"
-                : "text-neutral-500 hover:text-neutral-700",
-            )}
-          >
-            MAC — Tendencia
-          </button>
-          <button
-            onClick={() => setTrendVariant("sinExtras")}
-            className={cn(
-              "rounded-md px-3 py-1.5 text-xs font-semibold transition-all",
-              trendVariant === "sinExtras"
-                ? "bg-white text-neutral-900 shadow-sm"
-                : "text-neutral-500 hover:text-neutral-700",
-            )}
-          >
-            Sin búsqueda ni gráficos
-          </button>
-        </div>
-
-        <div className="h-[360px] w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={macTrendData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
-              <XAxis
-                dataKey="month"
-                stroke="#6b7280"
-                tick={{ fontSize: 12 }}
-                axisLine={{ stroke: "#e5e7eb" }}
-                tickLine={false}
-              />
-              <YAxis
-                stroke="#6b7280"
-                tick={{ fontSize: 12 }}
-                axisLine={false}
-                tickLine={false}
-                tickFormatter={(v) => v.toLocaleString("es-CO")}
-              />
-              <Tooltip
-                contentStyle={{
-                  borderRadius: 8,
-                  border: "1px solid #e5e7eb",
-                  fontSize: 12,
-                }}
-                formatter={(v: number) => v.toLocaleString("es-CO")}
-              />
-              <Legend
-                iconType="circle"
-                wrapperStyle={{ fontSize: 12, paddingTop: 12 }}
-              />
-              <Line
-                type="monotone"
-                dataKey="Pagos"
-                name="Usuarios Pagos"
-                stroke={ALEGRA_GREEN}
-                strokeWidth={3}
-                dot={{ r: 4, fill: ALEGRA_GREEN }}
-                activeDot={{ r: 6 }}
-              />
-              <Line
-                type="monotone"
-                dataKey="CORE"
-                stroke="#1f2937"
-                strokeWidth={2}
-                dot={{ r: 3 }}
-              />
-              <Line
-                type="monotone"
-                dataKey="LITE"
-                stroke="#9ca3af"
-                strokeWidth={2}
-                dot={{ r: 3 }}
-                strokeDasharray="4 4"
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-
-        <div className="mt-4 flex items-center justify-between border-t border-neutral-100 pt-4">
-          <p className="text-[11px] text-neutral-400">
-            Fuente: Amplitude ·{" "}
-            {trendVariant === "full"
-              ? "Eventos críticos de negocio (incluye búsquedas y gráficos)"
-              : "Eventos críticos sin incluir búsquedas ni gráficos"}
-          </p>
-          <a
-            href={
-              trendVariant === "full"
-                ? "https://app.amplitude.com/analytics/alegra/chart/wy27awa1"
-                : "https://app.amplitude.com/analytics/alegra/chart/yhghuf5q"
-            }
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1 text-xs font-medium text-neutral-500 hover:text-neutral-900"
-          >
-            Ver en Amplitude
-            <ExternalLink className="h-3 w-3" />
-          </a>
+        {/* Cards laterales: dinámicas según el toggle */}
+        <div className="flex flex-col gap-4 lg:col-span-1">
+          <SideMetricCard
+            label="MAC actual"
+            value={last.Pagos}
+            delta={Number(deltaPct)}
+            color={ALEGRA_GREEN}
+            highlight
+          />
+          <SideMetricCard
+            label="MAC Core actual"
+            value={last.CORE}
+            delta={Number(coreDelta)}
+            color="#1f2937"
+          />
+          <SideMetricCard
+            label="MAC Lite actual"
+            value={last.LITE}
+            delta={Number(liteDelta)}
+            color="#9ca3af"
+          />
         </div>
       </div>
 
-      {/* Cards CORE / LITE con variación */}
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div
-          className="rounded-2xl border bg-white p-5 shadow-sm"
-          style={{ borderLeft: `4px solid #1f2937` }}
-        >
-          <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
-            MAC Core actual
-          </p>
-          <p className="mt-2 text-3xl font-bold text-neutral-900">
-            {last.CORE.toLocaleString("es-CO")}
-          </p>
-          <p
-            className={cn(
-              "mt-1 flex items-center gap-1 text-sm font-bold",
-              coreUp ? "text-emerald-600" : "text-red-600",
-            )}
-          >
-            {coreUp ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
-            {coreUp ? "+" : ""}{coreDelta}%
-            <span className="ml-1 text-[11px] font-medium text-neutral-500">vs Oct '25</span>
-          </p>
-        </div>
-        <div
-          className="rounded-2xl border bg-white p-5 shadow-sm"
-          style={{ borderLeft: `4px solid #9ca3af` }}
-        >
-          <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
-            MAC Lite actual
-          </p>
-          <p className="mt-2 text-3xl font-bold text-neutral-900">
-            {last.LITE.toLocaleString("es-CO")}
-          </p>
-          <p
-            className={cn(
-              "mt-1 flex items-center gap-1 text-sm font-bold",
-              liteUp ? "text-emerald-600" : "text-red-600",
-            )}
-          >
-            {liteUp ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
-            {liteUp ? "+" : ""}{liteDelta}%
-            <span className="ml-1 text-[11px] font-medium text-neutral-500">vs Oct '25</span>
-          </p>
-        </div>
-      </div>
-
-      {/* Variación por país: Marzo vs Octubre */}
+      {/* Variación por país: Marzo vs Octubre — clic para filtrar la línea */}
       <div>
-        <h3 className="mb-3 text-base font-bold text-neutral-900">
-          MAC por país — Marzo '26 vs Octubre '25
-        </h3>
+        <div className="mb-3 flex items-center justify-between">
+          <h3 className="text-base font-bold text-neutral-900">
+            MAC por país — Marzo '26 vs Octubre '25
+          </h3>
+          {selectedCountry && (
+            <button
+              onClick={() => setSelectedCountry(null)}
+              className="text-xs font-medium text-neutral-500 hover:text-neutral-900"
+            >
+              Limpiar filtro ({selectedCountry}) ✕
+            </button>
+          )}
+        </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {countryVariation.map((c) => {
             const delta = ((c.march - c.october) / c.october) * 100;
             const isUp = delta >= 0;
+            const isActive = selectedCountry === c.country;
             return (
-              <div
+              <button
                 key={c.country}
-                className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+                onClick={() =>
+                  setSelectedCountry(isActive ? null : c.country)
+                }
+                className={cn(
+                  "rounded-2xl border bg-white p-5 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md",
+                  isActive
+                    ? "border-neutral-900 ring-2 ring-neutral-900/10"
+                    : "border-neutral-200",
+                )}
                 style={{ borderTop: `3px solid ${c.color}` }}
               >
                 <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
@@ -879,14 +896,14 @@ function Section2() {
                     vs Oct '25
                   </span>
                 </p>
-              </div>
+              </button>
             );
           })}
         </div>
       </div>
 
       {/* MAC por país: Line + Pie */}
-      <MacPorPais />
+      <MacPorPais selectedCountry={selectedCountry} />
 
       {/* Tasa de Adopción */}
       <TasaAdopcion />
@@ -921,7 +938,18 @@ const macPieData = [
 
 const macPieTotal = macPieData.reduce((s, d) => s + d.value, 0);
 
-function MacPorPais() {
+function MacPorPais({ selectedCountry }: { selectedCountry?: string | null }) {
+  const countryColors: Record<string, string> = {
+    Colombia: ALEGRA_GREEN,
+    "República Dominicana": "#0066FF",
+    México: "#FF6B00",
+    "Costa Rica": "#06B6D4",
+  };
+  const allCountries = ["Colombia", "República Dominicana", "México", "Costa Rica"];
+  const visible = selectedCountry && allCountries.includes(selectedCountry)
+    ? [selectedCountry]
+    : allCountries;
+
   return (
     <div className="grid gap-6 lg:grid-cols-5">
       {/* Line per country */}
@@ -930,7 +958,8 @@ function MacPorPais() {
           <div>
             <h3 className="text-base font-bold text-neutral-900">MAC — Tendencia por país</h3>
             <p className="mt-1 text-xs text-neutral-500">
-              Últimos 6 meses · Top 4 países por volumen
+              Últimos 6 meses ·{" "}
+              {selectedCountry ? `Filtrado: ${selectedCountry}` : "Top 4 países por volumen"}
             </p>
           </div>
           <a
@@ -950,10 +979,16 @@ function MacPorPais() {
               <YAxis stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
               <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} />
               <Legend iconType="circle" wrapperStyle={{ fontSize: 11, paddingTop: 8 }} />
-              <Line type="monotone" dataKey="Colombia" stroke={ALEGRA_GREEN} strokeWidth={3} dot={{ r: 3 }} />
-              <Line type="monotone" dataKey="República Dominicana" stroke="#0066FF" strokeWidth={2} dot={{ r: 3 }} />
-              <Line type="monotone" dataKey="México" stroke="#FF6B00" strokeWidth={2} dot={{ r: 3 }} />
-              <Line type="monotone" dataKey="Costa Rica" stroke="#06B6D4" strokeWidth={2} dot={{ r: 3 }} />
+              {visible.map((c) => (
+                <Line
+                  key={c}
+                  type="monotone"
+                  dataKey={c}
+                  stroke={countryColors[c]}
+                  strokeWidth={c === "Colombia" ? 3 : 2}
+                  dot={{ r: 3 }}
+                />
+              ))}
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -1067,6 +1102,54 @@ function TasaAdopcion() {
         </div>
       </div>
 
+      {/* Progreso global: Tasa Real vs Tasa de Adopción */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+        <div className="mb-4 flex items-center justify-between">
+          <div>
+            <h4 className="text-sm font-bold text-neutral-900">
+              Tasa de Adopción global — Marzo 2026
+            </h4>
+            <p className="mt-0.5 text-xs text-neutral-500">
+              % de usuarios pagos activos que entran a la app o realizan una acción
+            </p>
+          </div>
+          <a
+            href="https://app.amplitude.com/analytics/alegra/chart/rbp5ch2z"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+          >
+            Amplitude <ExternalLink className="h-3 w-3" />
+          </a>
+        </div>
+        <div className="space-y-4">
+          <div>
+            <div className="mb-1 flex items-center justify-between text-xs">
+              <span className="font-medium text-neutral-700">Tasa de Adopción (MAU APP / MAC WEB)</span>
+              <span className="font-bold text-[#0066FF]">{tasaAdopcion}%</span>
+            </div>
+            <div className="relative h-6 w-full overflow-hidden rounded-full bg-neutral-100">
+              <div
+                className="absolute left-0 top-0 h-full rounded-full"
+                style={{ width: `${tasaAdopcion}%`, backgroundColor: "#0066FF" }}
+              />
+            </div>
+          </div>
+          <div>
+            <div className="mb-1 flex items-center justify-between text-xs">
+              <span className="font-medium text-neutral-700">Tasa de Adopción Real (MAC APP / MAC WEB)</span>
+              <span className="font-bold" style={{ color: ALEGRA_GREEN }}>{tasaReal}%</span>
+            </div>
+            <div className="relative h-6 w-full overflow-hidden rounded-full bg-neutral-100">
+              <div
+                className="absolute left-0 top-0 h-full rounded-full"
+                style={{ width: `${tasaReal}%`, backgroundColor: ALEGRA_GREEN }}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Chart por país */}
       <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
         <div className="mb-4 flex items-center justify-between">
@@ -1121,6 +1204,68 @@ function TasaAdopcion() {
 
 // === % Participación de App ===
 
+// Series reales de Amplitude (Oct '25 → Mar/Abr '26)
+const facturasParticipSeries = [
+  { m: "Oct", v: 7.85 },
+  { m: "Nov", v: 7.37 },
+  { m: "Dic", v: 7.27 },
+  { m: "Ene", v: 7.33 },
+  { m: "Feb", v: 7.29 },
+  { m: "Mar", v: 7.57 },
+];
+const cotizacionesParticipSeries = [
+  { m: "Oct", v: 14.80 },
+  { m: "Nov", v: 14.89 },
+  { m: "Dic", v: 16.14 },
+  { m: "Ene", v: 13.81 },
+  { m: "Feb", v: 14.47 },
+  { m: "Mar", v: 15.38 },
+];
+const remisionesParticipSeries = [
+  { m: "Oct", v: 6.84 },
+  { m: "Nov", v: 7.48 },
+  { m: "Dic", v: 6.35 },
+  { m: "Ene", v: 6.49 },
+  { m: "Feb", v: 6.08 },
+  { m: "Mar", v: 6.42 },
+  { m: "Abr", v: 8.93 },
+];
+
+function MiniSparkline({
+  data,
+  color,
+}: {
+  data: { m: string; v: number }[];
+  color: string;
+}) {
+  return (
+    <div className="h-10 w-full">
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart data={data} margin={{ top: 4, right: 2, left: 2, bottom: 4 }}>
+          <Tooltip
+            contentStyle={{
+              borderRadius: 6,
+              border: "1px solid #e5e7eb",
+              fontSize: 10,
+              padding: "2px 6px",
+            }}
+            formatter={(v: number) => `${v.toFixed(2)}%`}
+            labelFormatter={(l) => l as string}
+          />
+          <Line
+            type="monotone"
+            dataKey="v"
+            stroke={color}
+            strokeWidth={2}
+            dot={false}
+            isAnimationActive={false}
+          />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+
 function ParticipacionApp() {
   const items = [
     {
@@ -1129,6 +1274,8 @@ function ParticipacionApp() {
       delta: -3.8,
       color: ALEGRA_GREEN,
       desc: "% de facturas totales (web + app) creadas desde la app móvil",
+      series: facturasParticipSeries,
+      chartUrl: "https://app.amplitude.com/analytics/alegra/chart/hltxo7ij",
     },
     {
       label: "Cotizaciones",
@@ -1136,6 +1283,8 @@ function ParticipacionApp() {
       delta: 3.94,
       color: "#0066FF",
       desc: "% de cotizaciones totales (web + app) creadas desde la app móvil",
+      series: cotizacionesParticipSeries,
+      chartUrl: "https://app.amplitude.com/analytics/alegra/chart/ndgvmi3v",
     },
     {
       label: "Remisiones",
@@ -1143,6 +1292,8 @@ function ParticipacionApp() {
       delta: 6.9,
       color: "#FF6B00",
       desc: "% de remisiones totales (web + app) creadas desde la app móvil",
+      series: remisionesParticipSeries,
+      chartUrl: "https://app.amplitude.com/analytics/alegra/chart/eosl7cg8",
     },
   ];
 
@@ -1183,6 +1334,23 @@ function ParticipacionApp() {
                 {isUp ? "+" : ""}{it.delta.toFixed(2)}%
                 <span className="ml-1 text-[11px] font-medium text-neutral-500">vs Oct '25</span>
               </p>
+
+              {/* Mini sparkline (solo línea) */}
+              <div className="mt-3 border-t border-neutral-100 pt-2">
+                <MiniSparkline data={it.series} color={it.color} />
+                <div className="mt-1 flex items-center justify-between text-[10px] text-neutral-400">
+                  <span>{it.series[0].m}</span>
+                  <a
+                    href={it.chartUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-neutral-700"
+                  >
+                    Amplitude ↗
+                  </a>
+                  <span>{it.series[it.series.length - 1].m}</span>
+                </div>
+              </div>
             </div>
           );
         })}
@@ -1353,23 +1521,29 @@ type EngagementEvent = {
   adoption: number; // % MAU
   frequency: number; // avg perform
 };
+// Datos reales Amplitude (Mar 2026)
+// CORE: chart 8bsh2x62 · LITE: chart jtbzs8ce — ambos 9 eventos
 const coreEvents: EngagementEvent[] = [
-  { num: 1, label: "Crear factura", adoption: 56.3, frequency: 25.4 },
-  { num: 2, label: "Buscar factura", adoption: 32.8, frequency: 20.3 },
-  { num: 3, label: "Crear cotización", adoption: 27.5, frequency: 16.8 },
-  { num: 4, label: "Crear contacto", adoption: 27.4, frequency: 6.9 },
-  { num: 5, label: "Crear ítem", adoption: 22.8, frequency: 8.4 },
-  { num: 6, label: "Crear remisión", adoption: 3.6, frequency: 27.3 },
-  { num: 7, label: "Crear gasto", adoption: 2.4, frequency: 8.7 },
-  { num: 8, label: "Crear factura de proveedor", adoption: 2.5, frequency: 9.7 },
+  { num: 1, label: "Crear factura", adoption: 44.3, frequency: 45.3 },
+  { num: 2, label: "Buscar factura", adoption: 38.2, frequency: 28.0 },
+  { num: 3, label: "Ver gráfico de ventas", adoption: 27.8, frequency: 9.3 },
+  { num: 4, label: "Crear cotización", adoption: 27.0, frequency: 27.1 },
+  { num: 5, label: "Crear contacto", adoption: 20.0, frequency: 10.6 },
+  { num: 6, label: "Crear ítem", adoption: 15.3, frequency: 7.3 },
+  { num: 7, label: "Crear remisión", adoption: 4.4, frequency: 42.4 },
+  { num: 8, label: "Crear factura de proveedor", adoption: 3.0, frequency: 10.4 },
+  { num: 9, label: "Crear gasto", adoption: 1.9, frequency: 9.4 },
 ];
 const liteEvents: EngagementEvent[] = [
-  { num: 1, label: "Crear factura", adoption: 48.2, frequency: 18.5 },
-  { num: 2, label: "Buscar factura", adoption: 24.1, frequency: 14.2 },
-  { num: 3, label: "Crear contacto", adoption: 19.8, frequency: 5.4 },
-  { num: 4, label: "Crear ítem", adoption: 15.6, frequency: 6.1 },
-  { num: 5, label: "Crear cotización", adoption: 12.4, frequency: 9.3 },
-  { num: 6, label: "Crear remisión", adoption: 2.8, frequency: 22.1 },
+  { num: 1, label: "Crear factura", adoption: 56.7, frequency: 13.2 },
+  { num: 2, label: "Crear contacto", adoption: 27.6, frequency: 4.8 },
+  { num: 3, label: "Crear cotización", adoption: 24.2, frequency: 7.6 },
+  { num: 4, label: "Buscar factura", adoption: 24.2, frequency: 10.8 },
+  { num: 5, label: "Crear ítem", adoption: 23.2, frequency: 8.0 },
+  { num: 6, label: "Ver gráfico de ventas", adoption: 21.8, frequency: 7.0 },
+  { num: 7, label: "Crear remisión", adoption: 2.5, frequency: 8.4 },
+  { num: 8, label: "Crear gasto", adoption: 2.0, frequency: 8.0 },
+  { num: 9, label: "Crear factura de proveedor", adoption: 2.0, frequency: 8.2 },
 ];
 
 function NegocioView() {
@@ -1497,10 +1671,10 @@ function NegocioView() {
           </p>
           <div className="mt-3 space-y-2 text-xs text-neutral-600">
             <p>
-              <span className="font-bold text-neutral-900">CORE</span> ({coreEvents.length} eventos): el cuadrante alto-derecho concentra "Crear factura" y "Buscar factura".
+              <span className="font-bold text-neutral-900">CORE</span> ({coreEvents.length} eventos): el cuadrante alto-derecho concentra "Crear factura" y "Buscar factura", con frecuencias {">"} 28.
             </p>
             <p>
-              <span className="font-bold text-neutral-900">LITE</span> ({liteEvents.length} eventos): patrón similar pero con menor adopción. Solo "Crear factura" supera la mediana.
+              <span className="font-bold text-neutral-900">LITE</span> ({liteEvents.length} eventos): adopción más alta en "Crear factura" (56.7%) pero frecuencias menores. Patrón de uso más esporádico.
             </p>
           </div>
         </div>
@@ -1526,7 +1700,7 @@ function EngagementScatter() {
 
   // Escalas
   const maxX = 60;
-  const maxY = 30;
+  const maxY = 50;
   const xToPx = (x: number) => padL + (x / maxX) * innerW;
   const yToPx = (y: number) => padT + innerH - (y / maxY) * innerH;
 
@@ -1599,7 +1773,7 @@ function EngagementScatter() {
             </g>
           ))}
           {/* Etiquetas eje Y */}
-          {[0, 5, 10, 15, 20, 25, 30].map((v) => (
+          {[0, 10, 20, 30, 40, 50].map((v) => (
             <g key={v}>
               <text x={padL - 6} y={yToPx(v) + 3} fontSize="10" fill="#6b7280" textAnchor="end">{v}</text>
               <line x1={padL - 4} y1={yToPx(v)} x2={padL} y2={yToPx(v)} stroke="#9ca3af" />
