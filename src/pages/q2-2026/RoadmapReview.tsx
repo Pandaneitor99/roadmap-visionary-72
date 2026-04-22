@@ -650,7 +650,7 @@ function Section2() {
 
       {/* MAC Trend Chart */}
       <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm md:p-8">
-        <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+        <div className="mb-4 flex flex-wrap items-end justify-between gap-4">
           <div>
             <h3 className="text-lg font-bold text-neutral-900">MAC — Tendencia</h3>
             <p className="mt-1 text-xs text-neutral-500">
@@ -682,6 +682,32 @@ function Section2() {
               </p>
             </div>
           </div>
+        </div>
+
+        {/* Toggle entre las dos vistas de MAC */}
+        <div className="mb-5 inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1">
+          <button
+            onClick={() => setTrendVariant("full")}
+            className={cn(
+              "rounded-md px-3 py-1.5 text-xs font-semibold transition-all",
+              trendVariant === "full"
+                ? "bg-white text-neutral-900 shadow-sm"
+                : "text-neutral-500 hover:text-neutral-700",
+            )}
+          >
+            MAC — Tendencia
+          </button>
+          <button
+            onClick={() => setTrendVariant("sinExtras")}
+            className={cn(
+              "rounded-md px-3 py-1.5 text-xs font-semibold transition-all",
+              trendVariant === "sinExtras"
+                ? "bg-white text-neutral-900 shadow-sm"
+                : "text-neutral-500 hover:text-neutral-700",
+            )}
+          >
+            Sin búsqueda ni gráficos
+          </button>
         </div>
 
         <div className="h-[360px] w-full">
@@ -744,10 +770,17 @@ function Section2() {
 
         <div className="mt-4 flex items-center justify-between border-t border-neutral-100 pt-4">
           <p className="text-[11px] text-neutral-400">
-            Fuente: Amplitude · Eventos críticos de negocio en la app móvil
+            Fuente: Amplitude ·{" "}
+            {trendVariant === "full"
+              ? "Eventos críticos de negocio (incluye búsquedas y gráficos)"
+              : "Eventos críticos sin incluir búsquedas ni gráficos"}
           </p>
           <a
-            href="https://app.amplitude.com/analytics/alegra/chart/wy27awa1"
+            href={
+              trendVariant === "full"
+                ? "https://app.amplitude.com/analytics/alegra/chart/wy27awa1"
+                : "https://app.amplitude.com/analytics/alegra/chart/yhghuf5q"
+            }
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1 text-xs font-medium text-neutral-500 hover:text-neutral-900"
@@ -758,11 +791,58 @@ function Section2() {
         </div>
       </div>
 
+      {/* Variación por país: Marzo vs Octubre */}
+      <div>
+        <h3 className="mb-3 text-base font-bold text-neutral-900">
+          MAC por país — Marzo '26 vs Octubre '25
+        </h3>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {countryVariation.map((c) => {
+            const delta = ((c.march - c.october) / c.october) * 100;
+            const isUp = delta >= 0;
+            return (
+              <div
+                key={c.country}
+                className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+                style={{ borderTop: `3px solid ${c.color}` }}
+              >
+                <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
+                  {c.country}
+                </p>
+                <p className="mt-2 text-3xl font-bold text-neutral-900">
+                  {c.march.toLocaleString("es-CO")}
+                </p>
+                <p
+                  className={cn(
+                    "mt-1 flex items-center gap-1 text-sm font-bold",
+                    isUp ? "text-emerald-600" : "text-red-600",
+                  )}
+                >
+                  {isUp ? (
+                    <TrendingUp className="h-4 w-4" />
+                  ) : (
+                    <TrendingDown className="h-4 w-4" />
+                  )}
+                  {isUp ? "+" : ""}
+                  {delta.toFixed(1)}%
+                  <span className="ml-1 text-[11px] font-medium text-neutral-500">
+                    vs Oct '25
+                  </span>
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
       {/* MAC por país: Line + Pie */}
       <MacPorPais />
 
       {/* Tasa de Adopción */}
       <TasaAdopcion />
+
+      {/* % Participación de App */}
+      <ParticipacionApp />
     </div>
   );
 }
