@@ -1503,10 +1503,10 @@ function NegocioView() {
           </p>
           <div className="mt-3 space-y-2 text-xs text-neutral-600">
             <p>
-              <span className="font-bold text-neutral-900">CORE</span> ({coreEvents.length} eventos): el cuadrante alto-derecho concentra "Crear factura" y "Buscar factura".
+              <span className="font-bold text-neutral-900">CORE</span> ({coreEvents.length} eventos): el cuadrante alto-derecho concentra "Crear factura" y "Buscar factura", con frecuencias {">"} 28.
             </p>
             <p>
-              <span className="font-bold text-neutral-900">LITE</span> ({liteEvents.length} eventos): patrón similar pero con menor adopción. Solo "Crear factura" supera la mediana.
+              <span className="font-bold text-neutral-900">LITE</span> ({liteEvents.length} eventos): adopción más alta en "Crear factura" (56.7%) pero frecuencias menores. Patrón de uso más esporádico.
             </p>
           </div>
         </div>
