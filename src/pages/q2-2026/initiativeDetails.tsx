@@ -412,11 +412,24 @@ export function EstabilizacionDetail() {
               <ExternalLink className="h-3.5 w-3.5" />
             </a>
           </div>
-          <iframe
-            src="https://app.amplitude.com/analytics/share/embed/cnbbpxr5"
-            className="h-48 w-full rounded border-0"
-            title="Errores API Weekly"
-          />
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-[1fr_auto]">
+            <iframe
+              src="https://app.amplitude.com/analytics/share/embed/cnbbpxr5"
+              className="h-48 w-full rounded border-0"
+              title="Errores API Weekly"
+            />
+            <div className="flex flex-col justify-center rounded-lg border border-neutral-100 bg-neutral-50/60 p-3 md:min-w-[140px]">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">
+                Última sem
+              </p>
+              <p className="mt-1 text-2xl font-bold text-neutral-900">~8K</p>
+              <p className="mt-1 flex items-center gap-1 text-xs font-bold text-emerald-600">
+                <TrendingDown className="h-3.5 w-3.5" />
+                -12.0%
+                <span className="ml-0.5 text-[10px] font-medium text-neutral-500">vs baseline</span>
+              </p>
+            </div>
+          </div>
         </div>
         <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm">
           <div className="mb-2 flex items-start justify-between">
@@ -430,11 +443,20 @@ export function EstabilizacionDetail() {
               <ExternalLink className="h-3.5 w-3.5" />
             </a>
           </div>
-          <iframe
-            src="https://app.amplitude.com/analytics/share/embed/70xrqgyp"
-            className="h-48 w-full rounded border-0"
-            title="Errores API por error"
-          />
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-[1fr_auto]">
+            <iframe
+              src="https://app.amplitude.com/analytics/share/embed/70xrqgyp"
+              className="h-48 w-full rounded border-0"
+              title="Errores API por error"
+            />
+            <div className="flex flex-col justify-center rounded-lg border border-neutral-100 bg-neutral-50/60 p-3 md:min-w-[140px]">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">
+                Top error
+              </p>
+              <p className="mt-1 text-lg font-bold text-neutral-900">DIAN-CO</p>
+              <p className="mt-1 text-[11px] text-neutral-500">~45% del total</p>
+            </div>
+          </div>
         </div>
       </div>
       <Insights
