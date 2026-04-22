@@ -735,6 +735,375 @@ function Section2() {
           </a>
         </div>
       </div>
+
+      {/* MAC por país: Line + Pie */}
+      <MacPorPais />
+
+      {/* Tasa de Adopción */}
+      <TasaAdopcion />
+    </div>
+  );
+}
+
+// === MAC por país (Line + Pie) ===
+
+const macLinePerCountry = [
+  { month: "Oct '25", Colombia: 4892, "República Dominicana": 1135, México: 677, "Costa Rica": 232 },
+  { month: "Nov '25", Colombia: 4882, "República Dominicana": 1084, México: 667, "Costa Rica": 225 },
+  { month: "Dic '25", Colombia: 5254, "República Dominicana": 1124, México: 729, "Costa Rica": 209 },
+  { month: "Ene '26", Colombia: 4842, "República Dominicana": 1083, México: 659, "Costa Rica": 227 },
+  { month: "Feb '26", Colombia: 4925, "República Dominicana": 1111, México: 657, "Costa Rica": 222 },
+  { month: "Mar '26", Colombia: 5128, "República Dominicana": 1197, México: 728, "Costa Rica": 235 },
+];
+
+const macPieData = [
+  { name: "Colombia", value: 5132, color: ALEGRA_GREEN },
+  { name: "República Dominicana", value: 1199, color: "#0066FF" },
+  { name: "México", value: 728, color: "#FF6B00" },
+  { name: "Panamá", value: 278, color: "#7C3AED" },
+  { name: "Costa Rica", value: 235, color: "#06B6D4" },
+  { name: "Argentina", value: 189, color: "#F59E0B" },
+  { name: "Perú", value: 90, color: "#EC4899" },
+  { name: "Otros", value: 152, color: "#9CA3AF" },
+];
+
+const macPieTotal = macPieData.reduce((s, d) => s + d.value, 0);
+
+function MacPorPais() {
+  return (
+    <div className="grid gap-6 lg:grid-cols-5">
+      {/* Line per country */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm lg:col-span-3">
+        <div className="mb-2 flex items-center justify-between">
+          <div>
+            <h3 className="text-base font-bold text-neutral-900">MAC — Tendencia por país</h3>
+            <p className="mt-1 text-xs text-neutral-500">
+              Últimos 6 meses · Top 4 países por volumen
+            </p>
+          </div>
+          <a
+            href="https://app.amplitude.com/analytics/alegra/chart/gxbjwfwt"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+          >
+            Amplitude <ExternalLink className="h-3 w-3" />
+          </a>
+        </div>
+        <div className="h-[280px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={macLinePerCountry} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+              <XAxis dataKey="month" stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={{ stroke: "#e5e7eb" }} tickLine={false} />
+              <YAxis stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
+              <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} />
+              <Legend iconType="circle" wrapperStyle={{ fontSize: 11, paddingTop: 8 }} />
+              <Line type="monotone" dataKey="Colombia" stroke={ALEGRA_GREEN} strokeWidth={3} dot={{ r: 3 }} />
+              <Line type="monotone" dataKey="República Dominicana" stroke="#0066FF" strokeWidth={2} dot={{ r: 3 }} />
+              <Line type="monotone" dataKey="México" stroke="#FF6B00" strokeWidth={2} dot={{ r: 3 }} />
+              <Line type="monotone" dataKey="Costa Rica" stroke="#06B6D4" strokeWidth={2} dot={{ r: 3 }} />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Pie per country */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm lg:col-span-2">
+        <div className="mb-2 flex items-center justify-between">
+          <div>
+            <h3 className="text-base font-bold text-neutral-900">MAC — Distribución por país</h3>
+            <p className="mt-1 text-xs text-neutral-500">Marzo 2026</p>
+          </div>
+          <a
+            href="https://app.amplitude.com/analytics/alegra/chart/0ixf9ww7"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+          >
+            Amplitude <ExternalLink className="h-3 w-3" />
+          </a>
+        </div>
+        <div className="h-[220px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie data={macPieData} dataKey="value" nameKey="name" innerRadius={45} outerRadius={85} paddingAngle={2}>
+                {macPieData.map((entry) => (
+                  <Cell key={entry.name} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip
+                contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }}
+                formatter={(v: number) => `${v.toLocaleString("es-CO")} (${((v / macPieTotal) * 100).toFixed(1)}%)`}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="mt-3 grid grid-cols-2 gap-x-3 gap-y-1 text-[11px]">
+          {macPieData.slice(0, 6).map((d) => (
+            <div key={d.name} className="flex items-center gap-1.5">
+              <span className="h-2 w-2 rounded-full" style={{ backgroundColor: d.color }} />
+              <span className="text-neutral-600">{d.name}</span>
+              <span className="ml-auto font-semibold text-neutral-900">
+                {((d.value / macPieTotal) * 100).toFixed(0)}%
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// === Tasa de Adopción ===
+
+const adoptionByCountry = [
+  { country: "Colombia", wac: 15.4, wau: 32.7 },
+  { country: "Rep. Dominicana", wac: 31.1, wau: 56.4 },
+  { country: "México", wac: 17.3, wau: 33.8 },
+  { country: "Panamá", wac: 27.8, wau: 49.5 },
+  { country: "Costa Rica", wac: 20.0, wau: 38.0 },
+];
+
+function TasaAdopcion() {
+  // Apr 2026: WAC APP=4933, WAU APP=8907, WAC WEB=29828
+  const wacApp = 4933;
+  const wauApp = 8907;
+  const wacWeb = 29828;
+  const macUsersApp = 7977;
+  const macWeb = wacWeb;
+  const tasaAdopcion = ((wauApp / wacWeb) * 100).toFixed(1); // MAU APP / MAC WEB
+  const tasaReal = ((wacApp / wacWeb) * 100).toFixed(1); // MAC APP / MAC WEB
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h3 className="text-lg font-bold text-neutral-900">Tasa de Adopción</h3>
+        <p className="mt-1 text-sm text-neutral-600">
+          % de usuarios pagos web que entran a la app y/o realizan acciones de valor.
+        </p>
+      </div>
+
+      {/* KPIs */}
+      <div className="grid gap-4 md:grid-cols-2">
+        <div
+          className="rounded-2xl border bg-white p-6 shadow-sm"
+          style={{ borderLeft: `4px solid #0066FF` }}
+        >
+          <div className="flex items-center gap-2">
+            <Target className="h-4 w-4" style={{ color: "#0066FF" }} />
+            <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: "#0066FF" }}>
+              Tasa de Adopción
+            </span>
+          </div>
+          <p className="mt-2 text-xs text-neutral-500">MAU APP / MAC WEB</p>
+          <p className="mt-3 text-4xl font-bold text-neutral-900">{tasaAdopcion}%</p>
+          <p className="mt-2 text-xs text-neutral-500">
+            {wauApp.toLocaleString("es-CO")} usuarios entran a la app cada mes sobre {wacWeb.toLocaleString("es-CO")} pagos activos en web.
+          </p>
+        </div>
+
+        <div
+          className="rounded-2xl border bg-white p-6 shadow-sm"
+          style={{ borderLeft: `4px solid ${ALEGRA_GREEN}` }}
+        >
+          <div className="flex items-center gap-2">
+            <Star className="h-4 w-4" style={{ color: ALEGRA_GREEN }} />
+            <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: ALEGRA_GREEN }}>
+              Tasa de Adopción Real
+            </span>
+          </div>
+          <p className="mt-2 text-xs text-neutral-500">MAC APP / MAC WEB</p>
+          <p className="mt-3 text-4xl font-bold text-neutral-900">{tasaReal}%</p>
+          <p className="mt-2 text-xs text-neutral-500">
+            {wacApp.toLocaleString("es-CO")} usuarios realizan al menos una acción de valor en la app sobre {wacWeb.toLocaleString("es-CO")} pagos activos en web.
+          </p>
+        </div>
+      </div>
+
+      {/* Chart por país */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+        <div className="mb-4 flex items-center justify-between">
+          <div>
+            <h4 className="text-sm font-bold text-neutral-900">
+              % Usuarios pagos activos por país
+            </h4>
+            <p className="mt-0.5 text-xs text-neutral-500">
+              Marzo 2026 · Tasa de Adopción (entran a la app) y Tasa Real (acciones de valor)
+            </p>
+          </div>
+          <a
+            href="https://app.amplitude.com/analytics/alegra/chart/hqcerbqk"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+          >
+            Amplitude <ExternalLink className="h-3 w-3" />
+          </a>
+        </div>
+        <div className="space-y-3">
+          {adoptionByCountry.map((c) => (
+            <div key={c.country}>
+              <div className="mb-1 flex items-center justify-between text-xs">
+                <span className="font-medium text-neutral-700">{c.country}</span>
+                <div className="flex gap-3">
+                  <span className="text-[#0066FF]">
+                    Adopción <strong>{c.wau.toFixed(1)}%</strong>
+                  </span>
+                  <span style={{ color: ALEGRA_GREEN }}>
+                    Real <strong>{c.wac.toFixed(1)}%</strong>
+                  </span>
+                </div>
+              </div>
+              <div className="relative h-5 w-full overflow-hidden rounded-full bg-neutral-100">
+                <div
+                  className="absolute left-0 top-0 h-full rounded-full"
+                  style={{ width: `${Math.min(c.wau, 100)}%`, backgroundColor: "#0066FF40" }}
+                />
+                <div
+                  className="absolute left-0 top-0 h-full rounded-full"
+                  style={{ width: `${Math.min(c.wac, 100)}%`, backgroundColor: ALEGRA_GREEN }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// === Sección 3: Base de usuarios y MRR ===
+
+function Section3() {
+  return (
+    <div className="space-y-8">
+      {/* Header bloque */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+        <div className="flex items-start gap-3">
+          <div
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
+            style={{ backgroundColor: `${ALEGRA_GREEN}15` }}
+          >
+            <Users className="h-5 w-5" style={{ color: ALEGRA_GREEN }} />
+          </div>
+          <div>
+            <p
+              className="text-xs font-semibold uppercase tracking-[0.2em]"
+              style={{ color: ALEGRA_GREEN }}
+            >
+              Segmentación de usuarios
+            </p>
+            <h2 className="mt-1 text-2xl font-bold text-neutral-900">
+              BASE vs SOS
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-neutral-600">
+              Hoy tenemos dos clusters claros de usuarios pagos activos en la app móvil. Conocer su comportamiento nos permite priorizar qué experiencia profundizar.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Cards SOS / BASE con % */}
+      <div className="grid gap-5 md:grid-cols-2">
+        {/* SOS */}
+        <div
+          className="relative overflow-hidden rounded-2xl border bg-white p-6 shadow-sm"
+          style={{ borderTop: `4px solid #FF6B00` }}
+        >
+          <div className="flex items-start justify-between">
+            <div>
+              <span
+                className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white"
+                style={{ backgroundColor: "#FF6B00" }}
+              >
+                <AlertTriangle className="h-3 w-3" /> SOS
+              </span>
+              <h3 className="mt-3 text-xl font-bold text-neutral-900">
+                Utilizan la app para una emergencia
+              </h3>
+            </div>
+            <div className="text-right">
+              <p className="text-3xl font-bold" style={{ color: "#FF6B00" }}>
+                62%
+              </p>
+              <p className="text-[10px] uppercase tracking-wider text-neutral-500">
+                de usuarios
+              </p>
+            </div>
+          </div>
+          <p className="mt-4 text-sm leading-relaxed text-neutral-700">
+            Usuario que utiliza la <strong>web el +90%</strong> del tiempo y el restante utilizan la <strong>app para casos de emergencia</strong> con clientes, <strong>cuando no tienen el computador</strong> a la mano, o cuando quiere <strong>ver su estado del negocio</strong> de manera rápida.
+          </p>
+        </div>
+
+        {/* BASE */}
+        <div
+          className="relative overflow-hidden rounded-2xl border bg-white p-6 shadow-sm"
+          style={{ borderTop: `4px solid ${ALEGRA_GREEN}` }}
+        >
+          <div className="flex items-start justify-between">
+            <div>
+              <span
+                className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white"
+                style={{ backgroundColor: ALEGRA_GREEN }}
+              >
+                <Star className="h-3 w-3" /> BASE
+              </span>
+              <h3 className="mt-3 text-xl font-bold text-neutral-900">
+                Utilizan la app como su principal herramienta
+              </h3>
+            </div>
+            <div className="text-right">
+              <p className="text-3xl font-bold" style={{ color: ALEGRA_GREEN }}>
+                38%
+              </p>
+              <p className="text-[10px] uppercase tracking-wider text-neutral-500">
+                de usuarios
+              </p>
+            </div>
+          </div>
+          <p className="mt-4 text-sm leading-relaxed text-neutral-700">
+            Es un usuario que utiliza la <strong>app el 90%</strong> del tiempo para <strong>crear facturas</strong> y compartirlas, y llevar una <strong>leve gestión de su negocio</strong>. El % restante utiliza web para funcionalidades que sólo están en web.
+          </p>
+        </div>
+      </div>
+
+      {/* Clusters image */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+        <div className="mb-4 flex items-center justify-between">
+          <div>
+            <h3 className="text-base font-bold text-neutral-900">
+              Clusters BASE y SOS
+            </h3>
+            <p className="mt-1 text-xs text-neutral-500">
+              Análisis de comportamiento · 7,703 usuarios totales
+            </p>
+          </div>
+          <a
+            href="https://app.amplitude.com/analytics/alegra/chart/w4dmwazb"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+          >
+            Amplitude <ExternalLink className="h-3 w-3" />
+          </a>
+        </div>
+        <img
+          src={clustersImage}
+          alt="Clusters BASE y SOS - distribución y caracterización de usuarios"
+          className="w-full rounded-lg border border-neutral-200"
+        />
+        <div className="mt-4 grid gap-3 text-xs text-neutral-600 md:grid-cols-2">
+          <div className="rounded-lg bg-neutral-50 p-3">
+            <p className="font-bold text-neutral-900">Cluster 1 (67%)</p>
+            <p className="mt-1">Eventos de web · Reportes en App · Busca factura de venta app</p>
+          </div>
+          <div className="rounded-lg bg-neutral-50 p-3">
+            <p className="font-bold text-neutral-900">Cluster 2 (33%)</p>
+            <p className="mt-1">Factura de venta App · Item en App · Contactos en App · Cotizaciones App</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
