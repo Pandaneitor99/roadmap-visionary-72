@@ -1353,23 +1353,29 @@ type EngagementEvent = {
   adoption: number; // % MAU
   frequency: number; // avg perform
 };
+// Datos reales Amplitude (Mar 2026)
+// CORE: chart 8bsh2x62 · LITE: chart jtbzs8ce — ambos 9 eventos
 const coreEvents: EngagementEvent[] = [
-  { num: 1, label: "Crear factura", adoption: 56.3, frequency: 25.4 },
-  { num: 2, label: "Buscar factura", adoption: 32.8, frequency: 20.3 },
-  { num: 3, label: "Crear cotización", adoption: 27.5, frequency: 16.8 },
-  { num: 4, label: "Crear contacto", adoption: 27.4, frequency: 6.9 },
-  { num: 5, label: "Crear ítem", adoption: 22.8, frequency: 8.4 },
-  { num: 6, label: "Crear remisión", adoption: 3.6, frequency: 27.3 },
-  { num: 7, label: "Crear gasto", adoption: 2.4, frequency: 8.7 },
-  { num: 8, label: "Crear factura de proveedor", adoption: 2.5, frequency: 9.7 },
+  { num: 1, label: "Crear factura", adoption: 44.3, frequency: 45.3 },
+  { num: 2, label: "Buscar factura", adoption: 38.2, frequency: 28.0 },
+  { num: 3, label: "Ver gráfico de ventas", adoption: 27.8, frequency: 9.3 },
+  { num: 4, label: "Crear cotización", adoption: 27.0, frequency: 27.1 },
+  { num: 5, label: "Crear contacto", adoption: 20.0, frequency: 10.6 },
+  { num: 6, label: "Crear ítem", adoption: 15.3, frequency: 7.3 },
+  { num: 7, label: "Crear remisión", adoption: 4.4, frequency: 42.4 },
+  { num: 8, label: "Crear factura de proveedor", adoption: 3.0, frequency: 10.4 },
+  { num: 9, label: "Crear gasto", adoption: 1.9, frequency: 9.4 },
 ];
 const liteEvents: EngagementEvent[] = [
-  { num: 1, label: "Crear factura", adoption: 48.2, frequency: 18.5 },
-  { num: 2, label: "Buscar factura", adoption: 24.1, frequency: 14.2 },
-  { num: 3, label: "Crear contacto", adoption: 19.8, frequency: 5.4 },
-  { num: 4, label: "Crear ítem", adoption: 15.6, frequency: 6.1 },
-  { num: 5, label: "Crear cotización", adoption: 12.4, frequency: 9.3 },
-  { num: 6, label: "Crear remisión", adoption: 2.8, frequency: 22.1 },
+  { num: 1, label: "Crear factura", adoption: 56.7, frequency: 13.2 },
+  { num: 2, label: "Crear contacto", adoption: 27.6, frequency: 4.8 },
+  { num: 3, label: "Crear cotización", adoption: 24.2, frequency: 7.6 },
+  { num: 4, label: "Buscar factura", adoption: 24.2, frequency: 10.8 },
+  { num: 5, label: "Crear ítem", adoption: 23.2, frequency: 8.0 },
+  { num: 6, label: "Ver gráfico de ventas", adoption: 21.8, frequency: 7.0 },
+  { num: 7, label: "Crear remisión", adoption: 2.5, frequency: 8.4 },
+  { num: 8, label: "Crear gasto", adoption: 2.0, frequency: 8.0 },
+  { num: 9, label: "Crear factura de proveedor", adoption: 2.0, frequency: 8.2 },
 ];
 
 function NegocioView() {
