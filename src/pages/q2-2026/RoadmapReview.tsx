@@ -1069,7 +1069,41 @@ function TasaAdopcion() {
   );
 }
 
-// === Sección 3: Base de usuarios y MRR ===
+// === % Participación de App ===
+
+function ParticipacionApp() {
+  return (
+    <div>
+      <h3 className="mb-3 text-base font-bold text-neutral-900">
+        % de participación de app
+      </h3>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div
+          className="rounded-2xl border bg-white p-6 shadow-sm"
+          style={{ borderLeft: `4px solid ${ALEGRA_GREEN}` }}
+        >
+          <div className="flex items-center gap-2">
+            <Star className="h-4 w-4" style={{ color: ALEGRA_GREEN }} />
+            <span
+              className="text-[10px] font-bold uppercase tracking-wider"
+              style={{ color: ALEGRA_GREEN }}
+            >
+              Facturas de venta
+            </span>
+          </div>
+          <p className="mt-2 text-xs text-neutral-500">
+            % de facturas de venta totales (web + app) creadas desde la app móvil
+          </p>
+          <p className="mt-3 text-4xl font-bold text-neutral-900">7.57%</p>
+          <p className="mt-2 text-xs text-neutral-500">
+            Aún hay un techo amplio de adopción frente al volumen total de facturación.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 
 function Section3() {
   return (
@@ -1165,40 +1199,125 @@ function Section3() {
         </div>
       </div>
 
-      {/* Clusters image */}
-      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-        <div className="mb-4 flex items-center justify-between">
-          <div>
-            <h3 className="text-base font-bold text-neutral-900">
-              Clusters BASE y SOS
-            </h3>
-            <p className="mt-1 text-xs text-neutral-500">
-              Análisis de comportamiento · 7,703 usuarios totales
+      {/* Clusters - bubble visualization */}
+      <ClustersBubbles />
+    </div>
+  );
+}
+
+// === Clusters BASE / SOS - bubble visualization ===
+
+function ClustersBubbles() {
+  // SOS = 62%, BASE = 38% (proporcional al tamaño del círculo via radio)
+  const sosPct = 62;
+  const basePct = 38;
+  // El área del círculo es proporcional al porcentaje => radio ∝ √pct
+  const sosRadius = Math.sqrt(sosPct) * 22; // px
+  const baseRadius = Math.sqrt(basePct) * 22;
+
+  return (
+    <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm md:p-8">
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h3 className="text-base font-bold text-neutral-900">
+            Clusters BASE y SOS
+          </h3>
+          <p className="mt-1 text-xs text-neutral-500">
+            Tamaño relativo de cada cluster · Análisis de comportamiento de usuarios pagos activos
+          </p>
+        </div>
+        <a
+          href="https://app.amplitude.com/analytics/alegra/chart/w4dmwazb"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+        >
+          Amplitude <ExternalLink className="h-3 w-3" />
+        </a>
+      </div>
+
+      {/* Bolitas */}
+      <div className="flex flex-col items-center justify-center gap-10 py-6 md:flex-row md:gap-16">
+        {/* SOS */}
+        <div className="flex flex-col items-center">
+          <div
+            className="flex items-center justify-center rounded-full text-white shadow-lg transition-transform hover:scale-105"
+            style={{
+              width: `${sosRadius * 2}px`,
+              height: `${sosRadius * 2}px`,
+              background: `radial-gradient(circle at 30% 30%, #FF8A3D, #FF6B00)`,
+              boxShadow: "0 12px 30px -8px rgba(255,107,0,0.45)",
+            }}
+          >
+            <div className="text-center">
+              <p className="text-4xl font-bold leading-none md:text-5xl">{sosPct}%</p>
+              <p className="mt-1 text-[11px] font-bold uppercase tracking-widest opacity-90">
+                SOS
+              </p>
+            </div>
+          </div>
+          <div className="mt-4 max-w-[220px] text-center">
+            <p className="text-xs font-semibold text-neutral-700">
+              Web-first · usan app para emergencia
+            </p>
+            <p className="mt-1 text-[11px] text-neutral-500">
+              Eventos de web · Reportes · Búsqueda de factura
             </p>
           </div>
-          <a
-            href="https://app.amplitude.com/analytics/alegra/chart/w4dmwazb"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
-          >
-            Amplitude <ExternalLink className="h-3 w-3" />
-          </a>
         </div>
-        <img
-          src={clustersImage}
-          alt="Clusters BASE y SOS - distribución y caracterización de usuarios"
-          className="w-full rounded-lg border border-neutral-200"
-        />
-        <div className="mt-4 grid gap-3 text-xs text-neutral-600 md:grid-cols-2">
-          <div className="rounded-lg bg-neutral-50 p-3">
-            <p className="font-bold text-neutral-900">Cluster 1 (67%)</p>
-            <p className="mt-1">Eventos de web · Reportes en App · Busca factura de venta app</p>
+
+        {/* BASE */}
+        <div className="flex flex-col items-center">
+          <div
+            className="flex items-center justify-center rounded-full text-white shadow-lg transition-transform hover:scale-105"
+            style={{
+              width: `${baseRadius * 2}px`,
+              height: `${baseRadius * 2}px`,
+              background: `radial-gradient(circle at 30% 30%, #2DD4A6, ${ALEGRA_GREEN})`,
+              boxShadow: `0 12px 30px -8px rgba(0,179,134,0.45)`,
+            }}
+          >
+            <div className="text-center">
+              <p className="text-3xl font-bold leading-none md:text-4xl">{basePct}%</p>
+              <p className="mt-1 text-[11px] font-bold uppercase tracking-widest opacity-90">
+                BASE
+              </p>
+            </div>
           </div>
-          <div className="rounded-lg bg-neutral-50 p-3">
-            <p className="font-bold text-neutral-900">Cluster 2 (33%)</p>
-            <p className="mt-1">Factura de venta App · Item en App · Contactos en App · Cotizaciones App</p>
+          <div className="mt-4 max-w-[220px] text-center">
+            <p className="text-xs font-semibold text-neutral-700">
+              Mobile-first · app es su herramienta principal
+            </p>
+            <p className="mt-1 text-[11px] text-neutral-500">
+              Facturas · Items · Contactos · Cotizaciones en App
+            </p>
           </div>
+        </div>
+      </div>
+
+      {/* Detalle inferior */}
+      <div className="mt-2 grid gap-3 border-t border-neutral-100 pt-5 text-xs text-neutral-600 md:grid-cols-2">
+        <div
+          className="rounded-lg p-3"
+          style={{ backgroundColor: "#FF6B0010" }}
+        >
+          <p className="font-bold" style={{ color: "#FF6B00" }}>
+            Cluster SOS — 62%
+          </p>
+          <p className="mt-1 text-neutral-600">
+            Eventos de web · Reportes en App · Busca factura de venta en app
+          </p>
+        </div>
+        <div
+          className="rounded-lg p-3"
+          style={{ backgroundColor: `${ALEGRA_GREEN}10` }}
+        >
+          <p className="font-bold" style={{ color: ALEGRA_GREEN }}>
+            Cluster BASE — 38%
+          </p>
+          <p className="mt-1 text-neutral-600">
+            Factura de venta App · Item en App · Contactos en App · Cotizaciones App
+          </p>
         </div>
       </div>
     </div>
