@@ -938,7 +938,18 @@ const macPieData = [
 
 const macPieTotal = macPieData.reduce((s, d) => s + d.value, 0);
 
-function MacPorPais() {
+function MacPorPais({ selectedCountry }: { selectedCountry?: string | null }) {
+  const countryColors: Record<string, string> = {
+    Colombia: ALEGRA_GREEN,
+    "República Dominicana": "#0066FF",
+    México: "#FF6B00",
+    "Costa Rica": "#06B6D4",
+  };
+  const allCountries = ["Colombia", "República Dominicana", "México", "Costa Rica"];
+  const visible = selectedCountry && allCountries.includes(selectedCountry)
+    ? [selectedCountry]
+    : allCountries;
+
   return (
     <div className="grid gap-6 lg:grid-cols-5">
       {/* Line per country */}
@@ -947,7 +958,8 @@ function MacPorPais() {
           <div>
             <h3 className="text-base font-bold text-neutral-900">MAC — Tendencia por país</h3>
             <p className="mt-1 text-xs text-neutral-500">
-              Últimos 6 meses · Top 4 países por volumen
+              Últimos 6 meses ·{" "}
+              {selectedCountry ? `Filtrado: ${selectedCountry}` : "Top 4 países por volumen"}
             </p>
           </div>
           <a
@@ -967,10 +979,16 @@ function MacPorPais() {
               <YAxis stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
               <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} />
               <Legend iconType="circle" wrapperStyle={{ fontSize: 11, paddingTop: 8 }} />
-              <Line type="monotone" dataKey="Colombia" stroke={ALEGRA_GREEN} strokeWidth={3} dot={{ r: 3 }} />
-              <Line type="monotone" dataKey="República Dominicana" stroke="#0066FF" strokeWidth={2} dot={{ r: 3 }} />
-              <Line type="monotone" dataKey="México" stroke="#FF6B00" strokeWidth={2} dot={{ r: 3 }} />
-              <Line type="monotone" dataKey="Costa Rica" stroke="#06B6D4" strokeWidth={2} dot={{ r: 3 }} />
+              {visible.map((c) => (
+                <Line
+                  key={c}
+                  type="monotone"
+                  dataKey={c}
+                  stroke={countryColors[c]}
+                  strokeWidth={c === "Colombia" ? 3 : 2}
+                  dot={{ r: 3 }}
+                />
+              ))}
             </LineChart>
           </ResponsiveContainer>
         </div>
