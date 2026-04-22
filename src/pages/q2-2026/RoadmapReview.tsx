@@ -577,6 +577,49 @@ const countryVariation = [
   { country: "Costa Rica", march: 235, october: 232, color: "#06B6D4" },
 ];
 
+function SideMetricCard({
+  label,
+  value,
+  delta,
+  color,
+  highlight,
+}: {
+  label: string;
+  value: number;
+  delta: number;
+  color: string;
+  highlight?: boolean;
+}) {
+  const up = delta >= 0;
+  return (
+    <div
+      className={cn(
+        "rounded-2xl border bg-white p-4 shadow-sm transition-all",
+        highlight && "ring-2 ring-emerald-100",
+      )}
+      style={{ borderLeft: `4px solid ${color}` }}
+    >
+      <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">
+        {label}
+      </p>
+      <p className="mt-1.5 text-2xl font-bold text-neutral-900">
+        {value.toLocaleString("es-CO")}
+      </p>
+      <p
+        className={cn(
+          "mt-1 flex items-center gap-1 text-xs font-bold",
+          up ? "text-emerald-600" : "text-red-600",
+        )}
+      >
+        {up ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
+        {up ? "+" : ""}
+        {delta.toFixed(1)}%
+        <span className="ml-1 text-[10px] font-medium text-neutral-500">vs Oct '25</span>
+      </p>
+    </div>
+  );
+}
+
 function Section2() {
   const [trendVariant, setTrendVariant] = useState<"full" | "sinExtras">("full");
   const macTrendData = trendVariant === "full" ? macTrendDataFull : macTrendDataSinExtras;
