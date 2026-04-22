@@ -622,6 +622,7 @@ function SideMetricCard({
 
 function Section2() {
   const [trendVariant, setTrendVariant] = useState<"full" | "sinExtras">("full");
+  const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
   const macTrendData = trendVariant === "full" ? macTrendDataFull : macTrendDataSinExtras;
   const last = macTrendData[macTrendData.length - 1];
   const first = macTrendData[0];
