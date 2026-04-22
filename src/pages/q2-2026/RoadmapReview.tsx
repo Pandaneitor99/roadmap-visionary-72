@@ -967,14 +967,9 @@ const adoptionByCountry = [
 ];
 
 function TasaAdopcion() {
-  // Apr 2026: WAC APP=4933, WAU APP=8907, WAC WEB=29828
-  const wacApp = 4933;
-  const wauApp = 8907;
-  const wacWeb = 29828;
-  const macUsersApp = 7977;
-  const macWeb = wacWeb;
-  const tasaAdopcion = ((wauApp / wacWeb) * 100).toFixed(1); // MAU APP / MAC WEB
-  const tasaReal = ((wacApp / wacWeb) * 100).toFixed(1); // MAC APP / MAC WEB
+  // Marzo 2026 (chart rbp5ch2z): Ingresan a la app 31.85%, Realizan acción 22.10%
+  const tasaAdopcion = "31.1"; // MAU APP / MAC WEB
+  const tasaReal = "22.1"; // MAC APP / MAC WEB
 
   return (
     <div className="space-y-6">
