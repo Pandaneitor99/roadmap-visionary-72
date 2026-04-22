@@ -1204,6 +1204,68 @@ function TasaAdopcion() {
 
 // === % Participación de App ===
 
+// Series reales de Amplitude (Oct '25 → Mar/Abr '26)
+const facturasParticipSeries = [
+  { m: "Oct", v: 7.85 },
+  { m: "Nov", v: 7.37 },
+  { m: "Dic", v: 7.27 },
+  { m: "Ene", v: 7.33 },
+  { m: "Feb", v: 7.29 },
+  { m: "Mar", v: 7.57 },
+];
+const cotizacionesParticipSeries = [
+  { m: "Oct", v: 14.80 },
+  { m: "Nov", v: 14.89 },
+  { m: "Dic", v: 16.14 },
+  { m: "Ene", v: 13.81 },
+  { m: "Feb", v: 14.47 },
+  { m: "Mar", v: 15.38 },
+];
+const remisionesParticipSeries = [
+  { m: "Oct", v: 6.84 },
+  { m: "Nov", v: 7.48 },
+  { m: "Dic", v: 6.35 },
+  { m: "Ene", v: 6.49 },
+  { m: "Feb", v: 6.08 },
+  { m: "Mar", v: 6.42 },
+  { m: "Abr", v: 8.93 },
+];
+
+function MiniSparkline({
+  data,
+  color,
+}: {
+  data: { m: string; v: number }[];
+  color: string;
+}) {
+  return (
+    <div className="h-10 w-full">
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart data={data} margin={{ top: 4, right: 2, left: 2, bottom: 4 }}>
+          <Tooltip
+            contentStyle={{
+              borderRadius: 6,
+              border: "1px solid #e5e7eb",
+              fontSize: 10,
+              padding: "2px 6px",
+            }}
+            formatter={(v: number) => `${v.toFixed(2)}%`}
+            labelFormatter={(l) => l as string}
+          />
+          <Line
+            type="monotone"
+            dataKey="v"
+            stroke={color}
+            strokeWidth={2}
+            dot={false}
+            isAnimationActive={false}
+          />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+
 function ParticipacionApp() {
   const items = [
     {
@@ -1212,6 +1274,8 @@ function ParticipacionApp() {
       delta: -3.8,
       color: ALEGRA_GREEN,
       desc: "% de facturas totales (web + app) creadas desde la app móvil",
+      series: facturasParticipSeries,
+      chartUrl: "https://app.amplitude.com/analytics/alegra/chart/hltxo7ij",
     },
     {
       label: "Cotizaciones",
@@ -1219,6 +1283,8 @@ function ParticipacionApp() {
       delta: 3.94,
       color: "#0066FF",
       desc: "% de cotizaciones totales (web + app) creadas desde la app móvil",
+      series: cotizacionesParticipSeries,
+      chartUrl: "https://app.amplitude.com/analytics/alegra/chart/ndgvmi3v",
     },
     {
       label: "Remisiones",
@@ -1226,6 +1292,8 @@ function ParticipacionApp() {
       delta: 6.9,
       color: "#FF6B00",
       desc: "% de remisiones totales (web + app) creadas desde la app móvil",
+      series: remisionesParticipSeries,
+      chartUrl: "https://app.amplitude.com/analytics/alegra/chart/eosl7cg8",
     },
   ];
 
@@ -1266,6 +1334,23 @@ function ParticipacionApp() {
                 {isUp ? "+" : ""}{it.delta.toFixed(2)}%
                 <span className="ml-1 text-[11px] font-medium text-neutral-500">vs Oct '25</span>
               </p>
+
+              {/* Mini sparkline (solo línea) */}
+              <div className="mt-3 border-t border-neutral-100 pt-2">
+                <MiniSparkline data={it.series} color={it.color} />
+                <div className="mt-1 flex items-center justify-between text-[10px] text-neutral-400">
+                  <span>{it.series[0].m}</span>
+                  <a
+                    href={it.chartUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-neutral-700"
+                  >
+                    Amplitude ↗
+                  </a>
+                  <span>{it.series[it.series.length - 1].m}</span>
+                </div>
+              </div>
             </div>
           );
         })}
