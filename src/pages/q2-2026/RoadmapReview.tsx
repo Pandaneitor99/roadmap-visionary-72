@@ -839,19 +839,38 @@ function Section2() {
         </div>
       </div>
 
-      {/* Variación por país: Marzo vs Octubre */}
+      {/* Variación por país: Marzo vs Octubre — clic para filtrar la línea */}
       <div>
-        <h3 className="mb-3 text-base font-bold text-neutral-900">
-          MAC por país — Marzo '26 vs Octubre '25
-        </h3>
+        <div className="mb-3 flex items-center justify-between">
+          <h3 className="text-base font-bold text-neutral-900">
+            MAC por país — Marzo '26 vs Octubre '25
+          </h3>
+          {selectedCountry && (
+            <button
+              onClick={() => setSelectedCountry(null)}
+              className="text-xs font-medium text-neutral-500 hover:text-neutral-900"
+            >
+              Limpiar filtro ({selectedCountry}) ✕
+            </button>
+          )}
+        </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {countryVariation.map((c) => {
             const delta = ((c.march - c.october) / c.october) * 100;
             const isUp = delta >= 0;
+            const isActive = selectedCountry === c.country;
             return (
-              <div
+              <button
                 key={c.country}
-                className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+                onClick={() =>
+                  setSelectedCountry(isActive ? null : c.country)
+                }
+                className={cn(
+                  "rounded-2xl border bg-white p-5 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md",
+                  isActive
+                    ? "border-neutral-900 ring-2 ring-neutral-900/10"
+                    : "border-neutral-200",
+                )}
                 style={{ borderTop: `3px solid ${c.color}` }}
               >
                 <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
@@ -877,14 +896,14 @@ function Section2() {
                     vs Oct '25
                   </span>
                 </p>
-              </div>
+              </button>
             );
           })}
         </div>
       </div>
 
       {/* MAC por país: Line + Pie */}
-      <MacPorPais />
+      <MacPorPais selectedCountry={selectedCountry} />
 
       {/* Tasa de Adopción */}
       <TasaAdopcion />
