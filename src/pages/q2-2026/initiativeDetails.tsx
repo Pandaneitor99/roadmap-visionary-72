@@ -14,7 +14,7 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
-import { ExternalLink, TrendingUp, Lightbulb } from "lucide-react";
+import { ExternalLink, TrendingUp, TrendingDown, Lightbulb } from "lucide-react";
 
 const ALEGRA_GREEN = "#00B386";
 const BLUE = "#0066FF";
