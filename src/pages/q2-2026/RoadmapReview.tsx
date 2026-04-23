@@ -1666,7 +1666,7 @@ const macCoreLiteTrend = [
 
 const corePieData = [
   { name: "CORE", value: 4936, color: ALEGRA_GREEN },
-  { name: "LITE", value: 3412, color: "#9ca3af" },
+  { name: "LITE", value: 3412, color: "#FF6B00" },
 ];
 const corePieTotal = corePieData.reduce((s, d) => s + d.value, 0);
 
