@@ -1820,11 +1820,20 @@ function NegocioView() {
   );
 }
 
-// Cuadrante de engagement con bolitas estilo Amplitude
-function EngagementScatter() {
-  // Dimensiones lógicas
-  const W = 720;
-  const H = 420;
+// Cuadrante de engagement con bolitas estilo Amplitude — un solo segmento (CORE o LITE)
+function EngagementScatterSegment({
+  segment,
+  events,
+  accent,
+  chartUrl,
+}: {
+  segment: "CORE" | "LITE" | "BASE" | "SOS";
+  events: EngagementEvent[];
+  accent: string;
+  chartUrl?: string;
+}) {
+  const W = 520;
+  const H = 380;
   const padL = 40;
   const padR = 20;
   const padT = 20;
@@ -1832,150 +1841,198 @@ function EngagementScatter() {
   const innerW = W - padL - padR;
   const innerH = H - padT - padB;
 
-  // Escalas
-  const maxX = 60;
-  const maxY = 50;
+  const maxX = Math.max(60, ...events.map((e) => e.adoption + 5));
+  const maxY = Math.max(50, ...events.map((e) => e.frequency + 5));
   const xToPx = (x: number) => padL + (x / maxX) * innerW;
   const yToPx = (y: number) => padT + innerH - (y / maxY) * innerH;
-
   const medX = 27.45;
   const medY = 9.65;
-
-  type Point = EngagementEvent & { type: "CORE" | "LITE" };
-  const points: Point[] = [
-    ...coreEvents.map((e) => ({ ...e, type: "CORE" as const })),
-    ...liteEvents.map((e) => ({ ...e, type: "LITE" as const })),
-  ];
-
-  // Radio en función del tamaño (frecuencia + adoption ligeros)
-  const radius = (p: Point) => 12 + Math.min(18, p.adoption * 0.25);
+  const radius = (e: EngagementEvent) => 12 + Math.min(18, e.adoption * 0.25);
 
   return (
     <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-      <div className="mb-4 flex items-start justify-between gap-4 flex-wrap">
+      <div className="mb-3 flex items-start justify-between gap-3">
         <div>
-          <h3 className="text-base font-bold text-neutral-900">
-            Engagement por funcionalidad — CORE vs LITE
-          </h3>
-          <p className="mt-1 text-xs text-neutral-500">
-            Adopción (%MAU) vs Frecuencia (avg time performed). Líneas guía: %MAU 27.45 · Frecuencia 9.65
+          <div className="flex items-center gap-2">
+            <span
+              className="inline-block h-2.5 w-2.5 rounded-full"
+              style={{ backgroundColor: accent }}
+            />
+            <h3 className="text-sm font-bold text-neutral-900">
+              Engagement por funcionalidad — {segment}
+            </h3>
+          </div>
+          <p className="mt-1 text-[11px] text-neutral-500">
+            Adopción (%MAU) vs Frecuencia · Líneas guía: %MAU {medX} · Frec {medY}
           </p>
         </div>
-        <div className="flex items-center gap-4 text-xs">
-          <div className="flex items-center gap-1.5">
-            <span
-              className="inline-block h-3 w-3 rounded-full"
-              style={{ backgroundColor: ALEGRA_GREEN }}
-            />
-            <span className="font-semibold text-neutral-700">CORE</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span
-              className="inline-block h-3 w-3 rounded-full"
-              style={{ backgroundColor: "#0066FF" }}
-            />
-            <span className="font-semibold text-neutral-700">LITE</span>
-          </div>
-        </div>
+        {chartUrl && (
+          <a
+            href={chartUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+          >
+            Amplitude <ExternalLink className="h-3 w-3" />
+          </a>
+        )}
       </div>
 
       <div className="overflow-x-auto">
-        <svg viewBox={`0 0 ${W} ${H}`} className="h-[420px] w-full min-w-[640px]">
-          {/* Cuadrantes background */}
+        <svg viewBox={`0 0 ${W} ${H}`} className="h-[360px] w-full min-w-[480px]">
           <rect x={padL} y={padT} width={xToPx(medX) - padL} height={yToPx(medY) - padT} fill="#FEF3C7" opacity="0.4" />
           <rect x={xToPx(medX)} y={padT} width={padL + innerW - xToPx(medX)} height={yToPx(medY) - padT} fill="#D1FAE5" opacity="0.4" />
           <rect x={padL} y={yToPx(medY)} width={xToPx(medX) - padL} height={padT + innerH - yToPx(medY)} fill="#FED7AA" opacity="0.4" />
           <rect x={xToPx(medX)} y={yToPx(medY)} width={padL + innerW - xToPx(medX)} height={padT + innerH - yToPx(medY)} fill="#E5E7EB" opacity="0.4" />
-
-          {/* Ejes */}
           <line x1={padL} y1={padT + innerH} x2={padL + innerW} y2={padT + innerH} stroke="#9ca3af" strokeWidth="1" />
           <line x1={padL} y1={padT} x2={padL} y2={padT + innerH} stroke="#9ca3af" strokeWidth="1" />
-
-          {/* Líneas medianas */}
           <line x1={xToPx(medX)} y1={padT} x2={xToPx(medX)} y2={padT + innerH} stroke="#6b7280" strokeWidth="1" strokeDasharray="4 3" />
           <line x1={padL} y1={yToPx(medY)} x2={padL + innerW} y2={yToPx(medY)} stroke="#6b7280" strokeWidth="1" strokeDasharray="4 3" />
 
-          {/* Labels mediana */}
-          <text x={xToPx(medX) + 4} y={padT + 12} fontSize="10" fill="#6b7280">Mediana %MAU: {medX}</text>
-          <text x={padL + innerW - 8} y={yToPx(medY) - 4} fontSize="10" fill="#6b7280" textAnchor="end">Mediana Frec: {medY}</text>
-
-          {/* Etiquetas eje X */}
-          {[0, 10, 20, 30, 40, 50, 60].map((v) => (
+          {[0, 10, 20, 30, 40, 50, 60].filter((v) => v <= maxX).map((v) => (
             <g key={v}>
               <text x={xToPx(v)} y={padT + innerH + 16} fontSize="10" fill="#6b7280" textAnchor="middle">{v}</text>
               <line x1={xToPx(v)} y1={padT + innerH} x2={xToPx(v)} y2={padT + innerH + 4} stroke="#9ca3af" />
             </g>
           ))}
-          {/* Etiquetas eje Y */}
-          {[0, 10, 20, 30, 40, 50].map((v) => (
+          {[0, 10, 20, 30, 40, 50].filter((v) => v <= maxY).map((v) => (
             <g key={v}>
               <text x={padL - 6} y={yToPx(v) + 3} fontSize="10" fill="#6b7280" textAnchor="end">{v}</text>
               <line x1={padL - 4} y1={yToPx(v)} x2={padL} y2={yToPx(v)} stroke="#9ca3af" />
             </g>
           ))}
 
-          {/* Bolitas */}
-          {points.map((p, i) => {
+          {events.map((p, i) => {
             const cx = xToPx(p.adoption);
             const cy = yToPx(p.frequency);
             const r = radius(p);
-            const fill = p.type === "CORE" ? ALEGRA_GREEN : "#0066FF";
+            const fill = colorForEvent(p.label);
             return (
-              <g key={`${p.type}-${i}`}>
-                <circle
-                  cx={cx}
-                  cy={cy}
-                  r={r}
-                  fill={fill}
-                  fillOpacity="0.85"
-                  stroke="white"
-                  strokeWidth="2"
-                />
+              <g key={`${segment}-${i}`}>
+                <circle cx={cx} cy={cy} r={r} fill={fill} fillOpacity="0.85" stroke="white" strokeWidth="2" />
                 <text x={cx} y={cy + 3} fontSize="11" fontWeight="bold" fill="white" textAnchor="middle">
                   {p.num}
                 </text>
-                <title>{`${p.type} · ${p.label} — Adopción ${p.adoption}% · Frec ${p.frequency}`}</title>
+                <title>{`${p.label} — Adopción ${p.adoption}% · Frec ${p.frequency}`}</title>
               </g>
             );
           })}
 
-          {/* Etiquetas ejes */}
           <text x={padL + innerW / 2} y={H - 6} fontSize="11" fill="#374151" textAnchor="middle" fontWeight="600">Adopción (%MAU)</text>
-          <text x={12} y={padT + innerH / 2} fontSize="11" fill="#374151" textAnchor="middle" fontWeight="600" transform={`rotate(-90 12 ${padT + innerH / 2})`}>Frecuencia (avg time performed)</text>
+          <text x={12} y={padT + innerH / 2} fontSize="11" fill="#374151" textAnchor="middle" fontWeight="600" transform={`rotate(-90 12 ${padT + innerH / 2})`}>Frecuencia</text>
         </svg>
       </div>
 
       {/* Leyenda numerada */}
-      <div className="mt-4 grid gap-x-6 gap-y-1 text-[11px] sm:grid-cols-2">
+      <div className="mt-3 grid grid-cols-1 gap-x-4 gap-y-1 text-[11px] sm:grid-cols-2">
+        {events.map((e) => (
+          <div key={e.num} className="flex items-center gap-2">
+            <span
+              className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-[9px] font-bold text-white"
+              style={{ backgroundColor: colorForEvent(e.label) }}
+            >
+              {e.num}
+            </span>
+            <span className="text-neutral-700">{e.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Funcionalidades — Uniques mensual con tags filtrables
+function FuncionalidadesUniquesMensual({
+  segment,
+  data,
+}: {
+  segment: "CORE" | "LITE";
+  data: { label: string; num: number; series: { month: string; value: number }[] }[];
+}) {
+  const [active, setActive] = useState<string | null>(null);
+  const visible = active ? data.filter((d) => d.label === active) : data;
+
+  // Convertir a formato Recharts: [{ month, "Crear factura": 100, ... }]
+  const months = data[0]?.series.map((s) => s.month) ?? [];
+  const chartData = months.map((m, idx) => {
+    const row: Record<string, string | number> = { month: m };
+    visible.forEach((d) => {
+      row[d.label] = d.series[idx].value;
+    });
+    return row;
+  });
+
+  return (
+    <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+      <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
         <div>
-          <p className="mb-1 text-[10px] font-bold uppercase tracking-wider" style={{ color: ALEGRA_GREEN }}>CORE</p>
-          {coreEvents.map((e) => (
-            <div key={e.num} className="flex items-center gap-2">
-              <span className="flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-bold text-white" style={{ backgroundColor: ALEGRA_GREEN }}>{e.num}</span>
-              <span className="text-neutral-700">{e.label}</span>
-            </div>
-          ))}
+          <h3 className="text-base font-bold text-neutral-900">
+            Funcionalidades — Uniques Mensual {segment === "CORE" ? "CORE" : "LITE"}
+          </h3>
+          <p className="mt-1 text-xs text-neutral-500">
+            Usuarios únicos por funcionalidad · Selecciona un tag para aislar la línea
+          </p>
         </div>
-        <div>
-          <p className="mb-1 text-[10px] font-bold uppercase tracking-wider" style={{ color: "#0066FF" }}>LITE</p>
-          {liteEvents.map((e) => (
-            <div key={e.num} className="flex items-center gap-2">
-              <span className="flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-bold text-white" style={{ backgroundColor: "#0066FF" }}>{e.num}</span>
-              <span className="text-neutral-700">{e.label}</span>
-            </div>
-          ))}
-        </div>
+        {active && (
+          <button
+            onClick={() => setActive(null)}
+            className="rounded-full border border-neutral-300 px-3 py-1 text-[11px] font-medium text-neutral-600 hover:bg-neutral-50"
+          >
+            Limpiar filtro
+          </button>
+        )}
       </div>
 
-      <div className="mt-4 flex items-center justify-end">
-        <a
-          href="https://app.amplitude.com/analytics/alegra"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
-        >
-          Fuente: Engagement por funcionalidad MAC CORE / MAU LITE · Amplitude <ExternalLink className="h-3 w-3" />
-        </a>
+      {/* Tags */}
+      <div className="mb-4 flex flex-wrap gap-1.5">
+        {data.map((d) => {
+          const isActive = active === d.label;
+          const c = colorForEvent(d.label);
+          return (
+            <button
+              key={d.label}
+              onClick={() => setActive(isActive ? null : d.label)}
+              className={cn(
+                "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-all",
+                isActive
+                  ? "text-white shadow-sm"
+                  : "border-neutral-200 bg-white text-neutral-700 hover:border-neutral-300",
+              )}
+              style={
+                isActive
+                  ? { backgroundColor: c, borderColor: c }
+                  : { borderLeftColor: c, borderLeftWidth: 3 }
+              }
+            >
+              <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full text-[8px] font-bold" style={{ backgroundColor: isActive ? "rgba(255,255,255,0.3)" : c, color: isActive ? "white" : "white" }}>
+                {d.num}
+              </span>
+              {d.label}
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="h-[300px] w-full">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={chartData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+            <XAxis dataKey="month" stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={{ stroke: "#e5e7eb" }} tickLine={false} />
+            <YAxis stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => v.toLocaleString("es-CO")} />
+            <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => v.toLocaleString("es-CO")} />
+            {visible.map((d) => (
+              <Line
+                key={d.label}
+                type="monotone"
+                dataKey={d.label}
+                stroke={colorForEvent(d.label)}
+                strokeWidth={active ? 3 : 2}
+                dot={{ r: active ? 4 : 2 }}
+                activeDot={{ r: 6 }}
+              />
+            ))}
+          </LineChart>
+        </ResponsiveContainer>
       </div>
     </div>
   );
