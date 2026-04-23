@@ -2168,104 +2168,13 @@ function NegocioView() {
         </div>
       </div>
 
-      {/* === Comportamiento === */}
-      <div>
-        <div className="mb-4 flex items-baseline gap-3">
-          <h3 className="text-lg font-bold text-neutral-900">Comportamiento</h3>
-          <span className="text-xs text-neutral-500">
-            Adopción y engagement de funcionalidades por tipo de negocio
-          </span>
-        </div>
-
-        {/* 1) Adopción funcionalidades CORE vs LITE - barras VERTICALES */}
-        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-          <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
-            <div>
-              <h4 className="text-base font-bold text-neutral-900">
-                Adopción funcionalidades — Uniques Mensual CORE vs LITE
-              </h4>
-              <p className="mt-1 text-xs text-neutral-500">
-                % de adopción por funcionalidad · Marzo 2026
-              </p>
-            </div>
-          </div>
-          <div className="h-[340px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={adopcionCoreLiteData} margin={{ top: 8, right: 16, left: 0, bottom: 60 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
-                <XAxis
-                  dataKey="event"
-                  stroke="#6b7280"
-                  tick={{ fontSize: 10 }}
-                  interval={0}
-                  angle={-30}
-                  textAnchor="end"
-                  height={70}
-                />
-                <YAxis
-                  stroke="#6b7280"
-                  tick={{ fontSize: 10 }}
-                  tickFormatter={(v) => `${v}%`}
-                />
-                <Tooltip
-                  contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }}
-                  formatter={(v: number) => `${v.toFixed(1)}%`}
-                />
-                <Legend iconType="circle" wrapperStyle={{ fontSize: 11, paddingTop: 4 }} />
-                <Bar dataKey="CORE" fill={ALEGRA_GREEN} radius={[4, 4, 0, 0]} />
-                <Bar dataKey="LITE" fill="#FF6B00" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-
-        {/* 2) Funcionalidades — Uniques Mensual % CORE & LITE: tags compartidos */}
-        <div className="mt-6">
-          <FuncionalidadesUniquesShared
-            core={coreMonthlyAdoption}
-            lite={liteMonthlyAdoption}
-            active={activeFeature}
-            onChangeActive={setActiveFeature}
-          />
-        </div>
-
-        {/* 3) Engagement scatter — separados CORE / LITE, filtran por tag activo */}
-        {activeFeature && (
-          <div className="mt-4 flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50/60 px-3 py-2 text-xs text-emerald-800">
-            <span className="font-bold uppercase tracking-wider">Filtro activo:</span>
-            <span
-              className="inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[11px] font-semibold text-white"
-              style={{ backgroundColor: colorForEvent(activeFeature) }}
-            >
-              {activeFeature}
-            </span>
-            <button
-              onClick={() => setActiveFeature(null)}
-              className="ml-auto text-[11px] font-medium text-neutral-600 underline hover:text-neutral-900"
-            >
-              Limpiar
-            </button>
-          </div>
-        )}
-        <div className="mt-6 grid gap-6 xl:grid-cols-2">
-          <EngagementScatterSegment
-            segment="CORE"
-            events={filteredCoreEvents}
-            accent={ALEGRA_GREEN}
-            chartUrl="https://app.amplitude.com/analytics/alegra/chart/8bsh2x62"
-          />
-          <EngagementScatterSegment
-            segment="LITE"
-            events={filteredLiteEvents}
-            accent="#FF6B00"
-            chartUrl="https://app.amplitude.com/analytics/alegra/chart/jtbzs8ce"
-          />
-        </div>
-      </div>
     </div>
   );
 }
+
+// (Comportamiento Core/Lite movido a ComportamientoUnifiedView en la pestaña "Comportamiento")
+function _NegocioViewClose() {
+  return null;
 
 function FuncionalidadesUniquesShared({
   core,
