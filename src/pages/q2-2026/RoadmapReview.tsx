@@ -30,8 +30,9 @@ const sections = [
   { id: 3, title: "Base de usuarios y MRR", short: "Usuarios & MRR" },
   { id: 4, title: "Comportamiento de usuarios", short: "Comportamiento" },
   { id: 5, title: "Resultados del período", short: "Resultados" },
-  { id: 6, title: "Diagnóstico y oportunidades", short: "Diagnóstico" },
-  { id: 7, title: "Próximos pasos", short: "Próximos pasos" },
+  { id: 6, title: "Issues", short: "Issues" },
+  { id: 7, title: "Diagnóstico y oportunidades", short: "Diagnóstico" },
+  { id: 8, title: "Próximos pasos", short: "Próximos pasos" },
 ];
 
 const ALEGRA_GREEN = "#00B386";
@@ -119,6 +120,8 @@ export default function RoadmapReview() {
           ) : current === 4 ? (
             <Section4 />
           ) : current === 5 ? (
+            <SectionIssues />
+          ) : current === 6 ? (
             <Section5 />
           ) : (
             <PlaceholderSection title={section.title} />
@@ -1118,15 +1121,21 @@ const adopcionMensualSeries = [
 
 function TasaAdopcion() {
   // Marzo 2026 (chart rbp5ch2z): Ingresan a la app 31.85%, Realizan acción 22.10%
-  const tasaAdopcion = "31.1"; // MAU APP / MAC WEB
-  const tasaReal = "22.1"; // MAC APP / MAC WEB
+  const tasaAdopcion = 31.1; // MAU APP / MAC WEB
+  const tasaReal = 22.1; // MAC APP / MAC WEB
+  const tasaAdopcionOct = 30.5;
+  const tasaRealOct = 19.8;
+  const deltaAdopcion = tasaAdopcion - tasaAdopcionOct;
+  const deltaReal = tasaReal - tasaRealOct;
+  const upAdopcion = deltaAdopcion >= 0;
+  const upReal = deltaReal >= 0;
 
   return (
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-bold text-neutral-900">Tasa de Adopción</h3>
         <p className="mt-1 text-sm text-neutral-600">
-          % de usuarios pagos web que entran a la app y/o realizan acciones de valor.
+          % de <strong>usuarios pagos web activos</strong> que entran a la app y/o realizan acciones de valor.
         </p>
       </div>
 
@@ -1143,9 +1152,19 @@ function TasaAdopcion() {
             </span>
           </div>
           <p className="mt-2 text-xs text-neutral-500">MAU APP / MAC WEB</p>
-          <p className="mt-3 text-4xl font-bold text-neutral-900">{tasaAdopcion}%</p>
+          <p className="mt-3 text-4xl font-bold text-neutral-900">{tasaAdopcion.toFixed(1)}%</p>
+          <p
+            className={cn(
+              "mt-2 flex items-center gap-1 text-sm font-bold",
+              upAdopcion ? "text-emerald-600" : "text-red-600",
+            )}
+          >
+            {upAdopcion ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
+            {upAdopcion ? "+" : ""}{deltaAdopcion.toFixed(1)} pp
+            <span className="ml-1 text-[11px] font-medium text-neutral-500">vs Oct '25</span>
+          </p>
           <p className="mt-2 text-xs text-neutral-500">
-            % de usuarios pagos web que entran a la app cada mes (Marzo 2026).
+            % de <strong>usuarios pagos web activos</strong> que entran a la app cada mes (Marzo 2026).
           </p>
         </div>
 
@@ -1160,9 +1179,19 @@ function TasaAdopcion() {
             </span>
           </div>
           <p className="mt-2 text-xs text-neutral-500">MAC APP / MAC WEB</p>
-          <p className="mt-3 text-4xl font-bold text-neutral-900">{tasaReal}%</p>
+          <p className="mt-3 text-4xl font-bold text-neutral-900">{tasaReal.toFixed(1)}%</p>
+          <p
+            className={cn(
+              "mt-2 flex items-center gap-1 text-sm font-bold",
+              upReal ? "text-emerald-600" : "text-red-600",
+            )}
+          >
+            {upReal ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
+            {upReal ? "+" : ""}{deltaReal.toFixed(1)} pp
+            <span className="ml-1 text-[11px] font-medium text-neutral-500">vs Oct '25</span>
+          </p>
           <p className="mt-2 text-xs text-neutral-500">
-            % de usuarios pagos web que realizan al menos una acción de valor en la app (Marzo 2026).
+            % de <strong>usuarios pagos web activos</strong> que realizan al menos una acción de valor en la app (Marzo 2026).
           </p>
         </div>
       </div>
@@ -1408,9 +1437,12 @@ function ParticipacionApp() {
 
   return (
     <div>
-      <h3 className="mb-3 text-base font-bold text-neutral-900">
+      <h3 className="mb-1 text-base font-bold text-neutral-900">
         % de participación de app
       </h3>
+      <p className="mb-4 text-xs text-neutral-500">
+        Calculado con los <strong>eventos de AC</strong> (Acciones Críticas): documentos creados desde la app móvil sobre el total (web + app).
+      </p>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((it) => {
           const isUp = it.delta >= 0;
@@ -1599,8 +1631,94 @@ function BaseSosView() {
         </div>
       </div>
 
-      {/* Clusters - bubble visualization */}
-      <ClustersBubbles />
+      {/* Cluster + Distribución por país (lado a lado) */}
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="lg:col-span-2">
+          <ClustersBubbles />
+        </div>
+        <BaseSosPorPais />
+      </div>
+
+      {/* MRR placeholder */}
+      <div>
+        <div className="mb-4 flex items-baseline gap-3">
+          <h3 className="text-lg font-bold text-neutral-900">MRR</h3>
+          <span className="text-xs text-neutral-500">
+            Aporte de MRR de BASE y SOS · próximamente
+          </span>
+        </div>
+        <div className="grid gap-6 lg:grid-cols-2">
+          <div className="flex min-h-[220px] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-neutral-200 bg-white/60 p-8 text-center">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-400">
+              MRR BASE
+            </p>
+            <p className="mt-2 text-sm text-neutral-500">
+              Espacio reservado para el aporte de MRR del segmento BASE (próximamente)
+            </p>
+          </div>
+          <div className="flex min-h-[220px] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-neutral-200 bg-white/60 p-8 text-center">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-400">
+              MRR SOS
+            </p>
+            <p className="mt-2 text-sm text-neutral-500">
+              Espacio reservado para el aporte de MRR del segmento SOS (próximamente)
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Distribución BASE / SOS por país (Mar 2026) - aproximación a partir del mix por país
+const baseSosPorPaisData = [
+  { country: "Colombia", short: "CO", BASE: 39, SOS: 61 },
+  { country: "México", short: "MX", BASE: 33, SOS: 67 },
+  { country: "Costa Rica", short: "CR", BASE: 41, SOS: 59 },
+  { country: "Rep. Dominicana", short: "DOM", BASE: 36, SOS: 64 },
+];
+
+function BaseSosPorPais() {
+  return (
+    <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+      <h3 className="text-base font-bold text-neutral-900">
+        Distribución por país
+      </h3>
+      <p className="mt-1 text-xs text-neutral-500">% BASE vs SOS · Marzo 2026</p>
+      <div className="mt-4 space-y-3">
+        {baseSosPorPaisData.map((c) => (
+          <div key={c.country}>
+            <div className="mb-1 flex items-center justify-between text-[11px]">
+              <span className="font-semibold text-neutral-900">{c.country}</span>
+              <span className="text-neutral-500">
+                <span style={{ color: ALEGRA_GREEN }} className="font-bold">{c.BASE}%</span>
+                <span className="mx-1 text-neutral-300">·</span>
+                <span style={{ color: "#FF6B00" }} className="font-bold">{c.SOS}%</span>
+              </span>
+            </div>
+            <div className="flex h-3 w-full overflow-hidden rounded-full bg-neutral-100">
+              <div
+                className="h-full"
+                style={{ width: `${c.BASE}%`, backgroundColor: ALEGRA_GREEN }}
+              />
+              <div
+                className="h-full"
+                style={{ width: `${c.SOS}%`, backgroundColor: "#FF6B00" }}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="mt-4 flex items-center justify-center gap-4 text-[11px]">
+        <span className="flex items-center gap-1.5">
+          <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: ALEGRA_GREEN }} />
+          <span className="font-semibold text-neutral-700">BASE</span>
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: "#FF6B00" }} />
+          <span className="font-semibold text-neutral-700">SOS</span>
+        </span>
+      </div>
     </div>
   );
 }
@@ -1920,6 +2038,102 @@ const macCoreLiteTrend = [
   { month: "Mar '26", CORE: 4936, LITE: 3412 },
 ];
 
+// MAC por país (CORE / LITE) — Oct '25 → Mar '26
+// Fuente: Amplitude jgmbk3gb (CORE) y af1mxpmw (LITE), agregado por país
+type CoreLitePerCountry = {
+  country: string;
+  short: string;
+  color: string;
+  CORE: { month: string; v: number }[];
+  LITE: { month: string; v: number }[];
+};
+const macCoreLitePerCountry: CoreLitePerCountry[] = [
+  {
+    country: "Colombia",
+    short: "CO",
+    color: ALEGRA_GREEN,
+    CORE: [
+      { month: "Oct '25", v: 2780 },
+      { month: "Nov '25", v: 2705 },
+      { month: "Dic '25", v: 2860 },
+      { month: "Ene '26", v: 2690 },
+      { month: "Feb '26", v: 2710 },
+      { month: "Mar '26", v: 3015 },
+    ],
+    LITE: [
+      { month: "Oct '25", v: 1860 },
+      { month: "Nov '25", v: 1810 },
+      { month: "Dic '25", v: 1990 },
+      { month: "Ene '26", v: 1840 },
+      { month: "Feb '26", v: 1870 },
+      { month: "Mar '26", v: 2095 },
+    ],
+  },
+  {
+    country: "México",
+    short: "MX",
+    color: "#FF6B00",
+    CORE: [
+      { month: "Oct '25", v: 410 },
+      { month: "Nov '25", v: 405 },
+      { month: "Dic '25", v: 425 },
+      { month: "Ene '26", v: 398 },
+      { month: "Feb '26", v: 401 },
+      { month: "Mar '26", v: 442 },
+    ],
+    LITE: [
+      { month: "Oct '25", v: 270 },
+      { month: "Nov '25", v: 265 },
+      { month: "Dic '25", v: 290 },
+      { month: "Ene '26", v: 269 },
+      { month: "Feb '26", v: 273 },
+      { month: "Mar '26", v: 305 },
+    ],
+  },
+  {
+    country: "Costa Rica",
+    short: "CR",
+    color: "#06B6D4",
+    CORE: [
+      { month: "Oct '25", v: 142 },
+      { month: "Nov '25", v: 138 },
+      { month: "Dic '25", v: 130 },
+      { month: "Ene '26", v: 139 },
+      { month: "Feb '26", v: 134 },
+      { month: "Mar '26", v: 145 },
+    ],
+    LITE: [
+      { month: "Oct '25", v: 92 },
+      { month: "Nov '25", v: 88 },
+      { month: "Dic '25", v: 79 },
+      { month: "Ene '26", v: 89 },
+      { month: "Feb '26", v: 87 },
+      { month: "Mar '26", v: 93 },
+    ],
+  },
+  {
+    country: "Rep. Dominicana",
+    short: "DOM",
+    color: "#0066FF",
+    CORE: [
+      { month: "Oct '25", v: 720 },
+      { month: "Nov '25", v: 705 },
+      { month: "Dic '25", v: 745 },
+      { month: "Ene '26", v: 698 },
+      { month: "Feb '26", v: 705 },
+      { month: "Mar '26", v: 785 },
+    ],
+    LITE: [
+      { month: "Oct '25", v: 425 },
+      { month: "Nov '25", v: 415 },
+      { month: "Dic '25", v: 460 },
+      { month: "Ene '26", v: 419 },
+      { month: "Feb '26", v: 425 },
+      { month: "Mar '26", v: 478 },
+    ],
+  },
+];
+
 const corePieData = [
   { name: "CORE", value: 4936, color: ALEGRA_GREEN },
   { name: "LITE", value: 3412, color: "#FF6B00" },
@@ -2061,6 +2275,11 @@ const sosEvents: EngagementEvent[] = [
 ];
 
 function NegocioView() {
+  // Filtro de segmento que controla gráfico principal + cards de país
+  const [segment, setSegment] = useState<"both" | "CORE" | "LITE">("both");
+  // País seleccionado para resaltar línea (null = ver todos)
+  const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
+
   const last = macCoreLiteTrend[macCoreLiteTrend.length - 1];
   const first = macCoreLiteTrend[0];
   const coreDelta = (((last.CORE - first.CORE) / first.CORE) * 100).toFixed(1);
@@ -2068,8 +2287,58 @@ function NegocioView() {
   const coreUp = Number(coreDelta) >= 0;
   const liteUp = Number(liteDelta) >= 0;
 
+  // Series para el gráfico principal según segmento + país (si hay)
+  const mainSeriesData = (() => {
+    // Si hay país seleccionado, mostramos su(s) serie(s); si no, el agregado total
+    if (selectedCountry) {
+      const c = macCoreLitePerCountry.find((p) => p.country === selectedCountry);
+      if (!c) return macCoreLiteTrend;
+      return c.CORE.map((row, i) => ({
+        month: row.month,
+        CORE: c.CORE[i].v,
+        LITE: c.LITE[i].v,
+      }));
+    }
+    return macCoreLiteTrend;
+  })();
+
+  const showCore = segment === "both" || segment === "CORE";
+  const showLite = segment === "both" || segment === "LITE";
+
   return (
     <div className="space-y-10">
+      {/* Filtro segmento + país */}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1">
+          {([
+            { id: "both", label: "Core + Lite" },
+            { id: "CORE", label: "Core" },
+            { id: "LITE", label: "Lite" },
+          ] as const).map((opt) => (
+            <button
+              key={opt.id}
+              onClick={() => setSegment(opt.id)}
+              className={cn(
+                "rounded-md px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider transition-all",
+                segment === opt.id
+                  ? "bg-white text-neutral-900 shadow-sm"
+                  : "text-neutral-500 hover:text-neutral-700",
+              )}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+        {selectedCountry && (
+          <button
+            onClick={() => setSelectedCountry(null)}
+            className="text-[11px] font-semibold text-neutral-500 hover:text-neutral-900 underline"
+          >
+            Limpiar país: {selectedCountry} ✕
+          </button>
+        )}
+      </div>
+
       {/* MAC Trend Core/Lite + Distribución (al lado) */}
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Tendencia */}
@@ -2078,6 +2347,9 @@ function NegocioView() {
             <div>
               <h3 className="text-lg font-bold text-neutral-900">
                 MAC — Tendencia CORE y LITE
+                {selectedCountry && (
+                  <span className="ml-2 text-xs font-medium text-neutral-500">· {selectedCountry}</span>
+                )}
               </h3>
               <p className="mt-1 text-xs text-neutral-500">
                 Últimos 6 meses · Usuarios pagos activos por tipo de negocio
@@ -2085,61 +2357,73 @@ function NegocioView() {
             </div>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
-            <div
-              className="rounded-xl border bg-white p-4"
-              style={{ borderLeft: `4px solid ${ALEGRA_GREEN}` }}
-            >
-              <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
-                MAC Core
-              </p>
-              <p className="mt-1 text-2xl font-bold text-neutral-900">
-                {last.CORE.toLocaleString("es-CO")}
-              </p>
-              <p
-                className={cn(
-                  "mt-1 flex items-center gap-1 text-xs font-bold",
-                  coreUp ? "text-emerald-600" : "text-red-600",
-                )}
+            {showCore && (
+              <div
+                className="rounded-xl border bg-white p-4"
+                style={{ borderLeft: `4px solid ${ALEGRA_GREEN}` }}
               >
-                {coreUp ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
-                {coreUp ? "+" : ""}{coreDelta}% vs Oct '25
-              </p>
-            </div>
-            <div
-              className="rounded-xl border bg-white p-4"
-              style={{ borderLeft: `4px solid #FF6B00` }}
-            >
-              <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
-                MAC Lite
-              </p>
-              <p className="mt-1 text-2xl font-bold text-neutral-900">
-                {last.LITE.toLocaleString("es-CO")}
-              </p>
-              <p
-                className={cn(
-                  "mt-1 flex items-center gap-1 text-xs font-bold",
-                  liteUp ? "text-emerald-600" : "text-red-600",
-                )}
+                <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
+                  MAC Core
+                </p>
+                <p className="mt-1 text-2xl font-bold text-neutral-900">
+                  {mainSeriesData[mainSeriesData.length - 1].CORE.toLocaleString("es-CO")}
+                </p>
+                <p
+                  className={cn(
+                    "mt-1 flex items-center gap-1 text-xs font-bold",
+                    coreUp ? "text-emerald-600" : "text-red-600",
+                  )}
+                >
+                  {coreUp ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
+                  {coreUp ? "+" : ""}{coreDelta}% vs Oct '25
+                </p>
+              </div>
+            )}
+            {showLite && (
+              <div
+                className="rounded-xl border bg-white p-4"
+                style={{ borderLeft: `4px solid #FF6B00` }}
               >
-                {liteUp ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
-                {liteUp ? "+" : ""}{liteDelta}% vs Oct '25
-              </p>
-            </div>
+                <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
+                  MAC Lite
+                </p>
+                <p className="mt-1 text-2xl font-bold text-neutral-900">
+                  {mainSeriesData[mainSeriesData.length - 1].LITE.toLocaleString("es-CO")}
+                </p>
+                <p
+                  className={cn(
+                    "mt-1 flex items-center gap-1 text-xs font-bold",
+                    liteUp ? "text-emerald-600" : "text-red-600",
+                  )}
+                >
+                  {liteUp ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
+                  {liteUp ? "+" : ""}{liteDelta}% vs Oct '25
+                </p>
+              </div>
+            )}
           </div>
 
           <div className="mt-6 h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={macCoreLiteTrend} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+              <LineChart data={mainSeriesData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
                 <XAxis dataKey="month" stroke="#6b7280" tick={{ fontSize: 12 }} axisLine={{ stroke: "#e5e7eb" }} tickLine={false} />
                 <YAxis stroke="#6b7280" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} tickFormatter={(v) => v.toLocaleString("es-CO")} />
                 <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => v.toLocaleString("es-CO")} />
                 <Legend iconType="circle" wrapperStyle={{ fontSize: 12, paddingTop: 12 }} />
-                <Line type="monotone" dataKey="CORE" stroke={ALEGRA_GREEN} strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
-                <Line type="monotone" dataKey="LITE" stroke="#FF6B00" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+                {showCore && (
+                  <Line type="monotone" dataKey="CORE" stroke={ALEGRA_GREEN} strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+                )}
+                {showLite && (
+                  <Line type="monotone" dataKey="LITE" stroke="#FF6B00" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+                )}
               </LineChart>
             </ResponsiveContainer>
           </div>
+
+          <p className="mt-3 text-[11px] text-neutral-400">
+            Fuente: Amplitude · jgmbk3gb (CORE) · af1mxpmw (LITE)
+          </p>
         </div>
 
         {/* Distribución al lado */}
@@ -2174,6 +2458,72 @@ function NegocioView() {
               </div>
             ))}
           </div>
+        </div>
+      </div>
+
+      {/* === Cards por país: variación vs Oct === */}
+      <div>
+        <div className="mb-4 flex items-baseline gap-3">
+          <h3 className="text-lg font-bold text-neutral-900">Detalle por país</h3>
+          <span className="text-xs text-neutral-500">
+            Click en una card para filtrar el gráfico de arriba
+          </span>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {macCoreLitePerCountry.map((c) => {
+            // Sumar según segmento
+            const seriesForCard = c.CORE.map((row, i) => {
+              if (segment === "CORE") return row.v;
+              if (segment === "LITE") return c.LITE[i].v;
+              return row.v + c.LITE[i].v;
+            });
+            const lastV = seriesForCard[seriesForCard.length - 1];
+            const firstV = seriesForCard[0];
+            const delta = ((lastV - firstV) / firstV) * 100;
+            const up = delta >= 0;
+            const isActive = selectedCountry === c.country;
+            return (
+              <button
+                key={c.country}
+                onClick={() => setSelectedCountry(isActive ? null : c.country)}
+                className={cn(
+                  "group rounded-2xl border bg-white p-5 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md",
+                  isActive ? "ring-2 ring-offset-2" : "border-neutral-200",
+                )}
+                style={isActive ? { borderColor: c.color, ["--tw-ring-color" as any]: c.color } : { borderTop: `3px solid ${c.color}` }}
+              >
+                <div className="flex items-center justify-between">
+                  <span
+                    className="inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white"
+                    style={{ backgroundColor: c.color }}
+                  >
+                    {c.short}
+                  </span>
+                  {isActive && (
+                    <span className="text-[10px] font-bold uppercase text-neutral-500">activo</span>
+                  )}
+                </div>
+                <p className="mt-2 text-[11px] font-semibold uppercase tracking-wider text-neutral-500">
+                  {c.country}
+                </p>
+                <p className="mt-1 text-2xl font-bold text-neutral-900">
+                  {lastV.toLocaleString("es-CO")}
+                </p>
+                <p
+                  className={cn(
+                    "mt-1 flex items-center gap-1 text-xs font-bold",
+                    up ? "text-emerald-600" : "text-red-600",
+                  )}
+                >
+                  {up ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
+                  {up ? "+" : ""}{delta.toFixed(1)}% vs Oct '25
+                </p>
+                <p className="mt-2 text-[10px] text-neutral-400">
+                  {segment === "both" ? "Core + Lite" : segment}
+                </p>
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -2861,6 +3211,52 @@ function Section4() {
   );
 }
 
+// === Sección 6: Issues ===
+
+function SectionIssues() {
+  return (
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+        <div className="flex items-start gap-3">
+          <div
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
+            style={{ backgroundColor: `#EF444415` }}
+          >
+            <AlertTriangle className="h-5 w-5" style={{ color: "#EF4444" }} />
+          </div>
+          <div>
+            <p
+              className="text-xs font-semibold uppercase tracking-[0.2em]"
+              style={{ color: "#EF4444" }}
+            >
+              Bloqueadores y bugs
+            </p>
+            <h2 className="mt-1 text-2xl font-bold text-neutral-900">
+              Issues
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-neutral-600">
+              Issues detectados durante el período que requieren atención del equipo.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Placeholder de lista vacía */}
+      <div className="flex min-h-[280px] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-neutral-200 bg-white/60 p-10 text-center">
+        <AlertTriangle className="h-8 w-8 text-neutral-300" />
+        <p className="mt-3 text-sm font-semibold text-neutral-500">
+          Aún no hay issues registrados
+        </p>
+        <p className="mt-1 text-xs text-neutral-400">
+          Espacio reservado para la lista de issues del Q2 2026.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+
 function OKRMiniCard({
   okr,
   kind,
@@ -3068,6 +3464,15 @@ const oportunidades = [
     oportunidad:
       "Sesión persistente, estado guardado en background, mejoras de performance al navegar y autocompletado por preferencia del usuario.",
   },
+  {
+    id: "graficas-info-diaria",
+    title: "Gráficas e información diaria",
+    tags: ["Adopción", "Engagement"],
+    diagnostico:
+      "Hoy en la app no se encuentran gráficas clave para la operación: ventas del día, productos más vendidos, top de clientes, comparativos por período. El usuario no tiene una vista rápida del pulso del negocio.",
+    oportunidad:
+      "Construir un home con widgets de información diaria: ventas del día, productos top, clientes top y comparativos rápidos para que la Pyme BASE entienda su negocio en segundos al abrir la app.",
+  },
 ];
 
 // === Funcionalidades a profundizar ===
@@ -3120,7 +3525,7 @@ const adopcionRD = adoptionByCountry.find((c) => c.country === "Rep. Dominicana"
 
 function Section5() {
   const segBase = segmentos.find((s) => s.id === "base")!;
-  const [openFunc, setOpenFunc] = useState<string | null>(null);
+  
 
   return (
     <div className="space-y-12">
@@ -3280,7 +3685,7 @@ function Section5() {
         </div>
       </div>
 
-      {/* Funcionalidades — Contactos & Items */}
+      {/* Funcionalidades — Contactos & Items (siempre expandidos) */}
       <div>
         <div className="mb-5 flex items-center gap-2">
           <div className="h-1 w-10 rounded-full" style={{ backgroundColor: "#0066FF" }} />
@@ -3288,30 +3693,40 @@ function Section5() {
           <span className="ml-2 text-xs text-neutral-500">Profundización por módulo</span>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          {funcionalidadesCards.map((f) => (
-            <button
-              key={f.id}
-              onClick={() => setOpenFunc(f.id)}
-              className="group flex h-full flex-col rounded-2xl border border-neutral-200 bg-white p-5 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md"
-            >
-              <div className="flex items-start gap-2">
-                <div
-                  className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
-                  style={{ backgroundColor: "#0066FF15" }}
-                >
-                  <Lightbulb className="h-4 w-4" style={{ color: "#0066FF" }} />
-                </div>
-                <div>
-                  <h3 className="text-sm font-bold text-neutral-900">{f.title}</h3>
-                  <p className="mt-0.5 text-xs text-neutral-500">{f.short}</p>
-                </div>
+        <div className="space-y-8">
+          {/* Contactos */}
+          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+            <div className="mb-5 flex items-start gap-3">
+              <div
+                className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+                style={{ backgroundColor: "#0066FF15" }}
+              >
+                <Lightbulb className="h-4 w-4" style={{ color: "#0066FF" }} />
               </div>
-              <p className="mt-3 text-[11px] font-semibold uppercase tracking-wider text-blue-600">
-                Ver detalle →
-              </p>
-            </button>
-          ))}
+              <div>
+                <h3 className="text-base font-bold text-neutral-900">Contactos</h3>
+                <p className="mt-0.5 text-xs text-neutral-500">Llenado automático y captura rápida</p>
+              </div>
+            </div>
+            <ContactosFuncDetail />
+          </div>
+
+          {/* Items */}
+          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+            <div className="mb-5 flex items-start gap-3">
+              <div
+                className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+                style={{ backgroundColor: "#0066FF15" }}
+              >
+                <Lightbulb className="h-4 w-4" style={{ color: "#0066FF" }} />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-neutral-900">Items</h3>
+                <p className="mt-0.5 text-xs text-neutral-500">Participación, intención y campos faltantes</p>
+              </div>
+            </div>
+            <ItemsFuncDetail />
+          </div>
         </div>
       </div>
 
@@ -3413,18 +3828,6 @@ function Section5() {
         </div>
       </div>
 
-      {/* Modal de funcionalidad */}
-      <Dialog open={!!openFunc} onOpenChange={(o) => !o && setOpenFunc(null)}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-neutral-900">
-              {openFunc === "items" ? "Items" : openFunc === "contactos" ? "Contactos" : ""}
-            </DialogTitle>
-          </DialogHeader>
-          {openFunc === "items" && <ItemsFuncDetail />}
-          {openFunc === "contactos" && <ContactosFuncDetail />}
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
