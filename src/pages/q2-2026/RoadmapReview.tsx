@@ -1434,9 +1434,12 @@ function ParticipacionApp() {
 
   return (
     <div>
-      <h3 className="mb-3 text-base font-bold text-neutral-900">
+      <h3 className="mb-1 text-base font-bold text-neutral-900">
         % de participación de app
       </h3>
+      <p className="mb-4 text-xs text-neutral-500">
+        Calculado con los <strong>eventos de AC</strong> (Acciones Críticas): documentos creados desde la app móvil sobre el total (web + app).
+      </p>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((it) => {
           const isUp = it.delta >= 0;
