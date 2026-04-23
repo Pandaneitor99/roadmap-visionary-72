@@ -14,7 +14,10 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
-import { ExternalLink, TrendingUp, TrendingDown, Lightbulb } from "lucide-react";
+import { ExternalLink, TrendingUp, TrendingDown, Lightbulb, Check } from "lucide-react";
+import appLanding from "@/assets/app-alegra-landing.png";
+import gysDeviceImg from "@/assets/gys-device-requests.png";
+import onelinkQR from "@/assets/onelink-qr.svg";
 
 const ALEGRA_GREEN = "#00B386";
 const BLUE = "#0066FF";
