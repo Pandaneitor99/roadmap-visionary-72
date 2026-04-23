@@ -2790,7 +2790,6 @@ function SimpleInitiativeCard({
   title,
   tags,
   problem,
-  krs,
   onClick,
 }: {
   title: string;
@@ -2813,17 +2812,7 @@ function SimpleInitiativeCard({
         onClick && "cursor-pointer hover:border-emerald-300",
       )}
     >
-      <div className="flex items-start justify-between gap-2">
-        <h3 className="text-sm font-bold leading-snug text-neutral-900">{title}</h3>
-        {onClick && (
-          <span
-            className="shrink-0 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white"
-            style={{ backgroundColor: ALEGRA_GREEN }}
-          >
-            Métricas
-          </span>
-        )}
-      </div>
+      <h3 className="text-sm font-bold leading-snug text-neutral-900">{title}</h3>
       <div className="mt-2 flex flex-wrap gap-1">
         {tags.map((t) => (
           <Badge
@@ -2844,23 +2833,6 @@ function SimpleInitiativeCard({
           {problem}
         </p>
       </div>
-      {krs && krs.length > 0 && (
-        <div className="mt-auto pt-3">
-          <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">
-            Key Results
-          </p>
-          <div className="mt-1 flex flex-wrap gap-1">
-            {krs.map((kr) => (
-              <span
-                key={kr}
-                className="rounded-full bg-neutral-100 px-2 py-0.5 text-[10px] font-medium text-neutral-700"
-              >
-                {kr}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 }
