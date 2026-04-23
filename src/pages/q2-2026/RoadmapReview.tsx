@@ -2317,8 +2317,10 @@ function EngagementScatterSegment({
   const innerW = W - padL - padR;
   const innerH = H - padT - padB;
 
-  const maxX = Math.max(60, ...events.map((e) => e.adoption + 5));
-  const maxY = Math.max(50, ...events.map((e) => e.frequency + 5));
+  // Ejes fijos compartidos por todos los segmentos (CORE/LITE/BASE/SOS)
+  // para que las bolitas sean comparables entre charts.
+  const maxX = 100;
+  const maxY = 50;
   const xToPx = (x: number) => padL + (x / maxX) * innerW;
   const yToPx = (y: number) => padT + innerH - (y / maxY) * innerH;
   const medX = 27.45;
