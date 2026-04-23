@@ -1528,6 +1528,28 @@ function Section3() {
 }
 
 function ComportamientoView() {
+  // Tag activo compartido entre Adopción BASE/SOS y Engagement scatter
+  const [activeFeature, setActiveFeature] = useState<string | null>(null);
+
+  // Lista de features compartidas entre BASE/SOS
+  const allFeatures = Array.from(
+    new Set([
+      ...baseEvents.map((e) => e.label),
+      ...sosEvents.map((e) => e.label),
+      ...adopcionBaseSosData.map((d) => d.event),
+    ]),
+  );
+
+  const filteredAdopcion = activeFeature
+    ? adopcionBaseSosData.filter((d) => d.event === activeFeature)
+    : adopcionBaseSosData;
+  const filteredBase = activeFeature
+    ? baseEvents.filter((e) => e.label === activeFeature)
+    : baseEvents;
+  const filteredSos = activeFeature
+    ? sosEvents.filter((e) => e.label === activeFeature)
+    : sosEvents;
+
   return (
     <div className="space-y-8">
       {/* Cards SOS / BASE con % */}
@@ -1598,6 +1620,57 @@ function ComportamientoView() {
       {/* Clusters - bubble visualization */}
       <ClustersBubbles />
 
+      {/* Tag filters compartidos para Adopción y Engagement */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
+        <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
+          <div>
+            <h4 className="text-sm font-bold text-neutral-900">
+              Filtrar por funcionalidad
+            </h4>
+            <p className="mt-0.5 text-xs text-neutral-500">
+              Selecciona un tag para filtrar los gráficos de adopción y engagement BASE / SOS
+            </p>
+          </div>
+          {activeFeature && (
+            <button
+              onClick={() => setActiveFeature(null)}
+              className="rounded-full border border-neutral-300 px-3 py-1 text-[11px] font-medium text-neutral-600 hover:bg-neutral-50"
+            >
+              Limpiar filtro
+            </button>
+          )}
+        </div>
+        <div className="flex flex-wrap gap-1.5">
+          {allFeatures.map((label) => {
+            const isActive = activeFeature === label;
+            const c = colorForEvent(label);
+            return (
+              <button
+                key={label}
+                onClick={() => setActiveFeature(isActive ? null : label)}
+                className={cn(
+                  "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-all",
+                  isActive
+                    ? "text-white shadow-sm"
+                    : "border-neutral-200 bg-white text-neutral-700 hover:border-neutral-300",
+                )}
+                style={
+                  isActive
+                    ? { backgroundColor: c, borderColor: c }
+                    : { borderLeftColor: c, borderLeftWidth: 3 }
+                }
+              >
+                <span
+                  className="h-2 w-2 rounded-full"
+                  style={{ backgroundColor: isActive ? "rgba(255,255,255,0.9)" : c }}
+                />
+                {label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       {/* Adopción funcionalidades BASE vs SOS - chart aq7o241v */}
       <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
         <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
@@ -1620,7 +1693,7 @@ function ComportamientoView() {
         </div>
         <div className="h-[360px] w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={adopcionBaseSosData} layout="vertical" margin={{ top: 5, right: 16, left: 130, bottom: 0 }}>
+            <BarChart data={filteredAdopcion} layout="vertical" margin={{ top: 5, right: 16, left: 130, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" horizontal={false} />
               <XAxis type="number" stroke="#6b7280" tick={{ fontSize: 10 }} tickFormatter={(v) => `${v}%`} />
               <YAxis dataKey="event" type="category" stroke="#6b7280" tick={{ fontSize: 10 }} width={130} />
@@ -1637,13 +1710,13 @@ function ComportamientoView() {
       <div className="grid gap-6 xl:grid-cols-2">
         <EngagementScatterSegment
           segment="BASE"
-          events={baseEvents}
+          events={filteredBase}
           accent={ALEGRA_GREEN}
           chartUrl="https://app.amplitude.com/analytics/alegra/chart/no1u7db2"
         />
         <EngagementScatterSegment
           segment="SOS"
-          events={sosEvents}
+          events={filteredSos}
           accent="#FF6B00"
           chartUrl="https://app.amplitude.com/analytics/alegra/chart/ezbhdx9r"
         />
