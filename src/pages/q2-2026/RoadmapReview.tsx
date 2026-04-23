@@ -114,6 +114,8 @@ export default function RoadmapReview() {
             <Section3 />
           ) : current === 3 ? (
             <Section4 />
+          ) : current === 4 ? (
+            <Section5 />
           ) : (
             <PlaceholderSection title={section.title} />
           )}
@@ -2836,6 +2838,260 @@ function SimpleInitiativeCard({
         <p className="mt-1 text-xs leading-relaxed text-neutral-600 line-clamp-3">
           {problem}
         </p>
+      </div>
+    </div>
+  );
+}
+
+// === Sección 5: Diagnóstico y oportunidades ===
+
+// Top funcionalidades que la Pyme BASE usa por fuera de la App (en web)
+// Insight: aunque BASE es móvil-first, vuelve al PC para tareas que la app no resuelve.
+const baseFueraDeApp = [
+  { feature: "Imprimir factura", uso: 84 },
+  { feature: "Clonar factura", uso: 71 },
+  { feature: "Descargar reportes", uso: 68 },
+  { feature: "Reporte de ventas generales", uso: 62 },
+  { feature: "Reporte de ventas por ítem", uso: 54 },
+  { feature: "Registrar pagos recibidos", uso: 49 },
+  { feature: "Reporte de inventario", uso: 41 },
+  { feature: "Reporte de ventas por vendedor", uso: 36 },
+];
+
+const oportunidades = [
+  {
+    id: "pagos",
+    title: "Pagos recibidos",
+    tags: ["Adopción", "Engagement"],
+    diagnostico:
+      "No existe una sección de pagos recibidos en la app. El usuario debe ir al PC para registrar el pago de una factura, lo que rompe el flujo móvil de cobro frente al cliente.",
+    oportunidad:
+      "Habilitar el registro y consulta de pagos recibidos desde la app, integrado al flujo de la factura de venta.",
+  },
+  {
+    id: "factura-venta",
+    title: "Funcionalidad factura de venta",
+    tags: ["Experiencia", "Adopción"],
+    diagnostico:
+      "La factura de venta en la app no tiene la funcionalidad de imprimir ni de clonar, dos acciones críticas para el día a día de la Pyme BASE que hoy lo obligan a volver al computador.",
+    oportunidad:
+      "Sumar imprimir y clonar dentro del detalle de la factura, cerrando el ciclo de venta sin necesidad del PC.",
+  },
+  {
+    id: "reportes",
+    title: "Reportes",
+    tags: ["Adopción", "Experiencia"],
+    diagnostico:
+      "El usuario no puede descargar ni compartir los reportes desde la app. Faltan reportes clave para la operación: ventas generales, ventas por vendedor, ventas por ítem y reporte de inventario.",
+    oportunidad:
+      "Construir un módulo de reportes nativo en la app, con descarga, compartir y los reportes que más demanda la Pyme BASE.",
+  },
+];
+
+function Section5() {
+  const segBase = segmentos.find((s) => s.id === "base")!;
+
+  return (
+    <div className="space-y-12">
+      {/* Intro: Pyme BASE */}
+      <div>
+        <div className="mb-5 flex items-center gap-2">
+          <div className="h-1 w-10 rounded-full" style={{ backgroundColor: ALEGRA_GREEN }} />
+          <h2 className="text-lg font-bold text-neutral-900">Quién es nuestro mejor usuario</h2>
+        </div>
+
+        <div
+          className="relative overflow-hidden rounded-2xl border border-emerald-100 bg-white p-7 shadow-sm md:p-9"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 100% 0%, rgba(0,179,134,0.08), transparent 55%)",
+          }}
+        >
+          <div
+            className="absolute left-0 top-0 h-full w-1.5"
+            style={{ backgroundColor: ALEGRA_GREEN }}
+          />
+          <div className="flex flex-wrap items-center gap-2">
+            <span
+              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white"
+              style={{ backgroundColor: ALEGRA_GREEN }}
+            >
+              <Star className="h-3 w-3" /> Pyme BASE
+            </span>
+            <Badge variant="outline" className="text-[10px]" style={{ borderColor: ALEGRA_GREEN, color: ALEGRA_GREEN }}>
+              {segBase.badge}
+            </Badge>
+            <span className="text-[11px] text-neutral-500">{segBase.tamano}</span>
+          </div>
+
+          <p className="mt-4 text-xl font-semibold leading-snug text-neutral-900 md:text-2xl">
+            La Pyme BASE es nuestro mejor usuario: vive con la app en la mano y la usa como su centro operativo móvil real.
+          </p>
+
+          <div className="mt-5 grid gap-4 md:grid-cols-2">
+            <div className="rounded-xl border border-neutral-200/80 bg-white/80 p-4 backdrop-blur-sm">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">Su dolor</p>
+              <p className="mt-1 text-sm leading-relaxed text-neutral-700">{segBase.problema}</p>
+            </div>
+            <div className="rounded-xl border border-neutral-200/80 bg-white/80 p-4 backdrop-blur-sm">
+              <p
+                className="text-[10px] font-bold uppercase tracking-wider"
+                style={{ color: ALEGRA_GREEN }}
+              >
+                Valor que creamos
+              </p>
+              <p className="mt-1 text-sm leading-relaxed text-neutral-700">{segBase.valor}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Video: caso real */}
+      <div>
+        <div className="mb-5 flex items-center gap-2">
+          <div className="h-1 w-10 rounded-full" style={{ backgroundColor: ALEGRA_GREEN }} />
+          <h2 className="text-lg font-bold text-neutral-900">Caso real · 1 min 18 seg</h2>
+        </div>
+
+        <div className="grid gap-5 md:grid-cols-5">
+          <div className="md:col-span-3 overflow-hidden rounded-2xl border border-neutral-200 bg-black shadow-sm">
+            <video
+              src="/videos/pyme-base-venta.mp4"
+              controls
+              playsInline
+              className="h-full w-full object-contain"
+            />
+          </div>
+          <div className="md:col-span-2 flex flex-col justify-center rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+            <span
+              className="inline-flex w-fit items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider"
+              style={{ backgroundColor: `${ALEGRA_GREEN}15`, color: ALEGRA_GREEN }}
+            >
+              <Heart className="h-3 w-3" /> Mejor usuario
+            </span>
+            <h3 className="mt-3 text-xl font-bold leading-snug text-neutral-900">
+              Crea y comparte la venta en <span style={{ color: ALEGRA_GREEN }}>1 minuto y 18 segundos</span>
+            </h3>
+            <p className="mt-3 text-sm leading-relaxed text-neutral-600">
+              Esta es la Pyme BASE en su mejor versión: factura frente al cliente, comparte el documento al instante y cierra la venta sin volver al PC. Es el estándar que queremos para todos.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Funcionalidades que la BASE usa por fuera de App */}
+      <div>
+        <div className="mb-5 flex items-center gap-2">
+          <div className="h-1 w-10 rounded-full" style={{ backgroundColor: "#FF6B00" }} />
+          <h2 className="text-lg font-bold text-neutral-900">Funcionalidades que más usa la Pyme BASE por fuera de la App</h2>
+        </div>
+
+        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+          <div className="mb-4 flex items-start justify-between gap-4">
+            <div>
+              <p className="text-sm font-semibold text-neutral-900">
+                % de usuarios BASE que ejecutan la acción en web
+              </p>
+              <p className="mt-0.5 text-xs text-neutral-500">
+                Aunque la BASE es móvil-first, vuelve al PC para resolver lo que la app aún no cubre.
+              </p>
+            </div>
+            <Badge variant="outline" className="text-[10px]" style={{ borderColor: "#FF6B00", color: "#FF6B00" }}>
+              Mar 2026
+            </Badge>
+          </div>
+
+          <div className="h-[360px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={baseFueraDeApp} layout="vertical" margin={{ top: 8, right: 32, left: 8, bottom: 8 }}>
+                <CartesianGrid horizontal={false} stroke="#f1f5f9" />
+                <XAxis type="number" domain={[0, 100]} unit="%" tick={{ fontSize: 11, fill: "#64748b" }} />
+                <YAxis
+                  type="category"
+                  dataKey="feature"
+                  width={210}
+                  tick={{ fontSize: 11, fill: "#0f172a" }}
+                />
+                <Tooltip
+                  cursor={{ fill: "rgba(255,107,0,0.06)" }}
+                  formatter={(v: number) => [`${v}%`, "Uso en web"]}
+                />
+                <Bar dataKey="uso" fill="#FF6B00" radius={[0, 6, 6, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
+
+      {/* Oportunidades */}
+      <div>
+        <div className="mb-5 flex items-center gap-2">
+          <div className="h-1 w-10 rounded-full" style={{ backgroundColor: ALEGRA_GREEN }} />
+          <h2 className="text-lg font-bold text-neutral-900">Oportunidades</h2>
+          <span className="ml-2 text-xs text-neutral-500">{oportunidades.length} frentes detectados</span>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-3">
+          {oportunidades.map((op) => (
+            <OportunidadCard key={op.id} op={op} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function OportunidadCard({
+  op,
+}: {
+  op: { id: string; title: string; tags: string[]; diagnostico: string; oportunidad: string };
+}) {
+  const tagColor = (t: string) => {
+    if (t === "Engagement") return "#FF6B00";
+    if (t === "Adopción") return ALEGRA_GREEN;
+    if (t === "Experiencia") return "#0066FF";
+    return "#737373";
+  };
+  return (
+    <div className="group flex h-full flex-col rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+      <div className="flex items-start gap-2">
+        <div
+          className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
+          style={{ backgroundColor: `${ALEGRA_GREEN}15` }}
+        >
+          <Lightbulb className="h-4 w-4" style={{ color: ALEGRA_GREEN }} />
+        </div>
+        <h3 className="text-sm font-bold leading-snug text-neutral-900">{op.title}</h3>
+      </div>
+
+      <div className="mt-2 flex flex-wrap gap-1">
+        {op.tags.map((t) => (
+          <Badge
+            key={t}
+            variant="outline"
+            className="text-[10px] font-semibold"
+            style={{ borderColor: tagColor(t), color: tagColor(t) }}
+          >
+            {t}
+          </Badge>
+        ))}
+      </div>
+
+      <div className="mt-3">
+        <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">
+          Diagnóstico
+        </p>
+        <p className="mt-1 text-xs leading-relaxed text-neutral-600">{op.diagnostico}</p>
+      </div>
+
+      <div className="mt-3 rounded-lg border border-emerald-100 bg-emerald-50/40 p-3">
+        <p
+          className="text-[10px] font-bold uppercase tracking-wider"
+          style={{ color: ALEGRA_GREEN }}
+        >
+          Oportunidad
+        </p>
+        <p className="mt-1 text-xs leading-relaxed text-neutral-700">{op.oportunidad}</p>
       </div>
     </div>
   );
