@@ -3464,6 +3464,15 @@ const oportunidades = [
     oportunidad:
       "Sesión persistente, estado guardado en background, mejoras de performance al navegar y autocompletado por preferencia del usuario.",
   },
+  {
+    id: "graficas-info-diaria",
+    title: "Gráficas e información diaria",
+    tags: ["Adopción", "Engagement"],
+    diagnostico:
+      "Hoy en la app no se encuentran gráficas clave para la operación: ventas del día, productos más vendidos, top de clientes, comparativos por período. El usuario no tiene una vista rápida del pulso del negocio.",
+    oportunidad:
+      "Construir un home con widgets de información diaria: ventas del día, productos top, clientes top y comparativos rápidos para que la Pyme BASE entienda su negocio en segundos al abrir la app.",
+  },
 ];
 
 // === Funcionalidades a profundizar ===
