@@ -1104,7 +1104,7 @@ function TasaAdopcion() {
         </div>
       </div>
 
-      {/* Progreso global: Tasa Real vs Tasa de Adopción */}
+      {/* Progreso global unificado: Tasa Real (verde) sobre Tasa de Adopción (azul) */}
       <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
         <div className="mb-4 flex items-center justify-between">
           <div>
@@ -1124,31 +1124,75 @@ function TasaAdopcion() {
             Amplitude <ExternalLink className="h-3 w-3" />
           </a>
         </div>
-        <div className="space-y-4">
-          <div>
-            <div className="mb-1 flex items-center justify-between text-xs">
-              <span className="font-medium text-neutral-700">Tasa de Adopción (MAU APP / MAC WEB)</span>
-              <span className="font-bold text-[#0066FF]">{tasaAdopcion}%</span>
-            </div>
-            <div className="relative h-6 w-full overflow-hidden rounded-full bg-neutral-100">
-              <div
-                className="absolute left-0 top-0 h-full rounded-full"
-                style={{ width: `${tasaAdopcion}%`, backgroundColor: "#0066FF" }}
-              />
-            </div>
+        {/* Barra unificada: azul = Adopción, verde encima = Real */}
+        <div className="relative h-8 w-full overflow-hidden rounded-full bg-neutral-100">
+          <div
+            className="absolute left-0 top-0 h-full rounded-full transition-all"
+            style={{ width: `${tasaAdopcion}%`, backgroundColor: "#0066FF" }}
+          />
+          <div
+            className="absolute left-0 top-0 h-full rounded-full transition-all"
+            style={{ width: `${tasaReal}%`, backgroundColor: ALEGRA_GREEN }}
+          />
+          <span
+            className="absolute top-1/2 -translate-y-1/2 text-[11px] font-bold text-white"
+            style={{ left: `calc(${tasaReal}% - 38px)` }}
+          >
+            {tasaReal}%
+          </span>
+          <span
+            className="absolute top-1/2 -translate-y-1/2 text-[11px] font-bold text-white"
+            style={{ left: `calc(${tasaAdopcion}% - 42px)` }}
+          >
+            {tasaAdopcion}%
+          </span>
+        </div>
+        <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1.5 text-[11px]">
+          <div className="flex items-center gap-1.5">
+            <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: ALEGRA_GREEN }} />
+            <span className="font-semibold text-neutral-700">Tasa de Adopción Real</span>
+            <span className="text-neutral-500">(MAC APP / MAC WEB)</span>
           </div>
-          <div>
-            <div className="mb-1 flex items-center justify-between text-xs">
-              <span className="font-medium text-neutral-700">Tasa de Adopción Real (MAC APP / MAC WEB)</span>
-              <span className="font-bold" style={{ color: ALEGRA_GREEN }}>{tasaReal}%</span>
-            </div>
-            <div className="relative h-6 w-full overflow-hidden rounded-full bg-neutral-100">
-              <div
-                className="absolute left-0 top-0 h-full rounded-full"
-                style={{ width: `${tasaReal}%`, backgroundColor: ALEGRA_GREEN }}
-              />
-            </div>
+          <div className="flex items-center gap-1.5">
+            <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: "#0066FF" }} />
+            <span className="font-semibold text-neutral-700">Tasa de Adopción</span>
+            <span className="text-neutral-500">(MAU APP / MAC WEB)</span>
           </div>
+        </div>
+      </div>
+
+      {/* Evolución mensual */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+        <div className="mb-4 flex items-center justify-between">
+          <div>
+            <h4 className="text-sm font-bold text-neutral-900">
+              % Usuarios pagos activos que entran a la app o realizan una acción
+            </h4>
+            <p className="mt-0.5 text-xs text-neutral-500">
+              Evolución mensual · Oct '25 → Mar '26
+            </p>
+          </div>
+          <a
+            href="https://app.amplitude.com/analytics/alegra/chart/rbp5ch2z"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+          >
+            Amplitude <ExternalLink className="h-3 w-3" />
+          </a>
+        </div>
+        <div className="h-[280px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={adopcionMensualSeries} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+              <XAxis dataKey="month" stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={{ stroke: "#e5e7eb" }} tickLine={false} />
+              <YAxis stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} domain={[0, 40]} tickFormatter={(v) => `${v}%`} />
+              <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => `${v.toFixed(1)}%`} />
+              <Legend iconType="circle" wrapperStyle={{ fontSize: 12, paddingTop: 8 }} />
+              <Line type="monotone" dataKey="adopcion" name="Tasa de Adopción (entran)" stroke="#0066FF" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+              <Line type="monotone" dataKey="real" name="Tasa de Adopción Real (acciones)" stroke={ALEGRA_GREEN} strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+            </LineChart>
+          </ResponsiveContainer>
         </div>
       </div>
 
