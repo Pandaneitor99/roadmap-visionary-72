@@ -190,17 +190,58 @@ function Section1() {
           de la Pyme y el centro de control móvil en tiempo real del contador,
           donde las decisiones y flujos críticos se resuelven en segundos."
         </p>
-        <p className="mt-6 max-w-4xl text-sm leading-relaxed text-neutral-600 md:text-base">
-          La app no compite con la web. La web es donde vive la complejidad; la
-          app es donde vive la inmediatez. Cuando un emprendedor está frente a
-          un cliente y necesita facturar, no debería pensar — debería actuar.
-          Cuando un contador necesita validar el estado de negocios en
-          movimiento, no debería esperar — debería controlar. Ese es el estándar
-          que nos imponemos.
-        </p>
       </div>
 
-      {/* Two cards */}
+      {/* Filosofía en tarjetas */}
+      <div className="grid gap-5 md:grid-cols-3">
+        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+          <div
+            className="inline-flex rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white"
+            style={{ backgroundColor: ALEGRA_GREEN }}
+          >
+            Principio
+          </div>
+          <h3 className="mt-3 text-lg font-bold text-neutral-900">
+            La app no compite con la web
+          </h3>
+          <p className="mt-2 text-sm leading-relaxed text-neutral-600">
+            La <strong>web</strong> es donde vive la <strong>complejidad</strong>;
+            la <strong>app</strong> es donde vive la <strong>inmediatez</strong>.
+          </p>
+        </div>
+
+        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+          <div
+            className="inline-flex rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white"
+            style={{ backgroundColor: "#FF6B00" }}
+          >
+            Pyme
+          </div>
+          <h3 className="mt-3 text-lg font-bold text-neutral-900">
+            Frente al cliente: actuar, no pensar
+          </h3>
+          <p className="mt-2 text-sm leading-relaxed text-neutral-600">
+            Cuando un emprendedor está frente a un cliente y necesita facturar,
+            no debería <strong>pensar</strong> — debería <strong>actuar</strong>.
+          </p>
+        </div>
+
+        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+          <div className="inline-flex rounded-full bg-neutral-900 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
+            Contador
+          </div>
+          <h3 className="mt-3 text-lg font-bold text-neutral-900">
+            En movimiento: controlar, no esperar
+          </h3>
+          <p className="mt-2 text-sm leading-relaxed text-neutral-600">
+            Cuando un contador necesita validar el estado de negocios en
+            movimiento, no debería <strong>esperar</strong> — debería{" "}
+            <strong>controlar</strong>. Ese es el estándar que nos imponemos.
+          </p>
+        </div>
+      </div>
+
+      {/* Two cards: roles */}
       <div className="grid gap-5 md:grid-cols-2">
         <div className="group rounded-2xl border border-neutral-200 bg-white p-7 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
           <div
@@ -210,7 +251,7 @@ function Section1() {
             Para la Pyme
           </div>
           <h3 className="mt-4 text-xl font-bold text-neutral-900">
-            Centro operativo
+            Centro operativo mobile
           </h3>
           <p className="mt-2 text-sm text-neutral-600">Ejecución inmediata</p>
         </div>
@@ -219,13 +260,16 @@ function Section1() {
             Para el contador
           </div>
           <h3 className="mt-4 text-xl font-bold text-neutral-900">
-            Centro de control
+            Centro de control mobile
           </h3>
           <p className="mt-2 text-sm text-neutral-600">Control y validación</p>
         </div>
       </div>
 
-      {/* Trade-offs table */}
+      {/* Segmentos Objetivo */}
+      <SegmentosObjetivo />
+
+      {/* Trade-offs table — al final */}
       <div>
         <h2 className="mb-4 text-lg font-bold text-neutral-900">
           Trade-offs estratégicos
@@ -270,9 +314,6 @@ function Section1() {
           </div>
         </div>
       </div>
-
-      {/* Segmentos Objetivo */}
-      <SegmentosObjetivo />
     </div>
   );
 }
