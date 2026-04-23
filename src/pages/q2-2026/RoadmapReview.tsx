@@ -3685,7 +3685,7 @@ function Section5() {
         </div>
       </div>
 
-      {/* Funcionalidades — Contactos & Items */}
+      {/* Funcionalidades — Contactos & Items (siempre expandidos) */}
       <div>
         <div className="mb-5 flex items-center gap-2">
           <div className="h-1 w-10 rounded-full" style={{ backgroundColor: "#0066FF" }} />
@@ -3693,30 +3693,40 @@ function Section5() {
           <span className="ml-2 text-xs text-neutral-500">Profundización por módulo</span>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          {funcionalidadesCards.map((f) => (
-            <button
-              key={f.id}
-              onClick={() => setOpenFunc(f.id)}
-              className="group flex h-full flex-col rounded-2xl border border-neutral-200 bg-white p-5 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md"
-            >
-              <div className="flex items-start gap-2">
-                <div
-                  className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
-                  style={{ backgroundColor: "#0066FF15" }}
-                >
-                  <Lightbulb className="h-4 w-4" style={{ color: "#0066FF" }} />
-                </div>
-                <div>
-                  <h3 className="text-sm font-bold text-neutral-900">{f.title}</h3>
-                  <p className="mt-0.5 text-xs text-neutral-500">{f.short}</p>
-                </div>
+        <div className="space-y-8">
+          {/* Contactos */}
+          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+            <div className="mb-5 flex items-start gap-3">
+              <div
+                className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+                style={{ backgroundColor: "#0066FF15" }}
+              >
+                <Lightbulb className="h-4 w-4" style={{ color: "#0066FF" }} />
               </div>
-              <p className="mt-3 text-[11px] font-semibold uppercase tracking-wider text-blue-600">
-                Ver detalle →
-              </p>
-            </button>
-          ))}
+              <div>
+                <h3 className="text-base font-bold text-neutral-900">Contactos</h3>
+                <p className="mt-0.5 text-xs text-neutral-500">Llenado automático y captura rápida</p>
+              </div>
+            </div>
+            <ContactosFuncDetail />
+          </div>
+
+          {/* Items */}
+          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+            <div className="mb-5 flex items-start gap-3">
+              <div
+                className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+                style={{ backgroundColor: "#0066FF15" }}
+              >
+                <Lightbulb className="h-4 w-4" style={{ color: "#0066FF" }} />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-neutral-900">Items</h3>
+                <p className="mt-0.5 text-xs text-neutral-500">Participación, intención y campos faltantes</p>
+              </div>
+            </div>
+            <ItemsFuncDetail />
+          </div>
         </div>
       </div>
 
