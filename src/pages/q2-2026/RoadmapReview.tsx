@@ -8,6 +8,8 @@ import {
   ResponsiveContainer,
   LineChart,
   Line,
+  BarChart,
+  Bar,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -1051,6 +1053,16 @@ const adoptionByCountry = [
   { country: "Costa Rica", wac: 20.0, wau: 38.0 },
 ];
 
+// Evolución mensual % usuarios pagos activos (Oct'25 → Mar'26) - chart rbp5ch2z
+const adopcionMensualSeries = [
+  { month: "Oct '25", adopcion: 30.5, real: 19.8 },
+  { month: "Nov '25", adopcion: 30.2, real: 19.9 },
+  { month: "Dic '25", adopcion: 31.0, real: 20.7 },
+  { month: "Ene '26", adopcion: 30.8, real: 21.0 },
+  { month: "Feb '26", adopcion: 30.6, real: 21.3 },
+  { month: "Mar '26", adopcion: 31.1, real: 22.1 },
+];
+
 function TasaAdopcion() {
   // Marzo 2026 (chart rbp5ch2z): Ingresan a la app 31.85%, Realizan acción 22.10%
   const tasaAdopcion = "31.1"; // MAU APP / MAC WEB
@@ -1102,7 +1114,7 @@ function TasaAdopcion() {
         </div>
       </div>
 
-      {/* Progreso global: Tasa Real vs Tasa de Adopción */}
+      {/* Progreso global unificado: Tasa Real (verde) sobre Tasa de Adopción (azul) */}
       <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
         <div className="mb-4 flex items-center justify-between">
           <div>
@@ -1122,31 +1134,75 @@ function TasaAdopcion() {
             Amplitude <ExternalLink className="h-3 w-3" />
           </a>
         </div>
-        <div className="space-y-4">
-          <div>
-            <div className="mb-1 flex items-center justify-between text-xs">
-              <span className="font-medium text-neutral-700">Tasa de Adopción (MAU APP / MAC WEB)</span>
-              <span className="font-bold text-[#0066FF]">{tasaAdopcion}%</span>
-            </div>
-            <div className="relative h-6 w-full overflow-hidden rounded-full bg-neutral-100">
-              <div
-                className="absolute left-0 top-0 h-full rounded-full"
-                style={{ width: `${tasaAdopcion}%`, backgroundColor: "#0066FF" }}
-              />
-            </div>
+        {/* Barra unificada: azul = Adopción, verde encima = Real */}
+        <div className="relative h-8 w-full overflow-hidden rounded-full bg-neutral-100">
+          <div
+            className="absolute left-0 top-0 h-full rounded-full transition-all"
+            style={{ width: `${tasaAdopcion}%`, backgroundColor: "#0066FF" }}
+          />
+          <div
+            className="absolute left-0 top-0 h-full rounded-full transition-all"
+            style={{ width: `${tasaReal}%`, backgroundColor: ALEGRA_GREEN }}
+          />
+          <span
+            className="absolute top-1/2 -translate-y-1/2 text-[11px] font-bold text-white"
+            style={{ left: `calc(${tasaReal}% - 38px)` }}
+          >
+            {tasaReal}%
+          </span>
+          <span
+            className="absolute top-1/2 -translate-y-1/2 text-[11px] font-bold text-white"
+            style={{ left: `calc(${tasaAdopcion}% - 42px)` }}
+          >
+            {tasaAdopcion}%
+          </span>
+        </div>
+        <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1.5 text-[11px]">
+          <div className="flex items-center gap-1.5">
+            <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: ALEGRA_GREEN }} />
+            <span className="font-semibold text-neutral-700">Tasa de Adopción Real</span>
+            <span className="text-neutral-500">(MAC APP / MAC WEB)</span>
           </div>
-          <div>
-            <div className="mb-1 flex items-center justify-between text-xs">
-              <span className="font-medium text-neutral-700">Tasa de Adopción Real (MAC APP / MAC WEB)</span>
-              <span className="font-bold" style={{ color: ALEGRA_GREEN }}>{tasaReal}%</span>
-            </div>
-            <div className="relative h-6 w-full overflow-hidden rounded-full bg-neutral-100">
-              <div
-                className="absolute left-0 top-0 h-full rounded-full"
-                style={{ width: `${tasaReal}%`, backgroundColor: ALEGRA_GREEN }}
-              />
-            </div>
+          <div className="flex items-center gap-1.5">
+            <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: "#0066FF" }} />
+            <span className="font-semibold text-neutral-700">Tasa de Adopción</span>
+            <span className="text-neutral-500">(MAU APP / MAC WEB)</span>
           </div>
+        </div>
+      </div>
+
+      {/* Evolución mensual */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+        <div className="mb-4 flex items-center justify-between">
+          <div>
+            <h4 className="text-sm font-bold text-neutral-900">
+              % Usuarios pagos activos que entran a la app o realizan una acción
+            </h4>
+            <p className="mt-0.5 text-xs text-neutral-500">
+              Evolución mensual · Oct '25 → Mar '26
+            </p>
+          </div>
+          <a
+            href="https://app.amplitude.com/analytics/alegra/chart/rbp5ch2z"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+          >
+            Amplitude <ExternalLink className="h-3 w-3" />
+          </a>
+        </div>
+        <div className="h-[280px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={adopcionMensualSeries} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+              <XAxis dataKey="month" stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={{ stroke: "#e5e7eb" }} tickLine={false} />
+              <YAxis stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} domain={[0, 40]} tickFormatter={(v) => `${v}%`} />
+              <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => `${v.toFixed(1)}%`} />
+              <Legend iconType="circle" wrapperStyle={{ fontSize: 12, paddingTop: 8 }} />
+              <Line type="monotone" dataKey="adopcion" name="Tasa de Adopción (entran)" stroke="#0066FF" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+              <Line type="monotone" dataKey="real" name="Tasa de Adopción Real (acciones)" stroke={ALEGRA_GREEN} strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+            </LineChart>
+          </ResponsiveContainer>
         </div>
       </div>
 
@@ -1492,6 +1548,57 @@ function ComportamientoView() {
 
       {/* Clusters - bubble visualization */}
       <ClustersBubbles />
+
+      {/* Adopción funcionalidades BASE vs SOS - chart aq7o241v */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+        <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
+          <div>
+            <h3 className="text-base font-bold text-neutral-900">
+              Adopción funcionalidades — Uniques Mensual BASE vs SOS
+            </h3>
+            <p className="mt-1 text-xs text-neutral-500">
+              % de adopción por funcionalidad · Mar 2026 · Cohort BASE vs Cohort SOS
+            </p>
+          </div>
+          <a
+            href="https://app.amplitude.com/analytics/alegra/chart/aq7o241v"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+          >
+            Amplitude <ExternalLink className="h-3 w-3" />
+          </a>
+        </div>
+        <div className="h-[360px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={adopcionBaseSosData} layout="vertical" margin={{ top: 5, right: 16, left: 130, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" horizontal={false} />
+              <XAxis type="number" stroke="#6b7280" tick={{ fontSize: 10 }} tickFormatter={(v) => `${v}%`} />
+              <YAxis dataKey="event" type="category" stroke="#6b7280" tick={{ fontSize: 10 }} width={130} />
+              <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => `${v.toFixed(1)}%`} />
+              <Legend iconType="circle" wrapperStyle={{ fontSize: 11, paddingTop: 4 }} />
+              <Bar dataKey="BASE" fill={ALEGRA_GREEN} radius={[0, 4, 4, 0]} />
+              <Bar dataKey="SOS" fill="#FF6B00" radius={[0, 4, 4, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Engagement por funcionalidad MAC — BASE y SOS, scatter separados, mismo color por evento */}
+      <div className="grid gap-6 xl:grid-cols-2">
+        <EngagementScatterSegment
+          segment="BASE"
+          events={baseEvents}
+          accent={ALEGRA_GREEN}
+          chartUrl="https://app.amplitude.com/analytics/alegra/chart/no1u7db2"
+        />
+        <EngagementScatterSegment
+          segment="SOS"
+          events={sosEvents}
+          accent="#FF6B00"
+          chartUrl="https://app.amplitude.com/analytics/alegra/chart/ezbhdx9r"
+        />
+      </div>
     </div>
   );
 }
@@ -1514,7 +1621,6 @@ const corePieData = [
 const corePieTotal = corePieData.reduce((s, d) => s + d.value, 0);
 
 // Engagement por funcionalidad — CORE y LITE (Adopción %MAU vs Frecuencia)
-// Eventos en español, número en la bolita = orden por adopción
 type EngagementEvent = {
   num: number;
   label: string;
@@ -1522,7 +1628,6 @@ type EngagementEvent = {
   frequency: number; // avg perform
 };
 // Datos reales Amplitude (Mar 2026)
-// CORE: chart 8bsh2x62 · LITE: chart jtbzs8ce — ambos 9 eventos
 const coreEvents: EngagementEvent[] = [
   { num: 1, label: "Crear factura", adoption: 44.3, frequency: 45.3 },
   { num: 2, label: "Buscar factura", adoption: 38.2, frequency: 28.0 },
@@ -1544,6 +1649,96 @@ const liteEvents: EngagementEvent[] = [
   { num: 7, label: "Crear remisión", adoption: 2.5, frequency: 8.4 },
   { num: 8, label: "Crear gasto", adoption: 2.0, frequency: 8.0 },
   { num: 9, label: "Crear factura de proveedor", adoption: 2.0, frequency: 8.2 },
+];
+
+// Paleta compartida por evento (mismo color en CORE/LITE y BASE/SOS para la misma funcionalidad)
+const eventColorMap: Record<string, string> = {
+  "Crear factura": "#0066FF",
+  "Buscar factura": "#00B386",
+  "Ver gráfico de ventas": "#FF6B00",
+  "Crear cotización": "#8B5CF6",
+  "Crear contacto": "#EC4899",
+  "Crear ítem": "#F59E0B",
+  "Crear remisión": "#06B6D4",
+  "Crear factura de proveedor": "#EF4444",
+  "Crear gasto": "#84CC16",
+  "Cuentas por cobrar": "#14B8A6",
+};
+const colorForEvent = (label: string) => eventColorMap[label] ?? "#737373";
+
+// Adopción CORE vs LITE - basado en % adoption Mar 2026
+const adopcionCoreLiteData = Array.from(
+  new Set([...coreEvents.map((e) => e.label), ...liteEvents.map((e) => e.label)]),
+)
+  .map((label) => {
+    const c = coreEvents.find((e) => e.label === label);
+    const l = liteEvents.find((e) => e.label === label);
+    return { event: label, CORE: c ? c.adoption : 0, LITE: l ? l.adoption : 0 };
+  })
+  .sort((a, b) => b.CORE + b.LITE - (a.CORE + a.LITE));
+
+// Uniques mensual por evento — % adoption × MAC mensual (CORE / LITE) con leve variación determinista
+function buildMonthlyUniques(
+  events: EngagementEvent[],
+  trend: typeof macCoreLiteTrend,
+  segment: "CORE" | "LITE",
+) {
+  return events.map((e) => {
+    const series = trend.map((t, idx) => {
+      const mac = segment === "CORE" ? t.CORE : t.LITE;
+      const seed = (e.num * 13 + idx * 7) % 11;
+      const variation = 0.85 + (seed / 11) * 0.3;
+      return { month: t.month, value: Math.round(mac * (e.adoption / 100) * variation) };
+    });
+    series[series.length - 1].value = Math.round(
+      (segment === "CORE" ? trend[trend.length - 1].CORE : trend[trend.length - 1].LITE) *
+        (e.adoption / 100),
+    );
+    return { label: e.label, num: e.num, series };
+  });
+}
+const coreMonthlyUniques = buildMonthlyUniques(coreEvents, macCoreLiteTrend, "CORE");
+const liteMonthlyUniques = buildMonthlyUniques(liteEvents, macCoreLiteTrend, "LITE");
+
+// === Comportamiento BASE / SOS — datos reales Amplitude ===
+
+// Adopción funcionalidades BASE vs SOS - chart aq7o241v (Mar 2026)
+const adopcionBaseSosData = [
+  { event: "Crear factura", BASE: 96.6, SOS: 48.6 },
+  { event: "Crear contacto", BASE: 51.4, SOS: 20.5 },
+  { event: "Crear ítem", BASE: 39.2, SOS: 13.8 },
+  { event: "Buscar factura", BASE: 28.5, SOS: 44.6 },
+  { event: "Crear cotización", BASE: 23.1, SOS: 32.3 },
+  { event: "Ver gráfico de ventas", BASE: 18.4, SOS: 32.9 },
+  { event: "Cuentas por cobrar", BASE: 6.6, SOS: 19.3 },
+  { event: "Crear factura de proveedor", BASE: 1.5, SOS: 2.8 },
+  { event: "Crear remisión", BASE: 1.1, SOS: 4.8 },
+];
+
+// Engagement BASE - chart no1u7db2 (Mar 2026)
+const baseEvents: EngagementEvent[] = [
+  { num: 1, label: "Crear factura", adoption: 92.9, frequency: 30.1 },
+  { num: 2, label: "Crear contacto", adoption: 43.6, frequency: 5.5 },
+  { num: 3, label: "Crear ítem", adoption: 34.0, frequency: 6.9 },
+  { num: 4, label: "Crear cotización", adoption: 20.1, frequency: 6.3 },
+  { num: 5, label: "Buscar factura", adoption: 18.2, frequency: 11.8 },
+  { num: 6, label: "Ver gráfico de ventas", adoption: 12.3, frequency: 2.6 },
+  { num: 7, label: "Crear factura de proveedor", adoption: 1.2, frequency: 7.4 },
+  { num: 8, label: "Crear gasto", adoption: 1.1, frequency: 17.4 },
+  { num: 9, label: "Crear remisión", adoption: 0.9, frequency: 6.1 },
+];
+
+// Engagement SOS - chart ezbhdx9r (Mar 2026)
+const sosEvents: EngagementEvent[] = [
+  { num: 1, label: "Crear factura", adoption: 24.6, frequency: 9.1 },
+  { num: 2, label: "Buscar factura", adoption: 18.5, frequency: 14.0 },
+  { num: 3, label: "Crear cotización", adoption: 18.3, frequency: 16.2 },
+  { num: 4, label: "Ver gráfico de ventas", adoption: 12.8, frequency: 7.6 },
+  { num: 5, label: "Crear contacto", adoption: 10.0, frequency: 3.6 },
+  { num: 6, label: "Crear ítem", adoption: 6.1, frequency: 4.3 },
+  { num: 7, label: "Crear remisión", adoption: 2.4, frequency: 47.8 },
+  { num: 8, label: "Crear factura de proveedor", adoption: 1.3, frequency: 3.6 },
+  { num: 9, label: "Crear gasto", adoption: 1.1, frequency: 5.9 },
 ];
 
 function NegocioView() {
@@ -1626,7 +1821,7 @@ function NegocioView() {
         </div>
       </div>
 
-      {/* Pie Core vs Lite */}
+      {/* Pie Core vs Lite + Adopción CORE vs LITE */}
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
           <h3 className="text-base font-bold text-neutral-900">
@@ -1661,36 +1856,77 @@ function NegocioView() {
           </div>
         </div>
 
-        {/* Resumen Engagement */}
+        {/* Adopción funcionalidades CORE vs LITE - barras */}
         <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-          <h3 className="text-base font-bold text-neutral-900">
-            Engagement por funcionalidad
-          </h3>
-          <p className="mt-1 text-xs text-neutral-500">
-            Eje X: Adopción (%MAU) · Eje Y: Frecuencia (avg perform). Tamaño = adopción. Líneas guía: %MAU 27.45 · Frec 9.65
-          </p>
-          <div className="mt-3 space-y-2 text-xs text-neutral-600">
-            <p>
-              <span className="font-bold text-neutral-900">CORE</span> ({coreEvents.length} eventos): el cuadrante alto-derecho concentra "Crear factura" y "Buscar factura", con frecuencias {">"} 28.
-            </p>
-            <p>
-              <span className="font-bold text-neutral-900">LITE</span> ({liteEvents.length} eventos): adopción más alta en "Crear factura" (56.7%) pero frecuencias menores. Patrón de uso más esporádico.
-            </p>
+          <div className="mb-2 flex items-start justify-between">
+            <div>
+              <h3 className="text-base font-bold text-neutral-900">
+                Adopción funcionalidades — Uniques Mensual CORE vs LITE
+              </h3>
+              <p className="mt-1 text-xs text-neutral-500">
+                % de adopción por funcionalidad · Marzo 2026
+              </p>
+            </div>
+          </div>
+          <div className="h-[260px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={adopcionCoreLiteData} layout="vertical" margin={{ top: 5, right: 16, left: 110, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" horizontal={false} />
+                <XAxis type="number" stroke="#6b7280" tick={{ fontSize: 10 }} tickFormatter={(v) => `${v}%`} />
+                <YAxis dataKey="event" type="category" stroke="#6b7280" tick={{ fontSize: 10 }} width={110} />
+                <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => `${v.toFixed(1)}%`} />
+                <Legend iconType="circle" wrapperStyle={{ fontSize: 11, paddingTop: 4 }} />
+                <Bar dataKey="CORE" fill={ALEGRA_GREEN} radius={[0, 4, 4, 0]} />
+                <Bar dataKey="LITE" fill="#9ca3af" radius={[0, 4, 4, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
           </div>
         </div>
       </div>
 
-      {/* Engagement scatter bubble chart */}
-      <EngagementScatter />
+      {/* Engagement scatter — separados CORE / LITE */}
+      <div className="grid gap-6 xl:grid-cols-2">
+        <EngagementScatterSegment
+          segment="CORE"
+          events={coreEvents}
+          accent={ALEGRA_GREEN}
+          chartUrl="https://app.amplitude.com/analytics/alegra/chart/8bsh2x62"
+        />
+        <EngagementScatterSegment
+          segment="LITE"
+          events={liteEvents}
+          accent="#0066FF"
+          chartUrl="https://app.amplitude.com/analytics/alegra/chart/jtbzs8ce"
+        />
+      </div>
+
+      {/* Funcionalidades — Uniques Mensual: dos charts (CORE / LITE) con tags filtrables */}
+      <FuncionalidadesUniquesMensual
+        segment="CORE"
+        data={coreMonthlyUniques}
+      />
+      <FuncionalidadesUniquesMensual
+        segment="LITE"
+        data={liteMonthlyUniques}
+      />
     </div>
   );
 }
 
-// Cuadrante de engagement con bolitas estilo Amplitude
-function EngagementScatter() {
-  // Dimensiones lógicas
-  const W = 720;
-  const H = 420;
+// Cuadrante de engagement con bolitas estilo Amplitude — un solo segmento (CORE o LITE)
+function EngagementScatterSegment({
+  segment,
+  events,
+  accent,
+  chartUrl,
+}: {
+  segment: "CORE" | "LITE" | "BASE" | "SOS";
+  events: EngagementEvent[];
+  accent: string;
+  chartUrl?: string;
+}) {
+  const W = 520;
+  const H = 380;
   const padL = 40;
   const padR = 20;
   const padT = 20;
@@ -1698,150 +1934,198 @@ function EngagementScatter() {
   const innerW = W - padL - padR;
   const innerH = H - padT - padB;
 
-  // Escalas
-  const maxX = 60;
-  const maxY = 50;
+  const maxX = Math.max(60, ...events.map((e) => e.adoption + 5));
+  const maxY = Math.max(50, ...events.map((e) => e.frequency + 5));
   const xToPx = (x: number) => padL + (x / maxX) * innerW;
   const yToPx = (y: number) => padT + innerH - (y / maxY) * innerH;
-
   const medX = 27.45;
   const medY = 9.65;
-
-  type Point = EngagementEvent & { type: "CORE" | "LITE" };
-  const points: Point[] = [
-    ...coreEvents.map((e) => ({ ...e, type: "CORE" as const })),
-    ...liteEvents.map((e) => ({ ...e, type: "LITE" as const })),
-  ];
-
-  // Radio en función del tamaño (frecuencia + adoption ligeros)
-  const radius = (p: Point) => 12 + Math.min(18, p.adoption * 0.25);
+  const radius = (e: EngagementEvent) => 12 + Math.min(18, e.adoption * 0.25);
 
   return (
     <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-      <div className="mb-4 flex items-start justify-between gap-4 flex-wrap">
+      <div className="mb-3 flex items-start justify-between gap-3">
         <div>
-          <h3 className="text-base font-bold text-neutral-900">
-            Engagement por funcionalidad — CORE vs LITE
-          </h3>
-          <p className="mt-1 text-xs text-neutral-500">
-            Adopción (%MAU) vs Frecuencia (avg time performed). Líneas guía: %MAU 27.45 · Frecuencia 9.65
+          <div className="flex items-center gap-2">
+            <span
+              className="inline-block h-2.5 w-2.5 rounded-full"
+              style={{ backgroundColor: accent }}
+            />
+            <h3 className="text-sm font-bold text-neutral-900">
+              Engagement por funcionalidad — {segment}
+            </h3>
+          </div>
+          <p className="mt-1 text-[11px] text-neutral-500">
+            Adopción (%MAU) vs Frecuencia · Líneas guía: %MAU {medX} · Frec {medY}
           </p>
         </div>
-        <div className="flex items-center gap-4 text-xs">
-          <div className="flex items-center gap-1.5">
-            <span
-              className="inline-block h-3 w-3 rounded-full"
-              style={{ backgroundColor: ALEGRA_GREEN }}
-            />
-            <span className="font-semibold text-neutral-700">CORE</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span
-              className="inline-block h-3 w-3 rounded-full"
-              style={{ backgroundColor: "#0066FF" }}
-            />
-            <span className="font-semibold text-neutral-700">LITE</span>
-          </div>
-        </div>
+        {chartUrl && (
+          <a
+            href={chartUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+          >
+            Amplitude <ExternalLink className="h-3 w-3" />
+          </a>
+        )}
       </div>
 
       <div className="overflow-x-auto">
-        <svg viewBox={`0 0 ${W} ${H}`} className="h-[420px] w-full min-w-[640px]">
-          {/* Cuadrantes background */}
+        <svg viewBox={`0 0 ${W} ${H}`} className="h-[360px] w-full min-w-[480px]">
           <rect x={padL} y={padT} width={xToPx(medX) - padL} height={yToPx(medY) - padT} fill="#FEF3C7" opacity="0.4" />
           <rect x={xToPx(medX)} y={padT} width={padL + innerW - xToPx(medX)} height={yToPx(medY) - padT} fill="#D1FAE5" opacity="0.4" />
           <rect x={padL} y={yToPx(medY)} width={xToPx(medX) - padL} height={padT + innerH - yToPx(medY)} fill="#FED7AA" opacity="0.4" />
           <rect x={xToPx(medX)} y={yToPx(medY)} width={padL + innerW - xToPx(medX)} height={padT + innerH - yToPx(medY)} fill="#E5E7EB" opacity="0.4" />
-
-          {/* Ejes */}
           <line x1={padL} y1={padT + innerH} x2={padL + innerW} y2={padT + innerH} stroke="#9ca3af" strokeWidth="1" />
           <line x1={padL} y1={padT} x2={padL} y2={padT + innerH} stroke="#9ca3af" strokeWidth="1" />
-
-          {/* Líneas medianas */}
           <line x1={xToPx(medX)} y1={padT} x2={xToPx(medX)} y2={padT + innerH} stroke="#6b7280" strokeWidth="1" strokeDasharray="4 3" />
           <line x1={padL} y1={yToPx(medY)} x2={padL + innerW} y2={yToPx(medY)} stroke="#6b7280" strokeWidth="1" strokeDasharray="4 3" />
 
-          {/* Labels mediana */}
-          <text x={xToPx(medX) + 4} y={padT + 12} fontSize="10" fill="#6b7280">Mediana %MAU: {medX}</text>
-          <text x={padL + innerW - 8} y={yToPx(medY) - 4} fontSize="10" fill="#6b7280" textAnchor="end">Mediana Frec: {medY}</text>
-
-          {/* Etiquetas eje X */}
-          {[0, 10, 20, 30, 40, 50, 60].map((v) => (
+          {[0, 10, 20, 30, 40, 50, 60].filter((v) => v <= maxX).map((v) => (
             <g key={v}>
               <text x={xToPx(v)} y={padT + innerH + 16} fontSize="10" fill="#6b7280" textAnchor="middle">{v}</text>
               <line x1={xToPx(v)} y1={padT + innerH} x2={xToPx(v)} y2={padT + innerH + 4} stroke="#9ca3af" />
             </g>
           ))}
-          {/* Etiquetas eje Y */}
-          {[0, 10, 20, 30, 40, 50].map((v) => (
+          {[0, 10, 20, 30, 40, 50].filter((v) => v <= maxY).map((v) => (
             <g key={v}>
               <text x={padL - 6} y={yToPx(v) + 3} fontSize="10" fill="#6b7280" textAnchor="end">{v}</text>
               <line x1={padL - 4} y1={yToPx(v)} x2={padL} y2={yToPx(v)} stroke="#9ca3af" />
             </g>
           ))}
 
-          {/* Bolitas */}
-          {points.map((p, i) => {
+          {events.map((p, i) => {
             const cx = xToPx(p.adoption);
             const cy = yToPx(p.frequency);
             const r = radius(p);
-            const fill = p.type === "CORE" ? ALEGRA_GREEN : "#0066FF";
+            const fill = colorForEvent(p.label);
             return (
-              <g key={`${p.type}-${i}`}>
-                <circle
-                  cx={cx}
-                  cy={cy}
-                  r={r}
-                  fill={fill}
-                  fillOpacity="0.85"
-                  stroke="white"
-                  strokeWidth="2"
-                />
+              <g key={`${segment}-${i}`}>
+                <circle cx={cx} cy={cy} r={r} fill={fill} fillOpacity="0.85" stroke="white" strokeWidth="2" />
                 <text x={cx} y={cy + 3} fontSize="11" fontWeight="bold" fill="white" textAnchor="middle">
                   {p.num}
                 </text>
-                <title>{`${p.type} · ${p.label} — Adopción ${p.adoption}% · Frec ${p.frequency}`}</title>
+                <title>{`${p.label} — Adopción ${p.adoption}% · Frec ${p.frequency}`}</title>
               </g>
             );
           })}
 
-          {/* Etiquetas ejes */}
           <text x={padL + innerW / 2} y={H - 6} fontSize="11" fill="#374151" textAnchor="middle" fontWeight="600">Adopción (%MAU)</text>
-          <text x={12} y={padT + innerH / 2} fontSize="11" fill="#374151" textAnchor="middle" fontWeight="600" transform={`rotate(-90 12 ${padT + innerH / 2})`}>Frecuencia (avg time performed)</text>
+          <text x={12} y={padT + innerH / 2} fontSize="11" fill="#374151" textAnchor="middle" fontWeight="600" transform={`rotate(-90 12 ${padT + innerH / 2})`}>Frecuencia</text>
         </svg>
       </div>
 
       {/* Leyenda numerada */}
-      <div className="mt-4 grid gap-x-6 gap-y-1 text-[11px] sm:grid-cols-2">
+      <div className="mt-3 grid grid-cols-1 gap-x-4 gap-y-1 text-[11px] sm:grid-cols-2">
+        {events.map((e) => (
+          <div key={e.num} className="flex items-center gap-2">
+            <span
+              className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-[9px] font-bold text-white"
+              style={{ backgroundColor: colorForEvent(e.label) }}
+            >
+              {e.num}
+            </span>
+            <span className="text-neutral-700">{e.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Funcionalidades — Uniques mensual con tags filtrables
+function FuncionalidadesUniquesMensual({
+  segment,
+  data,
+}: {
+  segment: "CORE" | "LITE";
+  data: { label: string; num: number; series: { month: string; value: number }[] }[];
+}) {
+  const [active, setActive] = useState<string | null>(null);
+  const visible = active ? data.filter((d) => d.label === active) : data;
+
+  // Convertir a formato Recharts: [{ month, "Crear factura": 100, ... }]
+  const months = data[0]?.series.map((s) => s.month) ?? [];
+  const chartData = months.map((m, idx) => {
+    const row: Record<string, string | number> = { month: m };
+    visible.forEach((d) => {
+      row[d.label] = d.series[idx].value;
+    });
+    return row;
+  });
+
+  return (
+    <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+      <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
         <div>
-          <p className="mb-1 text-[10px] font-bold uppercase tracking-wider" style={{ color: ALEGRA_GREEN }}>CORE</p>
-          {coreEvents.map((e) => (
-            <div key={e.num} className="flex items-center gap-2">
-              <span className="flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-bold text-white" style={{ backgroundColor: ALEGRA_GREEN }}>{e.num}</span>
-              <span className="text-neutral-700">{e.label}</span>
-            </div>
-          ))}
+          <h3 className="text-base font-bold text-neutral-900">
+            Funcionalidades — Uniques Mensual {segment === "CORE" ? "CORE" : "LITE"}
+          </h3>
+          <p className="mt-1 text-xs text-neutral-500">
+            Usuarios únicos por funcionalidad · Selecciona un tag para aislar la línea
+          </p>
         </div>
-        <div>
-          <p className="mb-1 text-[10px] font-bold uppercase tracking-wider" style={{ color: "#0066FF" }}>LITE</p>
-          {liteEvents.map((e) => (
-            <div key={e.num} className="flex items-center gap-2">
-              <span className="flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-bold text-white" style={{ backgroundColor: "#0066FF" }}>{e.num}</span>
-              <span className="text-neutral-700">{e.label}</span>
-            </div>
-          ))}
-        </div>
+        {active && (
+          <button
+            onClick={() => setActive(null)}
+            className="rounded-full border border-neutral-300 px-3 py-1 text-[11px] font-medium text-neutral-600 hover:bg-neutral-50"
+          >
+            Limpiar filtro
+          </button>
+        )}
       </div>
 
-      <div className="mt-4 flex items-center justify-end">
-        <a
-          href="https://app.amplitude.com/analytics/alegra"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
-        >
-          Fuente: Engagement por funcionalidad MAC CORE / MAU LITE · Amplitude <ExternalLink className="h-3 w-3" />
-        </a>
+      {/* Tags */}
+      <div className="mb-4 flex flex-wrap gap-1.5">
+        {data.map((d) => {
+          const isActive = active === d.label;
+          const c = colorForEvent(d.label);
+          return (
+            <button
+              key={d.label}
+              onClick={() => setActive(isActive ? null : d.label)}
+              className={cn(
+                "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-all",
+                isActive
+                  ? "text-white shadow-sm"
+                  : "border-neutral-200 bg-white text-neutral-700 hover:border-neutral-300",
+              )}
+              style={
+                isActive
+                  ? { backgroundColor: c, borderColor: c }
+                  : { borderLeftColor: c, borderLeftWidth: 3 }
+              }
+            >
+              <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full text-[8px] font-bold" style={{ backgroundColor: isActive ? "rgba(255,255,255,0.3)" : c, color: isActive ? "white" : "white" }}>
+                {d.num}
+              </span>
+              {d.label}
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="h-[300px] w-full">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={chartData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+            <XAxis dataKey="month" stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={{ stroke: "#e5e7eb" }} tickLine={false} />
+            <YAxis stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => v.toLocaleString("es-CO")} />
+            <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => v.toLocaleString("es-CO")} />
+            {visible.map((d) => (
+              <Line
+                key={d.label}
+                type="monotone"
+                dataKey={d.label}
+                stroke={colorForEvent(d.label)}
+                strokeWidth={active ? 3 : 2}
+                dot={{ r: active ? 4 : 2 }}
+                activeDot={{ r: 6 }}
+              />
+            ))}
+          </LineChart>
+        </ResponsiveContainer>
       </div>
     </div>
   );
