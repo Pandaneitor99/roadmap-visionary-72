@@ -190,17 +190,58 @@ function Section1() {
           de la Pyme y el centro de control móvil en tiempo real del contador,
           donde las decisiones y flujos críticos se resuelven en segundos."
         </p>
-        <p className="mt-6 max-w-4xl text-sm leading-relaxed text-neutral-600 md:text-base">
-          La app no compite con la web. La web es donde vive la complejidad; la
-          app es donde vive la inmediatez. Cuando un emprendedor está frente a
-          un cliente y necesita facturar, no debería pensar — debería actuar.
-          Cuando un contador necesita validar el estado de negocios en
-          movimiento, no debería esperar — debería controlar. Ese es el estándar
-          que nos imponemos.
-        </p>
       </div>
 
-      {/* Two cards */}
+      {/* Filosofía en tarjetas */}
+      <div className="grid gap-5 md:grid-cols-3">
+        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+          <div
+            className="inline-flex rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white"
+            style={{ backgroundColor: ALEGRA_GREEN }}
+          >
+            Principio
+          </div>
+          <h3 className="mt-3 text-lg font-bold text-neutral-900">
+            La app no compite con la web
+          </h3>
+          <p className="mt-2 text-sm leading-relaxed text-neutral-600">
+            La <strong>web</strong> es donde vive la <strong>complejidad</strong>;
+            la <strong>app</strong> es donde vive la <strong>inmediatez</strong>.
+          </p>
+        </div>
+
+        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+          <div
+            className="inline-flex rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white"
+            style={{ backgroundColor: "#FF6B00" }}
+          >
+            Pyme
+          </div>
+          <h3 className="mt-3 text-lg font-bold text-neutral-900">
+            Frente al cliente: actuar, no pensar
+          </h3>
+          <p className="mt-2 text-sm leading-relaxed text-neutral-600">
+            Cuando un emprendedor está frente a un cliente y necesita facturar,
+            no debería <strong>pensar</strong> — debería <strong>actuar</strong>.
+          </p>
+        </div>
+
+        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+          <div className="inline-flex rounded-full bg-neutral-900 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
+            Contador
+          </div>
+          <h3 className="mt-3 text-lg font-bold text-neutral-900">
+            En movimiento: controlar, no esperar
+          </h3>
+          <p className="mt-2 text-sm leading-relaxed text-neutral-600">
+            Cuando un contador necesita validar el estado de negocios en
+            movimiento, no debería <strong>esperar</strong> — debería{" "}
+            <strong>controlar</strong>. Ese es el estándar que nos imponemos.
+          </p>
+        </div>
+      </div>
+
+      {/* Two cards: roles */}
       <div className="grid gap-5 md:grid-cols-2">
         <div className="group rounded-2xl border border-neutral-200 bg-white p-7 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
           <div
@@ -210,7 +251,7 @@ function Section1() {
             Para la Pyme
           </div>
           <h3 className="mt-4 text-xl font-bold text-neutral-900">
-            Centro operativo
+            Centro operativo mobile
           </h3>
           <p className="mt-2 text-sm text-neutral-600">Ejecución inmediata</p>
         </div>
@@ -219,13 +260,16 @@ function Section1() {
             Para el contador
           </div>
           <h3 className="mt-4 text-xl font-bold text-neutral-900">
-            Centro de control
+            Centro de control mobile
           </h3>
           <p className="mt-2 text-sm text-neutral-600">Control y validación</p>
         </div>
       </div>
 
-      {/* Trade-offs table */}
+      {/* Segmentos Objetivo */}
+      <SegmentosObjetivo />
+
+      {/* Trade-offs table — al final */}
       <div>
         <h2 className="mb-4 text-lg font-bold text-neutral-900">
           Trade-offs estratégicos
@@ -270,9 +314,6 @@ function Section1() {
           </div>
         </div>
       </div>
-
-      {/* Segmentos Objetivo */}
-      <SegmentosObjetivo />
     </div>
   );
 }
@@ -396,15 +437,25 @@ function SegmentosObjetivo() {
         </div>
         {segmentos.map((s) => {
           const active = s.id === selected;
+          // Fondo claro: web-first → naranja claro, móvil-first → verde claro, otros → tono propio
+          const bgTint =
+            s.badge === "Web-first"
+              ? "rgba(255,107,0,0.08)"
+              : s.badge === "Móvil-first"
+                ? "rgba(0,179,134,0.08)"
+                : `${s.color}10`;
           return (
             <button
               key={s.id}
               onClick={() => setSelected(s.id)}
               className={cn(
                 "grid w-full grid-cols-12 items-center border-b border-neutral-100 px-5 py-3 text-left text-xs transition-all last:border-b-0 hover:bg-neutral-50",
-                active && "bg-emerald-50/40",
               )}
-              style={active ? { boxShadow: `inset 3px 0 0 ${s.color}` } : undefined}
+              style={
+                active
+                  ? { backgroundColor: bgTint, boxShadow: `inset 3px 0 0 ${s.color}` }
+                  : undefined
+              }
             >
               <div className="col-span-3 font-semibold text-neutral-900">
                 {s.nombre}
@@ -785,10 +836,9 @@ function Section2() {
                 <Line
                   type="monotone"
                   dataKey="LITE"
-                  stroke="#9ca3af"
+                  stroke="#FF6B00"
                   strokeWidth={2}
                   dot={{ r: 3 }}
-                  strokeDasharray="4 4"
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -836,7 +886,7 @@ function Section2() {
             label="MAC Lite actual"
             value={last.LITE}
             delta={Number(liteDelta)}
-            color="#9ca3af"
+            color="#FF6B00"
           />
         </div>
       </div>
@@ -1616,7 +1666,7 @@ const macCoreLiteTrend = [
 
 const corePieData = [
   { name: "CORE", value: 4936, color: ALEGRA_GREEN },
-  { name: "LITE", value: 3412, color: "#9ca3af" },
+  { name: "LITE", value: 3412, color: "#FF6B00" },
 ];
 const corePieTotal = corePieData.reduce((s, d) => s + d.value, 0);
 
@@ -1677,28 +1727,41 @@ const adopcionCoreLiteData = Array.from(
   })
   .sort((a, b) => b.CORE + b.LITE - (a.CORE + a.LITE));
 
-// Uniques mensual por evento — % adoption × MAC mensual (CORE / LITE) con leve variación determinista
-function buildMonthlyUniques(
-  events: EngagementEvent[],
-  trend: typeof macCoreLiteTrend,
-  segment: "CORE" | "LITE",
-) {
-  return events.map((e) => {
-    const series = trend.map((t, idx) => {
-      const mac = segment === "CORE" ? t.CORE : t.LITE;
-      const seed = (e.num * 13 + idx * 7) % 11;
-      const variation = 0.85 + (seed / 11) * 0.3;
-      return { month: t.month, value: Math.round(mac * (e.adoption / 100) * variation) };
-    });
-    series[series.length - 1].value = Math.round(
-      (segment === "CORE" ? trend[trend.length - 1].CORE : trend[trend.length - 1].LITE) *
-        (e.adoption / 100),
-    );
-    return { label: e.label, num: e.num, series };
-  });
+// Adopción mensual % por evento — Series reales Amplitude (Oct '25 → Mar '26)
+// Formula: % usuarios únicos del evento / MAC del segmento × 100
+type MonthlyAdoptionSeries = { label: string; num: number; series: { month: string; pct: number }[] };
+
+const months6 = ["Oct '25", "Nov '25", "Dic '25", "Ene '26", "Feb '26", "Mar '26"];
+
+// % MAU mensual CORE (chart 8bsh2x62 con histórico mensual)
+const coreMonthlyAdoption: MonthlyAdoptionSeries[] = [
+  { num: 1, label: "Crear factura",              series: zip(months6, [42.1, 41.5, 43.8, 41.0, 41.8, 44.3]) },
+  { num: 2, label: "Buscar factura",             series: zip(months6, [33.5, 34.6, 35.9, 35.4, 34.9, 38.2]) },
+  { num: 3, label: "Ver gráfico de ventas",      series: zip(months6, [22.5, 26.8, 28.6, 28.1, 27.9, 27.8]) },
+  { num: 4, label: "Crear cotización",           series: zip(months6, [27.6, 26.7, 25.5, 26.0, 26.4, 27.0]) },
+  { num: 5, label: "Crear contacto",             series: zip(months6, [22.0, 19.7, 20.2, 19.7, 20.3, 20.0]) },
+  { num: 6, label: "Crear ítem",                 series: zip(months6, [15.5, 14.7, 15.3, 12.9, 14.5, 15.3]) },
+  { num: 7, label: "Crear remisión",             series: zip(months6, [3.9, 3.7, 4.0, 3.6, 3.9, 4.4]) },
+  { num: 8, label: "Crear factura de proveedor", series: zip(months6, [2.8, 2.6, 2.7, 2.4, 2.7, 3.0]) },
+  { num: 9, label: "Crear gasto",                series: zip(months6, [1.7, 1.6, 1.7, 1.5, 1.7, 1.9]) },
+];
+
+// % MAU mensual LITE (chart jtbzs8ce con histórico mensual)
+const liteMonthlyAdoption: MonthlyAdoptionSeries[] = [
+  { num: 1, label: "Crear factura",              series: zip(months6, [55.0, 55.2, 56.7, 52.3, 53.5, 56.7]) },
+  { num: 2, label: "Crear contacto",             series: zip(months6, [29.4, 28.7, 27.8, 27.4, 28.2, 27.6]) },
+  { num: 3, label: "Crear cotización",           series: zip(months6, [23.2, 22.5, 20.6, 22.2, 22.5, 24.2]) },
+  { num: 4, label: "Buscar factura",             series: zip(months6, [19.8, 20.2, 21.0, 19.8, 19.7, 24.2]) },
+  { num: 5, label: "Crear ítem",                 series: zip(months6, [24.6, 23.6, 23.9, 23.4, 23.3, 23.2]) },
+  { num: 6, label: "Ver gráfico de ventas",      series: zip(months6, [16.7, 20.7, 23.0, 21.5, 21.2, 21.8]) },
+  { num: 7, label: "Crear remisión",             series: zip(months6, [2.2, 2.1, 2.3, 2.1, 2.2, 2.5]) },
+  { num: 8, label: "Crear gasto",                series: zip(months6, [1.8, 1.7, 1.9, 1.7, 1.8, 2.0]) },
+  { num: 9, label: "Crear factura de proveedor", series: zip(months6, [1.7, 1.7, 1.8, 1.6, 1.8, 2.0]) },
+];
+
+function zip(months: string[], vals: number[]): { month: string; pct: number }[] {
+  return months.map((m, i) => ({ month: m, pct: vals[i] }));
 }
-const coreMonthlyUniques = buildMonthlyUniques(coreEvents, macCoreLiteTrend, "CORE");
-const liteMonthlyUniques = buildMonthlyUniques(liteEvents, macCoreLiteTrend, "LITE");
 
 // === Comportamiento BASE / SOS — datos reales Amplitude ===
 
@@ -1750,85 +1813,86 @@ function NegocioView() {
   const liteUp = Number(liteDelta) >= 0;
 
   return (
-    <div className="space-y-8">
-      {/* MAC Trend Core/Lite + variación cards */}
-      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm md:p-8">
-        <div className="mb-4 flex items-end justify-between">
-          <div>
-            <h3 className="text-lg font-bold text-neutral-900">
-              MAC — Tendencia CORE y LITE
-            </h3>
-            <p className="mt-1 text-xs text-neutral-500">
-              Últimos 6 meses · Usuarios pagos activos por tipo de negocio
-            </p>
+    <div className="space-y-10">
+      {/* MAC Trend Core/Lite + Distribución (al lado) */}
+      <div className="grid gap-6 lg:grid-cols-3">
+        {/* Tendencia */}
+        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm md:p-8 lg:col-span-2">
+          <div className="mb-4 flex items-end justify-between">
+            <div>
+              <h3 className="text-lg font-bold text-neutral-900">
+                MAC — Tendencia CORE y LITE
+              </h3>
+              <p className="mt-1 text-xs text-neutral-500">
+                Últimos 6 meses · Usuarios pagos activos por tipo de negocio
+              </p>
+            </div>
           </div>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div
-            className="rounded-xl border bg-white p-4"
-            style={{ borderLeft: `4px solid ${ALEGRA_GREEN}` }}
-          >
-            <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
-              MAC Core
-            </p>
-            <p className="mt-1 text-2xl font-bold text-neutral-900">
-              {last.CORE.toLocaleString("es-CO")}
-            </p>
-            <p
-              className={cn(
-                "mt-1 flex items-center gap-1 text-xs font-bold",
-                coreUp ? "text-emerald-600" : "text-red-600",
-              )}
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div
+              className="rounded-xl border bg-white p-4"
+              style={{ borderLeft: `4px solid ${ALEGRA_GREEN}` }}
             >
-              {coreUp ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
-              {coreUp ? "+" : ""}{coreDelta}% vs Oct '25
-            </p>
+              <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
+                MAC Core
+              </p>
+              <p className="mt-1 text-2xl font-bold text-neutral-900">
+                {last.CORE.toLocaleString("es-CO")}
+              </p>
+              <p
+                className={cn(
+                  "mt-1 flex items-center gap-1 text-xs font-bold",
+                  coreUp ? "text-emerald-600" : "text-red-600",
+                )}
+              >
+                {coreUp ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
+                {coreUp ? "+" : ""}{coreDelta}% vs Oct '25
+              </p>
+            </div>
+            <div
+              className="rounded-xl border bg-white p-4"
+              style={{ borderLeft: `4px solid #FF6B00` }}
+            >
+              <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
+                MAC Lite
+              </p>
+              <p className="mt-1 text-2xl font-bold text-neutral-900">
+                {last.LITE.toLocaleString("es-CO")}
+              </p>
+              <p
+                className={cn(
+                  "mt-1 flex items-center gap-1 text-xs font-bold",
+                  liteUp ? "text-emerald-600" : "text-red-600",
+                )}
+              >
+                {liteUp ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
+                {liteUp ? "+" : ""}{liteDelta}% vs Oct '25
+              </p>
+            </div>
           </div>
-          <div
-            className="rounded-xl border bg-white p-4"
-            style={{ borderLeft: `4px solid #9ca3af` }}
-          >
-            <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
-              MAC Lite
-            </p>
-            <p className="mt-1 text-2xl font-bold text-neutral-900">
-              {last.LITE.toLocaleString("es-CO")}
-            </p>
-            <p
-              className={cn(
-                "mt-1 flex items-center gap-1 text-xs font-bold",
-                liteUp ? "text-emerald-600" : "text-red-600",
-              )}
-            >
-              {liteUp ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
-              {liteUp ? "+" : ""}{liteDelta}% vs Oct '25
-            </p>
+
+          <div className="mt-6 h-[300px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={macCoreLiteTrend} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                <XAxis dataKey="month" stroke="#6b7280" tick={{ fontSize: 12 }} axisLine={{ stroke: "#e5e7eb" }} tickLine={false} />
+                <YAxis stroke="#6b7280" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} tickFormatter={(v) => v.toLocaleString("es-CO")} />
+                <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => v.toLocaleString("es-CO")} />
+                <Legend iconType="circle" wrapperStyle={{ fontSize: 12, paddingTop: 12 }} />
+                <Line type="monotone" dataKey="CORE" stroke={ALEGRA_GREEN} strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+                <Line type="monotone" dataKey="LITE" stroke="#FF6B00" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+              </LineChart>
+            </ResponsiveContainer>
           </div>
         </div>
 
-        <div className="mt-6 h-[300px] w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={macCoreLiteTrend} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
-              <XAxis dataKey="month" stroke="#6b7280" tick={{ fontSize: 12 }} axisLine={{ stroke: "#e5e7eb" }} tickLine={false} />
-              <YAxis stroke="#6b7280" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} tickFormatter={(v) => v.toLocaleString("es-CO")} />
-              <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => v.toLocaleString("es-CO")} />
-              <Legend iconType="circle" wrapperStyle={{ fontSize: 12, paddingTop: 12 }} />
-              <Line type="monotone" dataKey="CORE" stroke={ALEGRA_GREEN} strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
-              <Line type="monotone" dataKey="LITE" stroke="#9ca3af" strokeWidth={2} dot={{ r: 3 }} strokeDasharray="4 4" />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-
-      {/* Pie Core vs Lite + Adopción CORE vs LITE */}
-      <div className="grid gap-6 lg:grid-cols-2">
+        {/* Distribución al lado */}
         <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
           <h3 className="text-base font-bold text-neutral-900">
             Distribución CORE vs LITE
           </h3>
           <p className="mt-1 text-xs text-neutral-500">Marzo 2026</p>
-          <div className="h-[240px] w-full">
+          <div className="h-[260px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie data={corePieData} dataKey="value" nameKey="name" innerRadius={55} outerRadius={95} paddingAngle={3} label={(e: any) => `${e.name}: ${((e.value / corePieTotal) * 100).toFixed(0)}%`}>
@@ -1855,60 +1919,348 @@ function NegocioView() {
             ))}
           </div>
         </div>
+      </div>
 
-        {/* Adopción funcionalidades CORE vs LITE - barras */}
+      {/* === MRR === */}
+      <div>
+        <div className="mb-4 flex items-baseline gap-3">
+          <h3 className="text-lg font-bold text-neutral-900">MRR</h3>
+          <span className="text-xs text-neutral-500">
+            Ingreso recurrente mensual y mix de planes de pago
+          </span>
+        </div>
+        <div className="grid gap-6 lg:grid-cols-2">
+          <div className="flex min-h-[220px] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-neutral-200 bg-white/60 p-8 text-center">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-400">
+              MRR
+            </p>
+            <p className="mt-2 text-sm text-neutral-500">
+              Espacio reservado para la métrica de MRR (próximamente)
+            </p>
+          </div>
+          <div className="flex min-h-[220px] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-neutral-200 bg-white/60 p-8 text-center">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-400">
+              Planes de pago
+            </p>
+            <p className="mt-2 text-sm text-neutral-500">
+              Espacio reservado para la distribución de planes de pago (próximamente)
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* === Comportamiento === */}
+      <div>
+        <div className="mb-4 flex items-baseline gap-3">
+          <h3 className="text-lg font-bold text-neutral-900">Comportamiento</h3>
+          <span className="text-xs text-neutral-500">
+            Adopción y engagement de funcionalidades por tipo de negocio
+          </span>
+        </div>
+
+        {/* 1) Adopción funcionalidades CORE vs LITE - barras VERTICALES */}
         <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-          <div className="mb-2 flex items-start justify-between">
+          <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
             <div>
-              <h3 className="text-base font-bold text-neutral-900">
+              <h4 className="text-base font-bold text-neutral-900">
                 Adopción funcionalidades — Uniques Mensual CORE vs LITE
-              </h3>
+              </h4>
               <p className="mt-1 text-xs text-neutral-500">
                 % de adopción por funcionalidad · Marzo 2026
               </p>
             </div>
           </div>
-          <div className="h-[260px] w-full">
+          <div className="h-[340px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={adopcionCoreLiteData} layout="vertical" margin={{ top: 5, right: 16, left: 110, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" horizontal={false} />
-                <XAxis type="number" stroke="#6b7280" tick={{ fontSize: 10 }} tickFormatter={(v) => `${v}%`} />
-                <YAxis dataKey="event" type="category" stroke="#6b7280" tick={{ fontSize: 10 }} width={110} />
-                <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => `${v.toFixed(1)}%`} />
+              <BarChart data={adopcionCoreLiteData} margin={{ top: 8, right: 16, left: 0, bottom: 60 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                <XAxis
+                  dataKey="event"
+                  stroke="#6b7280"
+                  tick={{ fontSize: 10 }}
+                  interval={0}
+                  angle={-30}
+                  textAnchor="end"
+                  height={70}
+                />
+                <YAxis
+                  stroke="#6b7280"
+                  tick={{ fontSize: 10 }}
+                  tickFormatter={(v) => `${v}%`}
+                />
+                <Tooltip
+                  contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }}
+                  formatter={(v: number) => `${v.toFixed(1)}%`}
+                />
                 <Legend iconType="circle" wrapperStyle={{ fontSize: 11, paddingTop: 4 }} />
-                <Bar dataKey="CORE" fill={ALEGRA_GREEN} radius={[0, 4, 4, 0]} />
-                <Bar dataKey="LITE" fill="#9ca3af" radius={[0, 4, 4, 0]} />
+                <Bar dataKey="CORE" fill={ALEGRA_GREEN} radius={[4, 4, 0, 0]} />
+                <Bar dataKey="LITE" fill="#FF6B00" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
+
+        {/* 2) Funcionalidades — Uniques Mensual % CORE & LITE: tags compartidos */}
+        <div className="mt-6">
+          <FuncionalidadesUniquesShared
+            core={coreMonthlyAdoption}
+            lite={liteMonthlyAdoption}
+          />
+        </div>
+
+        {/* 3) Engagement scatter — separados CORE / LITE */}
+        <div className="mt-6 grid gap-6 xl:grid-cols-2">
+          <EngagementScatterSegment
+            segment="CORE"
+            events={coreEvents}
+            accent={ALEGRA_GREEN}
+            chartUrl="https://app.amplitude.com/analytics/alegra/chart/8bsh2x62"
+          />
+          <EngagementScatterSegment
+            segment="LITE"
+            events={liteEvents}
+            accent="#FF6B00"
+            chartUrl="https://app.amplitude.com/analytics/alegra/chart/jtbzs8ce"
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// === Funcionalidades — Uniques Mensual % (CORE & LITE con tags compartidos) ===
+function FuncionalidadesUniquesShared({
+  core,
+  lite,
+}: {
+  core: MonthlyAdoptionSeries[];
+  lite: MonthlyAdoptionSeries[];
+}) {
+  // Lista única de funcionalidades (unión)
+  const allLabels = Array.from(
+    new Set([...core.map((d) => d.label), ...lite.map((d) => d.label)]),
+  );
+  const [active, setActive] = useState<string | null>(null);
+
+  const visibleCore = active ? core.filter((d) => d.label === active) : core;
+  const visibleLite = active ? lite.filter((d) => d.label === active) : lite;
+
+  const toChartData = (series: MonthlyAdoptionSeries[]) => {
+    const months = series[0]?.series.map((s) => s.month) ?? months6;
+    return months.map((m, idx) => {
+      const row: Record<string, string | number> = { month: m };
+      series.forEach((d) => {
+        row[d.label] = d.series[idx]?.pct ?? 0;
+      });
+      return row;
+    });
+  };
+
+  // Comparación vs Octubre (solo cuando hay un evento activo)
+  const comparison = active
+    ? (() => {
+        const c = core.find((d) => d.label === active);
+        const l = lite.find((d) => d.label === active);
+        const oct = (s?: MonthlyAdoptionSeries) => s?.series[0]?.pct ?? null;
+        const mar = (s?: MonthlyAdoptionSeries) => s?.series[s.series.length - 1]?.pct ?? null;
+        const delta = (a: number | null, b: number | null) =>
+          a == null || b == null ? null : a - b;
+        return {
+          coreOct: oct(c),
+          coreMar: mar(c),
+          coreDelta: delta(mar(c), oct(c)),
+          liteOct: oct(l),
+          liteMar: mar(l),
+          liteDelta: delta(mar(l), oct(l)),
+        };
+      })()
+    : null;
+
+  return (
+    <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+      {/* Header */}
+      <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
+        <div>
+          <h4 className="text-base font-bold text-neutral-900">
+            Funcionalidades — Uniques Mensual (% adopción)
+          </h4>
+          <p className="mt-1 text-xs text-neutral-500">
+            % MAU mensual por funcionalidad · Selecciona un tag para comparar CORE vs LITE
+          </p>
+        </div>
+        {active && (
+          <button
+            onClick={() => setActive(null)}
+            className="rounded-full border border-neutral-300 px-3 py-1 text-[11px] font-medium text-neutral-600 hover:bg-neutral-50"
+          >
+            Limpiar filtro
+          </button>
+        )}
       </div>
 
-      {/* Engagement scatter — separados CORE / LITE */}
+      {/* Tags compartidos */}
+      <div className="mb-5 flex flex-wrap gap-1.5">
+        {allLabels.map((label) => {
+          const isActive = active === label;
+          const c = colorForEvent(label);
+          return (
+            <button
+              key={label}
+              onClick={() => setActive(isActive ? null : label)}
+              className={cn(
+                "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-all",
+                isActive
+                  ? "text-white shadow-sm"
+                  : "border-neutral-200 bg-white text-neutral-700 hover:border-neutral-300",
+              )}
+              style={
+                isActive
+                  ? { backgroundColor: c, borderColor: c }
+                  : { borderLeftColor: c, borderLeftWidth: 3 }
+              }
+            >
+              <span
+                className="h-2 w-2 rounded-full"
+                style={{ backgroundColor: isActive ? "rgba(255,255,255,0.9)" : c }}
+              />
+              {label}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Tabla de comparación vs Octubre cuando hay evento activo */}
+      {active && comparison && (
+        <div className="mb-5 overflow-hidden rounded-xl border border-neutral-200">
+          <table className="w-full text-xs">
+            <thead className="bg-neutral-50 text-neutral-600">
+              <tr>
+                <th className="px-4 py-2 text-left font-semibold uppercase tracking-wider">
+                  Segmento
+                </th>
+                <th className="px-4 py-2 text-right font-semibold uppercase tracking-wider">
+                  Oct '25
+                </th>
+                <th className="px-4 py-2 text-right font-semibold uppercase tracking-wider">
+                  Mar '26
+                </th>
+                <th className="px-4 py-2 text-right font-semibold uppercase tracking-wider">
+                  Variación
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-t border-neutral-100">
+                <td className="px-4 py-2.5">
+                  <span className="inline-flex items-center gap-2">
+                    <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: ALEGRA_GREEN }} />
+                    <span className="font-semibold text-neutral-900">CORE</span>
+                  </span>
+                </td>
+                <td className="px-4 py-2.5 text-right text-neutral-600">
+                  {comparison.coreOct == null ? "—" : `${comparison.coreOct.toFixed(1)}%`}
+                </td>
+                <td className="px-4 py-2.5 text-right font-bold text-neutral-900">
+                  {comparison.coreMar == null ? "—" : `${comparison.coreMar.toFixed(1)}%`}
+                </td>
+                <td
+                  className={cn(
+                    "px-4 py-2.5 text-right font-bold",
+                    comparison.coreDelta == null
+                      ? "text-neutral-400"
+                      : comparison.coreDelta >= 0
+                        ? "text-emerald-600"
+                        : "text-red-600",
+                  )}
+                >
+                  {comparison.coreDelta == null
+                    ? "—"
+                    : `${comparison.coreDelta >= 0 ? "+" : ""}${comparison.coreDelta.toFixed(1)} pp`}
+                </td>
+              </tr>
+              <tr className="border-t border-neutral-100">
+                <td className="px-4 py-2.5">
+                  <span className="inline-flex items-center gap-2">
+                    <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: "#FF6B00" }} />
+                    <span className="font-semibold text-neutral-900">LITE</span>
+                  </span>
+                </td>
+                <td className="px-4 py-2.5 text-right text-neutral-600">
+                  {comparison.liteOct == null ? "—" : `${comparison.liteOct.toFixed(1)}%`}
+                </td>
+                <td className="px-4 py-2.5 text-right font-bold text-neutral-900">
+                  {comparison.liteMar == null ? "—" : `${comparison.liteMar.toFixed(1)}%`}
+                </td>
+                <td
+                  className={cn(
+                    "px-4 py-2.5 text-right font-bold",
+                    comparison.liteDelta == null
+                      ? "text-neutral-400"
+                      : comparison.liteDelta >= 0
+                        ? "text-emerald-600"
+                        : "text-red-600",
+                  )}
+                >
+                  {comparison.liteDelta == null
+                    ? "—"
+                    : `${comparison.liteDelta >= 0 ? "+" : ""}${comparison.liteDelta.toFixed(1)} pp`}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {/* Dos charts en paralelo */}
       <div className="grid gap-6 xl:grid-cols-2">
-        <EngagementScatterSegment
-          segment="CORE"
-          events={coreEvents}
-          accent={ALEGRA_GREEN}
-          chartUrl="https://app.amplitude.com/analytics/alegra/chart/8bsh2x62"
-        />
-        <EngagementScatterSegment
-          segment="LITE"
-          events={liteEvents}
-          accent="#0066FF"
-          chartUrl="https://app.amplitude.com/analytics/alegra/chart/jtbzs8ce"
-        />
+        <UniquesPctChart segment="CORE" data={toChartData(visibleCore)} series={visibleCore} />
+        <UniquesPctChart segment="LITE" data={toChartData(visibleLite)} series={visibleLite} />
       </div>
+    </div>
+  );
+}
 
-      {/* Funcionalidades — Uniques Mensual: dos charts (CORE / LITE) con tags filtrables */}
-      <FuncionalidadesUniquesMensual
-        segment="CORE"
-        data={coreMonthlyUniques}
-      />
-      <FuncionalidadesUniquesMensual
-        segment="LITE"
-        data={liteMonthlyUniques}
-      />
+function UniquesPctChart({
+  segment,
+  data,
+  series,
+}: {
+  segment: "CORE" | "LITE";
+  data: Record<string, string | number>[];
+  series: MonthlyAdoptionSeries[];
+}) {
+  const accent = segment === "CORE" ? ALEGRA_GREEN : "#FF6B00";
+  return (
+    <div className="rounded-xl border border-neutral-200 bg-white p-4">
+      <div className="mb-2 flex items-center gap-2">
+        <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: accent }} />
+        <h5 className="text-sm font-bold text-neutral-900">{segment}</h5>
+        <span className="text-[11px] text-neutral-500">% MAU mensual</span>
+      </div>
+      <div className="h-[260px] w-full">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={data} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+            <XAxis dataKey="month" stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={{ stroke: "#e5e7eb" }} tickLine={false} />
+            <YAxis stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}%`} />
+            <Tooltip
+              contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }}
+              formatter={(v: number) => `${v.toFixed(1)}%`}
+            />
+            {series.map((d) => (
+              <Line
+                key={d.label}
+                type="monotone"
+                dataKey={d.label}
+                stroke={colorForEvent(d.label)}
+                strokeWidth={series.length === 1 ? 3 : 2}
+                dot={{ r: series.length === 1 ? 4 : 2 }}
+                activeDot={{ r: 6 }}
+              />
+            ))}
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 }
@@ -2034,102 +2386,8 @@ function EngagementScatterSegment({
   );
 }
 
-// Funcionalidades — Uniques mensual con tags filtrables
-function FuncionalidadesUniquesMensual({
-  segment,
-  data,
-}: {
-  segment: "CORE" | "LITE";
-  data: { label: string; num: number; series: { month: string; value: number }[] }[];
-}) {
-  const [active, setActive] = useState<string | null>(null);
-  const visible = active ? data.filter((d) => d.label === active) : data;
+// (Funcionalidades — Uniques mensual antiguo: reemplazado por FuncionalidadesUniquesShared)
 
-  // Convertir a formato Recharts: [{ month, "Crear factura": 100, ... }]
-  const months = data[0]?.series.map((s) => s.month) ?? [];
-  const chartData = months.map((m, idx) => {
-    const row: Record<string, string | number> = { month: m };
-    visible.forEach((d) => {
-      row[d.label] = d.series[idx].value;
-    });
-    return row;
-  });
-
-  return (
-    <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-      <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
-        <div>
-          <h3 className="text-base font-bold text-neutral-900">
-            Funcionalidades — Uniques Mensual {segment === "CORE" ? "CORE" : "LITE"}
-          </h3>
-          <p className="mt-1 text-xs text-neutral-500">
-            Usuarios únicos por funcionalidad · Selecciona un tag para aislar la línea
-          </p>
-        </div>
-        {active && (
-          <button
-            onClick={() => setActive(null)}
-            className="rounded-full border border-neutral-300 px-3 py-1 text-[11px] font-medium text-neutral-600 hover:bg-neutral-50"
-          >
-            Limpiar filtro
-          </button>
-        )}
-      </div>
-
-      {/* Tags */}
-      <div className="mb-4 flex flex-wrap gap-1.5">
-        {data.map((d) => {
-          const isActive = active === d.label;
-          const c = colorForEvent(d.label);
-          return (
-            <button
-              key={d.label}
-              onClick={() => setActive(isActive ? null : d.label)}
-              className={cn(
-                "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-all",
-                isActive
-                  ? "text-white shadow-sm"
-                  : "border-neutral-200 bg-white text-neutral-700 hover:border-neutral-300",
-              )}
-              style={
-                isActive
-                  ? { backgroundColor: c, borderColor: c }
-                  : { borderLeftColor: c, borderLeftWidth: 3 }
-              }
-            >
-              <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full text-[8px] font-bold" style={{ backgroundColor: isActive ? "rgba(255,255,255,0.3)" : c, color: isActive ? "white" : "white" }}>
-                {d.num}
-              </span>
-              {d.label}
-            </button>
-          );
-        })}
-      </div>
-
-      <div className="h-[300px] w-full">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={chartData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
-            <XAxis dataKey="month" stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={{ stroke: "#e5e7eb" }} tickLine={false} />
-            <YAxis stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => v.toLocaleString("es-CO")} />
-            <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => v.toLocaleString("es-CO")} />
-            {visible.map((d) => (
-              <Line
-                key={d.label}
-                type="monotone"
-                dataKey={d.label}
-                stroke={colorForEvent(d.label)}
-                strokeWidth={active ? 3 : 2}
-                dot={{ r: active ? 4 : 2 }}
-                activeDot={{ r: 6 }}
-              />
-            ))}
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
-    </div>
-  );
-}
 
 // === Clusters BASE / SOS - bubble visualization ===
 
