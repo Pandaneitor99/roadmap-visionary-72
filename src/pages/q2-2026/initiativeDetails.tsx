@@ -680,7 +680,13 @@ export function HomeDetail() {
                       <Line type="monotone" dataKey="pct" stroke={BLUE} strokeWidth={2} />
                     </LineChart>
                   ) : tab === "fnCotizacion" ? (
-                    <iframe src="https://app.amplitude.com/analytics/share/embed/j5qy0tqd" className="h-full w-full rounded border-0" title="Funnel Cotización" />
+                    <LineChart data={funnelHomeCotizacion}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                      <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
+                      <YAxis tick={{ fontSize: 10 }} unit="%" />
+                      <Tooltip formatter={(v: number) => `${v.toFixed(2)}%`} />
+                      <Line type="monotone" dataKey="pct" stroke="#9333EA" strokeWidth={2} />
+                    </LineChart>
                   ) : tab === "fnItem" ? (
                     <LineChart data={funnelHomeItem}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -696,6 +702,14 @@ export function HomeDetail() {
                       <YAxis tick={{ fontSize: 10 }} unit="s" />
                       <Tooltip formatter={(v: number) => `${v.toLocaleString()}s`} />
                       <Line type="monotone" dataKey="s" stroke={ALEGRA_GREEN} strokeWidth={2} />
+                    </LineChart>
+                  ) : tab === "ttcContactos" ? (
+                    <LineChart data={ttcContactos}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                      <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
+                      <YAxis tick={{ fontSize: 10 }} unit="s" />
+                      <Tooltip formatter={(v: number) => `${v.toLocaleString()}s`} />
+                      <Line type="monotone" dataKey="s" stroke={BLUE} strokeWidth={2} />
                     </LineChart>
                   ) : tab === "ttcCotizacion" ? (
                     <iframe src="https://app.amplitude.com/analytics/share/embed/phd97cxa" className="h-full w-full rounded border-0" title="TTC Cotización" />
