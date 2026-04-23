@@ -3257,6 +3257,7 @@ function SectionIssues() {
 }
 
 
+function OKRMiniCard({
   okr,
   kind,
 }: {
