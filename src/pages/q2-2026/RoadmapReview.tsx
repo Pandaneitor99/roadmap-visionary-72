@@ -1470,7 +1470,7 @@ function ParticipacionApp() {
 
 
 function Section3() {
-  const [tab, setTab] = useState<"negocio" | "comportamiento" | "baseSos">("negocio");
+  const [tab, setTab] = useState<"negocio" | "baseSos">("negocio");
 
   return (
     <div className="space-y-8">
