@@ -2173,8 +2173,6 @@ function NegocioView() {
 }
 
 // (Comportamiento Core/Lite movido a ComportamientoUnifiedView en la pestaña "Comportamiento")
-function _NegocioViewClose() {
-  return null;
 
 function FuncionalidadesUniquesShared({
   core,
