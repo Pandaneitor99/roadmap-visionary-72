@@ -1053,6 +1053,16 @@ const adoptionByCountry = [
   { country: "Costa Rica", wac: 20.0, wau: 38.0 },
 ];
 
+// Evolución mensual % usuarios pagos activos (Oct'25 → Mar'26) - chart rbp5ch2z
+const adopcionMensualSeries = [
+  { month: "Oct '25", adopcion: 30.5, real: 19.8 },
+  { month: "Nov '25", adopcion: 30.2, real: 19.9 },
+  { month: "Dic '25", adopcion: 31.0, real: 20.7 },
+  { month: "Ene '26", adopcion: 30.8, real: 21.0 },
+  { month: "Feb '26", adopcion: 30.6, real: 21.3 },
+  { month: "Mar '26", adopcion: 31.1, real: 22.1 },
+];
+
 function TasaAdopcion() {
   // Marzo 2026 (chart rbp5ch2z): Ingresan a la app 31.85%, Realizan acción 22.10%
   const tasaAdopcion = "31.1"; // MAU APP / MAC WEB
