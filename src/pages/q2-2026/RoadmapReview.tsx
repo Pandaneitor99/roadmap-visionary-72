@@ -1728,7 +1728,7 @@ function NegocioView() {
         </div>
       </div>
 
-      {/* Pie Core vs Lite */}
+      {/* Pie Core vs Lite + Adopción CORE vs LITE */}
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
           <h3 className="text-base font-bold text-neutral-900">
@@ -1763,27 +1763,59 @@ function NegocioView() {
           </div>
         </div>
 
-        {/* Resumen Engagement */}
+        {/* Adopción funcionalidades CORE vs LITE - barras */}
         <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-          <h3 className="text-base font-bold text-neutral-900">
-            Engagement por funcionalidad
-          </h3>
-          <p className="mt-1 text-xs text-neutral-500">
-            Eje X: Adopción (%MAU) · Eje Y: Frecuencia (avg perform). Tamaño = adopción. Líneas guía: %MAU 27.45 · Frec 9.65
-          </p>
-          <div className="mt-3 space-y-2 text-xs text-neutral-600">
-            <p>
-              <span className="font-bold text-neutral-900">CORE</span> ({coreEvents.length} eventos): el cuadrante alto-derecho concentra "Crear factura" y "Buscar factura", con frecuencias {">"} 28.
-            </p>
-            <p>
-              <span className="font-bold text-neutral-900">LITE</span> ({liteEvents.length} eventos): adopción más alta en "Crear factura" (56.7%) pero frecuencias menores. Patrón de uso más esporádico.
-            </p>
+          <div className="mb-2 flex items-start justify-between">
+            <div>
+              <h3 className="text-base font-bold text-neutral-900">
+                Adopción funcionalidades — Uniques Mensual CORE vs LITE
+              </h3>
+              <p className="mt-1 text-xs text-neutral-500">
+                % de adopción por funcionalidad · Marzo 2026
+              </p>
+            </div>
+          </div>
+          <div className="h-[260px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={adopcionCoreLiteData} layout="vertical" margin={{ top: 5, right: 16, left: 110, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" horizontal={false} />
+                <XAxis type="number" stroke="#6b7280" tick={{ fontSize: 10 }} tickFormatter={(v) => `${v}%`} />
+                <YAxis dataKey="event" type="category" stroke="#6b7280" tick={{ fontSize: 10 }} width={110} />
+                <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => `${v.toFixed(1)}%`} />
+                <Legend iconType="circle" wrapperStyle={{ fontSize: 11, paddingTop: 4 }} />
+                <Bar dataKey="CORE" fill={ALEGRA_GREEN} radius={[0, 4, 4, 0]} />
+                <Bar dataKey="LITE" fill="#9ca3af" radius={[0, 4, 4, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
           </div>
         </div>
       </div>
 
-      {/* Engagement scatter bubble chart */}
-      <EngagementScatter />
+      {/* Engagement scatter — separados CORE / LITE */}
+      <div className="grid gap-6 xl:grid-cols-2">
+        <EngagementScatterSegment
+          segment="CORE"
+          events={coreEvents}
+          accent={ALEGRA_GREEN}
+          chartUrl="https://app.amplitude.com/analytics/alegra/chart/8bsh2x62"
+        />
+        <EngagementScatterSegment
+          segment="LITE"
+          events={liteEvents}
+          accent="#0066FF"
+          chartUrl="https://app.amplitude.com/analytics/alegra/chart/jtbzs8ce"
+        />
+      </div>
+
+      {/* Funcionalidades — Uniques Mensual: dos charts (CORE / LITE) con tags filtrables */}
+      <FuncionalidadesUniquesMensual
+        segment="CORE"
+        data={coreMonthlyUniques}
+      />
+      <FuncionalidadesUniquesMensual
+        segment="LITE"
+        data={liteMonthlyUniques}
+      />
     </div>
   );
 }
