@@ -437,15 +437,25 @@ function SegmentosObjetivo() {
         </div>
         {segmentos.map((s) => {
           const active = s.id === selected;
+          // Fondo claro: web-first → naranja claro, móvil-first → verde claro, otros → tono propio
+          const bgTint =
+            s.badge === "Web-first"
+              ? "rgba(255,107,0,0.08)"
+              : s.badge === "Móvil-first"
+                ? "rgba(0,179,134,0.08)"
+                : `${s.color}10`;
           return (
             <button
               key={s.id}
               onClick={() => setSelected(s.id)}
               className={cn(
                 "grid w-full grid-cols-12 items-center border-b border-neutral-100 px-5 py-3 text-left text-xs transition-all last:border-b-0 hover:bg-neutral-50",
-                active && "bg-emerald-50/40",
               )}
-              style={active ? { boxShadow: `inset 3px 0 0 ${s.color}` } : undefined}
+              style={
+                active
+                  ? { backgroundColor: bgTint, boxShadow: `inset 3px 0 0 ${s.color}` }
+                  : undefined
+              }
             >
               <div className="col-span-3 font-semibold text-neutral-900">
                 {s.nombre}
