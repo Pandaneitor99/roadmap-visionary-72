@@ -1615,14 +1615,14 @@ function SectionComportamiento() {
         <div className="flex items-start gap-3">
           <div
             className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
-            style={{ backgroundColor: `${BLUE}15` }}
+            style={{ backgroundColor: `${ALEGRA_GREEN}15` }}
           >
-            <Star className="h-5 w-5" style={{ color: BLUE }} />
+            <Star className="h-5 w-5" style={{ color: ALEGRA_GREEN }} />
           </div>
           <div>
             <p
               className="text-xs font-semibold uppercase tracking-[0.2em]"
-              style={{ color: BLUE }}
+              style={{ color: ALEGRA_GREEN }}
             >
               Adopción y engagement
             </p>
