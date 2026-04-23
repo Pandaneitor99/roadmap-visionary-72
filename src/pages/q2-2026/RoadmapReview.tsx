@@ -1548,6 +1548,57 @@ function ComportamientoView() {
 
       {/* Clusters - bubble visualization */}
       <ClustersBubbles />
+
+      {/* Adopción funcionalidades BASE vs SOS - chart aq7o241v */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+        <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
+          <div>
+            <h3 className="text-base font-bold text-neutral-900">
+              Adopción funcionalidades — Uniques Mensual BASE vs SOS
+            </h3>
+            <p className="mt-1 text-xs text-neutral-500">
+              % de adopción por funcionalidad · Mar 2026 · Cohort BASE vs Cohort SOS
+            </p>
+          </div>
+          <a
+            href="https://app.amplitude.com/analytics/alegra/chart/aq7o241v"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+          >
+            Amplitude <ExternalLink className="h-3 w-3" />
+          </a>
+        </div>
+        <div className="h-[360px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={adopcionBaseSosData} layout="vertical" margin={{ top: 5, right: 16, left: 130, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" horizontal={false} />
+              <XAxis type="number" stroke="#6b7280" tick={{ fontSize: 10 }} tickFormatter={(v) => `${v}%`} />
+              <YAxis dataKey="event" type="category" stroke="#6b7280" tick={{ fontSize: 10 }} width={130} />
+              <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => `${v.toFixed(1)}%`} />
+              <Legend iconType="circle" wrapperStyle={{ fontSize: 11, paddingTop: 4 }} />
+              <Bar dataKey="BASE" fill={ALEGRA_GREEN} radius={[0, 4, 4, 0]} />
+              <Bar dataKey="SOS" fill="#FF6B00" radius={[0, 4, 4, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Engagement por funcionalidad MAC — BASE y SOS, scatter separados, mismo color por evento */}
+      <div className="grid gap-6 xl:grid-cols-2">
+        <EngagementScatterSegment
+          segment="BASE"
+          events={baseEvents}
+          accent={ALEGRA_GREEN}
+          chartUrl="https://app.amplitude.com/analytics/alegra/chart/no1u7db2"
+        />
+        <EngagementScatterSegment
+          segment="SOS"
+          events={sosEvents}
+          accent="#FF6B00"
+          chartUrl="https://app.amplitude.com/analytics/alegra/chart/ezbhdx9r"
+        />
+      </div>
     </div>
   );
 }
