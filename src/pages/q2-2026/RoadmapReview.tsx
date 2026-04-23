@@ -2157,6 +2157,11 @@ const sosEvents: EngagementEvent[] = [
 ];
 
 function NegocioView() {
+  // Filtro de segmento que controla gráfico principal + cards de país
+  const [segment, setSegment] = useState<"both" | "CORE" | "LITE">("both");
+  // País seleccionado para resaltar línea (null = ver todos)
+  const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
+
   const last = macCoreLiteTrend[macCoreLiteTrend.length - 1];
   const first = macCoreLiteTrend[0];
   const coreDelta = (((last.CORE - first.CORE) / first.CORE) * 100).toFixed(1);
@@ -2164,8 +2169,58 @@ function NegocioView() {
   const coreUp = Number(coreDelta) >= 0;
   const liteUp = Number(liteDelta) >= 0;
 
+  // Series para el gráfico principal según segmento + país (si hay)
+  const mainSeriesData = (() => {
+    // Si hay país seleccionado, mostramos su(s) serie(s); si no, el agregado total
+    if (selectedCountry) {
+      const c = macCoreLitePerCountry.find((p) => p.country === selectedCountry);
+      if (!c) return macCoreLiteTrend;
+      return c.CORE.map((row, i) => ({
+        month: row.month,
+        CORE: c.CORE[i].v,
+        LITE: c.LITE[i].v,
+      }));
+    }
+    return macCoreLiteTrend;
+  })();
+
+  const showCore = segment === "both" || segment === "CORE";
+  const showLite = segment === "both" || segment === "LITE";
+
   return (
     <div className="space-y-10">
+      {/* Filtro segmento + país */}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1">
+          {([
+            { id: "both", label: "Core + Lite" },
+            { id: "CORE", label: "Core" },
+            { id: "LITE", label: "Lite" },
+          ] as const).map((opt) => (
+            <button
+              key={opt.id}
+              onClick={() => setSegment(opt.id)}
+              className={cn(
+                "rounded-md px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider transition-all",
+                segment === opt.id
+                  ? "bg-white text-neutral-900 shadow-sm"
+                  : "text-neutral-500 hover:text-neutral-700",
+              )}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+        {selectedCountry && (
+          <button
+            onClick={() => setSelectedCountry(null)}
+            className="text-[11px] font-semibold text-neutral-500 hover:text-neutral-900 underline"
+          >
+            Limpiar país: {selectedCountry} ✕
+          </button>
+        )}
+      </div>
+
       {/* MAC Trend Core/Lite + Distribución (al lado) */}
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Tendencia */}
@@ -2174,6 +2229,9 @@ function NegocioView() {
             <div>
               <h3 className="text-lg font-bold text-neutral-900">
                 MAC — Tendencia CORE y LITE
+                {selectedCountry && (
+                  <span className="ml-2 text-xs font-medium text-neutral-500">· {selectedCountry}</span>
+                )}
               </h3>
               <p className="mt-1 text-xs text-neutral-500">
                 Últimos 6 meses · Usuarios pagos activos por tipo de negocio
@@ -2181,61 +2239,73 @@ function NegocioView() {
             </div>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
-            <div
-              className="rounded-xl border bg-white p-4"
-              style={{ borderLeft: `4px solid ${ALEGRA_GREEN}` }}
-            >
-              <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
-                MAC Core
-              </p>
-              <p className="mt-1 text-2xl font-bold text-neutral-900">
-                {last.CORE.toLocaleString("es-CO")}
-              </p>
-              <p
-                className={cn(
-                  "mt-1 flex items-center gap-1 text-xs font-bold",
-                  coreUp ? "text-emerald-600" : "text-red-600",
-                )}
+            {showCore && (
+              <div
+                className="rounded-xl border bg-white p-4"
+                style={{ borderLeft: `4px solid ${ALEGRA_GREEN}` }}
               >
-                {coreUp ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
-                {coreUp ? "+" : ""}{coreDelta}% vs Oct '25
-              </p>
-            </div>
-            <div
-              className="rounded-xl border bg-white p-4"
-              style={{ borderLeft: `4px solid #FF6B00` }}
-            >
-              <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
-                MAC Lite
-              </p>
-              <p className="mt-1 text-2xl font-bold text-neutral-900">
-                {last.LITE.toLocaleString("es-CO")}
-              </p>
-              <p
-                className={cn(
-                  "mt-1 flex items-center gap-1 text-xs font-bold",
-                  liteUp ? "text-emerald-600" : "text-red-600",
-                )}
+                <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
+                  MAC Core
+                </p>
+                <p className="mt-1 text-2xl font-bold text-neutral-900">
+                  {mainSeriesData[mainSeriesData.length - 1].CORE.toLocaleString("es-CO")}
+                </p>
+                <p
+                  className={cn(
+                    "mt-1 flex items-center gap-1 text-xs font-bold",
+                    coreUp ? "text-emerald-600" : "text-red-600",
+                  )}
+                >
+                  {coreUp ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
+                  {coreUp ? "+" : ""}{coreDelta}% vs Oct '25
+                </p>
+              </div>
+            )}
+            {showLite && (
+              <div
+                className="rounded-xl border bg-white p-4"
+                style={{ borderLeft: `4px solid #FF6B00` }}
               >
-                {liteUp ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
-                {liteUp ? "+" : ""}{liteDelta}% vs Oct '25
-              </p>
-            </div>
+                <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
+                  MAC Lite
+                </p>
+                <p className="mt-1 text-2xl font-bold text-neutral-900">
+                  {mainSeriesData[mainSeriesData.length - 1].LITE.toLocaleString("es-CO")}
+                </p>
+                <p
+                  className={cn(
+                    "mt-1 flex items-center gap-1 text-xs font-bold",
+                    liteUp ? "text-emerald-600" : "text-red-600",
+                  )}
+                >
+                  {liteUp ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
+                  {liteUp ? "+" : ""}{liteDelta}% vs Oct '25
+                </p>
+              </div>
+            )}
           </div>
 
           <div className="mt-6 h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={macCoreLiteTrend} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+              <LineChart data={mainSeriesData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
                 <XAxis dataKey="month" stroke="#6b7280" tick={{ fontSize: 12 }} axisLine={{ stroke: "#e5e7eb" }} tickLine={false} />
                 <YAxis stroke="#6b7280" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} tickFormatter={(v) => v.toLocaleString("es-CO")} />
                 <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => v.toLocaleString("es-CO")} />
                 <Legend iconType="circle" wrapperStyle={{ fontSize: 12, paddingTop: 12 }} />
-                <Line type="monotone" dataKey="CORE" stroke={ALEGRA_GREEN} strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
-                <Line type="monotone" dataKey="LITE" stroke="#FF6B00" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+                {showCore && (
+                  <Line type="monotone" dataKey="CORE" stroke={ALEGRA_GREEN} strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+                )}
+                {showLite && (
+                  <Line type="monotone" dataKey="LITE" stroke="#FF6B00" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+                )}
               </LineChart>
             </ResponsiveContainer>
           </div>
+
+          <p className="mt-3 text-[11px] text-neutral-400">
+            Fuente: Amplitude · jgmbk3gb (CORE) · af1mxpmw (LITE)
+          </p>
         </div>
 
         {/* Distribución al lado */}
@@ -2270,6 +2340,72 @@ function NegocioView() {
               </div>
             ))}
           </div>
+        </div>
+      </div>
+
+      {/* === Cards por país: variación vs Oct === */}
+      <div>
+        <div className="mb-4 flex items-baseline gap-3">
+          <h3 className="text-lg font-bold text-neutral-900">Detalle por país</h3>
+          <span className="text-xs text-neutral-500">
+            Click en una card para filtrar el gráfico de arriba
+          </span>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {macCoreLitePerCountry.map((c) => {
+            // Sumar según segmento
+            const seriesForCard = c.CORE.map((row, i) => {
+              if (segment === "CORE") return row.v;
+              if (segment === "LITE") return c.LITE[i].v;
+              return row.v + c.LITE[i].v;
+            });
+            const lastV = seriesForCard[seriesForCard.length - 1];
+            const firstV = seriesForCard[0];
+            const delta = ((lastV - firstV) / firstV) * 100;
+            const up = delta >= 0;
+            const isActive = selectedCountry === c.country;
+            return (
+              <button
+                key={c.country}
+                onClick={() => setSelectedCountry(isActive ? null : c.country)}
+                className={cn(
+                  "group rounded-2xl border bg-white p-5 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md",
+                  isActive ? "ring-2 ring-offset-2" : "border-neutral-200",
+                )}
+                style={isActive ? { borderColor: c.color, ["--tw-ring-color" as any]: c.color } : { borderTop: `3px solid ${c.color}` }}
+              >
+                <div className="flex items-center justify-between">
+                  <span
+                    className="inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white"
+                    style={{ backgroundColor: c.color }}
+                  >
+                    {c.short}
+                  </span>
+                  {isActive && (
+                    <span className="text-[10px] font-bold uppercase text-neutral-500">activo</span>
+                  )}
+                </div>
+                <p className="mt-2 text-[11px] font-semibold uppercase tracking-wider text-neutral-500">
+                  {c.country}
+                </p>
+                <p className="mt-1 text-2xl font-bold text-neutral-900">
+                  {lastV.toLocaleString("es-CO")}
+                </p>
+                <p
+                  className={cn(
+                    "mt-1 flex items-center gap-1 text-xs font-bold",
+                    up ? "text-emerald-600" : "text-red-600",
+                  )}
+                >
+                  {up ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
+                  {up ? "+" : ""}{delta.toFixed(1)}% vs Oct '25
+                </p>
+                <p className="mt-2 text-[10px] text-neutral-400">
+                  {segment === "both" ? "Core + Lite" : segment}
+                </p>
+              </button>
+            );
+          })}
         </div>
       </div>
 
