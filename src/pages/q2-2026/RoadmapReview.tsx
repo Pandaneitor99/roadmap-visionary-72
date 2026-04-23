@@ -2680,7 +2680,11 @@ function Section4() {
         </div>
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {nonDevInitiativesS4.map((i, idx) => (
-            <SimpleInitiativeCard key={idx} {...i} />
+            <SimpleInitiativeCard
+              key={idx}
+              {...i}
+              onClick={initiativeDetailMap[i.title] ? () => setOpenInit(i.title) : undefined}
+            />
           ))}
         </div>
       </div>
