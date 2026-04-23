@@ -1605,18 +1605,138 @@ function BaseSosView() {
   );
 }
 
-function ComportamientoUnifiedView() {
-  // Tag activo compartido entre Core/Lite y BASE/SOS
+function SectionComportamiento() {
+  const [tab, setTab] = useState<"coreLite" | "baseSos">("coreLite");
+
+  return (
+    <div className="space-y-8">
+      {/* Header bloque */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+        <div className="flex items-start gap-3">
+          <div
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
+            style={{ backgroundColor: `${BLUE}15` }}
+          >
+            <Star className="h-5 w-5" style={{ color: BLUE }} />
+          </div>
+          <div>
+            <p
+              className="text-xs font-semibold uppercase tracking-[0.2em]"
+              style={{ color: BLUE }}
+            >
+              Adopción y engagement
+            </p>
+            <h2 className="mt-1 text-2xl font-bold text-neutral-900">
+              Comportamiento de usuarios
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-neutral-600">
+              Cómo se relacionan los usuarios con las funcionalidades de la app, segmentado por <strong>Negocio (Core / Lite)</strong> y por <strong>Comportamiento (BASE / SOS)</strong>.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Sub-tabs */}
+      <div className="inline-flex flex-wrap rounded-lg border border-neutral-200 bg-neutral-50 p-1">
+        <button
+          onClick={() => setTab("coreLite")}
+          className={cn(
+            "rounded-md px-4 py-2 text-xs font-semibold transition-all",
+            tab === "coreLite"
+              ? "bg-white text-neutral-900 shadow-sm"
+              : "text-neutral-500 hover:text-neutral-700",
+          )}
+        >
+          Negocio · Core y Lite
+        </button>
+        <button
+          onClick={() => setTab("baseSos")}
+          className={cn(
+            "rounded-md px-4 py-2 text-xs font-semibold transition-all",
+            tab === "baseSos"
+              ? "bg-white text-neutral-900 shadow-sm"
+              : "text-neutral-500 hover:text-neutral-700",
+          )}
+        >
+          BASE y SOS
+        </button>
+      </div>
+
+      {tab === "coreLite" ? <ComportamientoCoreLiteView /> : <ComportamientoBaseSosView />}
+    </div>
+  );
+}
+
+// Componente reutilizable: filtro de tags por funcionalidad
+function FeatureTagFilter({
+  features,
+  active,
+  onChange,
+  description,
+}: {
+  features: string[];
+  active: string | null;
+  onChange: (label: string | null) => void;
+  description: string;
+}) {
+  return (
+    <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
+      <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
+        <div>
+          <h4 className="text-sm font-bold text-neutral-900">
+            Filtrar por funcionalidad
+          </h4>
+          <p className="mt-0.5 text-xs text-neutral-500">{description}</p>
+        </div>
+        {active && (
+          <button
+            onClick={() => onChange(null)}
+            className="rounded-full border border-neutral-300 px-3 py-1 text-[11px] font-medium text-neutral-600 hover:bg-neutral-50"
+          >
+            Limpiar filtro
+          </button>
+        )}
+      </div>
+      <div className="flex flex-wrap gap-1.5">
+        {features.map((label) => {
+          const isActive = active === label;
+          const c = colorForEvent(label);
+          return (
+            <button
+              key={label}
+              onClick={() => onChange(isActive ? null : label)}
+              className={cn(
+                "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-all",
+                isActive
+                  ? "text-white shadow-sm"
+                  : "border-neutral-200 bg-white text-neutral-700 hover:border-neutral-300",
+              )}
+              style={
+                isActive
+                  ? { backgroundColor: c, borderColor: c }
+                  : { borderLeftColor: c, borderLeftWidth: 3 }
+              }
+            >
+              <span
+                className="h-2 w-2 rounded-full"
+                style={{ backgroundColor: isActive ? "rgba(255,255,255,0.9)" : c }}
+              />
+              {label}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function ComportamientoCoreLiteView() {
   const [activeFeature, setActiveFeature] = useState<string | null>(null);
 
-  // Lista de features compartidas
   const allFeatures = Array.from(
     new Set([
       ...coreEvents.map((e) => e.label),
       ...liteEvents.map((e) => e.label),
-      ...baseEvents.map((e) => e.label),
-      ...sosEvents.map((e) => e.label),
-      ...adopcionBaseSosData.map((d) => d.event),
     ]),
   );
 
@@ -1626,6 +1746,96 @@ function ComportamientoUnifiedView() {
   const filteredLiteEvents = activeFeature
     ? liteEvents.filter((e) => e.label === activeFeature)
     : liteEvents;
+
+  return (
+    <div className="space-y-6">
+      <FeatureTagFilter
+        features={allFeatures}
+        active={activeFeature}
+        onChange={setActiveFeature}
+        description="Selecciona un tag para filtrar los gráficos de adopción y engagement Core / Lite"
+      />
+
+      {/* Adopción funcionalidades CORE vs LITE - barras VERTICALES */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+        <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
+          <div>
+            <h4 className="text-base font-bold text-neutral-900">
+              Adopción funcionalidades — Uniques Mensual CORE vs LITE
+            </h4>
+            <p className="mt-1 text-xs text-neutral-500">
+              % de adopción por funcionalidad · Marzo 2026
+            </p>
+          </div>
+        </div>
+        <div className="h-[340px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={adopcionCoreLiteData} margin={{ top: 8, right: 16, left: 0, bottom: 60 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+              <XAxis
+                dataKey="event"
+                stroke="#6b7280"
+                tick={{ fontSize: 10 }}
+                interval={0}
+                angle={-30}
+                textAnchor="end"
+                height={70}
+              />
+              <YAxis
+                stroke="#6b7280"
+                tick={{ fontSize: 10 }}
+                tickFormatter={(v) => `${v}%`}
+              />
+              <Tooltip
+                contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }}
+                formatter={(v: number) => `${v.toFixed(1)}%`}
+              />
+              <Legend iconType="circle" wrapperStyle={{ fontSize: 11, paddingTop: 4 }} />
+              <Bar dataKey="CORE" fill={ALEGRA_GREEN} radius={[4, 4, 0, 0]} />
+              <Bar dataKey="LITE" fill="#FF6B00" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Funcionalidades — Uniques Mensual % CORE & LITE */}
+      <FuncionalidadesUniquesShared
+        core={coreMonthlyAdoption}
+        lite={liteMonthlyAdoption}
+        active={activeFeature}
+        onChangeActive={setActiveFeature}
+      />
+
+      {/* Engagement scatter CORE / LITE */}
+      <div className="grid gap-6 xl:grid-cols-2">
+        <EngagementScatterSegment
+          segment="CORE"
+          events={filteredCoreEvents}
+          accent={ALEGRA_GREEN}
+          chartUrl="https://app.amplitude.com/analytics/alegra/chart/8bsh2x62"
+        />
+        <EngagementScatterSegment
+          segment="LITE"
+          events={filteredLiteEvents}
+          accent="#FF6B00"
+          chartUrl="https://app.amplitude.com/analytics/alegra/chart/jtbzs8ce"
+        />
+      </div>
+    </div>
+  );
+}
+
+function ComportamientoBaseSosView() {
+  const [activeFeature, setActiveFeature] = useState<string | null>(null);
+
+  const allFeatures = Array.from(
+    new Set([
+      ...baseEvents.map((e) => e.label),
+      ...sosEvents.map((e) => e.label),
+      ...adopcionBaseSosData.map((d) => d.event),
+    ]),
+  );
+
   const filteredAdopcion = activeFeature
     ? adopcionBaseSosData.filter((d) => d.event === activeFeature)
     : adopcionBaseSosData;
@@ -1637,214 +1847,64 @@ function ComportamientoUnifiedView() {
     : sosEvents;
 
   return (
-    <div className="space-y-10">
-      {/* Tag filters compartidos */}
-      <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
+    <div className="space-y-6">
+      <FeatureTagFilter
+        features={allFeatures}
+        active={activeFeature}
+        onChange={setActiveFeature}
+        description="Selecciona un tag para filtrar los gráficos de adopción y engagement BASE / SOS"
+      />
+
+      {/* Adopción funcionalidades BASE vs SOS */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
         <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
           <div>
-            <h4 className="text-sm font-bold text-neutral-900">
-              Filtrar por funcionalidad
+            <h4 className="text-base font-bold text-neutral-900">
+              Adopción funcionalidades — Uniques Mensual BASE vs SOS
             </h4>
-            <p className="mt-0.5 text-xs text-neutral-500">
-              Selecciona un tag para filtrar los gráficos de adopción y engagement (Core/Lite y BASE/SOS)
+            <p className="mt-1 text-xs text-neutral-500">
+              % de adopción por funcionalidad · Mar 2026 · Cohort BASE vs Cohort SOS
             </p>
           </div>
-          {activeFeature && (
-            <button
-              onClick={() => setActiveFeature(null)}
-              className="rounded-full border border-neutral-300 px-3 py-1 text-[11px] font-medium text-neutral-600 hover:bg-neutral-50"
-            >
-              Limpiar filtro
-            </button>
-          )}
-        </div>
-        <div className="flex flex-wrap gap-1.5">
-          {allFeatures.map((label) => {
-            const isActive = activeFeature === label;
-            const c = colorForEvent(label);
-            return (
-              <button
-                key={label}
-                onClick={() => setActiveFeature(isActive ? null : label)}
-                className={cn(
-                  "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-all",
-                  isActive
-                    ? "text-white shadow-sm"
-                    : "border-neutral-200 bg-white text-neutral-700 hover:border-neutral-300",
-                )}
-                style={
-                  isActive
-                    ? { backgroundColor: c, borderColor: c }
-                    : { borderLeftColor: c, borderLeftWidth: 3 }
-                }
-              >
-                <span
-                  className="h-2 w-2 rounded-full"
-                  style={{ backgroundColor: isActive ? "rgba(255,255,255,0.9)" : c }}
-                />
-                {label}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* === Core / Lite === */}
-      <div>
-        <div className="mb-4 flex items-baseline gap-3">
-          <h3 className="text-lg font-bold text-neutral-900">CORE y LITE</h3>
-          <span className="text-xs text-neutral-500">
-            Adopción y engagement por tipo de negocio
-          </span>
-        </div>
-
-        {/* 1) Adopción funcionalidades CORE vs LITE - barras VERTICALES */}
-        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-          <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
-            <div>
-              <h4 className="text-base font-bold text-neutral-900">
-                Adopción funcionalidades — Uniques Mensual CORE vs LITE
-              </h4>
-              <p className="mt-1 text-xs text-neutral-500">
-                % de adopción por funcionalidad · Marzo 2026
-              </p>
-            </div>
-          </div>
-          <div className="h-[340px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={adopcionCoreLiteData} margin={{ top: 8, right: 16, left: 0, bottom: 60 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
-                <XAxis
-                  dataKey="event"
-                  stroke="#6b7280"
-                  tick={{ fontSize: 10 }}
-                  interval={0}
-                  angle={-30}
-                  textAnchor="end"
-                  height={70}
-                />
-                <YAxis
-                  stroke="#6b7280"
-                  tick={{ fontSize: 10 }}
-                  tickFormatter={(v) => `${v}%`}
-                />
-                <Tooltip
-                  contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }}
-                  formatter={(v: number) => `${v.toFixed(1)}%`}
-                />
-                <Legend iconType="circle" wrapperStyle={{ fontSize: 11, paddingTop: 4 }} />
-                <Bar dataKey="CORE" fill={ALEGRA_GREEN} radius={[4, 4, 0, 0]} />
-                <Bar dataKey="LITE" fill="#FF6B00" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        {/* 2) Funcionalidades — Uniques Mensual % CORE & LITE */}
-        <div className="mt-6">
-          <FuncionalidadesUniquesShared
-            core={coreMonthlyAdoption}
-            lite={liteMonthlyAdoption}
-            active={activeFeature}
-            onChangeActive={setActiveFeature}
-          />
-        </div>
-
-        {/* 3) Engagement scatter CORE / LITE */}
-        <div className="mt-6 grid gap-6 xl:grid-cols-2">
-          <EngagementScatterSegment
-            segment="CORE"
-            events={filteredCoreEvents}
-            accent={ALEGRA_GREEN}
-            chartUrl="https://app.amplitude.com/analytics/alegra/chart/8bsh2x62"
-          />
-          <EngagementScatterSegment
-            segment="LITE"
-            events={filteredLiteEvents}
-            accent="#FF6B00"
-            chartUrl="https://app.amplitude.com/analytics/alegra/chart/jtbzs8ce"
-          />
-        </div>
-      </div>
-
-      {/* === BASE / SOS === */}
-      <div>
-        <div className="mb-4 flex items-baseline gap-3">
-          <h3 className="text-lg font-bold text-neutral-900">BASE y SOS</h3>
-          <span className="text-xs text-neutral-500">
-            Adopción y engagement por comportamiento
-          </span>
-        </div>
-
-        {/* Adopción funcionalidades BASE vs SOS */}
-        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-          <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
-            <div>
-              <h4 className="text-base font-bold text-neutral-900">
-                Adopción funcionalidades — Uniques Mensual BASE vs SOS
-              </h4>
-              <p className="mt-1 text-xs text-neutral-500">
-                % de adopción por funcionalidad · Mar 2026 · Cohort BASE vs Cohort SOS
-              </p>
-            </div>
-            <a
-              href="https://app.amplitude.com/analytics/alegra/chart/aq7o241v"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
-            >
-              Amplitude <ExternalLink className="h-3 w-3" />
-            </a>
-          </div>
-          <div className="h-[360px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={filteredAdopcion} layout="vertical" margin={{ top: 5, right: 16, left: 130, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" horizontal={false} />
-                <XAxis type="number" stroke="#6b7280" tick={{ fontSize: 10 }} tickFormatter={(v) => `${v}%`} />
-                <YAxis dataKey="event" type="category" stroke="#6b7280" tick={{ fontSize: 10 }} width={130} />
-                <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => `${v.toFixed(1)}%`} />
-                <Legend iconType="circle" wrapperStyle={{ fontSize: 11, paddingTop: 4 }} />
-                <Bar dataKey="BASE" fill={ALEGRA_GREEN} radius={[0, 4, 4, 0]} />
-                <Bar dataKey="SOS" fill="#FF6B00" radius={[0, 4, 4, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        {/* Engagement scatter BASE / SOS */}
-        <div className="mt-6 grid gap-6 xl:grid-cols-2">
-          <EngagementScatterSegment
-            segment="BASE"
-            events={filteredBase}
-            accent={ALEGRA_GREEN}
-            chartUrl="https://app.amplitude.com/analytics/alegra/chart/no1u7db2"
-          />
-          <EngagementScatterSegment
-            segment="SOS"
-            events={filteredSos}
-            accent="#FF6B00"
-            chartUrl="https://app.amplitude.com/analytics/alegra/chart/ezbhdx9r"
-          />
-        </div>
-      </div>
-
-      {activeFeature && (
-        <div className="flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50/60 px-3 py-2 text-xs text-emerald-800">
-          <span className="font-bold uppercase tracking-wider">Filtro activo:</span>
-          <span
-            className="inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[11px] font-semibold text-white"
-            style={{ backgroundColor: colorForEvent(activeFeature) }}
+          <a
+            href="https://app.amplitude.com/analytics/alegra/chart/aq7o241v"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
           >
-            {activeFeature}
-          </span>
-          <button
-            onClick={() => setActiveFeature(null)}
-            className="ml-auto text-[11px] font-medium text-neutral-600 underline hover:text-neutral-900"
-          >
-            Limpiar
-          </button>
+            Amplitude <ExternalLink className="h-3 w-3" />
+          </a>
         </div>
-      )}
+        <div className="h-[360px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={filteredAdopcion} layout="vertical" margin={{ top: 5, right: 16, left: 130, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" horizontal={false} />
+              <XAxis type="number" stroke="#6b7280" tick={{ fontSize: 10 }} tickFormatter={(v) => `${v}%`} />
+              <YAxis dataKey="event" type="category" stroke="#6b7280" tick={{ fontSize: 10 }} width={130} />
+              <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => `${v.toFixed(1)}%`} />
+              <Legend iconType="circle" wrapperStyle={{ fontSize: 11, paddingTop: 4 }} />
+              <Bar dataKey="BASE" fill={ALEGRA_GREEN} radius={[0, 4, 4, 0]} />
+              <Bar dataKey="SOS" fill="#FF6B00" radius={[0, 4, 4, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Engagement scatter BASE / SOS */}
+      <div className="grid gap-6 xl:grid-cols-2">
+        <EngagementScatterSegment
+          segment="BASE"
+          events={filteredBase}
+          accent={ALEGRA_GREEN}
+          chartUrl="https://app.amplitude.com/analytics/alegra/chart/no1u7db2"
+        />
+        <EngagementScatterSegment
+          segment="SOS"
+          events={filteredSos}
+          accent="#FF6B00"
+          chartUrl="https://app.amplitude.com/analytics/alegra/chart/ezbhdx9r"
+        />
+      </div>
     </div>
   );
 }
