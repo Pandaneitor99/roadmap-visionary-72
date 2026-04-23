@@ -28,9 +28,10 @@ const sections = [
   { id: 1, title: "Visión estratégica", short: "Visión" },
   { id: 2, title: "North Star y métricas clave", short: "North Star" },
   { id: 3, title: "Base de usuarios y MRR", short: "Usuarios & MRR" },
-  { id: 4, title: "Resultados del período", short: "Resultados" },
-  { id: 5, title: "Diagnóstico y oportunidades", short: "Diagnóstico" },
-  { id: 6, title: "Próximos pasos", short: "Próximos pasos" },
+  { id: 4, title: "Comportamiento de usuarios", short: "Comportamiento" },
+  { id: 5, title: "Resultados del período", short: "Resultados" },
+  { id: 6, title: "Diagnóstico y oportunidades", short: "Diagnóstico" },
+  { id: 7, title: "Próximos pasos", short: "Próximos pasos" },
 ];
 
 const ALEGRA_GREEN = "#00B386";
