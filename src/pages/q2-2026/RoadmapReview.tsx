@@ -1727,28 +1727,41 @@ const adopcionCoreLiteData = Array.from(
   })
   .sort((a, b) => b.CORE + b.LITE - (a.CORE + a.LITE));
 
-// Uniques mensual por evento — % adoption × MAC mensual (CORE / LITE) con leve variación determinista
-function buildMonthlyUniques(
-  events: EngagementEvent[],
-  trend: typeof macCoreLiteTrend,
-  segment: "CORE" | "LITE",
-) {
-  return events.map((e) => {
-    const series = trend.map((t, idx) => {
-      const mac = segment === "CORE" ? t.CORE : t.LITE;
-      const seed = (e.num * 13 + idx * 7) % 11;
-      const variation = 0.85 + (seed / 11) * 0.3;
-      return { month: t.month, value: Math.round(mac * (e.adoption / 100) * variation) };
-    });
-    series[series.length - 1].value = Math.round(
-      (segment === "CORE" ? trend[trend.length - 1].CORE : trend[trend.length - 1].LITE) *
-        (e.adoption / 100),
-    );
-    return { label: e.label, num: e.num, series };
-  });
+// Adopción mensual % por evento — Series reales Amplitude (Oct '25 → Mar '26)
+// Formula: % usuarios únicos del evento / MAC del segmento × 100
+type MonthlyAdoptionSeries = { label: string; num: number; series: { month: string; pct: number }[] };
+
+const months6 = ["Oct '25", "Nov '25", "Dic '25", "Ene '26", "Feb '26", "Mar '26"];
+
+// % MAU mensual CORE (chart 8bsh2x62 con histórico mensual)
+const coreMonthlyAdoption: MonthlyAdoptionSeries[] = [
+  { num: 1, label: "Crear factura",              series: zip(months6, [42.1, 41.5, 43.8, 41.0, 41.8, 44.3]) },
+  { num: 2, label: "Buscar factura",             series: zip(months6, [33.5, 34.6, 35.9, 35.4, 34.9, 38.2]) },
+  { num: 3, label: "Ver gráfico de ventas",      series: zip(months6, [22.5, 26.8, 28.6, 28.1, 27.9, 27.8]) },
+  { num: 4, label: "Crear cotización",           series: zip(months6, [27.6, 26.7, 25.5, 26.0, 26.4, 27.0]) },
+  { num: 5, label: "Crear contacto",             series: zip(months6, [22.0, 19.7, 20.2, 19.7, 20.3, 20.0]) },
+  { num: 6, label: "Crear ítem",                 series: zip(months6, [15.5, 14.7, 15.3, 12.9, 14.5, 15.3]) },
+  { num: 7, label: "Crear remisión",             series: zip(months6, [3.9, 3.7, 4.0, 3.6, 3.9, 4.4]) },
+  { num: 8, label: "Crear factura de proveedor", series: zip(months6, [2.8, 2.6, 2.7, 2.4, 2.7, 3.0]) },
+  { num: 9, label: "Crear gasto",                series: zip(months6, [1.7, 1.6, 1.7, 1.5, 1.7, 1.9]) },
+];
+
+// % MAU mensual LITE (chart jtbzs8ce con histórico mensual)
+const liteMonthlyAdoption: MonthlyAdoptionSeries[] = [
+  { num: 1, label: "Crear factura",              series: zip(months6, [55.0, 55.2, 56.7, 52.3, 53.5, 56.7]) },
+  { num: 2, label: "Crear contacto",             series: zip(months6, [29.4, 28.7, 27.8, 27.4, 28.2, 27.6]) },
+  { num: 3, label: "Crear cotización",           series: zip(months6, [23.2, 22.5, 20.6, 22.2, 22.5, 24.2]) },
+  { num: 4, label: "Buscar factura",             series: zip(months6, [19.8, 20.2, 21.0, 19.8, 19.7, 24.2]) },
+  { num: 5, label: "Crear ítem",                 series: zip(months6, [24.6, 23.6, 23.9, 23.4, 23.3, 23.2]) },
+  { num: 6, label: "Ver gráfico de ventas",      series: zip(months6, [16.7, 20.7, 23.0, 21.5, 21.2, 21.8]) },
+  { num: 7, label: "Crear remisión",             series: zip(months6, [2.2, 2.1, 2.3, 2.1, 2.2, 2.5]) },
+  { num: 8, label: "Crear gasto",                series: zip(months6, [1.8, 1.7, 1.9, 1.7, 1.8, 2.0]) },
+  { num: 9, label: "Crear factura de proveedor", series: zip(months6, [1.7, 1.7, 1.8, 1.6, 1.8, 2.0]) },
+];
+
+function zip(months: string[], vals: number[]): { month: string; pct: number }[] {
+  return months.map((m, i) => ({ month: m, pct: vals[i] }));
 }
-const coreMonthlyUniques = buildMonthlyUniques(coreEvents, macCoreLiteTrend, "CORE");
-const liteMonthlyUniques = buildMonthlyUniques(liteEvents, macCoreLiteTrend, "LITE");
 
 // === Comportamiento BASE / SOS — datos reales Amplitude ===
 
