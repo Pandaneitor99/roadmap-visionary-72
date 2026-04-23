@@ -3211,7 +3211,52 @@ function Section4() {
   );
 }
 
-function OKRMiniCard({
+// === Sección 6: Issues ===
+
+function SectionIssues() {
+  return (
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+        <div className="flex items-start gap-3">
+          <div
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
+            style={{ backgroundColor: `#EF444415` }}
+          >
+            <AlertTriangle className="h-5 w-5" style={{ color: "#EF4444" }} />
+          </div>
+          <div>
+            <p
+              className="text-xs font-semibold uppercase tracking-[0.2em]"
+              style={{ color: "#EF4444" }}
+            >
+              Bloqueadores y bugs
+            </p>
+            <h2 className="mt-1 text-2xl font-bold text-neutral-900">
+              Issues
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-neutral-600">
+              Issues detectados durante el período que requieren atención del equipo.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Placeholder de lista vacía */}
+      <div className="flex min-h-[280px] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-neutral-200 bg-white/60 p-10 text-center">
+        <AlertTriangle className="h-8 w-8 text-neutral-300" />
+        <p className="mt-3 text-sm font-semibold text-neutral-500">
+          Aún no hay issues registrados
+        </p>
+        <p className="mt-1 text-xs text-neutral-400">
+          Espacio reservado para la lista de issues del Q2 2026.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+
   okr,
   kind,
 }: {
