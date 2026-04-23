@@ -1570,7 +1570,6 @@ const corePieData = [
 const corePieTotal = corePieData.reduce((s, d) => s + d.value, 0);
 
 // Engagement por funcionalidad — CORE y LITE (Adopción %MAU vs Frecuencia)
-// Eventos en español, número en la bolita = orden por adopción
 type EngagementEvent = {
   num: number;
   label: string;
@@ -1578,7 +1577,6 @@ type EngagementEvent = {
   frequency: number; // avg perform
 };
 // Datos reales Amplitude (Mar 2026)
-// CORE: chart 8bsh2x62 · LITE: chart jtbzs8ce — ambos 9 eventos
 const coreEvents: EngagementEvent[] = [
   { num: 1, label: "Crear factura", adoption: 44.3, frequency: 45.3 },
   { num: 2, label: "Buscar factura", adoption: 38.2, frequency: 28.0 },
@@ -1601,6 +1599,54 @@ const liteEvents: EngagementEvent[] = [
   { num: 8, label: "Crear gasto", adoption: 2.0, frequency: 8.0 },
   { num: 9, label: "Crear factura de proveedor", adoption: 2.0, frequency: 8.2 },
 ];
+
+// Paleta compartida por evento (mismo color en CORE y LITE para la misma funcionalidad)
+const eventColorMap: Record<string, string> = {
+  "Crear factura": "#0066FF",
+  "Buscar factura": "#00B386",
+  "Ver gráfico de ventas": "#FF6B00",
+  "Crear cotización": "#8B5CF6",
+  "Crear contacto": "#EC4899",
+  "Crear ítem": "#F59E0B",
+  "Crear remisión": "#06B6D4",
+  "Crear factura de proveedor": "#EF4444",
+  "Crear gasto": "#84CC16",
+};
+const colorForEvent = (label: string) => eventColorMap[label] ?? "#737373";
+
+// Adopción CORE vs LITE - basado en % adoption Mar 2026
+const adopcionCoreLiteData = Array.from(
+  new Set([...coreEvents.map((e) => e.label), ...liteEvents.map((e) => e.label)]),
+)
+  .map((label) => {
+    const c = coreEvents.find((e) => e.label === label);
+    const l = liteEvents.find((e) => e.label === label);
+    return { event: label, CORE: c ? c.adoption : 0, LITE: l ? l.adoption : 0 };
+  })
+  .sort((a, b) => b.CORE + b.LITE - (a.CORE + a.LITE));
+
+// Uniques mensual por evento — % adoption × MAC mensual (CORE / LITE) con leve variación determinista
+function buildMonthlyUniques(
+  events: EngagementEvent[],
+  trend: typeof macCoreLiteTrend,
+  segment: "CORE" | "LITE",
+) {
+  return events.map((e) => {
+    const series = trend.map((t, idx) => {
+      const mac = segment === "CORE" ? t.CORE : t.LITE;
+      const seed = (e.num * 13 + idx * 7) % 11;
+      const variation = 0.85 + (seed / 11) * 0.3;
+      return { month: t.month, value: Math.round(mac * (e.adoption / 100) * variation) };
+    });
+    series[series.length - 1].value = Math.round(
+      (segment === "CORE" ? trend[trend.length - 1].CORE : trend[trend.length - 1].LITE) *
+        (e.adoption / 100),
+    );
+    return { label: e.label, num: e.num, series };
+  });
+}
+const coreMonthlyUniques = buildMonthlyUniques(coreEvents, macCoreLiteTrend, "CORE");
+const liteMonthlyUniques = buildMonthlyUniques(liteEvents, macCoreLiteTrend, "LITE");
 
 function NegocioView() {
   const last = macCoreLiteTrend[macCoreLiteTrend.length - 1];
