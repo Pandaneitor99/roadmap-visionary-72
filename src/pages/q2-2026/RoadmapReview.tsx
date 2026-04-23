@@ -115,8 +115,10 @@ export default function RoadmapReview() {
           ) : current === 2 ? (
             <Section3 />
           ) : current === 3 ? (
-            <Section4 />
+            <SectionComportamiento />
           ) : current === 4 ? (
+            <Section4 />
+          ) : current === 5 ? (
             <Section5 />
           ) : (
             <PlaceholderSection title={section.title} />
