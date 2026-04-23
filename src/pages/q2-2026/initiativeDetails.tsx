@@ -757,6 +757,140 @@ export function HomeDetail() {
   );
 }
 
+// ===== Sección 4 — No Desarrollo =====
+
+const appContenidoMatrix = [
+  { label: "Landing App", values: [false, false, true, false] },
+  { label: "Banner App Facturación", values: [false, true, true, false] },
+  { label: "Banner App Pyme", values: [false, false, true, false] },
+];
+const paises = ["Colombia", "México", "R. Dominicana", "Costa Rica"];
+
+export function AppSeccionDetail() {
+  return (
+    <div className="space-y-6">
+      <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr]">
+        <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-3">
+          <img
+            src={appLanding}
+            alt="Landing actual de la app de Alegra"
+            className="h-auto w-full rounded-lg border border-neutral-200 bg-white"
+          />
+          <p className="mt-2 text-[11px] text-neutral-500">
+            Referencia · Landing actual de la App de Alegra
+          </p>
+        </div>
+
+        <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white">
+          <div className="border-b border-neutral-200 bg-neutral-50 px-4 py-2.5">
+            <h4 className="text-sm font-bold text-neutral-900">
+              Estado del contenido por país
+            </h4>
+            <p className="mt-0.5 text-[11px] text-neutral-500">
+              Cobertura actual de la sección de App por mercado
+            </p>
+          </div>
+          <table className="w-full text-xs">
+            <thead className="bg-neutral-50/50 text-neutral-600">
+              <tr>
+                <th className="px-4 py-2 text-left font-semibold uppercase tracking-wider">
+                  Contenido
+                </th>
+                {paises.map((p) => (
+                  <th
+                    key={p}
+                    className="px-3 py-2 text-center font-semibold uppercase tracking-wider"
+                  >
+                    {p}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {appContenidoMatrix.map((row) => (
+                <tr key={row.label} className="border-t border-neutral-100">
+                  <td className="px-4 py-3 font-semibold text-neutral-800">
+                    {row.label}
+                  </td>
+                  {row.values.map((has, i) => (
+                    <td key={i} className="px-3 py-3 text-center">
+                      {has ? (
+                        <span
+                          className="inline-flex h-6 w-6 items-center justify-center rounded-full text-white"
+                          style={{ backgroundColor: ALEGRA_GREEN }}
+                          title="Disponible"
+                        >
+                          <Check className="h-3.5 w-3.5" strokeWidth={3} />
+                        </span>
+                      ) : (
+                        <span className="text-neutral-300">—</span>
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <Insights
+        items={[
+          "República Dominicana es el único país con cobertura completa (Landing + Banners Facturación y Pyme) en el sitio web.",
+          "México cuenta con Banner App Facturación pero falta el resto del contenido — oportunidad rápida para escalar.",
+          "Colombia y Costa Rica no tienen aún sección de App desplegada: prioridad de contenido para Q2.",
+        ]}
+      />
+    </div>
+  );
+}
+
+export function GySDetail() {
+  return (
+    <div className="space-y-6">
+      <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
+        <div className="rounded-xl border border-neutral-200 bg-white p-3">
+          <img
+            src={gysDeviceImg}
+            alt="Devices haciendo request"
+            className="h-auto w-full rounded-lg border border-neutral-200"
+          />
+          <p className="mt-2 text-[11px] text-neutral-500">
+            Devices haciendo request · Total 338 (Android 200 · iOS 131 · iPhone 129 · iPad 2)
+          </p>
+        </div>
+
+        <div className="flex flex-col items-center justify-center gap-3 rounded-xl border border-neutral-200 bg-white p-6">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
+            OneLink — descarga de la App
+          </p>
+          <img
+            src={onelinkQR}
+            alt="QR de descarga de la app de Alegra"
+            className="h-48 w-48"
+          />
+          <a
+            href="https://onelink.to/kpkhuy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 text-xs font-semibold text-neutral-700 underline hover:text-neutral-900"
+          >
+            onelink.to/kpkhuy <ExternalLink className="h-3 w-3" />
+          </a>
+        </div>
+      </div>
+
+      <Insights
+        items={[
+          "Pico de tráfico el 13–17 de marzo (>50 requests/día) tras la activación de la primera campaña de G&S.",
+          "Android lidera el volumen de descargas con 200 requests, vs 131 en iOS — alineado con la base instalada en LATAM.",
+          "El QR + OneLink actúa como punto único de entrada a las stores; oportunidad de medir conversión QR → install.",
+        ]}
+      />
+    </div>
+  );
+}
+
 // Map title → detail component
 export const initiativeDetailMap: Record<string, () => JSX.Element> = {
   "Búsqueda de documentos e información": BusquedaDetail,
@@ -764,4 +898,6 @@ export const initiativeDetailMap: Record<string, () => JSX.Element> = {
   "Compartir y descargar remisiones": RemisionesDetail,
   "Llenado automático campos contactos": ContactosDetail,
   "Home — acciones rápidas": HomeDetail,
+  "Creación de la sección de App en Alegra": AppSeccionDetail,
+  "G&S para incentivar descarga de usuarios web": GySDetail,
 };
