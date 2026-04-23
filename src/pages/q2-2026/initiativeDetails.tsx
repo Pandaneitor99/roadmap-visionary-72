@@ -611,6 +611,7 @@ export function HomeDetail() {
           { id: "fnCotizacion", label: "Funnel → Cotización" },
           { id: "fnItem", label: "Funnel → Item" },
           { id: "ttcFactura", label: "TTC → Factura" },
+          { id: "ttcContactos", label: "TTC → Contactos" },
           { id: "ttcCotizacion", label: "TTC → Cotización" },
           { id: "ttcItem", label: "TTC → Item" },
         ]}
@@ -628,8 +629,10 @@ export function HomeDetail() {
           }
           if (tab === "fnFactura") return { label: "Funnel actual", value: `${lastVal(funnelHomeFactura, "pct").toFixed(2)}%`, delta: pctDelta(funnelHomeFactura, "pct") };
           if (tab === "fnContactos") return { label: "Funnel actual", value: `${lastVal(funnelHomeContactos, "pct").toFixed(2)}%`, delta: pctDelta(funnelHomeContactos, "pct") };
+          if (tab === "fnCotizacion") return { label: "Funnel actual", value: `${lastVal(funnelHomeCotizacion, "pct").toFixed(2)}%`, delta: pctDelta(funnelHomeCotizacion, "pct") };
           if (tab === "fnItem") return { label: "Funnel actual", value: `${lastVal(funnelHomeItem, "pct").toFixed(2)}%`, delta: pctDelta(funnelHomeItem, "pct") };
           if (tab === "ttcFactura") return { label: "TTC actual", value: `${lastVal(ttcFactura, "s").toLocaleString("es-CO")}s`, delta: pctDelta(ttcFactura, "s"), invert: true };
+          if (tab === "ttcContactos") return { label: "TTC actual", value: `${lastVal(ttcContactos, "s").toLocaleString("es-CO")}s`, delta: pctDelta(ttcContactos, "s"), invert: true };
           return null;
         })();
         return (
