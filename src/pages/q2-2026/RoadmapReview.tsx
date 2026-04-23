@@ -2925,20 +2925,20 @@ function SimpleInitiativeCard({
 // Conteo de eventos en las últimas 4 semanas · Cohort BASE (s8shexr4)
 // Fuente: Amplitude chart h6i1m5l2
 const baseFueraDeApp = [
-  { feature: "Imprimir factura", uso: 3835 },
-  { feature: "Descargar PDF factura", uso: 3369 },
-  { feature: "Editar factura", uso: 3058 },
-  { feature: "Registrar pago factura", uso: 2819 },
-  { feature: "Editar retenciones", uso: 1708 },
-  { feature: "Clonar factura", uso: 1569 },
-  { feature: "Reporte ventas por vendedor", uso: 1148 },
-  { feature: "Aplicar crédito", uso: 989 },
-  { feature: "Timbrar factura", uso: 605 },
-  { feature: "Reporte ventas por ítem", uso: 600 },
-  { feature: "Reporte de inventario", uso: 526 },
-  { feature: "Compartir factura", uso: 469 },
-  { feature: "Cancelar factura", uso: 431 },
-  { feature: "Reporte categorías libro diario", uso: 380 },
+  { feature: "Creación Factura", uso: 10649 },
+  { feature: "Registrar pago", uso: 6949 },
+  { feature: "Imprimir factura", uso: 3840 },
+  { feature: "Descargar factura", uso: 3385 },
+  { feature: "Generar reporte", uso: 3376 },
+  { feature: "Editar factura", uso: 3060 },
+  { feature: "Descargar reportes", uso: 2001 },
+  { feature: "Editar retenciones", uso: 1712 },
+  { feature: "Crear contactos", uso: 1690 },
+  { feature: "Generar reportes (otros)", uso: 1637 },
+  { feature: "Clonar factura", uso: 1571 },
+  { feature: "Factura de compra", uso: 1461 },
+  { feature: "Crear ítems", uso: 1189 },
+  { feature: "Nota de crédito", uso: 953 },
 ];
 
 const oportunidades = [
