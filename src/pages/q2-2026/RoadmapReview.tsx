@@ -1118,15 +1118,21 @@ const adopcionMensualSeries = [
 
 function TasaAdopcion() {
   // Marzo 2026 (chart rbp5ch2z): Ingresan a la app 31.85%, Realizan acción 22.10%
-  const tasaAdopcion = "31.1"; // MAU APP / MAC WEB
-  const tasaReal = "22.1"; // MAC APP / MAC WEB
+  const tasaAdopcion = 31.1; // MAU APP / MAC WEB
+  const tasaReal = 22.1; // MAC APP / MAC WEB
+  const tasaAdopcionOct = 30.5;
+  const tasaRealOct = 19.8;
+  const deltaAdopcion = tasaAdopcion - tasaAdopcionOct;
+  const deltaReal = tasaReal - tasaRealOct;
+  const upAdopcion = deltaAdopcion >= 0;
+  const upReal = deltaReal >= 0;
 
   return (
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-bold text-neutral-900">Tasa de Adopción</h3>
         <p className="mt-1 text-sm text-neutral-600">
-          % de usuarios pagos web que entran a la app y/o realizan acciones de valor.
+          % de <strong>usuarios pagos web activos</strong> que entran a la app y/o realizan acciones de valor.
         </p>
       </div>
 
@@ -1143,9 +1149,19 @@ function TasaAdopcion() {
             </span>
           </div>
           <p className="mt-2 text-xs text-neutral-500">MAU APP / MAC WEB</p>
-          <p className="mt-3 text-4xl font-bold text-neutral-900">{tasaAdopcion}%</p>
+          <p className="mt-3 text-4xl font-bold text-neutral-900">{tasaAdopcion.toFixed(1)}%</p>
+          <p
+            className={cn(
+              "mt-2 flex items-center gap-1 text-sm font-bold",
+              upAdopcion ? "text-emerald-600" : "text-red-600",
+            )}
+          >
+            {upAdopcion ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
+            {upAdopcion ? "+" : ""}{deltaAdopcion.toFixed(1)} pp
+            <span className="ml-1 text-[11px] font-medium text-neutral-500">vs Oct '25</span>
+          </p>
           <p className="mt-2 text-xs text-neutral-500">
-            % de usuarios pagos web que entran a la app cada mes (Marzo 2026).
+            % de <strong>usuarios pagos web activos</strong> que entran a la app cada mes (Marzo 2026).
           </p>
         </div>
 
@@ -1160,9 +1176,19 @@ function TasaAdopcion() {
             </span>
           </div>
           <p className="mt-2 text-xs text-neutral-500">MAC APP / MAC WEB</p>
-          <p className="mt-3 text-4xl font-bold text-neutral-900">{tasaReal}%</p>
+          <p className="mt-3 text-4xl font-bold text-neutral-900">{tasaReal.toFixed(1)}%</p>
+          <p
+            className={cn(
+              "mt-2 flex items-center gap-1 text-sm font-bold",
+              upReal ? "text-emerald-600" : "text-red-600",
+            )}
+          >
+            {upReal ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
+            {upReal ? "+" : ""}{deltaReal.toFixed(1)} pp
+            <span className="ml-1 text-[11px] font-medium text-neutral-500">vs Oct '25</span>
+          </p>
           <p className="mt-2 text-xs text-neutral-500">
-            % de usuarios pagos web que realizan al menos una acción de valor en la app (Marzo 2026).
+            % de <strong>usuarios pagos web activos</strong> que realizan al menos una acción de valor en la app (Marzo 2026).
           </p>
         </div>
       </div>
