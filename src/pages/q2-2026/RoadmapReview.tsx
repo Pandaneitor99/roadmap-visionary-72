@@ -1600,7 +1600,7 @@ const liteEvents: EngagementEvent[] = [
   { num: 9, label: "Crear factura de proveedor", adoption: 2.0, frequency: 8.2 },
 ];
 
-// Paleta compartida por evento (mismo color en CORE y LITE para la misma funcionalidad)
+// Paleta compartida por evento (mismo color en CORE/LITE y BASE/SOS para la misma funcionalidad)
 const eventColorMap: Record<string, string> = {
   "Crear factura": "#0066FF",
   "Buscar factura": "#00B386",
@@ -1611,6 +1611,7 @@ const eventColorMap: Record<string, string> = {
   "Crear remisión": "#06B6D4",
   "Crear factura de proveedor": "#EF4444",
   "Crear gasto": "#84CC16",
+  "Cuentas por cobrar": "#14B8A6",
 };
 const colorForEvent = (label: string) => eventColorMap[label] ?? "#737373";
 
