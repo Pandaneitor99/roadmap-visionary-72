@@ -164,7 +164,7 @@ export default function RoadmapReview() {
 function Section1() {
   return (
     <div className="space-y-10">
-      {/* Vision block */}
+      {/* Vision block + filosofía embebida */}
       <div
         className="relative overflow-hidden rounded-2xl border border-emerald-100 bg-white p-8 shadow-sm md:p-12"
         style={{
@@ -190,54 +190,51 @@ function Section1() {
           de la Pyme y el centro de control móvil en tiempo real del contador,
           donde las decisiones y flujos críticos se resuelven en segundos."
         </p>
-      </div>
 
-      {/* Filosofía en tarjetas */}
-      <div className="grid gap-5 md:grid-cols-3">
-        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
-          <div
-            className="inline-flex rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white"
-            style={{ backgroundColor: ALEGRA_GREEN }}
-          >
-            Principio
+        {/* Filosofía — tarjetas pequeñas embebidas */}
+        <div className="mt-8 grid gap-3 md:grid-cols-3">
+          <div className="rounded-xl border border-neutral-200/80 bg-white/80 p-4 backdrop-blur-sm">
+            <div
+              className="inline-flex rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white"
+              style={{ backgroundColor: ALEGRA_GREEN }}
+            >
+              Principio
+            </div>
+            <h4 className="mt-2 text-sm font-bold leading-snug text-neutral-900">
+              La app no compite con la web
+            </h4>
+            <p className="mt-1 text-xs leading-relaxed text-neutral-600">
+              La <strong>web</strong> vive la <strong>complejidad</strong>; la{" "}
+              <strong>app</strong> vive la <strong>inmediatez</strong>.
+            </p>
           </div>
-          <h3 className="mt-3 text-lg font-bold text-neutral-900">
-            La app no compite con la web
-          </h3>
-          <p className="mt-2 text-sm leading-relaxed text-neutral-600">
-            La <strong>web</strong> es donde vive la <strong>complejidad</strong>;
-            la <strong>app</strong> es donde vive la <strong>inmediatez</strong>.
-          </p>
-        </div>
-
-        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
-          <div
-            className="inline-flex rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white"
-            style={{ backgroundColor: "#FF6B00" }}
-          >
-            Pyme
+          <div className="rounded-xl border border-neutral-200/80 bg-white/80 p-4 backdrop-blur-sm">
+            <div
+              className="inline-flex rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white"
+              style={{ backgroundColor: "#FF6B00" }}
+            >
+              Pyme
+            </div>
+            <h4 className="mt-2 text-sm font-bold leading-snug text-neutral-900">
+              Frente al cliente: actuar, no pensar
+            </h4>
+            <p className="mt-1 text-xs leading-relaxed text-neutral-600">
+              Cuando el emprendedor está frente al cliente y necesita facturar,
+              debería <strong>actuar</strong>, no pensar.
+            </p>
           </div>
-          <h3 className="mt-3 text-lg font-bold text-neutral-900">
-            Frente al cliente: actuar, no pensar
-          </h3>
-          <p className="mt-2 text-sm leading-relaxed text-neutral-600">
-            Cuando un emprendedor está frente a un cliente y necesita facturar,
-            no debería <strong>pensar</strong> — debería <strong>actuar</strong>.
-          </p>
-        </div>
-
-        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
-          <div className="inline-flex rounded-full bg-neutral-900 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
-            Contador
+          <div className="rounded-xl border border-neutral-200/80 bg-white/80 p-4 backdrop-blur-sm">
+            <div className="inline-flex rounded-full bg-neutral-900 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white">
+              Contador
+            </div>
+            <h4 className="mt-2 text-sm font-bold leading-snug text-neutral-900">
+              En movimiento: controlar, no esperar
+            </h4>
+            <p className="mt-1 text-xs leading-relaxed text-neutral-600">
+              El contador debería <strong>controlar</strong> el estado de los
+              negocios en tiempo real, no esperar.
+            </p>
           </div>
-          <h3 className="mt-3 text-lg font-bold text-neutral-900">
-            En movimiento: controlar, no esperar
-          </h3>
-          <p className="mt-2 text-sm leading-relaxed text-neutral-600">
-            Cuando un contador necesita validar el estado de negocios en
-            movimiento, no debería <strong>esperar</strong> — debería{" "}
-            <strong>controlar</strong>. Ese es el estándar que nos imponemos.
-          </p>
         </div>
       </div>
 
