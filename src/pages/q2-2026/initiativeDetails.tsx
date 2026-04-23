@@ -934,6 +934,80 @@ export function PushTestDetail() {
   );
 }
 
+// ===== Rediseño Facturación Costa Rica =====
+const fvCRUniquesMes = [
+  { mes: "Oct 25", v: 168 },
+  { mes: "Nov 25", v: 162 },
+  { mes: "Dic 25", v: 155 },
+  { mes: "Ene 26", v: 164 },
+  { mes: "Feb 26", v: 159 },
+  { mes: "Mar 26", v: 171 },
+];
+
+const cantidadProductosFV = [
+  { rango: "1 ítem", v: 412 },
+  { rango: "2-3 ítems", v: 287 },
+  { rango: "4-5 ítems", v: 124 },
+  { rango: "6-10 ítems", v: 63 },
+  { rango: "+10 ítems", v: 21 },
+];
+
+export function RediseñoFacturacionCRDetail() {
+  return (
+    <div className="space-y-4">
+      <div className="rounded-xl border border-orange-100 bg-orange-50/50 p-4">
+        <p className="text-[11px] font-bold uppercase tracking-wider text-orange-700">
+          Problema
+        </p>
+        <p className="mt-2 text-sm leading-relaxed text-neutral-700">
+          Con la salida en web de la versión 4.4, la cantidad de facturas aumentó un <strong>20%</strong>, sin embargo, en la app se mantuvo constante. Adicionalmente, la <strong>tasa de conversión es la menor de las 4 versiones</strong> (63% hoy).
+        </p>
+      </div>
+
+      <div className="grid gap-3 md:grid-cols-2">
+        <ChartCard
+          title="Factura de venta Costa Rica — Uniques Mes"
+          subtitle="Usuarios únicos que crearon factura en CR · últimos 6 meses"
+          statLabel="Mar 26"
+          statValue={lastVal(fvCRUniquesMes, "v")}
+          statDelta={pctDelta(fvCRUniquesMes, "v")}
+        >
+          <LineChart data={fvCRUniquesMes} margin={{ top: 8, right: 10, left: -10, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+            <XAxis dataKey="mes" stroke="#6b7280" tick={{ fontSize: 10 }} />
+            <YAxis stroke="#6b7280" tick={{ fontSize: 10 }} />
+            <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => v.toLocaleString("es-CO")} />
+            <Line type="monotone" dataKey="v" stroke={ALEGRA_GREEN} strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 5 }} />
+          </LineChart>
+        </ChartCard>
+
+        <ChartCard
+          title="Cantidad de productos en la FV"
+          subtitle="Distribución de ítems por factura de venta · CR · Mar 2026"
+          statLabel="Moda"
+          statValue="1 ítem"
+        >
+          <BarChart data={cantidadProductosFV} margin={{ top: 8, right: 10, left: -10, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+            <XAxis dataKey="rango" stroke="#6b7280" tick={{ fontSize: 10 }} />
+            <YAxis stroke="#6b7280" tick={{ fontSize: 10 }} />
+            <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => v.toLocaleString("es-CO")} />
+            <Bar dataKey="v" fill={BLUE} radius={[4, 4, 0, 0]} />
+          </BarChart>
+        </ChartCard>
+      </div>
+
+      <Insights
+        items={[
+          "El uso mensual de la FV en Costa Rica es estable pero plano: la versión 4.4 web no se trasladó a app.",
+          "La gran mayoría de facturas tiene 1-3 ítems → priorizar flujo rápido para FV cortas en el rediseño.",
+          "Oportunidad de subir la tasa de conversión (63%) acercándola a la media de las otras versiones.",
+        ]}
+      />
+    </div>
+  );
+}
+
 // Map title → detail component
 export const initiativeDetailMap: Record<string, () => JSX.Element> = {
   "Búsqueda de documentos e información": BusquedaDetail,
@@ -944,4 +1018,5 @@ export const initiativeDetailMap: Record<string, () => JSX.Element> = {
   "Creación de la sección de App en Alegra": AppSeccionDetail,
   "G&S para incentivar descarga de usuarios web": GySDetail,
   "Testeo de push notification dentro de la app": PushTestDetail,
+  "Rediseño Facturación Costa Rica": RediseñoFacturacionCRDetail,
 };
