@@ -2014,17 +2014,44 @@ function NegocioView() {
           />
         </div>
 
-        {/* 3) Engagement scatter — separados CORE / LITE */}
+        {/* 2) Funcionalidades — Uniques Mensual % CORE & LITE: tags compartidos */}
+        <div className="mt-6">
+          <FuncionalidadesUniquesShared
+            core={coreMonthlyAdoption}
+            lite={liteMonthlyAdoption}
+            active={activeFeature}
+            onChangeActive={setActiveFeature}
+          />
+        </div>
+
+        {/* 3) Engagement scatter — separados CORE / LITE, filtran por tag activo */}
+        {activeFeature && (
+          <div className="mt-4 flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50/60 px-3 py-2 text-xs text-emerald-800">
+            <span className="font-bold uppercase tracking-wider">Filtro activo:</span>
+            <span
+              className="inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[11px] font-semibold text-white"
+              style={{ backgroundColor: colorForEvent(activeFeature) }}
+            >
+              {activeFeature}
+            </span>
+            <button
+              onClick={() => setActiveFeature(null)}
+              className="ml-auto text-[11px] font-medium text-neutral-600 underline hover:text-neutral-900"
+            >
+              Limpiar
+            </button>
+          </div>
+        )}
         <div className="mt-6 grid gap-6 xl:grid-cols-2">
           <EngagementScatterSegment
             segment="CORE"
-            events={coreEvents}
+            events={filteredCoreEvents}
             accent={ALEGRA_GREEN}
             chartUrl="https://app.amplitude.com/analytics/alegra/chart/8bsh2x62"
           />
           <EngagementScatterSegment
             segment="LITE"
-            events={liteEvents}
+            events={filteredLiteEvents}
             accent="#FF6B00"
             chartUrl="https://app.amplitude.com/analytics/alegra/chart/jtbzs8ce"
           />
@@ -2034,13 +2061,16 @@ function NegocioView() {
   );
 }
 
-// === Funcionalidades — Uniques Mensual % (CORE & LITE con tags compartidos) ===
 function FuncionalidadesUniquesShared({
   core,
   lite,
+  active,
+  onChangeActive,
 }: {
   core: MonthlyAdoptionSeries[];
   lite: MonthlyAdoptionSeries[];
+  active: string | null;
+  onChangeActive: (v: string | null) => void;
 }) {
   // Lista única de funcionalidades (unión)
   const allLabels = Array.from(
