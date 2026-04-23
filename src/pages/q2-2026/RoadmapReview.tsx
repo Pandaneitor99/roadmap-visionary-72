@@ -1498,7 +1498,7 @@ function Section3() {
       </div>
 
       {/* Tabs */}
-      <div className="inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1">
+      <div className="inline-flex flex-wrap rounded-lg border border-neutral-200 bg-neutral-50 p-1">
         <button
           onClick={() => setTab("negocio")}
           className={cn(
@@ -1519,11 +1519,28 @@ function Section3() {
               : "text-neutral-500 hover:text-neutral-700",
           )}
         >
-          Comportamiento · BASE y SOS
+          Comportamiento
+        </button>
+        <button
+          onClick={() => setTab("baseSos")}
+          className={cn(
+            "rounded-md px-4 py-2 text-xs font-semibold transition-all",
+            tab === "baseSos"
+              ? "bg-white text-neutral-900 shadow-sm"
+              : "text-neutral-500 hover:text-neutral-700",
+          )}
+        >
+          BASE y SOS
         </button>
       </div>
 
-      {tab === "comportamiento" ? <ComportamientoView /> : <NegocioView />}
+      {tab === "comportamiento" ? (
+        <ComportamientoUnifiedView />
+      ) : tab === "baseSos" ? (
+        <BaseSosView />
+      ) : (
+        <NegocioView />
+      )}
     </div>
   );
 }
