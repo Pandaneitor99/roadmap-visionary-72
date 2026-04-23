@@ -2069,7 +2069,7 @@ function FuncionalidadesUniquesShared({
   const allLabels = Array.from(
     new Set([...core.map((d) => d.label), ...lite.map((d) => d.label)]),
   );
-  const [active, setActive] = useState<string | null>(null);
+  const setActive = onChangeActive;
 
   const visibleCore = active ? core.filter((d) => d.label === active) : core;
   const visibleLite = active ? lite.filter((d) => d.label === active) : lite;
