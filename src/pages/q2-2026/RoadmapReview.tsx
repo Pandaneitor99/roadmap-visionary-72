@@ -164,7 +164,7 @@ export default function RoadmapReview() {
 function Section1() {
   return (
     <div className="space-y-10">
-      {/* Vision block */}
+      {/* Vision block + filosofía embebida */}
       <div
         className="relative overflow-hidden rounded-2xl border border-emerald-100 bg-white p-8 shadow-sm md:p-12"
         style={{
@@ -190,54 +190,51 @@ function Section1() {
           de la Pyme y el centro de control móvil en tiempo real del contador,
           donde las decisiones y flujos críticos se resuelven en segundos."
         </p>
-      </div>
 
-      {/* Filosofía en tarjetas */}
-      <div className="grid gap-5 md:grid-cols-3">
-        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
-          <div
-            className="inline-flex rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white"
-            style={{ backgroundColor: ALEGRA_GREEN }}
-          >
-            Principio
+        {/* Filosofía — tarjetas pequeñas embebidas */}
+        <div className="mt-8 grid gap-3 md:grid-cols-3">
+          <div className="rounded-xl border border-neutral-200/80 bg-white/80 p-4 backdrop-blur-sm">
+            <div
+              className="inline-flex rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white"
+              style={{ backgroundColor: ALEGRA_GREEN }}
+            >
+              Principio
+            </div>
+            <h4 className="mt-2 text-sm font-bold leading-snug text-neutral-900">
+              La app no compite con la web
+            </h4>
+            <p className="mt-1 text-xs leading-relaxed text-neutral-600">
+              La <strong>web</strong> vive la <strong>complejidad</strong>; la{" "}
+              <strong>app</strong> vive la <strong>inmediatez</strong>.
+            </p>
           </div>
-          <h3 className="mt-3 text-lg font-bold text-neutral-900">
-            La app no compite con la web
-          </h3>
-          <p className="mt-2 text-sm leading-relaxed text-neutral-600">
-            La <strong>web</strong> es donde vive la <strong>complejidad</strong>;
-            la <strong>app</strong> es donde vive la <strong>inmediatez</strong>.
-          </p>
-        </div>
-
-        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
-          <div
-            className="inline-flex rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white"
-            style={{ backgroundColor: "#FF6B00" }}
-          >
-            Pyme
+          <div className="rounded-xl border border-neutral-200/80 bg-white/80 p-4 backdrop-blur-sm">
+            <div
+              className="inline-flex rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white"
+              style={{ backgroundColor: "#FF6B00" }}
+            >
+              Pyme
+            </div>
+            <h4 className="mt-2 text-sm font-bold leading-snug text-neutral-900">
+              Frente al cliente: actuar, no pensar
+            </h4>
+            <p className="mt-1 text-xs leading-relaxed text-neutral-600">
+              Cuando el emprendedor está frente al cliente y necesita facturar,
+              debería <strong>actuar</strong>, no pensar.
+            </p>
           </div>
-          <h3 className="mt-3 text-lg font-bold text-neutral-900">
-            Frente al cliente: actuar, no pensar
-          </h3>
-          <p className="mt-2 text-sm leading-relaxed text-neutral-600">
-            Cuando un emprendedor está frente a un cliente y necesita facturar,
-            no debería <strong>pensar</strong> — debería <strong>actuar</strong>.
-          </p>
-        </div>
-
-        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
-          <div className="inline-flex rounded-full bg-neutral-900 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
-            Contador
+          <div className="rounded-xl border border-neutral-200/80 bg-white/80 p-4 backdrop-blur-sm">
+            <div className="inline-flex rounded-full bg-neutral-900 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white">
+              Contador
+            </div>
+            <h4 className="mt-2 text-sm font-bold leading-snug text-neutral-900">
+              En movimiento: controlar, no esperar
+            </h4>
+            <p className="mt-1 text-xs leading-relaxed text-neutral-600">
+              El contador debería <strong>controlar</strong> el estado de los
+              negocios en tiempo real, no esperar.
+            </p>
           </div>
-          <h3 className="mt-3 text-lg font-bold text-neutral-900">
-            En movimiento: controlar, no esperar
-          </h3>
-          <p className="mt-2 text-sm leading-relaxed text-neutral-600">
-            Cuando un contador necesita validar el estado de negocios en
-            movimiento, no debería <strong>esperar</strong> — debería{" "}
-            <strong>controlar</strong>. Ese es el estándar que nos imponemos.
-          </p>
         </div>
       </div>
 
@@ -1812,6 +1809,15 @@ function NegocioView() {
   const coreUp = Number(coreDelta) >= 0;
   const liteUp = Number(liteDelta) >= 0;
 
+  // Tag activo compartido entre Uniques mensual y Engagement scatter
+  const [activeFeature, setActiveFeature] = useState<string | null>(null);
+  const filteredCoreEvents = activeFeature
+    ? coreEvents.filter((e) => e.label === activeFeature)
+    : coreEvents;
+  const filteredLiteEvents = activeFeature
+    ? liteEvents.filter((e) => e.label === activeFeature)
+    : liteEvents;
+
   return (
     <div className="space-y-10">
       {/* MAC Trend Core/Lite + Distribución (al lado) */}
@@ -2000,25 +2006,45 @@ function NegocioView() {
           </div>
         </div>
 
+
         {/* 2) Funcionalidades — Uniques Mensual % CORE & LITE: tags compartidos */}
         <div className="mt-6">
           <FuncionalidadesUniquesShared
             core={coreMonthlyAdoption}
             lite={liteMonthlyAdoption}
+            active={activeFeature}
+            onChangeActive={setActiveFeature}
           />
         </div>
 
-        {/* 3) Engagement scatter — separados CORE / LITE */}
+        {/* 3) Engagement scatter — separados CORE / LITE, filtran por tag activo */}
+        {activeFeature && (
+          <div className="mt-4 flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50/60 px-3 py-2 text-xs text-emerald-800">
+            <span className="font-bold uppercase tracking-wider">Filtro activo:</span>
+            <span
+              className="inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[11px] font-semibold text-white"
+              style={{ backgroundColor: colorForEvent(activeFeature) }}
+            >
+              {activeFeature}
+            </span>
+            <button
+              onClick={() => setActiveFeature(null)}
+              className="ml-auto text-[11px] font-medium text-neutral-600 underline hover:text-neutral-900"
+            >
+              Limpiar
+            </button>
+          </div>
+        )}
         <div className="mt-6 grid gap-6 xl:grid-cols-2">
           <EngagementScatterSegment
             segment="CORE"
-            events={coreEvents}
+            events={filteredCoreEvents}
             accent={ALEGRA_GREEN}
             chartUrl="https://app.amplitude.com/analytics/alegra/chart/8bsh2x62"
           />
           <EngagementScatterSegment
             segment="LITE"
-            events={liteEvents}
+            events={filteredLiteEvents}
             accent="#FF6B00"
             chartUrl="https://app.amplitude.com/analytics/alegra/chart/jtbzs8ce"
           />
@@ -2028,19 +2054,22 @@ function NegocioView() {
   );
 }
 
-// === Funcionalidades — Uniques Mensual % (CORE & LITE con tags compartidos) ===
 function FuncionalidadesUniquesShared({
   core,
   lite,
+  active,
+  onChangeActive,
 }: {
   core: MonthlyAdoptionSeries[];
   lite: MonthlyAdoptionSeries[];
+  active: string | null;
+  onChangeActive: (v: string | null) => void;
 }) {
   // Lista única de funcionalidades (unión)
   const allLabels = Array.from(
     new Set([...core.map((d) => d.label), ...lite.map((d) => d.label)]),
   );
-  const [active, setActive] = useState<string | null>(null);
+  const setActive = onChangeActive;
 
   const visibleCore = active ? core.filter((d) => d.label === active) : core;
   const visibleLite = active ? lite.filter((d) => d.label === active) : lite;
@@ -2651,7 +2680,11 @@ function Section4() {
         </div>
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {nonDevInitiativesS4.map((i, idx) => (
-            <SimpleInitiativeCard key={idx} {...i} />
+            <SimpleInitiativeCard
+              key={idx}
+              {...i}
+              onClick={initiativeDetailMap[i.title] ? () => setOpenInit(i.title) : undefined}
+            />
           ))}
         </div>
       </div>
@@ -2761,7 +2794,6 @@ function SimpleInitiativeCard({
   title,
   tags,
   problem,
-  krs,
   onClick,
 }: {
   title: string;
@@ -2784,17 +2816,7 @@ function SimpleInitiativeCard({
         onClick && "cursor-pointer hover:border-emerald-300",
       )}
     >
-      <div className="flex items-start justify-between gap-2">
-        <h3 className="text-sm font-bold leading-snug text-neutral-900">{title}</h3>
-        {onClick && (
-          <span
-            className="shrink-0 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white"
-            style={{ backgroundColor: ALEGRA_GREEN }}
-          >
-            Métricas
-          </span>
-        )}
-      </div>
+      <h3 className="text-sm font-bold leading-snug text-neutral-900">{title}</h3>
       <div className="mt-2 flex flex-wrap gap-1">
         {tags.map((t) => (
           <Badge
@@ -2815,23 +2837,6 @@ function SimpleInitiativeCard({
           {problem}
         </p>
       </div>
-      {krs && krs.length > 0 && (
-        <div className="mt-auto pt-3">
-          <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">
-            Key Results
-          </p>
-          <div className="mt-1 flex flex-wrap gap-1">
-            {krs.map((kr) => (
-              <span
-                key={kr}
-                className="rounded-full bg-neutral-100 px-2 py-0.5 text-[10px] font-medium text-neutral-700"
-              >
-                {kr}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

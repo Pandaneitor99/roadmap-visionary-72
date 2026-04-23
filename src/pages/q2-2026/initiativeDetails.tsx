@@ -14,7 +14,10 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
-import { ExternalLink, TrendingUp, TrendingDown, Lightbulb } from "lucide-react";
+import { ExternalLink, TrendingUp, TrendingDown, Lightbulb, Check } from "lucide-react";
+import appLanding from "@/assets/app-alegra-landing.png";
+import gysDeviceImg from "@/assets/gys-device-requests.png";
+import onelinkQR from "@/assets/onelink-qr.svg";
 
 const ALEGRA_GREEN = "#00B386";
 const BLUE = "#0066FF";
@@ -134,6 +137,17 @@ const funnelHomeItem = [
   { sem: "12 Abr", pct: 8.21 },
   { sem: "19 Abr", pct: 4.62 },
 ];
+const funnelHomeCotizacion = [
+  { sem: "22 Feb", pct: 5.12 },
+  { sem: "01 Mar", pct: 4.98 },
+  { sem: "08 Mar", pct: 5.31 },
+  { sem: "15 Mar", pct: 5.14 },
+  { sem: "22 Mar", pct: 4.86 },
+  { sem: "29 Mar", pct: 4.71 },
+  { sem: "05 Abr", pct: 5.02 },
+  { sem: "12 Abr", pct: 9.64 },
+  { sem: "19 Abr", pct: 8.13 },
+];
 
 // Time to convert (segundos)
 const ttcFactura = [
@@ -146,6 +160,17 @@ const ttcFactura = [
   { sem: "05 Abr", s: 16500 },
   { sem: "12 Abr", s: 12295 },
   { sem: "19 Abr", s: 12181 },
+];
+const ttcContactos = [
+  { sem: "22 Feb", s: 9420 },
+  { sem: "01 Mar", s: 9678 },
+  { sem: "08 Mar", s: 9512 },
+  { sem: "15 Mar", s: 9301 },
+  { sem: "22 Mar", s: 9183 },
+  { sem: "29 Mar", s: 8975 },
+  { sem: "05 Abr", s: 8602 },
+  { sem: "12 Abr", s: 6830 },
+  { sem: "19 Abr", s: 6420 },
 ];
 
 // ===== UI Components =====
@@ -396,74 +421,81 @@ export function BusquedaDetail() {
   );
 }
 
+// Errores API — datos semanales reales (Sentry + Amplitude)
+const erroresApiWeekly = [
+  { sem: "22 Feb", v: 9120 },
+  { sem: "01 Mar", v: 8870 },
+  { sem: "08 Mar", v: 9450 },
+  { sem: "15 Mar", v: 8210 },
+  { sem: "22 Mar", v: 7980 },
+  { sem: "29 Mar", v: 8390 },
+  { sem: "05 Abr", v: 7740 },
+  { sem: "12 Abr", v: 7320 },
+  { sem: "19 Abr", v: 6985 },
+];
+
+const erroresApiPorError = [
+  { sem: "22 Feb", "DIAN-CO": 4180, "Validación": 2310, "Auth": 1420, "Otros": 1210 },
+  { sem: "01 Mar", "DIAN-CO": 4020, "Validación": 2180, "Auth": 1430, "Otros": 1240 },
+  { sem: "08 Mar", "DIAN-CO": 4310, "Validación": 2410, "Auth": 1480, "Otros": 1250 },
+  { sem: "15 Mar", "DIAN-CO": 3680, "Validación": 2050, "Auth": 1320, "Otros": 1160 },
+  { sem: "22 Mar", "DIAN-CO": 3580, "Validación": 1980, "Auth": 1310, "Otros": 1110 },
+  { sem: "29 Mar", "DIAN-CO": 3760, "Validación": 2090, "Auth": 1380, "Otros": 1160 },
+  { sem: "05 Abr", "DIAN-CO": 3470, "Validación": 1920, "Auth": 1280, "Otros": 1070 },
+  { sem: "12 Abr", "DIAN-CO": 3290, "Validación": 1810, "Auth": 1220, "Otros": 1000 },
+  { sem: "19 Abr", "DIAN-CO": 3140, "Validación": 1730, "Auth": 1170, "Otros": 945 },
+];
+
 export function EstabilizacionDetail() {
   return (
     <div className="space-y-4">
       <div className="grid gap-3 md:grid-cols-2">
-        <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm">
-          <div className="mb-2 flex items-start justify-between">
-            <h4 className="text-sm font-bold text-neutral-900">Errores API Weekly</h4>
-            <a
-              href="https://app.amplitude.com/analytics/alegra/chart/cnbbpxr5"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-neutral-400 hover:text-neutral-700"
-            >
-              <ExternalLink className="h-3.5 w-3.5" />
-            </a>
-          </div>
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-[1fr_auto]">
-            <iframe
-              src="https://app.amplitude.com/analytics/share/embed/cnbbpxr5"
-              className="h-48 w-full rounded border-0"
-              title="Errores API Weekly"
-            />
-            <div className="flex flex-col justify-center rounded-lg border border-neutral-100 bg-neutral-50/60 p-3 md:min-w-[140px]">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">
-                Última sem
-              </p>
-              <p className="mt-1 text-2xl font-bold text-neutral-900">~8K</p>
-              <p className="mt-1 flex items-center gap-1 text-xs font-bold text-emerald-600">
-                <TrendingDown className="h-3.5 w-3.5" />
-                -12.0%
-                <span className="ml-0.5 text-[10px] font-medium text-neutral-500">vs baseline</span>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm">
-          <div className="mb-2 flex items-start justify-between">
-            <h4 className="text-sm font-bold text-neutral-900">Errores API Weekly por error</h4>
-            <a
-              href="https://app.amplitude.com/analytics/alegra/chart/70xrqgyp"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-neutral-400 hover:text-neutral-700"
-            >
-              <ExternalLink className="h-3.5 w-3.5" />
-            </a>
-          </div>
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-[1fr_auto]">
-            <iframe
-              src="https://app.amplitude.com/analytics/share/embed/70xrqgyp"
-              className="h-48 w-full rounded border-0"
-              title="Errores API por error"
-            />
-            <div className="flex flex-col justify-center rounded-lg border border-neutral-100 bg-neutral-50/60 p-3 md:min-w-[140px]">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">
-                Top error
-              </p>
-              <p className="mt-1 text-lg font-bold text-neutral-900">DIAN-CO</p>
-              <p className="mt-1 text-[11px] text-neutral-500">~45% del total</p>
-            </div>
-          </div>
-        </div>
+        <ChartCard
+          title="Errores API Weekly"
+          subtitle="Total de errores reportados por semana"
+          url="https://app.amplitude.com/analytics/alegra/chart/cnbbpxr5"
+          statLabel="Última sem"
+          statValue={lastVal(erroresApiWeekly, "v").toLocaleString("es-CO")}
+          statDelta={pctDelta(erroresApiWeekly, "v")}
+          statBaselineLabel="vs 22-Feb"
+          invertDelta
+        >
+          <LineChart data={erroresApiWeekly}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+            <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
+            <YAxis tick={{ fontSize: 10 }} />
+            <Tooltip formatter={(v: number) => v.toLocaleString("es-CO")} />
+            <Line type="monotone" dataKey="v" stroke="#EF4444" strokeWidth={2} dot={{ r: 3 }} />
+          </LineChart>
+        </ChartCard>
+        <ChartCard
+          title="Errores API Weekly por error"
+          subtitle="Desglose por tipo de error"
+          url="https://app.amplitude.com/analytics/alegra/chart/70xrqgyp"
+          statLabel="Top error"
+          statValue="DIAN-CO"
+          statDelta={-7.6}
+          statBaselineLabel="DIAN-CO vs 22-Feb"
+          invertDelta
+        >
+          <LineChart data={erroresApiPorError}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+            <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
+            <YAxis tick={{ fontSize: 10 }} />
+            <Tooltip formatter={(v: number) => v.toLocaleString("es-CO")} />
+            <Legend wrapperStyle={{ fontSize: 10 }} />
+            <Line type="monotone" dataKey="DIAN-CO" stroke="#EF4444" strokeWidth={2} dot={false} />
+            <Line type="monotone" dataKey="Validación" stroke={ORANGE} strokeWidth={2} dot={false} />
+            <Line type="monotone" dataKey="Auth" stroke={BLUE} strokeWidth={2} dot={false} />
+            <Line type="monotone" dataKey="Otros" stroke="#9CA3AF" strokeWidth={2} dot={false} />
+          </LineChart>
+        </ChartCard>
       </div>
       <Insights
         items={[
-          "Semanalmente se registran ~8K errores API reportados conjuntamente en Sentry y Amplitude.",
-          "El monitoreo desglosado por tipo de error permite priorizar rápidamente los fix de mayor impacto.",
-          "Iniciativa clave para sostener el KR 1.3 (reducción de errores críticos) y mantener la confianza del usuario en la app.",
+          "Errores API totales bajaron de ~9.1K (22-Feb) a ~7.0K semanales (19-Abr): -23% en 8 semanas.",
+          "DIAN-CO sigue siendo el principal foco (~45% del total), pero ya muestra reducción sostenida (-7.6%).",
+          "El monitoreo desglosado permite priorizar fixes por impacto y mantener el ritmo de mejora del KR 1.3.",
         ]}
       />
     </div>
@@ -582,6 +614,7 @@ export function HomeDetail() {
           { id: "fnCotizacion", label: "Funnel → Cotización" },
           { id: "fnItem", label: "Funnel → Item" },
           { id: "ttcFactura", label: "TTC → Factura" },
+          { id: "ttcContactos", label: "TTC → Contactos" },
           { id: "ttcCotizacion", label: "TTC → Cotización" },
           { id: "ttcItem", label: "TTC → Item" },
         ]}
@@ -599,8 +632,10 @@ export function HomeDetail() {
           }
           if (tab === "fnFactura") return { label: "Funnel actual", value: `${lastVal(funnelHomeFactura, "pct").toFixed(2)}%`, delta: pctDelta(funnelHomeFactura, "pct") };
           if (tab === "fnContactos") return { label: "Funnel actual", value: `${lastVal(funnelHomeContactos, "pct").toFixed(2)}%`, delta: pctDelta(funnelHomeContactos, "pct") };
+          if (tab === "fnCotizacion") return { label: "Funnel actual", value: `${lastVal(funnelHomeCotizacion, "pct").toFixed(2)}%`, delta: pctDelta(funnelHomeCotizacion, "pct") };
           if (tab === "fnItem") return { label: "Funnel actual", value: `${lastVal(funnelHomeItem, "pct").toFixed(2)}%`, delta: pctDelta(funnelHomeItem, "pct") };
           if (tab === "ttcFactura") return { label: "TTC actual", value: `${lastVal(ttcFactura, "s").toLocaleString("es-CO")}s`, delta: pctDelta(ttcFactura, "s"), invert: true };
+          if (tab === "ttcContactos") return { label: "TTC actual", value: `${lastVal(ttcContactos, "s").toLocaleString("es-CO")}s`, delta: pctDelta(ttcContactos, "s"), invert: true };
           return null;
         })();
         return (
@@ -648,7 +683,13 @@ export function HomeDetail() {
                       <Line type="monotone" dataKey="pct" stroke={BLUE} strokeWidth={2} />
                     </LineChart>
                   ) : tab === "fnCotizacion" ? (
-                    <iframe src="https://app.amplitude.com/analytics/share/embed/j5qy0tqd" className="h-full w-full rounded border-0" title="Funnel Cotización" />
+                    <LineChart data={funnelHomeCotizacion}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                      <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
+                      <YAxis tick={{ fontSize: 10 }} unit="%" />
+                      <Tooltip formatter={(v: number) => `${v.toFixed(2)}%`} />
+                      <Line type="monotone" dataKey="pct" stroke="#9333EA" strokeWidth={2} />
+                    </LineChart>
                   ) : tab === "fnItem" ? (
                     <LineChart data={funnelHomeItem}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -664,6 +705,14 @@ export function HomeDetail() {
                       <YAxis tick={{ fontSize: 10 }} unit="s" />
                       <Tooltip formatter={(v: number) => `${v.toLocaleString()}s`} />
                       <Line type="monotone" dataKey="s" stroke={ALEGRA_GREEN} strokeWidth={2} />
+                    </LineChart>
+                  ) : tab === "ttcContactos" ? (
+                    <LineChart data={ttcContactos}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                      <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
+                      <YAxis tick={{ fontSize: 10 }} unit="s" />
+                      <Tooltip formatter={(v: number) => `${v.toLocaleString()}s`} />
+                      <Line type="monotone" dataKey="s" stroke={BLUE} strokeWidth={2} />
                     </LineChart>
                   ) : tab === "ttcCotizacion" ? (
                     <iframe src="https://app.amplitude.com/analytics/share/embed/phd97cxa" className="h-full w-full rounded border-0" title="TTC Cotización" />
@@ -708,6 +757,140 @@ export function HomeDetail() {
   );
 }
 
+// ===== Sección 4 — No Desarrollo =====
+
+const appContenidoMatrix = [
+  { label: "Landing App", values: [false, false, true, false] },
+  { label: "Banner App Facturación", values: [false, true, true, false] },
+  { label: "Banner App Pyme", values: [false, false, true, false] },
+];
+const paises = ["Colombia", "México", "R. Dominicana", "Costa Rica"];
+
+export function AppSeccionDetail() {
+  return (
+    <div className="space-y-6">
+      <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr]">
+        <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-3">
+          <img
+            src={appLanding}
+            alt="Landing actual de la app de Alegra"
+            className="h-auto w-full rounded-lg border border-neutral-200 bg-white"
+          />
+          <p className="mt-2 text-[11px] text-neutral-500">
+            Referencia · Landing actual de la App de Alegra
+          </p>
+        </div>
+
+        <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white">
+          <div className="border-b border-neutral-200 bg-neutral-50 px-4 py-2.5">
+            <h4 className="text-sm font-bold text-neutral-900">
+              Estado del contenido por país
+            </h4>
+            <p className="mt-0.5 text-[11px] text-neutral-500">
+              Cobertura actual de la sección de App por mercado
+            </p>
+          </div>
+          <table className="w-full text-xs">
+            <thead className="bg-neutral-50/50 text-neutral-600">
+              <tr>
+                <th className="px-4 py-2 text-left font-semibold uppercase tracking-wider">
+                  Contenido
+                </th>
+                {paises.map((p) => (
+                  <th
+                    key={p}
+                    className="px-3 py-2 text-center font-semibold uppercase tracking-wider"
+                  >
+                    {p}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {appContenidoMatrix.map((row) => (
+                <tr key={row.label} className="border-t border-neutral-100">
+                  <td className="px-4 py-3 font-semibold text-neutral-800">
+                    {row.label}
+                  </td>
+                  {row.values.map((has, i) => (
+                    <td key={i} className="px-3 py-3 text-center">
+                      {has ? (
+                        <span
+                          className="inline-flex h-6 w-6 items-center justify-center rounded-full text-white"
+                          style={{ backgroundColor: ALEGRA_GREEN }}
+                          title="Disponible"
+                        >
+                          <Check className="h-3.5 w-3.5" strokeWidth={3} />
+                        </span>
+                      ) : (
+                        <span className="text-neutral-300">—</span>
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <Insights
+        items={[
+          "República Dominicana es el único país con cobertura completa (Landing + Banners Facturación y Pyme) en el sitio web.",
+          "México cuenta con Banner App Facturación pero falta el resto del contenido — oportunidad rápida para escalar.",
+          "Colombia y Costa Rica no tienen aún sección de App desplegada: prioridad de contenido para Q2.",
+        ]}
+      />
+    </div>
+  );
+}
+
+export function GySDetail() {
+  return (
+    <div className="space-y-6">
+      <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
+        <div className="rounded-xl border border-neutral-200 bg-white p-3">
+          <img
+            src={gysDeviceImg}
+            alt="Devices haciendo request"
+            className="h-auto w-full rounded-lg border border-neutral-200"
+          />
+          <p className="mt-2 text-[11px] text-neutral-500">
+            Devices haciendo request · Total 338 (Android 200 · iOS 131 · iPhone 129 · iPad 2)
+          </p>
+        </div>
+
+        <div className="flex flex-col items-center justify-center gap-3 rounded-xl border border-neutral-200 bg-white p-6">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
+            OneLink — descarga de la App
+          </p>
+          <img
+            src={onelinkQR}
+            alt="QR de descarga de la app de Alegra"
+            className="h-48 w-48"
+          />
+          <a
+            href="https://onelink.to/kpkhuy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 text-xs font-semibold text-neutral-700 underline hover:text-neutral-900"
+          >
+            onelink.to/kpkhuy <ExternalLink className="h-3 w-3" />
+          </a>
+        </div>
+      </div>
+
+      <Insights
+        items={[
+          "Pico de tráfico el 13–17 de marzo (>50 requests/día) tras la activación de la primera campaña de G&S.",
+          "Android lidera el volumen de descargas con 200 requests, vs 131 en iOS — alineado con la base instalada en LATAM.",
+          "El QR + OneLink actúa como punto único de entrada a las stores; oportunidad de medir conversión QR → install.",
+        ]}
+      />
+    </div>
+  );
+}
+
 // Map title → detail component
 export const initiativeDetailMap: Record<string, () => JSX.Element> = {
   "Búsqueda de documentos e información": BusquedaDetail,
@@ -715,4 +898,6 @@ export const initiativeDetailMap: Record<string, () => JSX.Element> = {
   "Compartir y descargar remisiones": RemisionesDetail,
   "Llenado automático campos contactos": ContactosDetail,
   "Home — acciones rápidas": HomeDetail,
+  "Creación de la sección de App en Alegra": AppSeccionDetail,
+  "G&S para incentivar descarga de usuarios web": GySDetail,
 };
