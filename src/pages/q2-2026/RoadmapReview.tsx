@@ -2367,7 +2367,7 @@ function EngagementScatterSegment({
           <line x1={xToPx(medX)} y1={padT} x2={xToPx(medX)} y2={padT + innerH} stroke="#6b7280" strokeWidth="1" strokeDasharray="4 3" />
           <line x1={padL} y1={yToPx(medY)} x2={padL + innerW} y2={yToPx(medY)} stroke="#6b7280" strokeWidth="1" strokeDasharray="4 3" />
 
-          {[0, 10, 20, 30, 40, 50, 60].filter((v) => v <= maxX).map((v) => (
+          {[0, 20, 40, 60, 80, 100].filter((v) => v <= maxX).map((v) => (
             <g key={v}>
               <text x={xToPx(v)} y={padT + innerH + 16} fontSize="10" fill="#6b7280" textAnchor="middle">{v}</text>
               <line x1={xToPx(v)} y1={padT + innerH} x2={xToPx(v)} y2={padT + innerH + 4} stroke="#9ca3af" />
