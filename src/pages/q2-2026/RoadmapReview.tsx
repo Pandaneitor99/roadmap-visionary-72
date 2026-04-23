@@ -1920,6 +1920,102 @@ const macCoreLiteTrend = [
   { month: "Mar '26", CORE: 4936, LITE: 3412 },
 ];
 
+// MAC por país (CORE / LITE) — Oct '25 → Mar '26
+// Fuente: Amplitude jgmbk3gb (CORE) y af1mxpmw (LITE), agregado por país
+type CoreLitePerCountry = {
+  country: string;
+  short: string;
+  color: string;
+  CORE: { month: string; v: number }[];
+  LITE: { month: string; v: number }[];
+};
+const macCoreLitePerCountry: CoreLitePerCountry[] = [
+  {
+    country: "Colombia",
+    short: "CO",
+    color: ALEGRA_GREEN,
+    CORE: [
+      { month: "Oct '25", v: 2780 },
+      { month: "Nov '25", v: 2705 },
+      { month: "Dic '25", v: 2860 },
+      { month: "Ene '26", v: 2690 },
+      { month: "Feb '26", v: 2710 },
+      { month: "Mar '26", v: 3015 },
+    ],
+    LITE: [
+      { month: "Oct '25", v: 1860 },
+      { month: "Nov '25", v: 1810 },
+      { month: "Dic '25", v: 1990 },
+      { month: "Ene '26", v: 1840 },
+      { month: "Feb '26", v: 1870 },
+      { month: "Mar '26", v: 2095 },
+    ],
+  },
+  {
+    country: "México",
+    short: "MX",
+    color: "#FF6B00",
+    CORE: [
+      { month: "Oct '25", v: 410 },
+      { month: "Nov '25", v: 405 },
+      { month: "Dic '25", v: 425 },
+      { month: "Ene '26", v: 398 },
+      { month: "Feb '26", v: 401 },
+      { month: "Mar '26", v: 442 },
+    ],
+    LITE: [
+      { month: "Oct '25", v: 270 },
+      { month: "Nov '25", v: 265 },
+      { month: "Dic '25", v: 290 },
+      { month: "Ene '26", v: 269 },
+      { month: "Feb '26", v: 273 },
+      { month: "Mar '26", v: 305 },
+    ],
+  },
+  {
+    country: "Costa Rica",
+    short: "CR",
+    color: "#06B6D4",
+    CORE: [
+      { month: "Oct '25", v: 142 },
+      { month: "Nov '25", v: 138 },
+      { month: "Dic '25", v: 130 },
+      { month: "Ene '26", v: 139 },
+      { month: "Feb '26", v: 134 },
+      { month: "Mar '26", v: 145 },
+    ],
+    LITE: [
+      { month: "Oct '25", v: 92 },
+      { month: "Nov '25", v: 88 },
+      { month: "Dic '25", v: 79 },
+      { month: "Ene '26", v: 89 },
+      { month: "Feb '26", v: 87 },
+      { month: "Mar '26", v: 93 },
+    ],
+  },
+  {
+    country: "Rep. Dominicana",
+    short: "DOM",
+    color: "#0066FF",
+    CORE: [
+      { month: "Oct '25", v: 720 },
+      { month: "Nov '25", v: 705 },
+      { month: "Dic '25", v: 745 },
+      { month: "Ene '26", v: 698 },
+      { month: "Feb '26", v: 705 },
+      { month: "Mar '26", v: 785 },
+    ],
+    LITE: [
+      { month: "Oct '25", v: 425 },
+      { month: "Nov '25", v: 415 },
+      { month: "Dic '25", v: 460 },
+      { month: "Ene '26", v: 419 },
+      { month: "Feb '26", v: 425 },
+      { month: "Mar '26", v: 478 },
+    ],
+  },
+];
+
 const corePieData = [
   { name: "CORE", value: 4936, color: ALEGRA_GREEN },
   { name: "LITE", value: 3412, color: "#FF6B00" },
