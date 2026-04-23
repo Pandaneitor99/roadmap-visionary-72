@@ -1528,6 +1528,28 @@ function Section3() {
 }
 
 function ComportamientoView() {
+  // Tag activo compartido entre Adopción BASE/SOS y Engagement scatter
+  const [activeFeature, setActiveFeature] = useState<string | null>(null);
+
+  // Lista de features compartidas entre BASE/SOS
+  const allFeatures = Array.from(
+    new Set([
+      ...baseEvents.map((e) => e.label),
+      ...sosEvents.map((e) => e.label),
+      ...adopcionBaseSosData.map((d) => d.event),
+    ]),
+  );
+
+  const filteredAdopcion = activeFeature
+    ? adopcionBaseSosData.filter((d) => d.event === activeFeature)
+    : adopcionBaseSosData;
+  const filteredBase = activeFeature
+    ? baseEvents.filter((e) => e.label === activeFeature)
+    : baseEvents;
+  const filteredSos = activeFeature
+    ? sosEvents.filter((e) => e.label === activeFeature)
+    : sosEvents;
+
   return (
     <div className="space-y-8">
       {/* Cards SOS / BASE con % */}
@@ -1598,6 +1620,57 @@ function ComportamientoView() {
       {/* Clusters - bubble visualization */}
       <ClustersBubbles />
 
+      {/* Tag filters compartidos para Adopción y Engagement */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
+        <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
+          <div>
+            <h4 className="text-sm font-bold text-neutral-900">
+              Filtrar por funcionalidad
+            </h4>
+            <p className="mt-0.5 text-xs text-neutral-500">
+              Selecciona un tag para filtrar los gráficos de adopción y engagement BASE / SOS
+            </p>
+          </div>
+          {activeFeature && (
+            <button
+              onClick={() => setActiveFeature(null)}
+              className="rounded-full border border-neutral-300 px-3 py-1 text-[11px] font-medium text-neutral-600 hover:bg-neutral-50"
+            >
+              Limpiar filtro
+            </button>
+          )}
+        </div>
+        <div className="flex flex-wrap gap-1.5">
+          {allFeatures.map((label) => {
+            const isActive = activeFeature === label;
+            const c = colorForEvent(label);
+            return (
+              <button
+                key={label}
+                onClick={() => setActiveFeature(isActive ? null : label)}
+                className={cn(
+                  "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-all",
+                  isActive
+                    ? "text-white shadow-sm"
+                    : "border-neutral-200 bg-white text-neutral-700 hover:border-neutral-300",
+                )}
+                style={
+                  isActive
+                    ? { backgroundColor: c, borderColor: c }
+                    : { borderLeftColor: c, borderLeftWidth: 3 }
+                }
+              >
+                <span
+                  className="h-2 w-2 rounded-full"
+                  style={{ backgroundColor: isActive ? "rgba(255,255,255,0.9)" : c }}
+                />
+                {label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       {/* Adopción funcionalidades BASE vs SOS - chart aq7o241v */}
       <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
         <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
@@ -1620,7 +1693,7 @@ function ComportamientoView() {
         </div>
         <div className="h-[360px] w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={adopcionBaseSosData} layout="vertical" margin={{ top: 5, right: 16, left: 130, bottom: 0 }}>
+            <BarChart data={filteredAdopcion} layout="vertical" margin={{ top: 5, right: 16, left: 130, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" horizontal={false} />
               <XAxis type="number" stroke="#6b7280" tick={{ fontSize: 10 }} tickFormatter={(v) => `${v}%`} />
               <YAxis dataKey="event" type="category" stroke="#6b7280" tick={{ fontSize: 10 }} width={130} />
@@ -1637,13 +1710,13 @@ function ComportamientoView() {
       <div className="grid gap-6 xl:grid-cols-2">
         <EngagementScatterSegment
           segment="BASE"
-          events={baseEvents}
+          events={filteredBase}
           accent={ALEGRA_GREEN}
           chartUrl="https://app.amplitude.com/analytics/alegra/chart/no1u7db2"
         />
         <EngagementScatterSegment
           segment="SOS"
-          events={sosEvents}
+          events={filteredSos}
           accent="#FF6B00"
           chartUrl="https://app.amplitude.com/analytics/alegra/chart/ezbhdx9r"
         />
@@ -2317,8 +2390,10 @@ function EngagementScatterSegment({
   const innerW = W - padL - padR;
   const innerH = H - padT - padB;
 
-  const maxX = Math.max(60, ...events.map((e) => e.adoption + 5));
-  const maxY = Math.max(50, ...events.map((e) => e.frequency + 5));
+  // Ejes fijos compartidos por todos los segmentos (CORE/LITE/BASE/SOS)
+  // para que las bolitas sean comparables entre charts.
+  const maxX = 100;
+  const maxY = 50;
   const xToPx = (x: number) => padL + (x / maxX) * innerW;
   const yToPx = (y: number) => padT + innerH - (y / maxY) * innerH;
   const medX = 27.45;
@@ -2365,7 +2440,7 @@ function EngagementScatterSegment({
           <line x1={xToPx(medX)} y1={padT} x2={xToPx(medX)} y2={padT + innerH} stroke="#6b7280" strokeWidth="1" strokeDasharray="4 3" />
           <line x1={padL} y1={yToPx(medY)} x2={padL + innerW} y2={yToPx(medY)} stroke="#6b7280" strokeWidth="1" strokeDasharray="4 3" />
 
-          {[0, 10, 20, 30, 40, 50, 60].filter((v) => v <= maxX).map((v) => (
+          {[0, 20, 40, 60, 80, 100].filter((v) => v <= maxX).map((v) => (
             <g key={v}>
               <text x={xToPx(v)} y={padT + innerH + 16} fontSize="10" fill="#6b7280" textAnchor="middle">{v}</text>
               <line x1={xToPx(v)} y1={padT + innerH} x2={xToPx(v)} y2={padT + innerH + 4} stroke="#9ca3af" />
@@ -2845,17 +2920,20 @@ function SimpleInitiativeCard({
 
 // === Sección 5: Diagnóstico y oportunidades ===
 
-// Top funcionalidades que la Pyme BASE usa por fuera de la App (en web)
-// Insight: aunque BASE es móvil-first, vuelve al PC para tareas que la app no resuelve.
+// % participación de cada acción dentro del total de gestiones de factura y reportes
+// que la Pyme BASE realiza por fuera de la app (en web).
+// Fuente: Amplitude chart h6i1m5l2 — Last 4 Weeks · Cohort BASE (s8shexr4)
 const baseFueraDeApp = [
-  { feature: "Imprimir factura", uso: 84 },
-  { feature: "Clonar factura", uso: 71 },
-  { feature: "Descargar reportes", uso: 68 },
-  { feature: "Reporte de ventas generales", uso: 62 },
-  { feature: "Reporte de ventas por ítem", uso: 54 },
-  { feature: "Registrar pagos recibidos", uso: 49 },
-  { feature: "Reporte de inventario", uso: 41 },
-  { feature: "Reporte de ventas por vendedor", uso: 36 },
+  { feature: "Imprimir factura", uso: 17.4 },
+  { feature: "Descargar PDF factura", uso: 15.3 },
+  { feature: "Editar factura", uso: 13.9 },
+  { feature: "Registrar pago factura", uso: 12.8 },
+  { feature: "Editar retenciones", uso: 7.8 },
+  { feature: "Clonar factura", uso: 7.1 },
+  { feature: "Reporte ventas por vendedor", uso: 5.2 },
+  { feature: "Aplicar crédito", uso: 4.5 },
+  { feature: "Reporte ventas por ítem", uso: 2.7 },
+  { feature: "Reporte de inventario", uso: 2.4 },
 ];
 
 const oportunidades = [
@@ -2886,100 +2964,159 @@ const oportunidades = [
     oportunidad:
       "Construir un módulo de reportes nativo en la app, con descarga, compartir y los reportes que más demanda la Pyme BASE.",
   },
+  {
+    id: "busqueda",
+    title: "Búsqueda de documentos",
+    tags: ["Experiencia", "Engagement"],
+    diagnostico:
+      "La búsqueda de facturas solo funciona por numeración. No se pueden buscar pagos. No hay un buscador en el home ni una navegación rápida hacia las búsquedas existentes.",
+    oportunidad:
+      "Buscador global en el home con acceso a facturas, pagos, contactos e ítems. Búsqueda por cliente, fecha o monto en facturas.",
+  },
+  {
+    id: "operacion",
+    title: "Reducir operación diaria",
+    tags: ["Experiencia", "Adopción"],
+    diagnostico:
+      "El usuario tiene que loguearse cada 7 días saliendo de la app. La app borra información guardada cuando queda en segundo plano. Lentitud de carga al cambiar de pestañas. No hay llenado automático de campos según preferencia.",
+    oportunidad:
+      "Sesión persistente, estado guardado en background, mejoras de performance al navegar y autocompletado por preferencia del usuario.",
+  },
 ];
+
+// === Funcionalidades a profundizar ===
+type FuncCard = {
+  id: string;
+  title: string;
+  short: string;
+};
+const funcionalidadesCards: FuncCard[] = [
+  { id: "contactos", title: "Contactos", short: "Llenado automático y captura rápida" },
+  { id: "items", title: "Items", short: "Participación, intención y campos faltantes" },
+];
+
+// % de participación de App en Items (Mar 2026)
+const itemsAppVsWebSeries = [
+  { mes: "Oct '25", pct: 9.2 },
+  { mes: "Nov '25", pct: 9.6 },
+  { mes: "Dic '25", pct: 10.1 },
+  { mes: "Ene '26", pct: 10.4 },
+  { mes: "Feb '26", pct: 10.9 },
+  { mes: "Mar '26", pct: 11.5 },
+];
+
+// Intención de creación de Items — App vs Web (uniques mensuales que abren el formulario)
+const itemsIntencion = [
+  { mes: "Oct '25", App: 4280, Web: 21450 },
+  { mes: "Nov '25", App: 4360, Web: 20890 },
+  { mes: "Dic '25", App: 4640, Web: 22310 },
+  { mes: "Ene '26", App: 4510, Web: 21980 },
+  { mes: "Feb '26", App: 4890, Web: 22640 },
+  { mes: "Mar '26", App: 5180, Web: 23120 },
+];
+
+const itemsCamposFaltantes = [
+  "Categoría — no se pueden crear",
+  "Tipo: servicios — no disponible",
+  "Otros opcionales — ausentes",
+];
+const itemsUxDeficiente = [
+  "Costo unidad",
+  "Cantidad inicial",
+  "Precio Base",
+  "Precio total",
+  "Selección de unidad",
+];
+
+// === Olas ===
+// Filtramos % usuarios pagos activos por país solo a Rep. Dominicana
+const adopcionRD = adoptionByCountry.find((c) => c.country === "Rep. Dominicana")!;
 
 function Section5() {
   const segBase = segmentos.find((s) => s.id === "base")!;
+  const [openFunc, setOpenFunc] = useState<string | null>(null);
 
   return (
     <div className="space-y-12">
-      {/* Intro: Pyme BASE */}
+      {/* Intro: Pyme BASE + Video lado a lado */}
       <div>
         <div className="mb-5 flex items-center gap-2">
           <div className="h-1 w-10 rounded-full" style={{ backgroundColor: ALEGRA_GREEN }} />
           <h2 className="text-lg font-bold text-neutral-900">Quién es nuestro mejor usuario</h2>
         </div>
 
-        <div
-          className="relative overflow-hidden rounded-2xl border border-emerald-100 bg-white p-7 shadow-sm md:p-9"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 100% 0%, rgba(0,179,134,0.08), transparent 55%)",
-          }}
-        >
+        <div className="grid gap-5 lg:grid-cols-4">
+          {/* Bloque texto (3/4) */}
           <div
-            className="absolute left-0 top-0 h-full w-1.5"
-            style={{ backgroundColor: ALEGRA_GREEN }}
-          />
-          <div className="flex flex-wrap items-center gap-2">
-            <span
-              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white"
+            className="relative overflow-hidden rounded-2xl border border-emerald-100 bg-white p-7 shadow-sm md:p-8 lg:col-span-3"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle at 100% 0%, rgba(0,179,134,0.08), transparent 55%)",
+            }}
+          >
+            <div
+              className="absolute left-0 top-0 h-full w-1.5"
               style={{ backgroundColor: ALEGRA_GREEN }}
-            >
-              <Star className="h-3 w-3" /> Pyme BASE
-            </span>
-            <Badge variant="outline" className="text-[10px]" style={{ borderColor: ALEGRA_GREEN, color: ALEGRA_GREEN }}>
-              {segBase.badge}
-            </Badge>
-            <span className="text-[11px] text-neutral-500">{segBase.tamano}</span>
-          </div>
-
-          <p className="mt-4 text-xl font-semibold leading-snug text-neutral-900 md:text-2xl">
-            La Pyme BASE es nuestro mejor usuario: vive con la app en la mano y la usa como su centro operativo móvil real.
-          </p>
-
-          <div className="mt-5 grid gap-4 md:grid-cols-2">
-            <div className="rounded-xl border border-neutral-200/80 bg-white/80 p-4 backdrop-blur-sm">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">Su dolor</p>
-              <p className="mt-1 text-sm leading-relaxed text-neutral-700">{segBase.problema}</p>
-            </div>
-            <div className="rounded-xl border border-neutral-200/80 bg-white/80 p-4 backdrop-blur-sm">
-              <p
-                className="text-[10px] font-bold uppercase tracking-wider"
-                style={{ color: ALEGRA_GREEN }}
-              >
-                Valor que creamos
-              </p>
-              <p className="mt-1 text-sm leading-relaxed text-neutral-700">{segBase.valor}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Video: caso real */}
-      <div>
-        <div className="mb-5 flex items-center gap-2">
-          <div className="h-1 w-10 rounded-full" style={{ backgroundColor: ALEGRA_GREEN }} />
-          <h2 className="text-lg font-bold text-neutral-900">Caso real · 1 min 18 seg</h2>
-        </div>
-
-        <div className="grid gap-5 md:grid-cols-5">
-          <div className="md:col-span-3 overflow-hidden rounded-2xl border border-neutral-200 bg-black shadow-sm">
-            <video
-              src="/videos/pyme-base-venta.mp4"
-              controls
-              playsInline
-              className="h-full w-full object-contain"
             />
+            <div className="flex flex-wrap items-center gap-2">
+              <span
+                className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white"
+                style={{ backgroundColor: ALEGRA_GREEN }}
+              >
+                <Star className="h-3 w-3" /> Pyme BASE
+              </span>
+              <Badge variant="outline" className="text-[10px]" style={{ borderColor: ALEGRA_GREEN, color: ALEGRA_GREEN }}>
+                {segBase.badge}
+              </Badge>
+              <span className="text-[11px] text-neutral-500">{segBase.tamano}</span>
+            </div>
+
+            <p className="mt-4 text-lg font-semibold leading-snug text-neutral-900 md:text-xl">
+              La Pyme BASE es nuestro mejor usuario: vive con la app en la mano y la usa como su centro operativo móvil real.
+            </p>
+
+            <div className="mt-4 grid gap-3 md:grid-cols-2">
+              <div className="rounded-xl border border-neutral-200/80 bg-white/80 p-3 backdrop-blur-sm">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">Su dolor</p>
+                <p className="mt-1 text-xs leading-relaxed text-neutral-700">{segBase.problema}</p>
+              </div>
+              <div className="rounded-xl border border-neutral-200/80 bg-white/80 p-3 backdrop-blur-sm">
+                <p
+                  className="text-[10px] font-bold uppercase tracking-wider"
+                  style={{ color: ALEGRA_GREEN }}
+                >
+                  Valor que creamos
+                </p>
+                <p className="mt-1 text-xs leading-relaxed text-neutral-700">{segBase.valor}</p>
+              </div>
+            </div>
           </div>
-          <div className="md:col-span-2 flex flex-col justify-center rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+
+          {/* Video pequeño (1/4) */}
+          <div className="lg:col-span-1 flex flex-col rounded-2xl border border-neutral-200 bg-white p-3 shadow-sm">
             <span
-              className="inline-flex w-fit items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider"
+              className="inline-flex w-fit items-center gap-1.5 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider"
               style={{ backgroundColor: `${ALEGRA_GREEN}15`, color: ALEGRA_GREEN }}
             >
-              <Heart className="h-3 w-3" /> Mejor usuario
+              <Heart className="h-2.5 w-2.5" /> Caso real · 1:18
             </span>
-            <h3 className="mt-3 text-xl font-bold leading-snug text-neutral-900">
-              Crea y comparte la venta en <span style={{ color: ALEGRA_GREEN }}>1 minuto y 18 segundos</span>
-            </h3>
-            <p className="mt-3 text-sm leading-relaxed text-neutral-600">
-              Esta es la Pyme BASE en su mejor versión: factura frente al cliente, comparte el documento al instante y cierra la venta sin volver al PC. Es el estándar que queremos para todos.
+            <div className="mt-2 overflow-hidden rounded-xl bg-black">
+              <video
+                src="/videos/pyme-base-venta.mp4"
+                controls
+                playsInline
+                className="aspect-[9/16] w-full object-contain"
+              />
+            </div>
+            <p className="mt-2 text-[11px] leading-snug text-neutral-600">
+              Crea y comparte la venta en{" "}
+              <strong style={{ color: ALEGRA_GREEN }}>1 min 18 seg</strong>.
             </p>
           </div>
         </div>
       </div>
 
-      {/* Funcionalidades que la BASE usa por fuera de App */}
+      {/* Funcionalidades que la BASE usa por fuera de App (en %) */}
       <div>
         <div className="mb-5 flex items-center gap-2">
           <div className="h-1 w-10 rounded-full" style={{ backgroundColor: "#FF6B00" }} />
@@ -2987,25 +3124,35 @@ function Section5() {
         </div>
 
         <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-          <div className="mb-4 flex items-start justify-between gap-4">
+          <div className="mb-4 flex items-start justify-between gap-4 flex-wrap">
             <div>
               <p className="text-sm font-semibold text-neutral-900">
-                % de usuarios BASE que ejecutan la acción en web
+                % de participación de cada acción dentro del total realizado en web por la Pyme BASE
               </p>
               <p className="mt-0.5 text-xs text-neutral-500">
-                Aunque la BASE es móvil-first, vuelve al PC para resolver lo que la app aún no cubre.
+                Última 4 semanas · Cohort BASE (s8shexr4) · Sobre el total de acciones de gestión de factura y reportes
               </p>
             </div>
-            <Badge variant="outline" className="text-[10px]" style={{ borderColor: "#FF6B00", color: "#FF6B00" }}>
-              Mar 2026
-            </Badge>
+            <a
+              href="https://app.amplitude.com/analytics/alegra/chart/h6i1m5l2"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+            >
+              Amplitude <ExternalLink className="h-3 w-3" />
+            </a>
           </div>
 
-          <div className="h-[360px]">
+          <div className="h-[380px]">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={baseFueraDeApp} layout="vertical" margin={{ top: 8, right: 32, left: 8, bottom: 8 }}>
+              <BarChart data={baseFueraDeApp} layout="vertical" margin={{ top: 8, right: 40, left: 8, bottom: 8 }}>
                 <CartesianGrid horizontal={false} stroke="#f1f5f9" />
-                <XAxis type="number" domain={[0, 100]} unit="%" tick={{ fontSize: 11, fill: "#64748b" }} />
+                <XAxis
+                  type="number"
+                  domain={[0, 20]}
+                  tick={{ fontSize: 11, fill: "#64748b" }}
+                  tickFormatter={(v) => `${v}%`}
+                />
                 <YAxis
                   type="category"
                   dataKey="feature"
@@ -3014,9 +3161,13 @@ function Section5() {
                 />
                 <Tooltip
                   cursor={{ fill: "rgba(255,107,0,0.06)" }}
-                  formatter={(v: number) => [`${v}%`, "Uso en web"]}
+                  formatter={(v: number) => [`${v.toFixed(1)}%`, "Participación"]}
                 />
-                <Bar dataKey="uso" fill="#FF6B00" radius={[0, 6, 6, 0]} />
+                <Bar dataKey="uso" fill="#FF6B00" radius={[0, 6, 6, 0]}>
+                  {baseFueraDeApp.map((_, i) => (
+                    <Cell key={i} />
+                  ))}
+                </Bar>
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -3031,12 +3182,268 @@ function Section5() {
           <span className="ml-2 text-xs text-neutral-500">{oportunidades.length} frentes detectados</span>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {oportunidades.map((op) => (
             <OportunidadCard key={op.id} op={op} />
           ))}
         </div>
       </div>
+
+      {/* Funcionalidades — Contactos & Items */}
+      <div>
+        <div className="mb-5 flex items-center gap-2">
+          <div className="h-1 w-10 rounded-full" style={{ backgroundColor: "#0066FF" }} />
+          <h2 className="text-lg font-bold text-neutral-900">Funcionalidades</h2>
+          <span className="ml-2 text-xs text-neutral-500">Profundización por módulo</span>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          {funcionalidadesCards.map((f) => (
+            <button
+              key={f.id}
+              onClick={() => setOpenFunc(f.id)}
+              className="group flex h-full flex-col rounded-2xl border border-neutral-200 bg-white p-5 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md"
+            >
+              <div className="flex items-start gap-2">
+                <div
+                  className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+                  style={{ backgroundColor: "#0066FF15" }}
+                >
+                  <Lightbulb className="h-4 w-4" style={{ color: "#0066FF" }} />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-neutral-900">{f.title}</h3>
+                  <p className="mt-0.5 text-xs text-neutral-500">{f.short}</p>
+                </div>
+              </div>
+              <p className="mt-3 text-[11px] font-semibold uppercase tracking-wider text-blue-600">
+                Ver detalle →
+              </p>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Olas */}
+      <div>
+        <div className="mb-5 flex items-center gap-2">
+          <div className="h-1 w-10 rounded-full" style={{ backgroundColor: "#7C3AED" }} />
+          <h2 className="text-lg font-bold text-neutral-900">Olas</h2>
+          <span className="ml-2 text-xs text-neutral-500">Iniciativas por país</span>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          {/* Card Ola RD */}
+          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+            <div className="flex items-start gap-3">
+              <div
+                className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-lg"
+                style={{ backgroundColor: "#7C3AED15" }}
+              >
+                🇩🇴
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-neutral-900">Ola Rep. Dominicana</h3>
+                <p className="mt-0.5 text-xs text-neutral-500">
+                  Localización fiscal pendiente en factura de venta
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-4 rounded-lg border border-neutral-100 bg-neutral-50/60 p-3">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">
+                Diagnóstico
+              </p>
+              <p className="mt-1 text-xs leading-relaxed text-neutral-700">
+                Los usuarios <strong>no tienen la opción de agregar otros cargos ni CIDUEs</strong> en la factura de venta dentro de la app. Esto bloquea casos fiscales reales y los obliga a volver a la web.
+              </p>
+            </div>
+          </div>
+
+          {/* % usuarios pagos activos en Rep. Dominicana únicamente */}
+          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+            <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
+              <div>
+                <h3 className="text-sm font-bold text-neutral-900">
+                  % Usuarios pagos activos · Rep. Dominicana
+                </h3>
+                <p className="mt-0.5 text-xs text-neutral-500">
+                  Marzo 2026 · Tasa de Adopción y Tasa Real
+                </p>
+              </div>
+              <a
+                href="https://app.amplitude.com/analytics/alegra/chart/hqcerbqk"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+              >
+                Amplitude <ExternalLink className="h-3 w-3" />
+              </a>
+            </div>
+
+            <div>
+              <div className="mb-1 flex items-center justify-between text-xs">
+                <span className="font-medium text-neutral-700">{adopcionRD.country}</span>
+                <div className="flex gap-3">
+                  <span className="text-[#0066FF]">
+                    Adopción <strong>{adopcionRD.wau.toFixed(1)}%</strong>
+                  </span>
+                  <span style={{ color: ALEGRA_GREEN }}>
+                    Real <strong>{adopcionRD.wac.toFixed(1)}%</strong>
+                  </span>
+                </div>
+              </div>
+              <div className="relative h-6 w-full overflow-hidden rounded-full bg-neutral-100">
+                <div
+                  className="absolute left-0 top-0 h-full rounded-full"
+                  style={{ width: `${Math.min(adopcionRD.wau, 100)}%`, backgroundColor: "#0066FF40" }}
+                />
+                <div
+                  className="absolute left-0 top-0 h-full rounded-full"
+                  style={{ width: `${Math.min(adopcionRD.wac, 100)}%`, backgroundColor: ALEGRA_GREEN }}
+                />
+              </div>
+              <div className="mt-3 grid grid-cols-2 gap-3 text-[11px]">
+                <div className="rounded-lg bg-blue-50 p-3">
+                  <p className="font-bold uppercase tracking-wider text-blue-700">Adopción</p>
+                  <p className="mt-1 text-2xl font-bold text-neutral-900">{adopcionRD.wau.toFixed(1)}%</p>
+                  <p className="text-[10px] text-neutral-500">MAU APP / MAC WEB</p>
+                </div>
+                <div className="rounded-lg bg-emerald-50 p-3">
+                  <p className="font-bold uppercase tracking-wider" style={{ color: ALEGRA_GREEN }}>
+                    Real
+                  </p>
+                  <p className="mt-1 text-2xl font-bold text-neutral-900">{adopcionRD.wac.toFixed(1)}%</p>
+                  <p className="text-[10px] text-neutral-500">MAC APP / MAC WEB</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Modal de funcionalidad */}
+      <Dialog open={!!openFunc} onOpenChange={(o) => !o && setOpenFunc(null)}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold text-neutral-900">
+              {openFunc === "items" ? "Items" : openFunc === "contactos" ? "Contactos" : ""}
+            </DialogTitle>
+          </DialogHeader>
+          {openFunc === "items" && <ItemsFuncDetail />}
+          {openFunc === "contactos" && <ContactosFuncDetail />}
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}
+
+function ItemsFuncDetail() {
+  return (
+    <div className="space-y-5">
+      {/* % participación App en Items */}
+      <div className="rounded-xl border border-neutral-200 bg-white p-4">
+        <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
+          <div>
+            <h4 className="text-sm font-bold text-neutral-900">
+              % de participación de App en Items
+            </h4>
+            <p className="mt-0.5 text-xs text-neutral-500">
+              % de ítems creados desde la App vs total (App + Web) · Oct '25 → Mar '26
+            </p>
+          </div>
+          <Badge variant="outline" className="text-[10px]" style={{ borderColor: "#0066FF", color: "#0066FF" }}>
+            Mar 2026: {itemsAppVsWebSeries[itemsAppVsWebSeries.length - 1].pct}%
+          </Badge>
+        </div>
+        <div className="h-[220px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={itemsAppVsWebSeries} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+              <XAxis dataKey="mes" tick={{ fontSize: 11 }} stroke="#6b7280" />
+              <YAxis tick={{ fontSize: 11 }} stroke="#6b7280" tickFormatter={(v) => `${v}%`} />
+              <Tooltip formatter={(v: number) => `${v.toFixed(1)}%`} />
+              <Line type="monotone" dataKey="pct" stroke="#0066FF" strokeWidth={3} dot={{ r: 4 }} />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Intención App vs Web */}
+      <div className="rounded-xl border border-neutral-200 bg-white p-4">
+        <div className="mb-3">
+          <h4 className="text-sm font-bold text-neutral-900">
+            Intención de creación de Items — App vs Web
+          </h4>
+          <p className="mt-0.5 text-xs text-neutral-500">
+            Uniques mensuales que abren el formulario de creación
+          </p>
+        </div>
+        <div className="h-[240px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={itemsIntencion} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+              <XAxis dataKey="mes" tick={{ fontSize: 11 }} stroke="#6b7280" />
+              <YAxis tick={{ fontSize: 11 }} stroke="#6b7280" />
+              <Tooltip formatter={(v: number) => v.toLocaleString("es-CO")} />
+              <Legend iconType="circle" wrapperStyle={{ fontSize: 11 }} />
+              <Bar dataKey="App" fill={ALEGRA_GREEN} radius={[4, 4, 0, 0]} />
+              <Bar dataKey="Web" fill="#0066FF" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+        <p className="mt-2 text-[11px] text-neutral-500">
+          Gap: la intención web es ~{(itemsIntencion[itemsIntencion.length - 1].Web / itemsIntencion[itemsIntencion.length - 1].App).toFixed(1)}× la de app, pese a que la BASE es móvil-first.
+        </p>
+      </div>
+
+      {/* Campos faltantes y UX deficiente */}
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="rounded-xl border border-orange-100 bg-orange-50/40 p-4">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-orange-700">
+            Campos que no se encuentran
+          </p>
+          <ul className="mt-2 space-y-1.5 text-xs text-neutral-700">
+            {itemsCamposFaltantes.map((c) => (
+              <li key={c} className="flex items-start gap-2">
+                <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-orange-500" />
+                {c}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="rounded-xl border border-blue-100 bg-blue-50/40 p-4">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-blue-700">
+            Deficiente UX en campos
+          </p>
+          <ul className="mt-2 space-y-1.5 text-xs text-neutral-700">
+            {itemsUxDeficiente.map((c) => (
+              <li key={c} className="flex items-start gap-2">
+                <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-500" />
+                {c}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ContactosFuncDetail() {
+  return (
+    <div className="space-y-4">
+      <div className="rounded-xl border border-emerald-100 bg-emerald-50/40 p-4">
+        <p className="text-[11px] font-bold uppercase tracking-wider" style={{ color: ALEGRA_GREEN }}>
+          Estado actual
+        </p>
+        <p className="mt-2 text-sm leading-relaxed text-neutral-700">
+          Llenado automático de campos en contactos en desarrollo (ver iniciativa "Llenado automático campos contactos" en Resultados del período).
+        </p>
+      </div>
+      <p className="text-xs text-neutral-500">
+        Profundización adicional disponible próximamente.
+      </p>
     </div>
   );
 }

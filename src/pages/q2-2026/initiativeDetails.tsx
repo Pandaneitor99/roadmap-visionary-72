@@ -18,6 +18,7 @@ import { ExternalLink, TrendingUp, TrendingDown, Lightbulb, Check } from "lucide
 import appLanding from "@/assets/app-alegra-landing.png";
 import gysDeviceImg from "@/assets/gys-device-requests.png";
 import onelinkQR from "@/assets/onelink-qr.svg";
+import pushNotificationImg from "@/assets/push-notification-test.png";
 
 const ALEGRA_GREEN = "#00B386";
 const BLUE = "#0066FF";
@@ -891,6 +892,48 @@ export function GySDetail() {
   );
 }
 
+export function PushTestDetail() {
+  return (
+    <div className="space-y-5">
+      <div className="grid gap-5 md:grid-cols-[auto_1fr]">
+        <div className="flex justify-center rounded-xl border border-neutral-200 bg-neutral-50 p-3">
+          <img
+            src={pushNotificationImg}
+            alt="Push notification de prueba — vista en WhatsApp / lock screen"
+            className="max-h-[420px] w-auto rounded-lg border border-neutral-200 shadow-sm"
+          />
+        </div>
+        <div className="flex flex-col gap-3">
+          <div className="rounded-xl border border-orange-100 bg-orange-50/50 p-4">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-orange-700">
+              Hipótesis
+            </p>
+            <p className="mt-2 text-sm leading-relaxed text-neutral-700">
+              Las notificaciones push pueden recuperar usuarios SOS y reactivar BASE en momentos clave (cobro, fin de mes, alertas de impuestos).
+            </p>
+          </div>
+          <div className="rounded-xl border border-emerald-100 bg-emerald-50/50 p-4">
+            <p className="text-[11px] font-bold uppercase tracking-wider" style={{ color: ALEGRA_GREEN }}>
+              Push de prueba
+            </p>
+            <p className="mt-2 text-sm leading-relaxed text-neutral-700">
+              Mensaje de bienvenida personalizado: "¡Hola! 😊 ¿Qué tal todo con Alegra?".
+              Test sobre cohort acotado para medir tasa de apertura, retorno a la app y reacción frente a contenido conversacional.
+            </p>
+          </div>
+          <Insights
+            items={[
+              "Primer experimento estructurado de push notifications: medir delivery, open-rate y retorno a la app.",
+              "El tono cercano (emoji + pregunta) busca reactivar conversación, no solo notificar acciones.",
+              "Si la apertura supera el baseline web push (~3-5%), se escalará a campañas segmentadas por comportamiento (BASE / SOS).",
+            ]}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // Map title → detail component
 export const initiativeDetailMap: Record<string, () => JSX.Element> = {
   "Búsqueda de documentos e información": BusquedaDetail,
@@ -900,4 +943,5 @@ export const initiativeDetailMap: Record<string, () => JSX.Element> = {
   "Home — acciones rápidas": HomeDetail,
   "Creación de la sección de App en Alegra": AppSeccionDetail,
   "G&S para incentivar descarga de usuarios web": GySDetail,
+  "Testeo de push notification dentro de la app": PushTestDetail,
 };
