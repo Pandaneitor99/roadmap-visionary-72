@@ -2006,13 +2006,6 @@ function NegocioView() {
           </div>
         </div>
 
-        {/* 2) Funcionalidades — Uniques Mensual % CORE & LITE: tags compartidos */}
-        <div className="mt-6">
-          <FuncionalidadesUniquesShared
-            core={coreMonthlyAdoption}
-            lite={liteMonthlyAdoption}
-          />
-        </div>
 
         {/* 2) Funcionalidades — Uniques Mensual % CORE & LITE: tags compartidos */}
         <div className="mt-6">
