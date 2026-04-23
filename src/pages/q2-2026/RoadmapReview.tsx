@@ -3525,7 +3525,7 @@ const adopcionRD = adoptionByCountry.find((c) => c.country === "Rep. Dominicana"
 
 function Section5() {
   const segBase = segmentos.find((s) => s.id === "base")!;
-  const [openFunc, setOpenFunc] = useState<string | null>(null);
+  
 
   return (
     <div className="space-y-12">
@@ -3828,18 +3828,6 @@ function Section5() {
         </div>
       </div>
 
-      {/* Modal de funcionalidad */}
-      <Dialog open={!!openFunc} onOpenChange={(o) => !o && setOpenFunc(null)}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-neutral-900">
-              {openFunc === "items" ? "Items" : openFunc === "contactos" ? "Contactos" : ""}
-            </DialogTitle>
-          </DialogHeader>
-          {openFunc === "items" && <ItemsFuncDetail />}
-          {openFunc === "contactos" && <ContactosFuncDetail />}
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
