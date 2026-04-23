@@ -18,6 +18,7 @@ import {
   PieChart,
   Pie,
   Cell,
+  LabelList,
 } from "recharts";
 
 import { initiativeDetailMap } from "./initiativeDetails";
@@ -2920,20 +2921,24 @@ function SimpleInitiativeCard({
 
 // === Sección 5: Diagnóstico y oportunidades ===
 
-// % participación de cada acción dentro del total de gestiones de factura y reportes
-// que la Pyme BASE realiza por fuera de la app (en web).
-// Fuente: Amplitude chart h6i1m5l2 — Last 4 Weeks · Cohort BASE (s8shexr4)
+// Funcionalidades que más utilizan los BASE por fuera de la App (web).
+// Conteo de eventos en las últimas 4 semanas · Cohort BASE (s8shexr4)
+// Fuente: Amplitude chart h6i1m5l2
 const baseFueraDeApp = [
-  { feature: "Imprimir factura", uso: 17.4 },
-  { feature: "Descargar PDF factura", uso: 15.3 },
-  { feature: "Editar factura", uso: 13.9 },
-  { feature: "Registrar pago factura", uso: 12.8 },
-  { feature: "Editar retenciones", uso: 7.8 },
-  { feature: "Clonar factura", uso: 7.1 },
-  { feature: "Reporte ventas por vendedor", uso: 5.2 },
-  { feature: "Aplicar crédito", uso: 4.5 },
-  { feature: "Reporte ventas por ítem", uso: 2.7 },
-  { feature: "Reporte de inventario", uso: 2.4 },
+  { feature: "Imprimir factura", uso: 3835 },
+  { feature: "Descargar PDF factura", uso: 3369 },
+  { feature: "Editar factura", uso: 3058 },
+  { feature: "Registrar pago factura", uso: 2819 },
+  { feature: "Editar retenciones", uso: 1708 },
+  { feature: "Clonar factura", uso: 1569 },
+  { feature: "Reporte ventas por vendedor", uso: 1148 },
+  { feature: "Aplicar crédito", uso: 989 },
+  { feature: "Timbrar factura", uso: 605 },
+  { feature: "Reporte ventas por ítem", uso: 600 },
+  { feature: "Reporte de inventario", uso: 526 },
+  { feature: "Compartir factura", uso: 469 },
+  { feature: "Cancelar factura", uso: 431 },
+  { feature: "Reporte categorías libro diario", uso: 380 },
 ];
 
 const oportunidades = [
@@ -3127,10 +3132,10 @@ function Section5() {
           <div className="mb-4 flex items-start justify-between gap-4 flex-wrap">
             <div>
               <p className="text-sm font-semibold text-neutral-900">
-                % de participación de cada acción dentro del total realizado en web por la Pyme BASE
+                Funcionalidades que más utilizan los BASE por fuera de App
               </p>
               <p className="mt-0.5 text-xs text-neutral-500">
-                Última 4 semanas · Cohort BASE (s8shexr4) · Sobre el total de acciones de gestión de factura y reportes
+                Últimas 4 semanas · Cohort BASE (s8shexr4) · Conteo de eventos en web
               </p>
             </div>
             <a
@@ -3143,30 +3148,35 @@ function Section5() {
             </a>
           </div>
 
-          <div className="h-[380px]">
+          <div className="h-[460px]">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={baseFueraDeApp} layout="vertical" margin={{ top: 8, right: 40, left: 8, bottom: 8 }}>
+              <BarChart data={baseFueraDeApp} layout="vertical" margin={{ top: 8, right: 56, left: 8, bottom: 8 }}>
                 <CartesianGrid horizontal={false} stroke="#f1f5f9" />
                 <XAxis
                   type="number"
-                  domain={[0, 20]}
                   tick={{ fontSize: 11, fill: "#64748b" }}
-                  tickFormatter={(v) => `${v}%`}
+                  tickFormatter={(v) => v.toLocaleString("es-CO")}
                 />
                 <YAxis
                   type="category"
                   dataKey="feature"
-                  width={210}
+                  width={220}
                   tick={{ fontSize: 11, fill: "#0f172a" }}
                 />
                 <Tooltip
                   cursor={{ fill: "rgba(255,107,0,0.06)" }}
-                  formatter={(v: number) => [`${v.toFixed(1)}%`, "Participación"]}
+                  formatter={(v: number) => [v.toLocaleString("es-CO"), "Eventos"]}
                 />
                 <Bar dataKey="uso" fill="#FF6B00" radius={[0, 6, 6, 0]}>
                   {baseFueraDeApp.map((_, i) => (
                     <Cell key={i} />
                   ))}
+                  <LabelList
+                    dataKey="uso"
+                    position="right"
+                    formatter={(v: number) => v.toLocaleString("es-CO")}
+                    style={{ fontSize: 11, fill: "#475569", fontWeight: 600 }}
+                  />
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
