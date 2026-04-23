@@ -886,7 +886,7 @@ function Section2() {
             label="MAC Lite actual"
             value={last.LITE}
             delta={Number(liteDelta)}
-            color="#9ca3af"
+            color="#FF6B00"
           />
         </div>
       </div>
