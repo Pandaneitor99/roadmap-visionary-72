@@ -1599,8 +1599,94 @@ function BaseSosView() {
         </div>
       </div>
 
-      {/* Clusters - bubble visualization */}
-      <ClustersBubbles />
+      {/* Cluster + Distribución por país (lado a lado) */}
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="lg:col-span-2">
+          <ClustersBubbles />
+        </div>
+        <BaseSosPorPais />
+      </div>
+
+      {/* MRR placeholder */}
+      <div>
+        <div className="mb-4 flex items-baseline gap-3">
+          <h3 className="text-lg font-bold text-neutral-900">MRR</h3>
+          <span className="text-xs text-neutral-500">
+            Aporte de MRR de BASE y SOS · próximamente
+          </span>
+        </div>
+        <div className="grid gap-6 lg:grid-cols-2">
+          <div className="flex min-h-[220px] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-neutral-200 bg-white/60 p-8 text-center">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-400">
+              MRR BASE
+            </p>
+            <p className="mt-2 text-sm text-neutral-500">
+              Espacio reservado para el aporte de MRR del segmento BASE (próximamente)
+            </p>
+          </div>
+          <div className="flex min-h-[220px] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-neutral-200 bg-white/60 p-8 text-center">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-400">
+              MRR SOS
+            </p>
+            <p className="mt-2 text-sm text-neutral-500">
+              Espacio reservado para el aporte de MRR del segmento SOS (próximamente)
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Distribución BASE / SOS por país (Mar 2026) - aproximación a partir del mix por país
+const baseSosPorPaisData = [
+  { country: "Colombia", short: "CO", BASE: 39, SOS: 61 },
+  { country: "México", short: "MX", BASE: 33, SOS: 67 },
+  { country: "Costa Rica", short: "CR", BASE: 41, SOS: 59 },
+  { country: "Rep. Dominicana", short: "DOM", BASE: 36, SOS: 64 },
+];
+
+function BaseSosPorPais() {
+  return (
+    <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+      <h3 className="text-base font-bold text-neutral-900">
+        Distribución por país
+      </h3>
+      <p className="mt-1 text-xs text-neutral-500">% BASE vs SOS · Marzo 2026</p>
+      <div className="mt-4 space-y-3">
+        {baseSosPorPaisData.map((c) => (
+          <div key={c.country}>
+            <div className="mb-1 flex items-center justify-between text-[11px]">
+              <span className="font-semibold text-neutral-900">{c.country}</span>
+              <span className="text-neutral-500">
+                <span style={{ color: ALEGRA_GREEN }} className="font-bold">{c.BASE}%</span>
+                <span className="mx-1 text-neutral-300">·</span>
+                <span style={{ color: "#FF6B00" }} className="font-bold">{c.SOS}%</span>
+              </span>
+            </div>
+            <div className="flex h-3 w-full overflow-hidden rounded-full bg-neutral-100">
+              <div
+                className="h-full"
+                style={{ width: `${c.BASE}%`, backgroundColor: ALEGRA_GREEN }}
+              />
+              <div
+                className="h-full"
+                style={{ width: `${c.SOS}%`, backgroundColor: "#FF6B00" }}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="mt-4 flex items-center justify-center gap-4 text-[11px]">
+        <span className="flex items-center gap-1.5">
+          <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: ALEGRA_GREEN }} />
+          <span className="font-semibold text-neutral-700">BASE</span>
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: "#FF6B00" }} />
+          <span className="font-semibold text-neutral-700">SOS</span>
+        </span>
+      </div>
     </div>
   );
 }
