@@ -1809,6 +1809,15 @@ function NegocioView() {
   const coreUp = Number(coreDelta) >= 0;
   const liteUp = Number(liteDelta) >= 0;
 
+  // Tag activo compartido entre Uniques mensual y Engagement scatter
+  const [activeFeature, setActiveFeature] = useState<string | null>(null);
+  const filteredCoreEvents = activeFeature
+    ? coreEvents.filter((e) => e.label === activeFeature)
+    : coreEvents;
+  const filteredLiteEvents = activeFeature
+    ? liteEvents.filter((e) => e.label === activeFeature)
+    : liteEvents;
+
   return (
     <div className="space-y-10">
       {/* MAC Trend Core/Lite + Distribución (al lado) */}
