@@ -836,10 +836,9 @@ function Section2() {
                 <Line
                   type="monotone"
                   dataKey="LITE"
-                  stroke="#9ca3af"
+                  stroke="#FF6B00"
                   strokeWidth={2}
                   dot={{ r: 3 }}
-                  strokeDasharray="4 4"
                 />
               </LineChart>
             </ResponsiveContainer>
