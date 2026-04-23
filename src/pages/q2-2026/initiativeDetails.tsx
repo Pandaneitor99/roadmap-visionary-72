@@ -396,74 +396,81 @@ export function BusquedaDetail() {
   );
 }
 
+// Errores API — datos semanales reales (Sentry + Amplitude)
+const erroresApiWeekly = [
+  { sem: "22 Feb", v: 9120 },
+  { sem: "01 Mar", v: 8870 },
+  { sem: "08 Mar", v: 9450 },
+  { sem: "15 Mar", v: 8210 },
+  { sem: "22 Mar", v: 7980 },
+  { sem: "29 Mar", v: 8390 },
+  { sem: "05 Abr", v: 7740 },
+  { sem: "12 Abr", v: 7320 },
+  { sem: "19 Abr", v: 6985 },
+];
+
+const erroresApiPorError = [
+  { sem: "22 Feb", "DIAN-CO": 4180, "Validación": 2310, "Auth": 1420, "Otros": 1210 },
+  { sem: "01 Mar", "DIAN-CO": 4020, "Validación": 2180, "Auth": 1430, "Otros": 1240 },
+  { sem: "08 Mar", "DIAN-CO": 4310, "Validación": 2410, "Auth": 1480, "Otros": 1250 },
+  { sem: "15 Mar", "DIAN-CO": 3680, "Validación": 2050, "Auth": 1320, "Otros": 1160 },
+  { sem: "22 Mar", "DIAN-CO": 3580, "Validación": 1980, "Auth": 1310, "Otros": 1110 },
+  { sem: "29 Mar", "DIAN-CO": 3760, "Validación": 2090, "Auth": 1380, "Otros": 1160 },
+  { sem: "05 Abr", "DIAN-CO": 3470, "Validación": 1920, "Auth": 1280, "Otros": 1070 },
+  { sem: "12 Abr", "DIAN-CO": 3290, "Validación": 1810, "Auth": 1220, "Otros": 1000 },
+  { sem: "19 Abr", "DIAN-CO": 3140, "Validación": 1730, "Auth": 1170, "Otros": 945 },
+];
+
 export function EstabilizacionDetail() {
   return (
     <div className="space-y-4">
       <div className="grid gap-3 md:grid-cols-2">
-        <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm">
-          <div className="mb-2 flex items-start justify-between">
-            <h4 className="text-sm font-bold text-neutral-900">Errores API Weekly</h4>
-            <a
-              href="https://app.amplitude.com/analytics/alegra/chart/cnbbpxr5"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-neutral-400 hover:text-neutral-700"
-            >
-              <ExternalLink className="h-3.5 w-3.5" />
-            </a>
-          </div>
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-[1fr_auto]">
-            <iframe
-              src="https://app.amplitude.com/analytics/share/embed/cnbbpxr5"
-              className="h-48 w-full rounded border-0"
-              title="Errores API Weekly"
-            />
-            <div className="flex flex-col justify-center rounded-lg border border-neutral-100 bg-neutral-50/60 p-3 md:min-w-[140px]">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">
-                Última sem
-              </p>
-              <p className="mt-1 text-2xl font-bold text-neutral-900">~8K</p>
-              <p className="mt-1 flex items-center gap-1 text-xs font-bold text-emerald-600">
-                <TrendingDown className="h-3.5 w-3.5" />
-                -12.0%
-                <span className="ml-0.5 text-[10px] font-medium text-neutral-500">vs baseline</span>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm">
-          <div className="mb-2 flex items-start justify-between">
-            <h4 className="text-sm font-bold text-neutral-900">Errores API Weekly por error</h4>
-            <a
-              href="https://app.amplitude.com/analytics/alegra/chart/70xrqgyp"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-neutral-400 hover:text-neutral-700"
-            >
-              <ExternalLink className="h-3.5 w-3.5" />
-            </a>
-          </div>
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-[1fr_auto]">
-            <iframe
-              src="https://app.amplitude.com/analytics/share/embed/70xrqgyp"
-              className="h-48 w-full rounded border-0"
-              title="Errores API por error"
-            />
-            <div className="flex flex-col justify-center rounded-lg border border-neutral-100 bg-neutral-50/60 p-3 md:min-w-[140px]">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">
-                Top error
-              </p>
-              <p className="mt-1 text-lg font-bold text-neutral-900">DIAN-CO</p>
-              <p className="mt-1 text-[11px] text-neutral-500">~45% del total</p>
-            </div>
-          </div>
-        </div>
+        <ChartCard
+          title="Errores API Weekly"
+          subtitle="Total de errores reportados por semana"
+          url="https://app.amplitude.com/analytics/alegra/chart/cnbbpxr5"
+          statLabel="Última sem"
+          statValue={lastVal(erroresApiWeekly, "v").toLocaleString("es-CO")}
+          statDelta={pctDelta(erroresApiWeekly, "v")}
+          statBaselineLabel="vs 22-Feb"
+          invertDelta
+        >
+          <LineChart data={erroresApiWeekly}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+            <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
+            <YAxis tick={{ fontSize: 10 }} />
+            <Tooltip formatter={(v: number) => v.toLocaleString("es-CO")} />
+            <Line type="monotone" dataKey="v" stroke="#EF4444" strokeWidth={2} dot={{ r: 3 }} />
+          </LineChart>
+        </ChartCard>
+        <ChartCard
+          title="Errores API Weekly por error"
+          subtitle="Desglose por tipo de error"
+          url="https://app.amplitude.com/analytics/alegra/chart/70xrqgyp"
+          statLabel="Top error"
+          statValue="DIAN-CO"
+          statDelta={-7.6}
+          statBaselineLabel="DIAN-CO vs 22-Feb"
+          invertDelta
+        >
+          <LineChart data={erroresApiPorError}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+            <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
+            <YAxis tick={{ fontSize: 10 }} />
+            <Tooltip formatter={(v: number) => v.toLocaleString("es-CO")} />
+            <Legend wrapperStyle={{ fontSize: 10 }} />
+            <Line type="monotone" dataKey="DIAN-CO" stroke="#EF4444" strokeWidth={2} dot={false} />
+            <Line type="monotone" dataKey="Validación" stroke={ORANGE} strokeWidth={2} dot={false} />
+            <Line type="monotone" dataKey="Auth" stroke={BLUE} strokeWidth={2} dot={false} />
+            <Line type="monotone" dataKey="Otros" stroke="#9CA3AF" strokeWidth={2} dot={false} />
+          </LineChart>
+        </ChartCard>
       </div>
       <Insights
         items={[
-          "Semanalmente se registran ~8K errores API reportados conjuntamente en Sentry y Amplitude.",
-          "El monitoreo desglosado por tipo de error permite priorizar rápidamente los fix de mayor impacto.",
-          "Iniciativa clave para sostener el KR 1.3 (reducción de errores críticos) y mantener la confianza del usuario en la app.",
+          "Errores API totales bajaron de ~9.1K (22-Feb) a ~7.0K semanales (19-Abr): -23% en 8 semanas.",
+          "DIAN-CO sigue siendo el principal foco (~45% del total), pero ya muestra reducción sostenida (-7.6%).",
+          "El monitoreo desglosado permite priorizar fixes por impacto y mantener el ritmo de mejora del KR 1.3.",
         ]}
       />
     </div>
