@@ -134,6 +134,17 @@ const funnelHomeItem = [
   { sem: "12 Abr", pct: 8.21 },
   { sem: "19 Abr", pct: 4.62 },
 ];
+const funnelHomeCotizacion = [
+  { sem: "22 Feb", pct: 5.12 },
+  { sem: "01 Mar", pct: 4.98 },
+  { sem: "08 Mar", pct: 5.31 },
+  { sem: "15 Mar", pct: 5.14 },
+  { sem: "22 Mar", pct: 4.86 },
+  { sem: "29 Mar", pct: 4.71 },
+  { sem: "05 Abr", pct: 5.02 },
+  { sem: "12 Abr", pct: 9.64 },
+  { sem: "19 Abr", pct: 8.13 },
+];
 
 // Time to convert (segundos)
 const ttcFactura = [
@@ -146,6 +157,17 @@ const ttcFactura = [
   { sem: "05 Abr", s: 16500 },
   { sem: "12 Abr", s: 12295 },
   { sem: "19 Abr", s: 12181 },
+];
+const ttcContactos = [
+  { sem: "22 Feb", s: 9420 },
+  { sem: "01 Mar", s: 9678 },
+  { sem: "08 Mar", s: 9512 },
+  { sem: "15 Mar", s: 9301 },
+  { sem: "22 Mar", s: 9183 },
+  { sem: "29 Mar", s: 8975 },
+  { sem: "05 Abr", s: 8602 },
+  { sem: "12 Abr", s: 6830 },
+  { sem: "19 Abr", s: 6420 },
 ];
 
 // ===== UI Components =====
