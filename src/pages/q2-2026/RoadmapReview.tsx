@@ -3634,24 +3634,31 @@ const funcionalidadesCards: FuncCard[] = [
   { id: "items", title: "Items", short: "Participación, intención y campos faltantes" },
 ];
 
-// % de participación de App en Items (Mar 2026) — ~3%
+// % de participación de App en Items — datos reales Amplitude (chart 1barvuzk)
+// Fórmula: app-item-created / (app-item-created + ac-item-created)
 const itemsAppVsWebSeries = [
-  { mes: "Oct '25", pct: 2.4 },
-  { mes: "Nov '25", pct: 2.6 },
-  { mes: "Dic '25", pct: 2.7 },
-  { mes: "Ene '26", pct: 2.8 },
-  { mes: "Feb '26", pct: 2.9 },
-  { mes: "Mar '26", pct: 3.1 },
+  { mes: "Abr '25", pct: 3.45 },
+  { mes: "May '25", pct: 3.37 },
+  { mes: "Jun '25", pct: 3.54 },
+  { mes: "Jul '25", pct: 4.07 },
+  { mes: "Ago '25", pct: 3.39 },
+  { mes: "Sep '25", pct: 3.60 },
+  { mes: "Oct '25", pct: 3.60 },
+  { mes: "Nov '25", pct: 3.61 },
+  { mes: "Dic '25", pct: 3.33 },
+  { mes: "Ene '26", pct: 3.99 },
+  { mes: "Feb '26", pct: 3.95 },
+  { mes: "Mar '26", pct: 3.85 },
+  { mes: "Abr '26", pct: 4.31 },
 ];
 
-// Intención de creación de Items — App vs Web (% de usuarios que abren el formulario)
+// Intención de creación de Items - Web (chart 08ti0ts5, funnel ac-item-creation-attempted → ac-item-created)
+// % de conversión web por mes
 const itemsIntencion = [
-  { mes: "Oct '25", App: 3.8, Web: 22.1 },
-  { mes: "Nov '25", App: 4.0, Web: 22.4 },
-  { mes: "Dic '25", App: 4.2, Web: 22.8 },
-  { mes: "Ene '26", App: 4.3, Web: 23.0 },
-  { mes: "Feb '26", App: 4.5, Web: 23.4 },
-  { mes: "Mar '26", App: 4.7, Web: 23.7 },
+  { mes: "Ene '26", conversion: 85.4 },
+  { mes: "Feb '26", conversion: 88.5 },
+  { mes: "Mar '26", conversion: 87.5 },
+  { mes: "Abr '26", conversion: 87.9 },
 ];
 
 const itemsCamposFaltantes = [
