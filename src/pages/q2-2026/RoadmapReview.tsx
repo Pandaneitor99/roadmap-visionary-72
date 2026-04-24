@@ -3584,7 +3584,7 @@ const oportunidades = [
       "La factura de venta en la app no tiene la funcionalidad de imprimir ni de clonar, dos acciones críticas para el día a día de la Pyme BASE que hoy lo obligan a volver al computador.",
     oportunidad:
       "Sumar imprimir y clonar dentro del detalle de la factura, cerrando el ciclo de venta sin necesidad del PC.",
-    link: "https://019dbd42-565f-7ccd-958c-6b7206220c86.claudeusercontent.com/v1/design/projects/019dbd42-565f-7ccd-958c-6b7206220c86/serve/Factura%20Detalle.html?t=503d6973346430c4eae4b14e6b6015a463",
+    link: "https://claude.ai/design/p/019dbd42-565f-7ccd-958c-6b7206220c86?file=Factura+Detalle.html",
   },
   {
     id: "reportes",
