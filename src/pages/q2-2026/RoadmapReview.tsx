@@ -3271,15 +3271,134 @@ function SectionIssues() {
         </div>
       </div>
 
-      {/* Placeholder de lista vacía */}
-      <div className="flex min-h-[280px] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-neutral-200 bg-white/60 p-10 text-center">
-        <AlertTriangle className="h-8 w-8 text-neutral-300" />
-        <p className="mt-3 text-sm font-semibold text-neutral-500">
-          Aún no hay issues registrados
-        </p>
-        <p className="mt-1 text-xs text-neutral-400">
-          Espacio reservado para la lista de issues del Q2 2026.
-        </p>
+      {/* Charts: tendencia + origen */}
+      <div className="grid gap-6 lg:grid-cols-5">
+        {/* Línea: bugs por mes */}
+        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm lg:col-span-3">
+          <div className="flex items-start justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">
+                Tendencia
+              </p>
+              <h3 className="mt-1 text-base font-bold text-neutral-900">
+                Cantidad de bugs por mes
+              </h3>
+              <p className="mt-1 text-xs text-neutral-500">
+                Octubre 2025 – Marzo 2026
+              </p>
+            </div>
+            <Badge variant="outline" className="border-neutral-200 text-[10px] font-semibold text-neutral-600">
+              27 bugs
+            </Badge>
+          </div>
+
+          <div className="mt-5 h-[260px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart
+                data={[
+                  { mes: "Oct", cantidad: 3 },
+                  { mes: "Nov", cantidad: 4 },
+                  { mes: "Dic", cantidad: 3 },
+                  { mes: "Ene", cantidad: 4 },
+                  { mes: "Feb", cantidad: 6 },
+                  { mes: "Mar", cantidad: 5 },
+                  { mes: "Abr", cantidad: 2 },
+                ]}
+                margin={{ top: 10, right: 16, left: 0, bottom: 0 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                <XAxis dataKey="mes" tick={{ fontSize: 11, fill: "#6b7280" }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fontSize: 11, fill: "#6b7280" }} axisLine={false} tickLine={false} allowDecimals={false} />
+                <Tooltip
+                  contentStyle={{
+                    borderRadius: 8,
+                    border: "1px solid #e5e7eb",
+                    fontSize: 12,
+                  }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="cantidad"
+                  stroke="#EF4444"
+                  strokeWidth={2.5}
+                  dot={{ r: 4, fill: "#EF4444" }}
+                  activeDot={{ r: 6 }}
+                >
+                  <LabelList dataKey="cantidad" position="top" style={{ fontSize: 11, fill: "#374151", fontWeight: 600 }} />
+                </Line>
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Donut: origen Q1 */}
+        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm lg:col-span-2">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">
+              Origen Q1
+            </p>
+            <h3 className="mt-1 text-base font-bold text-neutral-900">
+              Total de bugs encontrados
+            </h3>
+            <p className="mt-1 text-xs text-neutral-500">
+              Detección por canal en Q1 2026
+            </p>
+          </div>
+
+          <div className="relative mt-3 h-[200px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={[
+                    { name: "Llamadas y visitas", value: 24, fill: "#EF4444" },
+                    { name: "Soporte (CS)", value: 14, fill: "#FCA5A5" },
+                  ]}
+                  dataKey="value"
+                  nameKey="name"
+                  innerRadius={55}
+                  outerRadius={85}
+                  paddingAngle={2}
+                  stroke="#fff"
+                  strokeWidth={2}
+                />
+                <Tooltip
+                  contentStyle={{
+                    borderRadius: 8,
+                    border: "1px solid #e5e7eb",
+                    fontSize: 12,
+                  }}
+                />
+              </PieChart>
+            </ResponsiveContainer>
+            <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+              <span className="text-2xl font-bold text-neutral-900">38</span>
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-neutral-500">
+                bugs Q1
+              </span>
+            </div>
+          </div>
+
+          <div className="mt-4 space-y-2">
+            <div className="flex items-center justify-between rounded-lg bg-neutral-50 px-3 py-2">
+              <div className="flex items-center gap-2">
+                <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: "#EF4444" }} />
+                <span className="text-xs font-medium text-neutral-700">Llamadas y visitas</span>
+              </div>
+              <span className="text-xs font-bold text-neutral-900">24</span>
+            </div>
+            <div className="flex items-center justify-between rounded-lg bg-neutral-50 px-3 py-2">
+              <div className="flex items-center gap-2">
+                <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: "#FCA5A5" }} />
+                <span className="text-xs font-medium text-neutral-700">Soporte (CS)</span>
+              </div>
+              <span className="text-xs font-bold text-neutral-900">14</span>
+            </div>
+          </div>
+
+          <p className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs leading-relaxed text-amber-900">
+            <span className="font-semibold">Insight:</span> encontramos más bugs en llamadas y visitas con clientes que a través de soporte.
+          </p>
+        </div>
       </div>
     </div>
   );
