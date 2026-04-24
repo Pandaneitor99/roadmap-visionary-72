@@ -3634,24 +3634,24 @@ const funcionalidadesCards: FuncCard[] = [
   { id: "items", title: "Items", short: "Participación, intención y campos faltantes" },
 ];
 
-// % de participación de App en Items (Mar 2026)
+// % de participación de App en Items (Mar 2026) — ~3%
 const itemsAppVsWebSeries = [
-  { mes: "Oct '25", pct: 9.2 },
-  { mes: "Nov '25", pct: 9.6 },
-  { mes: "Dic '25", pct: 10.1 },
-  { mes: "Ene '26", pct: 10.4 },
-  { mes: "Feb '26", pct: 10.9 },
-  { mes: "Mar '26", pct: 11.5 },
+  { mes: "Oct '25", pct: 2.4 },
+  { mes: "Nov '25", pct: 2.6 },
+  { mes: "Dic '25", pct: 2.7 },
+  { mes: "Ene '26", pct: 2.8 },
+  { mes: "Feb '26", pct: 2.9 },
+  { mes: "Mar '26", pct: 3.1 },
 ];
 
-// Intención de creación de Items — App vs Web (uniques mensuales que abren el formulario)
+// Intención de creación de Items — App vs Web (% de usuarios que abren el formulario)
 const itemsIntencion = [
-  { mes: "Oct '25", App: 4280, Web: 21450 },
-  { mes: "Nov '25", App: 4360, Web: 20890 },
-  { mes: "Dic '25", App: 4640, Web: 22310 },
-  { mes: "Ene '26", App: 4510, Web: 21980 },
-  { mes: "Feb '26", App: 4890, Web: 22640 },
-  { mes: "Mar '26", App: 5180, Web: 23120 },
+  { mes: "Oct '25", App: 3.8, Web: 22.1 },
+  { mes: "Nov '25", App: 4.0, Web: 22.4 },
+  { mes: "Dic '25", App: 4.2, Web: 22.8 },
+  { mes: "Ene '26", App: 4.3, Web: 23.0 },
+  { mes: "Feb '26", App: 4.5, Web: 23.4 },
+  { mes: "Mar '26", App: 4.7, Web: 23.7 },
 ];
 
 const itemsCamposFaltantes = [
