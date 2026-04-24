@@ -3584,6 +3584,7 @@ const oportunidades = [
       "La factura de venta en la app no tiene la funcionalidad de imprimir ni de clonar, dos acciones críticas para el día a día de la Pyme BASE que hoy lo obligan a volver al computador.",
     oportunidad:
       "Sumar imprimir y clonar dentro del detalle de la factura, cerrando el ciclo de venta sin necesidad del PC.",
+    link: "https://019dbd42-565f-7ccd-958c-6b7206220c86.claudeusercontent.com/v1/design/projects/019dbd42-565f-7ccd-958c-6b7206220c86/serve/Factura%20Detalle.html?t=503d6973346430c4eae4b14e6b6015a463",
   },
   {
     id: "reportes",
@@ -4109,7 +4110,7 @@ function ContactosFuncDetail() {
 function OportunidadCard({
   op,
 }: {
-  op: { id: string; title: string; tags: string[]; diagnostico: string; oportunidad: string };
+  op: { id: string; title: string; tags: string[]; diagnostico: string; oportunidad: string; link?: string };
 }) {
   const tagColor = (t: string) => {
     if (t === "Engagement") return "#FF6B00";
@@ -4157,6 +4158,18 @@ function OportunidadCard({
           Oportunidad
         </p>
         <p className="mt-1 text-xs leading-relaxed text-neutral-700">{op.oportunidad}</p>
+        {op.link && (
+          <a
+            href={op.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[11px] font-semibold text-white transition-opacity hover:opacity-90"
+            style={{ backgroundColor: ALEGRA_GREEN }}
+          >
+            <ExternalLink className="h-3 w-3" />
+            Ver diseño
+          </a>
+        )}
       </div>
     </div>
   );
