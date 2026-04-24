@@ -4000,51 +4000,57 @@ function ItemsFuncDetail() {
                 % de participación de App en Items
               </h4>
               <p className="mt-0.5 text-xs text-neutral-500">
-                % de ítems creados desde la App vs total (App + Web) · Oct '25 → Mar '26
+                % de ítems creados desde la App vs total (App + Web) · Abr '25 → Abr '26
               </p>
             </div>
             <Badge variant="outline" className="text-[10px]" style={{ borderColor: "#0066FF", color: "#0066FF" }}>
-              Mar 2026: {itemsAppVsWebSeries[itemsAppVsWebSeries.length - 1].pct}%
+              Abr 2026: {itemsAppVsWebSeries[itemsAppVsWebSeries.length - 1].pct}%
             </Badge>
           </div>
           <div className="h-[240px]">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={itemsAppVsWebSeries} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
-                <XAxis dataKey="mes" tick={{ fontSize: 11 }} stroke="#6b7280" />
-                <YAxis tick={{ fontSize: 11 }} stroke="#6b7280" tickFormatter={(v) => `${v}%`} />
-                <Tooltip formatter={(v: number) => `${v.toFixed(1)}%`} />
-                <Line type="monotone" dataKey="pct" stroke="#0066FF" strokeWidth={3} dot={{ r: 4 }} />
+                <XAxis dataKey="mes" tick={{ fontSize: 10 }} stroke="#6b7280" />
+                <YAxis tick={{ fontSize: 11 }} stroke="#6b7280" tickFormatter={(v) => `${v}%`} domain={[0, 6]} />
+                <Tooltip formatter={(v: number) => `${v.toFixed(2)}%`} />
+                <Line type="monotone" dataKey="pct" stroke="#0066FF" strokeWidth={3} dot={{ r: 3 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
+          <p className="mt-2 text-[11px] text-neutral-500">
+            Fuente: Amplitude · se mantiene plana entre 3.3% – 4.3% durante 12 meses, sin tendencia de crecimiento.
+          </p>
         </div>
 
-        {/* Intención App vs Web */}
+        {/* Intención de creación de Items - Web (funnel) */}
         <div className="rounded-xl border border-neutral-200 bg-white p-4">
-          <div className="mb-3">
-            <h4 className="text-sm font-bold text-neutral-900">
-              Intención de creación de Items — App vs Web
-            </h4>
-            <p className="mt-0.5 text-xs text-neutral-500">
-              % de usuarios que abren el formulario de creación
-            </p>
+          <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
+            <div>
+              <h4 className="text-sm font-bold text-neutral-900">
+                Intención de creación de Items — Web
+              </h4>
+              <p className="mt-0.5 text-xs text-neutral-500">
+                % de conversión: ac-item-creation-attempted → ac-item-created
+              </p>
+            </div>
+            <Badge variant="outline" className="text-[10px]" style={{ borderColor: ALEGRA_GREEN, color: ALEGRA_GREEN }}>
+              Abr 2026: {itemsIntencion[itemsIntencion.length - 1].conversion}%
+            </Badge>
           </div>
           <div className="h-[240px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={itemsIntencion} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
                 <XAxis dataKey="mes" tick={{ fontSize: 11 }} stroke="#6b7280" />
-                <YAxis tick={{ fontSize: 11 }} stroke="#6b7280" tickFormatter={(v) => `${v}%`} />
+                <YAxis tick={{ fontSize: 11 }} stroke="#6b7280" tickFormatter={(v) => `${v}%`} domain={[0, 100]} />
                 <Tooltip formatter={(v: number) => `${v.toFixed(1)}%`} />
-                <Legend iconType="circle" wrapperStyle={{ fontSize: 11 }} />
-                <Bar dataKey="App" fill={ALEGRA_GREEN} radius={[4, 4, 0, 0]} />
-                <Bar dataKey="Web" fill="#0066FF" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="conversion" fill={ALEGRA_GREEN} radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
           <p className="mt-2 text-[11px] text-neutral-500">
-            Gap: la intención web es ~{(itemsIntencion[itemsIntencion.length - 1].Web / itemsIntencion[itemsIntencion.length - 1].App).toFixed(1)}× la de app, pese a que la BASE es móvil-first.
+            Fuente: Amplitude (chart 08ti0ts5) · conversión web sostenida ~87%.
           </p>
         </div>
       </div>
