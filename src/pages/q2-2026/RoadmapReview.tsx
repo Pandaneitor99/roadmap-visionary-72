@@ -2421,11 +2421,13 @@ function NegocioView() {
 
       {/* === Cards por país: variación vs Oct === */}
       <div>
-        <div className="mb-4 flex items-baseline gap-3">
-          <h3 className="text-lg font-bold text-neutral-900">Detalle por país</h3>
-          <span className="text-xs text-neutral-500">
-            Click en una card para filtrar el gráfico de arriba
-          </span>
+        <div className="mb-4 flex flex-wrap items-baseline justify-between gap-3">
+          <div className="flex items-baseline gap-3">
+            <h3 className="text-lg font-bold text-neutral-900">Detalle por país</h3>
+            <span className="text-xs text-neutral-500">
+              Click en una card para filtrar el gráfico de abajo
+            </span>
+          </div>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {macCoreLitePerCountry.map((c) => {
@@ -2482,6 +2484,75 @@ function NegocioView() {
               </button>
             );
           })}
+        </div>
+
+        {/* Gráfico filtrado por segmento + país (debajo de las cards) */}
+        <div className="mt-6 rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm md:p-8">
+          <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <h3 className="text-base font-bold text-neutral-900">
+                MAC filtrado
+                {selectedCountry && (
+                  <span className="ml-2 text-xs font-medium text-neutral-500">· {selectedCountry}</span>
+                )}
+              </h3>
+              <p className="mt-1 text-xs text-neutral-500">
+                Filtra por segmento y país. Sin selección: agregado total.
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1">
+                {([
+                  { id: "both", label: "Core + Lite" },
+                  { id: "CORE", label: "Core" },
+                  { id: "LITE", label: "Lite" },
+                ] as const).map((opt) => (
+                  <button
+                    key={opt.id}
+                    onClick={() => setSegment(opt.id)}
+                    className={cn(
+                      "rounded-md px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider transition-all",
+                      segment === opt.id
+                        ? "bg-white text-neutral-900 shadow-sm"
+                        : "text-neutral-500 hover:text-neutral-700",
+                    )}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+              {selectedCountry && (
+                <button
+                  onClick={() => setSelectedCountry(null)}
+                  className="text-[11px] font-semibold text-neutral-500 hover:text-neutral-900 underline"
+                >
+                  Limpiar país ✕
+                </button>
+              )}
+            </div>
+          </div>
+
+          <div className="h-[280px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={filteredSeriesData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                <XAxis dataKey="month" stroke="#6b7280" tick={{ fontSize: 12 }} axisLine={{ stroke: "#e5e7eb" }} tickLine={false} />
+                <YAxis stroke="#6b7280" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} tickFormatter={(v) => v.toLocaleString("es-CO")} />
+                <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => v.toLocaleString("es-CO")} />
+                <Legend iconType="circle" wrapperStyle={{ fontSize: 12, paddingTop: 12 }} />
+                {showCore && (
+                  <Line type="monotone" dataKey="CORE" stroke={ALEGRA_GREEN} strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+                )}
+                {showLite && (
+                  <Line type="monotone" dataKey="LITE" stroke="#FF6B00" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+                )}
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+
+          <p className="mt-3 text-[11px] text-neutral-400">
+            Fuente: Amplitude · jgmbk3gb (CORE) · af1mxpmw (LITE)
+          </p>
         </div>
       </div>
 
