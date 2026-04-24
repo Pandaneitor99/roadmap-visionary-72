@@ -3634,24 +3634,24 @@ const funcionalidadesCards: FuncCard[] = [
   { id: "items", title: "Items", short: "Participación, intención y campos faltantes" },
 ];
 
-// % de participación de App en Items (Mar 2026)
+// % de participación de App en Items (Mar 2026) — ~3%
 const itemsAppVsWebSeries = [
-  { mes: "Oct '25", pct: 9.2 },
-  { mes: "Nov '25", pct: 9.6 },
-  { mes: "Dic '25", pct: 10.1 },
-  { mes: "Ene '26", pct: 10.4 },
-  { mes: "Feb '26", pct: 10.9 },
-  { mes: "Mar '26", pct: 11.5 },
+  { mes: "Oct '25", pct: 2.4 },
+  { mes: "Nov '25", pct: 2.6 },
+  { mes: "Dic '25", pct: 2.7 },
+  { mes: "Ene '26", pct: 2.8 },
+  { mes: "Feb '26", pct: 2.9 },
+  { mes: "Mar '26", pct: 3.1 },
 ];
 
-// Intención de creación de Items — App vs Web (uniques mensuales que abren el formulario)
+// Intención de creación de Items — App vs Web (% de usuarios que abren el formulario)
 const itemsIntencion = [
-  { mes: "Oct '25", App: 4280, Web: 21450 },
-  { mes: "Nov '25", App: 4360, Web: 20890 },
-  { mes: "Dic '25", App: 4640, Web: 22310 },
-  { mes: "Ene '26", App: 4510, Web: 21980 },
-  { mes: "Feb '26", App: 4890, Web: 22640 },
-  { mes: "Mar '26", App: 5180, Web: 23120 },
+  { mes: "Oct '25", App: 3.8, Web: 22.1 },
+  { mes: "Nov '25", App: 4.0, Web: 22.4 },
+  { mes: "Dic '25", App: 4.2, Web: 22.8 },
+  { mes: "Ene '26", App: 4.3, Web: 23.0 },
+  { mes: "Feb '26", App: 4.5, Web: 23.4 },
+  { mes: "Mar '26", App: 4.7, Web: 23.7 },
 ];
 
 const itemsCamposFaltantes = [
@@ -3983,60 +3983,63 @@ function Section5() {
 function ItemsFuncDetail() {
   return (
     <div className="space-y-5">
-      {/* % participación App en Items */}
-      <div className="rounded-xl border border-neutral-200 bg-white p-4">
-        <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
-          <div>
+      {/* Charts lado a lado */}
+      <div className="grid gap-4 lg:grid-cols-2">
+        {/* % participación App en Items */}
+        <div className="rounded-xl border border-neutral-200 bg-white p-4">
+          <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
+            <div>
+              <h4 className="text-sm font-bold text-neutral-900">
+                % de participación de App en Items
+              </h4>
+              <p className="mt-0.5 text-xs text-neutral-500">
+                % de ítems creados desde la App vs total (App + Web) · Oct '25 → Mar '26
+              </p>
+            </div>
+            <Badge variant="outline" className="text-[10px]" style={{ borderColor: "#0066FF", color: "#0066FF" }}>
+              Mar 2026: {itemsAppVsWebSeries[itemsAppVsWebSeries.length - 1].pct}%
+            </Badge>
+          </div>
+          <div className="h-[240px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={itemsAppVsWebSeries} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                <XAxis dataKey="mes" tick={{ fontSize: 11 }} stroke="#6b7280" />
+                <YAxis tick={{ fontSize: 11 }} stroke="#6b7280" tickFormatter={(v) => `${v}%`} />
+                <Tooltip formatter={(v: number) => `${v.toFixed(1)}%`} />
+                <Line type="monotone" dataKey="pct" stroke="#0066FF" strokeWidth={3} dot={{ r: 4 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Intención App vs Web */}
+        <div className="rounded-xl border border-neutral-200 bg-white p-4">
+          <div className="mb-3">
             <h4 className="text-sm font-bold text-neutral-900">
-              % de participación de App en Items
+              Intención de creación de Items — App vs Web
             </h4>
             <p className="mt-0.5 text-xs text-neutral-500">
-              % de ítems creados desde la App vs total (App + Web) · Oct '25 → Mar '26
+              % de usuarios que abren el formulario de creación
             </p>
           </div>
-          <Badge variant="outline" className="text-[10px]" style={{ borderColor: "#0066FF", color: "#0066FF" }}>
-            Mar 2026: {itemsAppVsWebSeries[itemsAppVsWebSeries.length - 1].pct}%
-          </Badge>
-        </div>
-        <div className="h-[220px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={itemsAppVsWebSeries} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
-              <XAxis dataKey="mes" tick={{ fontSize: 11 }} stroke="#6b7280" />
-              <YAxis tick={{ fontSize: 11 }} stroke="#6b7280" tickFormatter={(v) => `${v}%`} />
-              <Tooltip formatter={(v: number) => `${v.toFixed(1)}%`} />
-              <Line type="monotone" dataKey="pct" stroke="#0066FF" strokeWidth={3} dot={{ r: 4 }} />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-
-      {/* Intención App vs Web */}
-      <div className="rounded-xl border border-neutral-200 bg-white p-4">
-        <div className="mb-3">
-          <h4 className="text-sm font-bold text-neutral-900">
-            Intención de creación de Items — App vs Web
-          </h4>
-          <p className="mt-0.5 text-xs text-neutral-500">
-            Uniques mensuales que abren el formulario de creación
+          <div className="h-[240px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={itemsIntencion} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                <XAxis dataKey="mes" tick={{ fontSize: 11 }} stroke="#6b7280" />
+                <YAxis tick={{ fontSize: 11 }} stroke="#6b7280" tickFormatter={(v) => `${v}%`} />
+                <Tooltip formatter={(v: number) => `${v.toFixed(1)}%`} />
+                <Legend iconType="circle" wrapperStyle={{ fontSize: 11 }} />
+                <Bar dataKey="App" fill={ALEGRA_GREEN} radius={[4, 4, 0, 0]} />
+                <Bar dataKey="Web" fill="#0066FF" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+          <p className="mt-2 text-[11px] text-neutral-500">
+            Gap: la intención web es ~{(itemsIntencion[itemsIntencion.length - 1].Web / itemsIntencion[itemsIntencion.length - 1].App).toFixed(1)}× la de app, pese a que la BASE es móvil-first.
           </p>
         </div>
-        <div className="h-[240px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={itemsIntencion} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
-              <XAxis dataKey="mes" tick={{ fontSize: 11 }} stroke="#6b7280" />
-              <YAxis tick={{ fontSize: 11 }} stroke="#6b7280" />
-              <Tooltip formatter={(v: number) => v.toLocaleString("es-CO")} />
-              <Legend iconType="circle" wrapperStyle={{ fontSize: 11 }} />
-              <Bar dataKey="App" fill={ALEGRA_GREEN} radius={[4, 4, 0, 0]} />
-              <Bar dataKey="Web" fill="#0066FF" radius={[4, 4, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-        <p className="mt-2 text-[11px] text-neutral-500">
-          Gap: la intención web es ~{(itemsIntencion[itemsIntencion.length - 1].Web / itemsIntencion[itemsIntencion.length - 1].App).toFixed(1)}× la de app, pese a que la BASE es móvil-first.
-        </p>
       </div>
 
       {/* Campos faltantes y UX deficiente */}
