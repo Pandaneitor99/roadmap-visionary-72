@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import DashboardLayout from "./layouts/DashboardLayout";
 import Dashboard from "./pages/Dashboard";
 import OKRs from "./pages/OKRs";
@@ -30,7 +30,8 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route element={<DashboardLayout />}>
-            <Route path="/" element={<Dashboard />} />
+            <Route path="/" element={<Navigate to="/q2-2026/roadmap-review" replace />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/okrs" element={<OKRs />} />
             <Route path="/iniciativas" element={<Iniciativas />} />
             <Route path="/roadmap" element={<Roadmap />} />
