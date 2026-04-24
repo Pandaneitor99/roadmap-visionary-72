@@ -2275,9 +2275,9 @@ const sosEvents: EngagementEvent[] = [
 ];
 
 function NegocioView() {
-  // Filtro de segmento que controla gráfico principal + cards de país
+  // Filtro de segmento que controla SOLO el gráfico de detalle por país (no el principal)
   const [segment, setSegment] = useState<"both" | "CORE" | "LITE">("both");
-  // País seleccionado para resaltar línea (null = ver todos)
+  // País seleccionado para resaltar línea en el gráfico de detalle (null = ver todos)
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
 
   const last = macCoreLiteTrend[macCoreLiteTrend.length - 1];
@@ -2287,9 +2287,13 @@ function NegocioView() {
   const coreUp = Number(coreDelta) >= 0;
   const liteUp = Number(liteDelta) >= 0;
 
-  // Series para el gráfico principal según segmento + país (si hay)
-  const mainSeriesData = (() => {
-    // Si hay país seleccionado, mostramos su(s) serie(s); si no, el agregado total
+  const showCore = segment === "both" || segment === "CORE";
+  const showLite = segment === "both" || segment === "LITE";
+
+  // Datos para el gráfico filtrado (debajo de las cards de país)
+  // Si no hay país seleccionado: muestra el agregado total CORE/LITE
+  // Si hay país: muestra las series de ese país
+  const filteredSeriesData = (() => {
     if (selectedCountry) {
       const c = macCoreLitePerCountry.find((p) => p.country === selectedCountry);
       if (!c) return macCoreLiteTrend;
@@ -2302,44 +2306,9 @@ function NegocioView() {
     return macCoreLiteTrend;
   })();
 
-  const showCore = segment === "both" || segment === "CORE";
-  const showLite = segment === "both" || segment === "LITE";
-
   return (
     <div className="space-y-10">
-      {/* Filtro segmento + país */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1">
-          {([
-            { id: "both", label: "Core + Lite" },
-            { id: "CORE", label: "Core" },
-            { id: "LITE", label: "Lite" },
-          ] as const).map((opt) => (
-            <button
-              key={opt.id}
-              onClick={() => setSegment(opt.id)}
-              className={cn(
-                "rounded-md px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider transition-all",
-                segment === opt.id
-                  ? "bg-white text-neutral-900 shadow-sm"
-                  : "text-neutral-500 hover:text-neutral-700",
-              )}
-            >
-              {opt.label}
-            </button>
-          ))}
-        </div>
-        {selectedCountry && (
-          <button
-            onClick={() => setSelectedCountry(null)}
-            className="text-[11px] font-semibold text-neutral-500 hover:text-neutral-900 underline"
-          >
-            Limpiar país: {selectedCountry} ✕
-          </button>
-        )}
-      </div>
-
-      {/* MAC Trend Core/Lite + Distribución (al lado) */}
+      {/* MAC Trend Core/Lite (principal, sin filtro) + Distribución (al lado) */}
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Tendencia */}
         <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm md:p-8 lg:col-span-2">
@@ -2347,9 +2316,6 @@ function NegocioView() {
             <div>
               <h3 className="text-lg font-bold text-neutral-900">
                 MAC — Tendencia CORE y LITE
-                {selectedCountry && (
-                  <span className="ml-2 text-xs font-medium text-neutral-500">· {selectedCountry}</span>
-                )}
               </h3>
               <p className="mt-1 text-xs text-neutral-500">
                 Últimos 6 meses · Usuarios pagos activos por tipo de negocio
@@ -2357,66 +2323,58 @@ function NegocioView() {
             </div>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
-            {showCore && (
-              <div
-                className="rounded-xl border bg-white p-4"
-                style={{ borderLeft: `4px solid ${ALEGRA_GREEN}` }}
+            <div
+              className="rounded-xl border bg-white p-4"
+              style={{ borderLeft: `4px solid ${ALEGRA_GREEN}` }}
+            >
+              <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
+                MAC Core
+              </p>
+              <p className="mt-1 text-2xl font-bold text-neutral-900">
+                {last.CORE.toLocaleString("es-CO")}
+              </p>
+              <p
+                className={cn(
+                  "mt-1 flex items-center gap-1 text-xs font-bold",
+                  coreUp ? "text-emerald-600" : "text-red-600",
+                )}
               >
-                <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
-                  MAC Core
-                </p>
-                <p className="mt-1 text-2xl font-bold text-neutral-900">
-                  {mainSeriesData[mainSeriesData.length - 1].CORE.toLocaleString("es-CO")}
-                </p>
-                <p
-                  className={cn(
-                    "mt-1 flex items-center gap-1 text-xs font-bold",
-                    coreUp ? "text-emerald-600" : "text-red-600",
-                  )}
-                >
-                  {coreUp ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
-                  {coreUp ? "+" : ""}{coreDelta}% vs Oct '25
-                </p>
-              </div>
-            )}
-            {showLite && (
-              <div
-                className="rounded-xl border bg-white p-4"
-                style={{ borderLeft: `4px solid #FF6B00` }}
+                {coreUp ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
+                {coreUp ? "+" : ""}{coreDelta}% vs Oct '25
+              </p>
+            </div>
+            <div
+              className="rounded-xl border bg-white p-4"
+              style={{ borderLeft: `4px solid #FF6B00` }}
+            >
+              <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
+                MAC Lite
+              </p>
+              <p className="mt-1 text-2xl font-bold text-neutral-900">
+                {last.LITE.toLocaleString("es-CO")}
+              </p>
+              <p
+                className={cn(
+                  "mt-1 flex items-center gap-1 text-xs font-bold",
+                  liteUp ? "text-emerald-600" : "text-red-600",
+                )}
               >
-                <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
-                  MAC Lite
-                </p>
-                <p className="mt-1 text-2xl font-bold text-neutral-900">
-                  {mainSeriesData[mainSeriesData.length - 1].LITE.toLocaleString("es-CO")}
-                </p>
-                <p
-                  className={cn(
-                    "mt-1 flex items-center gap-1 text-xs font-bold",
-                    liteUp ? "text-emerald-600" : "text-red-600",
-                  )}
-                >
-                  {liteUp ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
-                  {liteUp ? "+" : ""}{liteDelta}% vs Oct '25
-                </p>
-              </div>
-            )}
+                {liteUp ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
+                {liteUp ? "+" : ""}{liteDelta}% vs Oct '25
+              </p>
+            </div>
           </div>
 
           <div className="mt-6 h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={mainSeriesData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+              <LineChart data={macCoreLiteTrend} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
                 <XAxis dataKey="month" stroke="#6b7280" tick={{ fontSize: 12 }} axisLine={{ stroke: "#e5e7eb" }} tickLine={false} />
                 <YAxis stroke="#6b7280" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} tickFormatter={(v) => v.toLocaleString("es-CO")} />
                 <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => v.toLocaleString("es-CO")} />
                 <Legend iconType="circle" wrapperStyle={{ fontSize: 12, paddingTop: 12 }} />
-                {showCore && (
-                  <Line type="monotone" dataKey="CORE" stroke={ALEGRA_GREEN} strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
-                )}
-                {showLite && (
-                  <Line type="monotone" dataKey="LITE" stroke="#FF6B00" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
-                )}
+                <Line type="monotone" dataKey="CORE" stroke={ALEGRA_GREEN} strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+                <Line type="monotone" dataKey="LITE" stroke="#FF6B00" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
