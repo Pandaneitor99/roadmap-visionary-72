@@ -5190,6 +5190,32 @@ function ContactosFuncDetail() {
         </div>
       </div>
 
+      {/* Card destacada: % participación de App en Contactos */}
+      <div
+        className="rounded-2xl border p-5 shadow-sm"
+        style={{
+          borderColor: "#FF6B0033",
+          background: "linear-gradient(135deg, rgba(255,107,0,0.06), rgba(255,107,0,0.02))",
+        }}
+      >
+        <div className="flex items-center justify-between gap-4 flex-wrap">
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-wider" style={{ color: "#FF6B00" }}>
+              % de participación de App en Contactos
+            </p>
+            <p className="mt-1 text-xs text-neutral-600">
+              App vs total (App + Web) · contactos creados — últimos 30 días
+            </p>
+          </div>
+          <div className="text-right">
+            <p className="text-3xl font-bold" style={{ color: "#FF6B00" }}>
+              {CONTACTOS_APP_PARTICIPACION.toFixed(2)}%
+            </p>
+            <p className="text-[10px] text-neutral-500">de los contactos se crean en la app</p>
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 }
