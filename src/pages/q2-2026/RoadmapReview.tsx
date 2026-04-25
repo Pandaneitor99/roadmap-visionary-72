@@ -3769,9 +3769,7 @@ function SectionFunnel() {
     </div>
   );
 }
-
-
-
+function OKRMiniCard({
   okr,
   kind,
 }: {
