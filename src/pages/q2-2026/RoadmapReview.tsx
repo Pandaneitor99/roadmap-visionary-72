@@ -23,6 +23,7 @@ import {
 
 import { initiativeDetailMap } from "./initiativeDetails";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import visionAppMockup from "@/assets/vision-app-mockup.png";
 
 const sections = [
   { id: 1, title: "Visión estratégica", short: "Visión" },
