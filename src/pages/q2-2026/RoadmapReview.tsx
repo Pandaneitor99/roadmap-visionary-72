@@ -4841,9 +4841,116 @@ function ItemsFuncDetail() {
   );
 }
 
+// --- Datos Contactos (Amplitude charts up58fj0c + 45ccva3n) - últimas 9 semanas ---
+const contactosHomeAContactos = [
+  { semana: "22 Feb", pct: 3.47 },
+  { semana: "01 Mar", pct: 3.46 },
+  { semana: "08 Mar", pct: 3.22 },
+  { semana: "15 Mar", pct: 2.99 },
+  { semana: "22 Mar", pct: 3.09 },
+  { semana: "29 Mar", pct: 2.65 },
+  { semana: "05 Abr", pct: 3.20 },
+  { semana: "12 Abr", pct: 6.84 },
+  { semana: "19 Abr", pct: 9.93 },
+];
+const contactosVisitaACreado = [
+  { semana: "22 Feb", pct: 81.91 },
+  { semana: "01 Mar", pct: 83.55 },
+  { semana: "08 Mar", pct: 77.05 },
+  { semana: "15 Mar", pct: 78.64 },
+  { semana: "22 Mar", pct: 81.91 },
+  { semana: "29 Mar", pct: 78.01 },
+  { semana: "05 Abr", pct: 65.31 },
+  { semana: "12 Abr", pct: 41.55 },
+  { semana: "19 Abr", pct: 30.70 },
+];
+
 function ContactosFuncDetail() {
+  const lastDescubre = contactosHomeAContactos[contactosHomeAContactos.length - 1].pct;
+  const lastCrea = contactosVisitaACreado[contactosVisitaACreado.length - 1].pct;
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
+      {/* Problema destacado */}
+      <div className="rounded-xl border border-orange-200 bg-orange-50/60 p-4">
+        <p className="text-[11px] font-bold uppercase tracking-wider text-orange-700">
+          Problema detectado
+        </p>
+        <p className="mt-2 text-sm leading-relaxed text-neutral-800">
+          Los usuarios <strong>descubren la sección de Contactos</strong> (visitas crecen +9.93% últ. semana) <strong>pero NO están creando</strong>: la conversión visita → contacto creado <strong>cae de 81.91% a 30.70%</strong> en 9 semanas. Hay intención de uso pero la creación no está cerrando.
+        </p>
+      </div>
+
+      {/* Charts lado a lado */}
+      <div className="grid gap-4 lg:grid-cols-2">
+        {/* Funnel home → contactos */}
+        <div className="rounded-xl border border-neutral-200 bg-white p-4">
+          <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
+            <div>
+              <h4 className="text-sm font-bold text-neutral-900">Funnel Home → Contactos</h4>
+              <p className="mt-0.5 text-xs text-neutral-500">
+                % de usuarios pagos que llegan a la sección de contactos desde el home · últ. 9 semanas
+              </p>
+            </div>
+            <Badge variant="outline" className="text-[10px]" style={{ borderColor: "#0066FF", color: "#0066FF" }}>
+              19 Abr: {lastDescubre.toFixed(2)}%
+            </Badge>
+          </div>
+          <div className="h-[220px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={contactosHomeAContactos} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                <XAxis dataKey="semana" tick={{ fontSize: 10 }} stroke="#6b7280" />
+                <YAxis tick={{ fontSize: 11 }} stroke="#6b7280" tickFormatter={(v) => `${v}%`} />
+                <Tooltip formatter={(v: number) => `${v.toFixed(2)}%`} />
+                <Line type="monotone" dataKey="pct" stroke="#0066FF" strokeWidth={3} dot={{ r: 3 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+          <a
+            href="https://app.amplitude.com/analytics/alegra/chart/up58fj0c"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-500 hover:text-neutral-800"
+          >
+            <ExternalLink className="h-3 w-3" /> Amplitude · up58fj0c
+          </a>
+        </div>
+
+        {/* Funnel visita → creado */}
+        <div className="rounded-xl border border-neutral-200 bg-white p-4">
+          <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
+            <div>
+              <h4 className="text-sm font-bold text-neutral-900">Funnel Visita Contactos → Contacto Creado</h4>
+              <p className="mt-0.5 text-xs text-neutral-500">
+                % de conversión: app-new-contact-visited → app-contact-created · últ. 9 semanas
+              </p>
+            </div>
+            <Badge variant="outline" className="text-[10px]" style={{ borderColor: "#FF6B00", color: "#FF6B00" }}>
+              19 Abr: {lastCrea.toFixed(2)}%
+            </Badge>
+          </div>
+          <div className="h-[220px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={contactosVisitaACreado} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                <XAxis dataKey="semana" tick={{ fontSize: 10 }} stroke="#6b7280" />
+                <YAxis tick={{ fontSize: 11 }} stroke="#6b7280" tickFormatter={(v) => `${v}%`} domain={[0, 100]} />
+                <Tooltip formatter={(v: number) => `${v.toFixed(2)}%`} />
+                <Line type="monotone" dataKey="pct" stroke="#FF6B00" strokeWidth={3} dot={{ r: 3 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+          <a
+            href="https://app.amplitude.com/analytics/alegra/chart/45ccva3n"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-500 hover:text-neutral-800"
+          >
+            <ExternalLink className="h-3 w-3" /> Amplitude · 45ccva3n
+          </a>
+        </div>
+      </div>
+
       <div className="rounded-xl border border-emerald-100 bg-emerald-50/40 p-4">
         <p className="text-[11px] font-bold uppercase tracking-wider" style={{ color: ALEGRA_GREEN }}>
           Estado actual
@@ -4852,9 +4959,6 @@ function ContactosFuncDetail() {
           Llenado automático de campos en contactos en desarrollo (ver iniciativa "Llenado automático campos contactos" en Resultados del período).
         </p>
       </div>
-      <p className="text-xs text-neutral-500">
-        Profundización adicional disponible próximamente.
-      </p>
     </div>
   );
 }
