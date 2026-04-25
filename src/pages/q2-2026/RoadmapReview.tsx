@@ -5048,7 +5048,7 @@ function ContactosFuncDetail() {
           Problema detectado
         </p>
         <p className="mt-2 text-sm leading-relaxed text-neutral-800">
-          Los usuarios <strong>descubren la sección de Contactos</strong> (visitas crecen +9.93% últ. semana) <strong>pero NO están creando</strong>: la conversión visita → contacto creado <strong>cae de 81.91% a 30.70%</strong> en 9 semanas. Hay intención de uso pero la creación no está cerrando.
+          <strong>Disparidad en algunos campos</strong> como nombre y apellido, municipio y departamento, sumado a <strong>poca claridad en la elección de cliente y vendedor</strong>. Esto genera fricción en la creación de contactos desde la app.
         </p>
       </div>
 
