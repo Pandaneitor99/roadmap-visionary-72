@@ -4088,7 +4088,7 @@ function SectionFunnel() {
       {/* Funnels combinados Todos vs Mobile - 2 columnas */}
       <div className="grid gap-6 lg:grid-cols-2">
         <FunnelComboCard
-          title="Funnel Entero — Todos vs Mobile web"
+          title="Funnel Entero — Mobile App vs Mobile web"
           subtitle="Con PQL · 4 pasos"
           source="Amplitude · charts tgvpb7n5 + ozsknaof"
           data={funnelComboPQL}
