@@ -4755,6 +4755,50 @@ function Section5() {
         </div>
       </div>
 
+      {/* Adquisición */}
+      <div>
+        <div className="mb-5 flex items-center gap-2">
+          <div className="h-1 w-10 rounded-full" style={{ backgroundColor: "#FF6B00" }} />
+          <h2 className="text-lg font-bold text-neutral-900">Adquisición</h2>
+          <span className="ml-2 text-xs text-neutral-500">Login para ver planes y pagar</span>
+        </div>
+
+        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+          <div className="mb-5 flex items-start gap-3">
+            <div
+              className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+              style={{ backgroundColor: "#FF6B0015" }}
+            >
+              <LogIn className="h-4 w-4" style={{ color: "#FF6B00" }} />
+            </div>
+            <div>
+              <h3 className="text-base font-bold text-neutral-900">
+                Funnel Entero sin PQL — Mobile App vs Mobile web
+              </h3>
+              <p className="mt-0.5 text-xs text-neutral-500">
+                Comparativo de adquisición entre canales · Año en curso · entrepreneur
+              </p>
+            </div>
+          </div>
+
+          <div className="mb-5 rounded-xl border border-orange-200 bg-orange-50/60 p-4">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-orange-700">
+              Problema detectado
+            </p>
+            <p className="mt-2 text-sm leading-relaxed text-neutral-800">
+              Los usuarios <strong>tienen que iniciar sesión dentro de la app</strong> para ver los planes y pagar, o <strong>ir a web</strong>. Este paso adicional fricciona la conversión a pago en Mobile App: <strong>Mobile web convierte 2.76% vs 1.96% en Mobile App</strong>.
+            </p>
+          </div>
+
+          <FunnelComboCard
+            title="Funnel Entero sin PQL — Mobile App vs Mobile web"
+            subtitle="Sin PQL · 3 pasos · Adquisición"
+            source="Amplitude · charts 6lwwlzbl + jdusjvvg"
+            data={funnelComboSinPQL}
+          />
+        </div>
+      </div>
+
     </div>
   );
 }
