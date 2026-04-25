@@ -4077,6 +4077,7 @@ function EventosOnboardingSemanalCard() {
 }
 
 function SectionFunnel() {
+  const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -4097,13 +4098,13 @@ function SectionFunnel() {
             </p>
             <h2 className="mt-1 text-2xl font-bold text-neutral-900">Funnel</h2>
             <p className="mt-2 text-sm leading-relaxed text-neutral-600">
-              Segmento <strong>entrepreneur</strong> · Año en curso. Comparamos el funnel <strong>Todos los dispositivos</strong> frente a <strong>Mobile web</strong>, con y sin PQL (intento de factura). Debajo, el funnel <strong>App Mobile por país</strong> y la distribución de perfiles por mercado.
+              Segmento <strong>entrepreneur</strong> · Año en curso. Comparamos el funnel <strong>Mobile App</strong> frente a <strong>Mobile web</strong>, con y sin PQL (intento de factura). Debajo, el funnel <strong>App Mobile por país</strong> y la distribución de perfiles por mercado.
             </p>
           </div>
         </div>
       </div>
 
-      {/* Funnels combinados Todos vs Mobile - 2 columnas */}
+      {/* Funnels combinados Mobile App vs Mobile web - 2 columnas */}
       <div className="grid gap-6 lg:grid-cols-2">
         <FunnelComboCard
           title="Funnel Entero — Mobile App vs Mobile web"
@@ -4119,10 +4120,24 @@ function SectionFunnel() {
         />
       </div>
 
-      {/* Funnel por País + Perfil por País (lateral) */}
-      <div className="grid gap-6 lg:grid-cols-2">
-        <FunnelByCountryCard />
-        <PerfilPorPaisCard />
+      {/* Selector de países (afuera del dashboard) */}
+      <div>
+        <div className="mb-3 flex items-center gap-2">
+          <div className="h-1 w-10 rounded-full" style={{ backgroundColor: ALEGRA_GREEN }} />
+          <h3 className="text-base font-bold text-neutral-900">Selecciona un país</h3>
+          <span className="text-xs text-neutral-500">· filtra el funnel App Mobile</span>
+        </div>
+        <CountrySelectorCards selected={selectedCountry} setSelected={setSelectedCountry} />
+      </div>
+
+      {/* Funnel por País (3/4) + Perfil por País (1/4) */}
+      <div className="grid gap-6 lg:grid-cols-4">
+        <div className="lg:col-span-3">
+          <FunnelByCountryCard selected={selectedCountry} setSelected={setSelectedCountry} />
+        </div>
+        <div className="lg:col-span-1">
+          <PerfilPorPaisCard />
+        </div>
       </div>
 
       {/* Tendencia combinada con tag selector */}
