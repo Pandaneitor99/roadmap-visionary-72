@@ -31,8 +31,9 @@ const sections = [
   { id: 4, title: "Comportamiento de usuarios", short: "Comportamiento" },
   { id: 5, title: "Resultados del período", short: "Resultados" },
   { id: 6, title: "Issues", short: "Issues" },
-  { id: 7, title: "Diagnóstico y oportunidades", short: "Diagnóstico" },
-  { id: 8, title: "Próximos pasos", short: "Próximos pasos" },
+  { id: 7, title: "Funnel", short: "Funnel" },
+  { id: 8, title: "Diagnóstico y oportunidades", short: "Diagnóstico" },
+  { id: 9, title: "Próximos pasos", short: "Próximos pasos" },
 ];
 
 const ALEGRA_GREEN = "#00B386";
@@ -122,6 +123,8 @@ export default function RoadmapReview() {
           ) : current === 5 ? (
             <SectionIssues />
           ) : current === 6 ? (
+            <SectionFunnel />
+          ) : current === 7 ? (
             <Section5 />
           ) : (
             <PlaceholderSection title={section.title} />
@@ -3407,6 +3410,365 @@ function SectionIssues() {
 }
 
 
+// === Sección 7: Funnel ===
+// Datos extraídos de Amplitude (range = This Year, segment entrepreneur)
+//   tgvpb7n5  Funnel Entero            (4 pasos: Perfil → Onboarding → Intento factura → Pago)
+//   6lwwlzbl  Funnel Entero sin PQL    (3 pasos: Perfil → Onboarding → Pago)
+//   ozsknaof  Funnel Mobile web        (4 pasos, Mobile)
+//   jdusjvvg  Funnel Mobile web sin PQL(3 pasos, Mobile)
+// Tendencias (b6xrlqln, txoefzi7, kcf69jc1) — Last 6 Months, conversión mensual
+
+// --- Funnel "Entero" (con PQL) ---
+const funnelEntero = [
+  { step: "Perfil", label: "Selección perfil", count: 3260, pct: 100 },
+  { step: "Onboarding", label: "Wizard finalizado", count: 2823, pct: 86.6 },
+  { step: "PQL", label: "Intento factura", count: 1398, pct: 42.9 },
+  { step: "Logo", label: "Pago suscripción", count: 39, pct: 1.20 },
+];
+
+// --- Funnel "Entero" (sin PQL) ---
+const funnelEnteroSinPQL = [
+  { step: "Perfil", label: "Selección perfil", count: 3260, pct: 100 },
+  { step: "Onboarding", label: "Wizard finalizado", count: 2823, pct: 86.6 },
+  { step: "Logo", label: "Pago suscripción", count: 64, pct: 1.96 },
+];
+
+// --- Funnel Mobile web (con PQL) ---
+const funnelMobile = [
+  { step: "Perfil", label: "Selección perfil", count: 10391, pct: 100 },
+  { step: "Onboarding", label: "Wizard finalizado", count: 6849, pct: 65.9 },
+  { step: "PQL", label: "Intento factura", count: 1585, pct: 15.3 },
+  { step: "Logo", label: "Pago suscripción", count: 104, pct: 1.00 },
+];
+
+// --- Funnel Mobile web (sin PQL) ---
+const funnelMobileSinPQL = [
+  { step: "Perfil", label: "Selección perfil", count: 10391, pct: 100 },
+  { step: "Onboarding", label: "Wizard finalizado", count: 6849, pct: 65.9 },
+  { step: "Logo", label: "Pago suscripción", count: 287, pct: 2.76 },
+];
+
+// --- Tendencias mensuales ---
+const tendenciaPerfilMQL = [
+  { mes: "Oct '25", pct: 89.22 },
+  { mes: "Nov '25", pct: 92.03 },
+  { mes: "Dic '25", pct: 88.32 },
+  { mes: "Ene '26", pct: 87.04 },
+  { mes: "Feb '26", pct: 84.73 },
+  { mes: "Mar '26", pct: 86.89 },
+  { mes: "Abr '26", pct: 87.76 },
+];
+const tendenciaPerfilPQL = [
+  { mes: "Oct '25", pct: 14.59 },
+  { mes: "Nov '25", pct: 17.99 },
+  { mes: "Dic '25", pct: 17.53 },
+  { mes: "Ene '26", pct: 17.41 },
+  { mes: "Feb '26", pct: 13.80 },
+  { mes: "Mar '26", pct: 12.88 },
+  { mes: "Abr '26", pct: 12.54 },
+];
+const tendenciaPerfilLogo = [
+  { mes: "Oct '25", pct: 1.69 },
+  { mes: "Nov '25", pct: 2.06 },
+  { mes: "Dic '25", pct: 2.75 },
+  { mes: "Ene '26", pct: 2.63 },
+  { mes: "Feb '26", pct: 2.49 },
+  { mes: "Mar '26", pct: 2.39 },
+  { mes: "Abr '26", pct: 0.80 },
+];
+
+type FunnelDatum = { step: string; label: string; count: number; pct: number };
+
+function FunnelCard({
+  title,
+  subtitle,
+  source,
+  data,
+  color,
+}: {
+  title: string;
+  subtitle: string;
+  source: string;
+  data: FunnelDatum[];
+  color: string;
+}) {
+  const [mode, setMode] = useState<"pct" | "num">("pct");
+  const baseTotal = data[0]?.count ?? 0;
+  const finalPct = data[data.length - 1]?.pct ?? 0;
+  const vsOct = (finalPct - tendenciaPerfilLogo[0].pct).toFixed(2);
+
+  return (
+    <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">
+            {subtitle}
+          </p>
+          <h3 className="mt-1 text-base font-bold text-neutral-900">{title}</h3>
+          <p className="mt-1 text-xs text-neutral-500">{source}</p>
+        </div>
+        <div className="inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-0.5">
+          <button
+            onClick={() => setMode("pct")}
+            className={cn(
+              "rounded-md px-2.5 py-1 text-[11px] font-semibold transition-all",
+              mode === "pct" ? "bg-white text-neutral-900 shadow-sm" : "text-neutral-500",
+            )}
+          >
+            %
+          </button>
+          <button
+            onClick={() => setMode("num")}
+            className={cn(
+              "rounded-md px-2.5 py-1 text-[11px] font-semibold transition-all",
+              mode === "num" ? "bg-white text-neutral-900 shadow-sm" : "text-neutral-500",
+            )}
+          >
+            #
+          </button>
+        </div>
+      </div>
+
+      <div className="mt-4 flex items-baseline gap-2">
+        <span className="text-3xl font-bold" style={{ color }}>
+          {finalPct.toFixed(2)}%
+        </span>
+        <span className="text-xs text-neutral-500">conversión total · base {baseTotal.toLocaleString()}</span>
+      </div>
+
+      <div className="mt-5 h-[280px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={data} margin={{ top: 24, right: 16, left: 0, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+            <XAxis
+              dataKey="step"
+              tick={{ fontSize: 11, fill: "#6b7280" }}
+              axisLine={false}
+              tickLine={false}
+            />
+            <YAxis
+              tick={{ fontSize: 11, fill: "#6b7280" }}
+              axisLine={false}
+              tickLine={false}
+              tickFormatter={(v) => (mode === "pct" ? `${v}%` : v.toLocaleString())}
+            />
+            <Tooltip
+              contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }}
+              formatter={(_, __, item) => {
+                const p = item.payload as FunnelDatum;
+                return [
+                  mode === "pct"
+                    ? `${p.pct.toFixed(2)}%  (${p.count.toLocaleString()} usuarios)`
+                    : `${p.count.toLocaleString()} usuarios  (${p.pct.toFixed(2)}%)`,
+                  p.label,
+                ];
+              }}
+            />
+            <Bar dataKey={mode === "pct" ? "pct" : "count"} fill={color} radius={[6, 6, 0, 0]}>
+              <LabelList
+                dataKey={mode === "pct" ? "pct" : "count"}
+                position="top"
+                style={{ fontSize: 11, fill: "#374151", fontWeight: 700 }}
+                formatter={(v: number) =>
+                  mode === "pct" ? `${v.toFixed(2)}%` : v.toLocaleString()
+                }
+              />
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  );
+}
+
+function TrendCard({
+  title,
+  subtitle,
+  data,
+  color,
+  url,
+}: {
+  title: string;
+  subtitle: string;
+  data: { mes: string; pct: number }[];
+  color: string;
+  url: string;
+}) {
+  const oct = data[0]?.pct ?? 0;
+  const last = data[data.length - 1]?.pct ?? 0;
+  const delta = last - oct;
+  const positive = delta >= 0;
+
+  return (
+    <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">
+            Tendencia
+          </p>
+          <h3 className="mt-1 text-base font-bold text-neutral-900">{title}</h3>
+          <p className="mt-1 text-xs text-neutral-500">{subtitle}</p>
+        </div>
+        <span
+          className={cn(
+            "inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-bold",
+            positive ? "bg-emerald-50 text-emerald-700" : "bg-orange-50 text-orange-700",
+          )}
+        >
+          {positive ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+          {positive ? "+" : ""}
+          {delta.toFixed(2)} pp vs Oct
+        </span>
+      </div>
+
+      <div className="mt-4 flex items-baseline gap-3">
+        <span className="text-2xl font-bold" style={{ color }}>
+          {last.toFixed(2)}%
+        </span>
+        <span className="text-xs text-neutral-500">
+          Oct: <span className="font-semibold text-neutral-700">{oct.toFixed(2)}%</span>
+        </span>
+      </div>
+
+      <div className="mt-4 h-[200px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={data} margin={{ top: 16, right: 16, left: 0, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+            <XAxis dataKey="mes" tick={{ fontSize: 10, fill: "#6b7280" }} axisLine={false} tickLine={false} />
+            <YAxis
+              tick={{ fontSize: 10, fill: "#6b7280" }}
+              axisLine={false}
+              tickLine={false}
+              tickFormatter={(v) => `${v}%`}
+            />
+            <Tooltip
+              contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }}
+              formatter={(v: number) => [`${v.toFixed(2)}%`, "Conversión"]}
+            />
+            <Line
+              type="monotone"
+              dataKey="pct"
+              stroke={color}
+              strokeWidth={2.5}
+              dot={{ r: 3.5, fill: color }}
+              activeDot={{ r: 5.5 }}
+            >
+              <LabelList
+                dataKey="pct"
+                position="top"
+                style={{ fontSize: 10, fill: "#374151", fontWeight: 600 }}
+                formatter={(v: number) => `${v.toFixed(1)}%`}
+              />
+            </Line>
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-3 inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-500 hover:text-neutral-800"
+      >
+        <ExternalLink className="h-3 w-3" /> Ver en Amplitude
+      </a>
+    </div>
+  );
+}
+
+function SectionFunnel() {
+  return (
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+        <div className="flex items-start gap-3">
+          <div
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
+            style={{ backgroundColor: `${ALEGRA_GREEN}15` }}
+          >
+            <Target className="h-5 w-5" style={{ color: ALEGRA_GREEN }} />
+          </div>
+          <div>
+            <p
+              className="text-xs font-semibold uppercase tracking-[0.2em]"
+              style={{ color: ALEGRA_GREEN }}
+            >
+              Conversión end-to-end
+            </p>
+            <h2 className="mt-1 text-2xl font-bold text-neutral-900">Funnel</h2>
+            <p className="mt-2 text-sm leading-relaxed text-neutral-600">
+              Segmento <strong>entrepreneur</strong> · Año en curso. Comparamos el funnel <strong>con PQL</strong> (incluye intento de factura) frente al funnel <strong>sin PQL</strong> (perfil → onboarding → pago) para todos los dispositivos y para la cohorte <strong>mobile web</strong>.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Funnels - 2 columnas: con PQL (izq) vs sin PQL (der) */}
+      <div className="grid gap-6 lg:grid-cols-2">
+        <FunnelCard
+          title="Funnel Entero"
+          subtitle="Con PQL · Todos los dispositivos"
+          source="Amplitude · chart tgvpb7n5"
+          data={funnelEntero}
+          color={ALEGRA_GREEN}
+        />
+        <FunnelCard
+          title="Funnel Entero sin PQL"
+          subtitle="Sin PQL · Todos los dispositivos"
+          source="Amplitude · chart 6lwwlzbl"
+          data={funnelEnteroSinPQL}
+          color="#0066FF"
+        />
+        <FunnelCard
+          title="Funnel — Entero Mobile web"
+          subtitle="Con PQL · Mobile web"
+          source="Amplitude · chart ozsknaof"
+          data={funnelMobile}
+          color="#FF6B00"
+        />
+        <FunnelCard
+          title="Funnel — Entero Mobile web sin PQL"
+          subtitle="Sin PQL · Mobile web"
+          source="Amplitude · chart jdusjvvg"
+          data={funnelMobileSinPQL}
+          color="#A855F7"
+        />
+      </div>
+
+      {/* Tendencia: 3 dashboards over time */}
+      <div>
+        <div className="mb-4 flex items-center gap-2">
+          <TrendingUp className="h-4 w-4" style={{ color: ALEGRA_GREEN }} />
+          <h3 className="text-lg font-bold text-neutral-900">Tendencia mensual</h3>
+          <span className="text-xs text-neutral-500">· últimos 6 meses · comparativo vs Octubre 2025</span>
+        </div>
+        <div className="grid gap-6 lg:grid-cols-3">
+          <TrendCard
+            title="Perfil → MQL"
+            subtitle="Onboarding finalizado"
+            data={tendenciaPerfilMQL}
+            color={ALEGRA_GREEN}
+            url="https://app.amplitude.com/analytics/alegra/chart/b6xrlqln"
+          />
+          <TrendCard
+            title="Perfil → PQL"
+            subtitle="Intento de factura"
+            data={tendenciaPerfilPQL}
+            color="#FF6B00"
+            url="https://app.amplitude.com/analytics/alegra/chart/txoefzi7"
+          />
+          <TrendCard
+            title="Perfil → Logo"
+            subtitle="Pago suscripción"
+            data={tendenciaPerfilLogo}
+            color="#0066FF"
+            url="https://app.amplitude.com/analytics/alegra/chart/kcf69jc1"
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
 function OKRMiniCard({
   okr,
   kind,
