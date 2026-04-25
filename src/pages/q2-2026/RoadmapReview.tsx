@@ -4721,7 +4721,17 @@ function Section5() {
                 <Lightbulb className="h-4 w-4" style={{ color: "#0066FF" }} />
               </div>
               <div>
-                <h3 className="text-base font-bold text-neutral-900">Contactos</h3>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-base font-bold text-neutral-900">Contactos</h3>
+                  <Badge
+                    className="gap-1 border-0 text-[10px] font-bold uppercase tracking-wider text-white"
+                    style={{
+                      background: "linear-gradient(135deg, #00B386, #0066FF)",
+                    }}
+                  >
+                    <Sparkles className="h-3 w-3" /> IA
+                  </Badge>
+                </div>
                 <p className="mt-0.5 text-xs text-neutral-500">Llenado automático y captura rápida</p>
               </div>
             </div>
