@@ -4635,6 +4635,25 @@ function Section5() {
             </div>
             <ItemsFuncDetail />
           </div>
+
+          {/* Soporte */}
+          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+            <div className="mb-5 flex items-start gap-3">
+              <div
+                className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+                style={{ backgroundColor: "#FCA5A520" }}
+              >
+                <Headphones className="h-4 w-4 text-red-500" />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-neutral-900">Soporte</h3>
+                <p className="mt-0.5 text-xs text-neutral-500">
+                  Solicitudes de soporte desde la app · totales y únicos
+                </p>
+              </div>
+            </div>
+            <SoporteFuncDetail />
+          </div>
         </div>
       </div>
 
