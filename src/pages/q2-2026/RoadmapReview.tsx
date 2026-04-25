@@ -3782,10 +3782,59 @@ const COUNTRY_COLORS: Record<string, string> = {
   Peru: "#A855F7",
 };
 
-function FunnelByCountryCard() {
+function CountrySelectorCards({
+  selected,
+  setSelected,
+}: {
+  selected: string | null;
+  setSelected: (c: string | null) => void;
+}) {
   const countries = Object.keys(funnelPorPais);
-  const [selected, setSelected] = useState<string | null>(null);
+  return (
+    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      {countries.map((c) => {
+        const isActive = selected === c;
+        const d = funnelPorPais[c];
+        const color = COUNTRY_COLORS[c] ?? "#6b7280";
+        return (
+          <button
+            key={c}
+            onClick={() => setSelected(isActive ? null : c)}
+            className={cn(
+              "rounded-2xl border bg-white px-4 py-3 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md",
+              isActive
+                ? "border-transparent ring-2"
+                : "border-neutral-200 hover:border-neutral-300",
+            )}
+            style={
+              isActive
+                ? { backgroundColor: `${color}10`, borderColor: color, boxShadow: `0 0 0 2px ${color}40` }
+                : undefined
+            }
+          >
+            <div className="flex items-center gap-2">
+              <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: color }} />
+              <p className="text-xs font-bold uppercase tracking-wider text-neutral-700">{c}</p>
+            </div>
+            <p className="mt-1 text-2xl font-bold" style={{ color: isActive ? color : "#111827" }}>
+              {d.conv.toFixed(2)}%
+            </p>
+            <p className="text-[10px] text-neutral-500">{d.perfil.toLocaleString()} perfiles · conversión total</p>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
 
+function FunnelByCountryCard({
+  selected,
+  setSelected,
+}: {
+  selected: string | null;
+  setSelected: (c: string | null) => void;
+}) {
+  const countries = Object.keys(funnelPorPais);
   const stepKeys = ["perfil", "onboarding", "pql", "logo"] as const;
   const stepLabels = ["Perfil", "Onboarding", "PQL · Intento", "Logo · Pago"];
 
@@ -3824,38 +3873,7 @@ function FunnelByCountryCard() {
         </a>
       </div>
 
-      {/* Country cards selector (CO, MX, CR, PE) */}
-      <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
-        {countries.map((c) => {
-          const isActive = selected === c;
-          const d = funnelPorPais[c];
-          const color = COUNTRY_COLORS[c] ?? "#6b7280";
-          return (
-            <button
-              key={c}
-              onClick={() => setSelected(isActive ? null : c)}
-              className={cn(
-                "rounded-xl border px-3 py-2 text-left transition-all",
-                isActive
-                  ? "border-transparent shadow-md"
-                  : "border-neutral-200 bg-white hover:border-neutral-300 hover:bg-neutral-50",
-              )}
-              style={isActive ? { backgroundColor: `${color}15`, borderColor: color } : undefined}
-            >
-              <div className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />
-                <p className="truncate text-[11px] font-semibold text-neutral-700">{c}</p>
-              </div>
-              <p className="mt-0.5 text-base font-bold" style={{ color: isActive ? color : "#111827" }}>
-                {d.conv.toFixed(2)}%
-              </p>
-              <p className="text-[10px] text-neutral-500">{d.perfil.toLocaleString()} perfiles</p>
-            </button>
-          );
-        })}
-      </div>
-
-      <div className="mt-5 flex items-baseline gap-2">
+      <div className="mt-4 flex items-baseline gap-2">
         <span className="text-2xl font-bold text-neutral-900">
           {selected ?? "Comparativo 4 países"}
         </span>
@@ -3871,15 +3889,15 @@ function FunnelByCountryCard() {
             </button>
           </span>
         ) : (
-          <span className="text-xs text-neutral-500">click en un país para filtrar</span>
+          <span className="text-xs text-neutral-500">click en un país (arriba) para filtrar</span>
         )}
       </div>
 
-      <div className="mt-3 h-[300px]">
+      <div className="mt-4 h-[340px]">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData} margin={{ top: 24, right: 16, left: 0, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
-            <XAxis dataKey="step" tick={{ fontSize: 10, fill: "#6b7280" }} axisLine={false} tickLine={false} />
+            <XAxis dataKey="step" tick={{ fontSize: 11, fill: "#6b7280" }} axisLine={false} tickLine={false} />
             <YAxis
               tick={{ fontSize: 11, fill: "#6b7280" }}
               axisLine={false}
