@@ -3412,43 +3412,29 @@ function SectionIssues() {
 
 // === Sección 7: Funnel ===
 // Datos extraídos de Amplitude (range = This Year, segment entrepreneur)
-//   tgvpb7n5  Funnel Entero            (4 pasos: Perfil → Onboarding → Intento factura → Pago)
-//   6lwwlzbl  Funnel Entero sin PQL    (3 pasos: Perfil → Onboarding → Pago)
-//   ozsknaof  Funnel Mobile web        (4 pasos, Mobile)
-//   jdusjvvg  Funnel Mobile web sin PQL(3 pasos, Mobile)
-// Tendencias (b6xrlqln, txoefzi7, kcf69jc1) — Last 6 Months, conversión mensual
+//   tgvpb7n5  Funnel Entero (4 pasos)         · ozsknaof Mobile web (4 pasos)
+//   6lwwlzbl  Funnel Entero sin PQL (3 pasos) · jdusjvvg Mobile web sin PQL (3 pasos)
+//   tnh09978  Funnel Entero App Mobile por País (group-by Country)
+//   42w27hn3  Perfil por País (uniques semanal)
+//   b6xrlqln/txoefzi7/kcf69jc1  Tendencias mensuales Perfil→MQL/PQL/Logo
+//   j30yk1tu  Eventos Onboarding Semanal (Perfil/MQL/PQL)
 
-// --- Funnel "Entero" (con PQL) ---
-const funnelEntero = [
-  { step: "Perfil", label: "Selección perfil", count: 3260, pct: 100 },
-  { step: "Onboarding", label: "Wizard finalizado", count: 2823, pct: 86.6 },
-  { step: "PQL", label: "Intento factura", count: 1398, pct: 42.9 },
-  { step: "Logo", label: "Pago suscripción", count: 39, pct: 1.20 },
+// --- Funnels combinados: Todos vs Mobile web (con PQL) ---
+const funnelComboPQL = [
+  { step: "Perfil", todosCount: 3260, todosPct: 100, mobileCount: 10391, mobilePct: 100 },
+  { step: "Onboarding", todosCount: 2823, todosPct: 86.6, mobileCount: 6849, mobilePct: 65.9 },
+  { step: "PQL · Intento factura", todosCount: 1398, todosPct: 42.9, mobileCount: 1585, mobilePct: 15.3 },
+  { step: "Logo · Pago", todosCount: 39, todosPct: 1.20, mobileCount: 104, mobilePct: 1.00 },
 ];
 
-// --- Funnel "Entero" (sin PQL) ---
-const funnelEnteroSinPQL = [
-  { step: "Perfil", label: "Selección perfil", count: 3260, pct: 100 },
-  { step: "Onboarding", label: "Wizard finalizado", count: 2823, pct: 86.6 },
-  { step: "Logo", label: "Pago suscripción", count: 64, pct: 1.96 },
+// --- Funnels combinados sin PQL: Todos vs Mobile web ---
+const funnelComboSinPQL = [
+  { step: "Perfil", todosCount: 3260, todosPct: 100, mobileCount: 10391, mobilePct: 100 },
+  { step: "Onboarding", todosCount: 2823, todosPct: 86.6, mobileCount: 6849, mobilePct: 65.9 },
+  { step: "Logo · Pago", todosCount: 64, todosPct: 1.96, mobileCount: 287, mobilePct: 2.76 },
 ];
 
-// --- Funnel Mobile web (con PQL) ---
-const funnelMobile = [
-  { step: "Perfil", label: "Selección perfil", count: 10391, pct: 100 },
-  { step: "Onboarding", label: "Wizard finalizado", count: 6849, pct: 65.9 },
-  { step: "PQL", label: "Intento factura", count: 1585, pct: 15.3 },
-  { step: "Logo", label: "Pago suscripción", count: 104, pct: 1.00 },
-];
-
-// --- Funnel Mobile web (sin PQL) ---
-const funnelMobileSinPQL = [
-  { step: "Perfil", label: "Selección perfil", count: 10391, pct: 100 },
-  { step: "Onboarding", label: "Wizard finalizado", count: 6849, pct: 65.9 },
-  { step: "Logo", label: "Pago suscripción", count: 287, pct: 2.76 },
-];
-
-// --- Tendencias mensuales ---
+// --- Tendencias mensuales actualizadas (Amplitude refresh) ---
 const tendenciaPerfilMQL = [
   { mes: "Oct '25", pct: 89.22 },
   { mes: "Nov '25", pct: 92.03 },
@@ -3456,7 +3442,6 @@ const tendenciaPerfilMQL = [
   { mes: "Ene '26", pct: 87.04 },
   { mes: "Feb '26", pct: 84.73 },
   { mes: "Mar '26", pct: 86.89 },
-  { mes: "Abr '26", pct: 87.76 },
 ];
 const tendenciaPerfilPQL = [
   { mes: "Oct '25", pct: 14.59 },
@@ -3474,36 +3459,78 @@ const tendenciaPerfilLogo = [
   { mes: "Ene '26", pct: 2.63 },
   { mes: "Feb '26", pct: 2.49 },
   { mes: "Mar '26", pct: 2.39 },
-  { mes: "Abr '26", pct: 0.80 },
 ];
 
-type FunnelDatum = { step: string; label: string; count: number; pct: number };
+// --- Funnel App Mobile por país (chart tnh09978) ---
+const funnelPorPais: Record<string, { perfil: number; onboarding: number; pql: number; logo: number; conv: number }> = {
+  Colombia: { perfil: 1236, onboarding: 1077, pql: 271, logo: 21, conv: 1.70 },
+  "Dominican Republic": { perfil: 713, onboarding: 620, pql: 109, logo: 8, conv: 1.12 },
+  Mexico: { perfil: 569, onboarding: 498, pql: 78, logo: 5, conv: 0.88 },
+  Argentina: { perfil: 151, onboarding: 134, pql: 19, logo: 1, conv: 0.66 },
+  Peru: { perfil: 130, onboarding: 108, pql: 41, logo: 0, conv: 0 },
+  "Costa Rica": { perfil: 126, onboarding: 111, pql: 25, logo: 2, conv: 1.59 },
+  Spain: { perfil: 111, onboarding: 84, pql: 7, logo: 1, conv: 0.90 },
+  "United States": { perfil: 88, onboarding: 77, pql: 9, logo: 0, conv: 0 },
+  Panama: { perfil: 72, onboarding: 60, pql: 14, logo: 1, conv: 1.39 },
+};
 
-function FunnelCard({
+// --- Perfil por país (chart 42w27hn3) - totales últimas 24 semanas ---
+const perfilPorPaisTotal: { country: string; uniques: number }[] = [
+  { country: "Colombia", uniques: 1502 },
+  { country: "Dominican Republic", uniques: 938 },
+  { country: "Mexico", uniques: 642 },
+  { country: "Argentina", uniques: 220 },
+  { country: "Peru", uniques: 165 },
+  { country: "Costa Rica", uniques: 150 },
+  { country: "Spain", uniques: 154 },
+  { country: "United States", uniques: 114 },
+  { country: "Panama", uniques: 89 },
+];
+
+// --- Eventos Onboarding Semanal (chart j30yk1tu) - últimas 12 semanas ---
+const eventosOnboardingSemanal = [
+  { semana: "02 Feb", perfil: 217, mql: 182, pql: 38 },
+  { semana: "09 Feb", perfil: 231, mql: 191, pql: 62 },
+  { semana: "16 Feb", perfil: 248, mql: 217, pql: 58 },
+  { semana: "22 Feb", perfil: 188, mql: 148, pql: 60 },
+  { semana: "01 Mar", perfil: 178, mql: 153, pql: 45 },
+  { semana: "08 Mar", perfil: 98, mql: 84, pql: 43 },
+  { semana: "15 Mar", perfil: 222, mql: 190, pql: 51 },
+  { semana: "22 Mar", perfil: 264, mql: 224, pql: 62 },
+  { semana: "29 Mar", perfil: 260, mql: 214, pql: 56 },
+  { semana: "05 Abr", perfil: 322, mql: 289, pql: 63 },
+  { semana: "12 Abr", perfil: 281, mql: 242, pql: 76 },
+  { semana: "19 Abr", perfil: 257, mql: 219, pql: 72 },
+];
+
+type FunnelComboDatum = {
+  step: string;
+  todosCount: number;
+  todosPct: number;
+  mobileCount: number;
+  mobilePct: number;
+};
+
+function FunnelComboCard({
   title,
   subtitle,
   source,
   data,
-  color,
 }: {
   title: string;
   subtitle: string;
   source: string;
-  data: FunnelDatum[];
-  color: string;
+  data: FunnelComboDatum[];
 }) {
   const [mode, setMode] = useState<"pct" | "num">("pct");
-  const baseTotal = data[0]?.count ?? 0;
-  const finalPct = data[data.length - 1]?.pct ?? 0;
-  const vsOct = (finalPct - tendenciaPerfilLogo[0].pct).toFixed(2);
+  const finalTodos = data[data.length - 1].todosPct;
+  const finalMobile = data[data.length - 1].mobilePct;
 
   return (
     <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">
-            {subtitle}
-          </p>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">{subtitle}</p>
           <h3 className="mt-1 text-base font-bold text-neutral-900">{title}</h3>
           <p className="mt-1 text-xs text-neutral-500">{source}</p>
         </div>
@@ -3529,23 +3556,28 @@ function FunnelCard({
         </div>
       </div>
 
-      <div className="mt-4 flex items-baseline gap-2">
-        <span className="text-3xl font-bold" style={{ color }}>
-          {finalPct.toFixed(2)}%
-        </span>
-        <span className="text-xs text-neutral-500">conversión total · base {baseTotal.toLocaleString()}</span>
+      <div className="mt-4 flex flex-wrap items-baseline gap-x-6 gap-y-1">
+        <div className="flex items-baseline gap-2">
+          <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: ALEGRA_GREEN }} />
+          <span className="text-xs font-semibold text-neutral-700">Todos</span>
+          <span className="text-lg font-bold" style={{ color: ALEGRA_GREEN }}>
+            {finalTodos.toFixed(2)}%
+          </span>
+        </div>
+        <div className="flex items-baseline gap-2">
+          <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: "#FF6B00" }} />
+          <span className="text-xs font-semibold text-neutral-700">Mobile web</span>
+          <span className="text-lg font-bold" style={{ color: "#FF6B00" }}>
+            {finalMobile.toFixed(2)}%
+          </span>
+        </div>
       </div>
 
-      <div className="mt-5 h-[280px]">
+      <div className="mt-5 h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} margin={{ top: 24, right: 16, left: 0, bottom: 0 }}>
+          <BarChart data={data} margin={{ top: 28, right: 16, left: 0, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
-            <XAxis
-              dataKey="step"
-              tick={{ fontSize: 11, fill: "#6b7280" }}
-              axisLine={false}
-              tickLine={false}
-            />
+            <XAxis dataKey="step" tick={{ fontSize: 10, fill: "#6b7280" }} axisLine={false} tickLine={false} />
             <YAxis
               tick={{ fontSize: 11, fill: "#6b7280" }}
               axisLine={false}
@@ -3554,24 +3586,42 @@ function FunnelCard({
             />
             <Tooltip
               contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }}
-              formatter={(_, __, item) => {
-                const p = item.payload as FunnelDatum;
+              formatter={(value: number, name: string, item) => {
+                const p = item.payload as FunnelComboDatum;
+                const isTodos = name === "Todos";
+                const pct = isTodos ? p.todosPct : p.mobilePct;
+                const count = isTodos ? p.todosCount : p.mobileCount;
                 return [
                   mode === "pct"
-                    ? `${p.pct.toFixed(2)}%  (${p.count.toLocaleString()} usuarios)`
-                    : `${p.count.toLocaleString()} usuarios  (${p.pct.toFixed(2)}%)`,
-                  p.label,
+                    ? `${pct.toFixed(2)}%  (${count.toLocaleString()})`
+                    : `${count.toLocaleString()}  (${pct.toFixed(2)}%)`,
+                  name,
                 ];
               }}
             />
-            <Bar dataKey={mode === "pct" ? "pct" : "count"} fill={color} radius={[6, 6, 0, 0]}>
+            <Legend wrapperStyle={{ fontSize: 11 }} iconType="square" />
+            <Bar
+              name="Todos"
+              dataKey={mode === "pct" ? "todosPct" : "todosCount"}
+              fill={ALEGRA_GREEN}
+              radius={[6, 6, 0, 0]}
+            >
               <LabelList
-                dataKey={mode === "pct" ? "pct" : "count"}
                 position="top"
-                style={{ fontSize: 11, fill: "#374151", fontWeight: 700 }}
-                formatter={(v: number) =>
-                  mode === "pct" ? `${v.toFixed(2)}%` : v.toLocaleString()
-                }
+                style={{ fontSize: 10, fill: "#374151", fontWeight: 700 }}
+                formatter={(v: number) => (mode === "pct" ? `${v.toFixed(2)}%` : v.toLocaleString())}
+              />
+            </Bar>
+            <Bar
+              name="Mobile web"
+              dataKey={mode === "pct" ? "mobilePct" : "mobileCount"}
+              fill="#FF6B00"
+              radius={[6, 6, 0, 0]}
+            >
+              <LabelList
+                position="top"
+                style={{ fontSize: 10, fill: "#374151", fontWeight: 700 }}
+                formatter={(v: number) => (mode === "pct" ? `${v.toFixed(2)}%` : v.toLocaleString())}
               />
             </Bar>
           </BarChart>
@@ -3581,34 +3631,84 @@ function FunnelCard({
   );
 }
 
-function TrendCard({
-  title,
-  subtitle,
-  data,
-  color,
-  url,
-}: {
-  title: string;
-  subtitle: string;
-  data: { mes: string; pct: number }[];
-  color: string;
-  url: string;
-}) {
-  const oct = data[0]?.pct ?? 0;
-  const last = data[data.length - 1]?.pct ?? 0;
+// --- Card combinada de tendencias (toggle MQL / PQL / Logo) ---
+type TrendKey = "mql" | "pql" | "logo";
+
+const trendsConfig: Record<
+  TrendKey,
+  {
+    label: string;
+    subtitle: string;
+    color: string;
+    url: string;
+    data: { mes: string; pct: number }[];
+  }
+> = {
+  mql: {
+    label: "Perfil → MQL",
+    subtitle: "Onboarding finalizado",
+    color: ALEGRA_GREEN,
+    url: "https://app.amplitude.com/analytics/alegra/chart/b6xrlqln",
+    data: tendenciaPerfilMQL,
+  },
+  pql: {
+    label: "Perfil → PQL",
+    subtitle: "Intento de factura",
+    color: "#FF6B00",
+    url: "https://app.amplitude.com/analytics/alegra/chart/txoefzi7",
+    data: tendenciaPerfilPQL,
+  },
+  logo: {
+    label: "Perfil → Logo",
+    subtitle: "Pago suscripción",
+    color: "#0066FF",
+    url: "https://app.amplitude.com/analytics/alegra/chart/kcf69jc1",
+    data: tendenciaPerfilLogo,
+  },
+};
+
+function TrendCombinedCard() {
+  const [active, setActive] = useState<TrendKey>("mql");
+  const cfg = trendsConfig[active];
+  const oct = cfg.data[0]?.pct ?? 0;
+  const last = cfg.data[cfg.data.length - 1]?.pct ?? 0;
   const delta = last - oct;
   const positive = delta >= 0;
 
   return (
     <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-      <div className="flex items-start justify-between gap-3">
+      <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">
-            Tendencia
+            Tendencia mensual · últimos 6-7 meses
           </p>
-          <h3 className="mt-1 text-base font-bold text-neutral-900">{title}</h3>
-          <p className="mt-1 text-xs text-neutral-500">{subtitle}</p>
+          <h3 className="mt-1 text-base font-bold text-neutral-900">{cfg.label}</h3>
+          <p className="mt-1 text-xs text-neutral-500">{cfg.subtitle}</p>
         </div>
+        <div className="inline-flex flex-wrap rounded-lg border border-neutral-200 bg-neutral-50 p-0.5">
+          {(Object.keys(trendsConfig) as TrendKey[]).map((k) => (
+            <button
+              key={k}
+              onClick={() => setActive(k)}
+              className={cn(
+                "rounded-md px-3 py-1.5 text-[11px] font-semibold transition-all",
+                active === k ? "bg-white text-neutral-900 shadow-sm" : "text-neutral-500 hover:text-neutral-800",
+              )}
+              style={active === k ? { color: trendsConfig[k].color } : undefined}
+            >
+              {trendsConfig[k].label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-4 flex items-baseline gap-3">
+        <span className="text-3xl font-bold" style={{ color: cfg.color }}>
+          {last.toFixed(2)}%
+        </span>
+        <span className="text-xs text-neutral-500">
+          Oct: <span className="font-semibold text-neutral-700">{oct.toFixed(2)}%</span>
+        </span>
         <span
           className={cn(
             "inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-bold",
@@ -3621,22 +3721,13 @@ function TrendCard({
         </span>
       </div>
 
-      <div className="mt-4 flex items-baseline gap-3">
-        <span className="text-2xl font-bold" style={{ color }}>
-          {last.toFixed(2)}%
-        </span>
-        <span className="text-xs text-neutral-500">
-          Oct: <span className="font-semibold text-neutral-700">{oct.toFixed(2)}%</span>
-        </span>
-      </div>
-
-      <div className="mt-4 h-[200px]">
+      <div className="mt-4 h-[260px]">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data} margin={{ top: 16, right: 16, left: 0, bottom: 0 }}>
+          <LineChart data={cfg.data} margin={{ top: 16, right: 24, left: 0, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
-            <XAxis dataKey="mes" tick={{ fontSize: 10, fill: "#6b7280" }} axisLine={false} tickLine={false} />
+            <XAxis dataKey="mes" tick={{ fontSize: 11, fill: "#6b7280" }} axisLine={false} tickLine={false} />
             <YAxis
-              tick={{ fontSize: 10, fill: "#6b7280" }}
+              tick={{ fontSize: 11, fill: "#6b7280" }}
               axisLine={false}
               tickLine={false}
               tickFormatter={(v) => `${v}%`}
@@ -3648,9 +3739,9 @@ function TrendCard({
             <Line
               type="monotone"
               dataKey="pct"
-              stroke={color}
+              stroke={cfg.color}
               strokeWidth={2.5}
-              dot={{ r: 3.5, fill: color }}
+              dot={{ r: 3.5, fill: cfg.color }}
               activeDot={{ r: 5.5 }}
             >
               <LabelList
@@ -3665,13 +3756,266 @@ function TrendCard({
       </div>
 
       <a
-        href={url}
+        href={cfg.url}
         target="_blank"
         rel="noopener noreferrer"
         className="mt-3 inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-500 hover:text-neutral-800"
       >
         <ExternalLink className="h-3 w-3" /> Ver en Amplitude
       </a>
+    </div>
+  );
+}
+
+// --- Funnel por País + selector de cards ---
+function FunnelByCountryCard() {
+  const countries = Object.keys(funnelPorPais);
+  const [selected, setSelected] = useState<string>("Colombia");
+  const data = funnelPorPais[selected];
+  const steps = [
+    { step: "Perfil", count: data.perfil, pct: 100 },
+    {
+      step: "Onboarding",
+      count: data.onboarding,
+      pct: data.perfil ? (data.onboarding / data.perfil) * 100 : 0,
+    },
+    { step: "PQL · Intento", count: data.pql, pct: data.perfil ? (data.pql / data.perfil) * 100 : 0 },
+    { step: "Logo · Pago", count: data.logo, pct: data.perfil ? (data.logo / data.perfil) * 100 : 0 },
+  ];
+
+  return (
+    <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">App Mobile · por país</p>
+          <h3 className="mt-1 text-base font-bold text-neutral-900">Funnel Entero App Mobile por País</h3>
+          <p className="mt-1 text-xs text-neutral-500">
+            Amplitude · chart tnh09978 · This Year · entrepreneur
+          </p>
+        </div>
+        <a
+          href="https://app.amplitude.com/analytics/alegra/chart/tnh09978"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-500 hover:text-neutral-800"
+        >
+          <ExternalLink className="h-3 w-3" /> Amplitude
+        </a>
+      </div>
+
+      {/* Country cards selector */}
+      <div className="mt-4 grid grid-cols-3 gap-2 sm:grid-cols-5">
+        {countries.map((c) => {
+          const isActive = selected === c;
+          const d = funnelPorPais[c];
+          return (
+            <button
+              key={c}
+              onClick={() => setSelected(c)}
+              className={cn(
+                "rounded-xl border px-3 py-2 text-left transition-all",
+                isActive
+                  ? "border-transparent shadow-md"
+                  : "border-neutral-200 bg-white hover:border-neutral-300 hover:bg-neutral-50",
+              )}
+              style={
+                isActive
+                  ? { backgroundColor: `${ALEGRA_GREEN}15`, borderColor: ALEGRA_GREEN }
+                  : undefined
+              }
+            >
+              <p className="truncate text-[11px] font-semibold text-neutral-700">{c}</p>
+              <p className="mt-0.5 text-base font-bold" style={{ color: isActive ? ALEGRA_GREEN : "#111827" }}>
+                {d.conv.toFixed(2)}%
+              </p>
+              <p className="text-[10px] text-neutral-500">{d.perfil.toLocaleString()} perfiles</p>
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="mt-5 flex items-baseline gap-2">
+        <span className="text-2xl font-bold" style={{ color: ALEGRA_GREEN }}>
+          {selected}
+        </span>
+        <span className="text-xs text-neutral-500">
+          conversión total <span className="font-semibold text-neutral-800">{data.conv.toFixed(2)}%</span>
+        </span>
+      </div>
+
+      <div className="mt-3 h-[280px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={steps} margin={{ top: 24, right: 16, left: 0, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+            <XAxis dataKey="step" tick={{ fontSize: 10, fill: "#6b7280" }} axisLine={false} tickLine={false} />
+            <YAxis
+              tick={{ fontSize: 11, fill: "#6b7280" }}
+              axisLine={false}
+              tickLine={false}
+              tickFormatter={(v) => `${v}%`}
+            />
+            <Tooltip
+              contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }}
+              formatter={(_: number, __: string, item) => {
+                const p = item.payload as { count: number; pct: number };
+                return [`${p.pct.toFixed(2)}%  (${p.count.toLocaleString()} usuarios)`, "Conversión"];
+              }}
+            />
+            <Bar dataKey="pct" fill={ALEGRA_GREEN} radius={[6, 6, 0, 0]}>
+              <LabelList
+                dataKey="pct"
+                position="top"
+                style={{ fontSize: 11, fill: "#374151", fontWeight: 700 }}
+                formatter={(v: number) => `${v.toFixed(2)}%`}
+              />
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  );
+}
+
+// --- Perfil por País (chart 42w27hn3) ---
+const PIE_COLORS = ["#00C853", "#0066FF", "#FF6B00", "#A855F7", "#06B6D4", "#F59E0B", "#EC4899", "#10B981", "#6366F1"];
+
+function PerfilPorPaisCard() {
+  const totalPerfiles = perfilPorPaisTotal.reduce((acc, x) => acc + x.uniques, 0);
+
+  return (
+    <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">Distribución</p>
+          <h3 className="mt-1 text-base font-bold text-neutral-900">Perfil por País</h3>
+          <p className="mt-1 text-xs text-neutral-500">
+            Amplitude · chart 42w27hn3 · últimas 24 semanas · entrepreneur
+          </p>
+        </div>
+        <a
+          href="https://app.amplitude.com/analytics/alegra/chart/42w27hn3"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-500 hover:text-neutral-800"
+        >
+          <ExternalLink className="h-3 w-3" /> Amplitude
+        </a>
+      </div>
+
+      <div className="mt-4 flex items-baseline gap-2">
+        <span className="text-3xl font-bold text-neutral-900">{totalPerfiles.toLocaleString()}</span>
+        <span className="text-xs text-neutral-500">perfiles seleccionados (top {perfilPorPaisTotal.length} países)</span>
+      </div>
+
+      <div className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="h-[240px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={perfilPorPaisTotal}
+                dataKey="uniques"
+                nameKey="country"
+                cx="50%"
+                cy="50%"
+                outerRadius={85}
+                innerRadius={45}
+                paddingAngle={2}
+              >
+                {perfilPorPaisTotal.map((_, i) => (
+                  <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip
+                contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }}
+                formatter={(v: number, n: string) => [
+                  `${v.toLocaleString()} (${((v / totalPerfiles) * 100).toFixed(1)}%)`,
+                  n,
+                ]}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="space-y-1.5">
+          {perfilPorPaisTotal.map((row, i) => {
+            const pct = (row.uniques / totalPerfiles) * 100;
+            return (
+              <div key={row.country} className="flex items-center gap-2 text-xs">
+                <span
+                  className="h-2.5 w-2.5 shrink-0 rounded-sm"
+                  style={{ backgroundColor: PIE_COLORS[i % PIE_COLORS.length] }}
+                />
+                <span className="flex-1 truncate font-medium text-neutral-700">{row.country}</span>
+                <span className="font-semibold text-neutral-900">{row.uniques.toLocaleString()}</span>
+                <span className="w-12 text-right text-neutral-500">{pct.toFixed(1)}%</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// --- Eventos Onboarding Semanal (chart j30yk1tu) ---
+function EventosOnboardingSemanalCard() {
+  return (
+    <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">Volumen semanal</p>
+          <h3 className="mt-1 text-base font-bold text-neutral-900">Eventos Onboarding Semanal</h3>
+          <p className="mt-1 text-xs text-neutral-500">
+            Amplitude · chart j30yk1tu · uniques semanales (Perfil / MQL / PQL)
+          </p>
+        </div>
+        <a
+          href="https://app.amplitude.com/analytics/alegra/chart/j30yk1tu"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-500 hover:text-neutral-800"
+        >
+          <ExternalLink className="h-3 w-3" /> Amplitude
+        </a>
+      </div>
+
+      <div className="mt-5 h-[300px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={eventosOnboardingSemanal} margin={{ top: 16, right: 16, left: 0, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+            <XAxis dataKey="semana" tick={{ fontSize: 10, fill: "#6b7280" }} axisLine={false} tickLine={false} />
+            <YAxis tick={{ fontSize: 11, fill: "#6b7280" }} axisLine={false} tickLine={false} />
+            <Tooltip
+              contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }}
+              formatter={(v: number, n: string) => [v.toLocaleString(), n]}
+            />
+            <Legend wrapperStyle={{ fontSize: 11 }} iconType="circle" />
+            <Line
+              type="monotone"
+              name="Perfil"
+              dataKey="perfil"
+              stroke={ALEGRA_GREEN}
+              strokeWidth={2.5}
+              dot={{ r: 3, fill: ALEGRA_GREEN }}
+            />
+            <Line
+              type="monotone"
+              name="MQL"
+              dataKey="mql"
+              stroke="#0066FF"
+              strokeWidth={2.5}
+              dot={{ r: 3, fill: "#0066FF" }}
+            />
+            <Line
+              type="monotone"
+              name="PQL"
+              dataKey="pql"
+              stroke="#FF6B00"
+              strokeWidth={2.5}
+              dot={{ r: 3, fill: "#FF6B00" }}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 }
@@ -3697,75 +4041,46 @@ function SectionFunnel() {
             </p>
             <h2 className="mt-1 text-2xl font-bold text-neutral-900">Funnel</h2>
             <p className="mt-2 text-sm leading-relaxed text-neutral-600">
-              Segmento <strong>entrepreneur</strong> · Año en curso. Comparamos el funnel <strong>con PQL</strong> (incluye intento de factura) frente al funnel <strong>sin PQL</strong> (perfil → onboarding → pago) para todos los dispositivos y para la cohorte <strong>mobile web</strong>.
+              Segmento <strong>entrepreneur</strong> · Año en curso. Comparamos el funnel <strong>Todos los dispositivos</strong> frente a <strong>Mobile web</strong>, con y sin PQL (intento de factura). Debajo, el funnel <strong>App Mobile por país</strong> y la distribución de perfiles por mercado.
             </p>
           </div>
         </div>
       </div>
 
-      {/* Funnels - 2 columnas: con PQL (izq) vs sin PQL (der) */}
+      {/* Funnels combinados Todos vs Mobile - 2 columnas */}
       <div className="grid gap-6 lg:grid-cols-2">
-        <FunnelCard
-          title="Funnel Entero"
-          subtitle="Con PQL · Todos los dispositivos"
-          source="Amplitude · chart tgvpb7n5"
-          data={funnelEntero}
-          color={ALEGRA_GREEN}
+        <FunnelComboCard
+          title="Funnel Entero — Todos vs Mobile web"
+          subtitle="Con PQL · 4 pasos"
+          source="Amplitude · charts tgvpb7n5 + ozsknaof"
+          data={funnelComboPQL}
         />
-        <FunnelCard
-          title="Funnel Entero sin PQL"
-          subtitle="Sin PQL · Todos los dispositivos"
-          source="Amplitude · chart 6lwwlzbl"
-          data={funnelEnteroSinPQL}
-          color="#0066FF"
-        />
-        <FunnelCard
-          title="Funnel — Entero Mobile web"
-          subtitle="Con PQL · Mobile web"
-          source="Amplitude · chart ozsknaof"
-          data={funnelMobile}
-          color="#FF6B00"
-        />
-        <FunnelCard
-          title="Funnel — Entero Mobile web sin PQL"
-          subtitle="Sin PQL · Mobile web"
-          source="Amplitude · chart jdusjvvg"
-          data={funnelMobileSinPQL}
-          color="#A855F7"
+        <FunnelComboCard
+          title="Funnel Entero sin PQL — Todos vs Mobile web"
+          subtitle="Sin PQL · 3 pasos"
+          source="Amplitude · charts 6lwwlzbl + jdusjvvg"
+          data={funnelComboSinPQL}
         />
       </div>
 
-      {/* Tendencia: 3 dashboards over time */}
+      {/* Funnel por País + Perfil por País (lateral) */}
+      <div className="grid gap-6 lg:grid-cols-2">
+        <FunnelByCountryCard />
+        <PerfilPorPaisCard />
+      </div>
+
+      {/* Tendencia combinada con tag selector */}
       <div>
         <div className="mb-4 flex items-center gap-2">
           <TrendingUp className="h-4 w-4" style={{ color: ALEGRA_GREEN }} />
-          <h3 className="text-lg font-bold text-neutral-900">Tendencia mensual</h3>
-          <span className="text-xs text-neutral-500">· últimos 6 meses · comparativo vs Octubre 2025</span>
+          <h3 className="text-lg font-bold text-neutral-900">Tendencia mensual de conversión</h3>
+          <span className="text-xs text-neutral-500">· comparativo vs Octubre 2025</span>
         </div>
-        <div className="grid gap-6 lg:grid-cols-3">
-          <TrendCard
-            title="Perfil → MQL"
-            subtitle="Onboarding finalizado"
-            data={tendenciaPerfilMQL}
-            color={ALEGRA_GREEN}
-            url="https://app.amplitude.com/analytics/alegra/chart/b6xrlqln"
-          />
-          <TrendCard
-            title="Perfil → PQL"
-            subtitle="Intento de factura"
-            data={tendenciaPerfilPQL}
-            color="#FF6B00"
-            url="https://app.amplitude.com/analytics/alegra/chart/txoefzi7"
-          />
-          <TrendCard
-            title="Perfil → Logo"
-            subtitle="Pago suscripción"
-            data={tendenciaPerfilLogo}
-            color="#0066FF"
-            url="https://app.amplitude.com/analytics/alegra/chart/kcf69jc1"
-          />
-        </div>
+        <TrendCombinedCard />
       </div>
+
+      {/* Eventos Onboarding Semanal */}
+      <EventosOnboardingSemanalCard />
     </div>
   );
 }
