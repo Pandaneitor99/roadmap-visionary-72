@@ -3409,6 +3409,115 @@ function SectionIssues() {
   );
 }
 
+// --- Datos Soporte (Amplitude charts h88jlpxl + dfv2ba96) - últimos 3 meses ---
+const soporteData = [
+  { mes: "Feb '26", uniques: 268, totals: 493 },
+  { mes: "Mar '26", uniques: 289, totals: 510 },
+  { mes: "Abr '26", uniques: 155, totals: 298 },
+];
+
+function SoporteFuncDetail() {
+  const lastUniques = soporteData[soporteData.length - 1].uniques;
+  const lastTotals = soporteData[soporteData.length - 1].totals;
+
+  return (
+    <div className="space-y-5">
+      {/* Problema */}
+      <div className="rounded-xl border border-red-200 bg-red-50/60 p-4">
+        <p className="text-[11px] font-bold uppercase tracking-wider text-red-700">
+          Problema detectado
+        </p>
+        <p className="mt-2 text-sm leading-relaxed text-neutral-800">
+          El usuario tiene que <strong>ir a la web para realizar un reclamo</strong> de soporte. La app no permite gestionar tickets ni hacer seguimiento, generando fricción y abandono cuando el usuario necesita ayuda en el momento.
+        </p>
+      </div>
+
+      {/* Charts lado a lado */}
+      <div className="grid gap-4 lg:grid-cols-2">
+        {/* Únicos */}
+        <div className="rounded-xl border border-neutral-200 bg-white p-4">
+          <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
+            <div>
+              <h4 className="text-sm font-bold text-neutral-900">App Support Request — Únicos</h4>
+              <p className="mt-0.5 text-xs text-neutral-500">
+                Usuarios únicos que solicitaron soporte desde la app · mensual
+              </p>
+            </div>
+            <Badge variant="outline" className="text-[10px]" style={{ borderColor: "#FCA5A5", color: "#DC2626" }}>
+              Abr '26: {lastUniques}
+            </Badge>
+          </div>
+          <div className="h-[220px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={soporteData} margin={{ top: 16, right: 16, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                <XAxis dataKey="mes" tick={{ fontSize: 11 }} stroke="#6b7280" />
+                <YAxis tick={{ fontSize: 11 }} stroke="#6b7280" />
+                <Tooltip formatter={(v: number) => v.toLocaleString()} />
+                <Bar dataKey="uniques" fill="#DC2626" radius={[4, 4, 0, 0]}>
+                  <LabelList
+                    dataKey="uniques"
+                    position="top"
+                    style={{ fontSize: 11, fill: "#374151", fontWeight: 700 }}
+                  />
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+          <a
+            href="https://app.amplitude.com/analytics/alegra/chart/h88jlpxl"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-500 hover:text-neutral-800"
+          >
+            <ExternalLink className="h-3 w-3" /> Amplitude · h88jlpxl
+          </a>
+        </div>
+
+        {/* Totales */}
+        <div className="rounded-xl border border-neutral-200 bg-white p-4">
+          <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
+            <div>
+              <h4 className="text-sm font-bold text-neutral-900">App Support Request — Total</h4>
+              <p className="mt-0.5 text-xs text-neutral-500">
+                Total de solicitudes (eventos) de soporte desde la app · mensual
+              </p>
+            </div>
+            <Badge variant="outline" className="text-[10px]" style={{ borderColor: "#FCA5A5", color: "#DC2626" }}>
+              Abr '26: {lastTotals}
+            </Badge>
+          </div>
+          <div className="h-[220px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={soporteData} margin={{ top: 16, right: 16, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                <XAxis dataKey="mes" tick={{ fontSize: 11 }} stroke="#6b7280" />
+                <YAxis tick={{ fontSize: 11 }} stroke="#6b7280" />
+                <Tooltip formatter={(v: number) => v.toLocaleString()} />
+                <Bar dataKey="totals" fill="#FCA5A5" radius={[4, 4, 0, 0]}>
+                  <LabelList
+                    dataKey="totals"
+                    position="top"
+                    style={{ fontSize: 11, fill: "#374151", fontWeight: 700 }}
+                  />
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+          <a
+            href="https://app.amplitude.com/analytics/alegra/chart/dfv2ba96"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-500 hover:text-neutral-800"
+          >
+            <ExternalLink className="h-3 w-3" /> Amplitude · dfv2ba96
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 
 // === Sección 7: Funnel ===
 // Datos extraídos de Amplitude (range = This Year, segment entrepreneur)
