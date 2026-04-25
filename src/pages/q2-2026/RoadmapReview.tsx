@@ -123,6 +123,8 @@ export default function RoadmapReview() {
           ) : current === 5 ? (
             <SectionIssues />
           ) : current === 6 ? (
+            <SectionFunnel />
+          ) : current === 7 ? (
             <Section5 />
           ) : (
             <PlaceholderSection title={section.title} />
