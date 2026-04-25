@@ -2172,6 +2172,22 @@ const eventColorMap: Record<string, string> = {
 };
 const colorForEvent = (label: string) => eventColorMap[label] ?? "#737373";
 
+// Numeración global por funcionalidad — para que el mismo número represente la misma
+// feature (y mismo color) en CORE/LITE y BASE/SOS.
+const eventNumberMap: Record<string, number> = {
+  "Crear factura": 1,
+  "Buscar factura": 2,
+  "Crear contacto": 3,
+  "Crear cotización": 4,
+  "Crear ítem": 5,
+  "Ver gráfico de ventas": 6,
+  "Cuentas por cobrar": 7,
+  "Crear remisión": 8,
+  "Crear factura de proveedor": 9,
+  "Crear gasto": 10,
+};
+const numberForEvent = (label: string) => eventNumberMap[label] ?? 0;
+
 // Adopción CORE vs LITE - basado en % adoption Mar 2026
 const adopcionCoreLiteData = Array.from(
   new Set([...coreEvents.map((e) => e.label), ...liteEvents.map((e) => e.label)]),
