@@ -3208,6 +3208,68 @@ function Section4() {
         </div>
       </div>
 
+      {/* Home · Items totales semanal (Amplitude j6et1f82) */}
+      <div>
+        <div className="mb-5 flex items-center gap-2">
+          <div className="h-1 w-10 rounded-full" style={{ backgroundColor: "#0066FF" }} />
+          <h2 className="text-lg font-bold text-neutral-900">Home · Items totales — Semanal</h2>
+        </div>
+        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+          <div className="flex items-start justify-between gap-3 flex-wrap">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">
+                Eventos `app-item-created`
+              </p>
+              <h3 className="mt-1 text-base font-bold text-neutral-900">
+                Ítems creados en la app por semana
+              </h3>
+              <p className="mt-1 text-xs text-neutral-500">
+                Últimas 12 semanas · todos los usuarios
+              </p>
+            </div>
+            <Badge variant="outline" className="text-[10px]" style={{ borderColor: "#0066FF", color: "#0066FF" }}>
+              19 Abr: 5,370
+            </Badge>
+          </div>
+          <div className="mt-5 h-[280px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart
+                data={[
+                  { semana: "25 Ene", total: 4720 },
+                  { semana: "01 Feb", total: 4615 },
+                  { semana: "08 Feb", total: 4840 },
+                  { semana: "15 Feb", total: 4552 },
+                  { semana: "22 Feb", total: 4451 },
+                  { semana: "01 Mar", total: 4616 },
+                  { semana: "08 Mar", total: 4029 },
+                  { semana: "15 Mar", total: 4050 },
+                  { semana: "22 Mar", total: 4364 },
+                  { semana: "29 Mar", total: 2779 },
+                  { semana: "05 Abr", total: 4265 },
+                  { semana: "12 Abr", total: 5295 },
+                  { semana: "19 Abr", total: 5370 },
+                ]}
+                margin={{ top: 10, right: 16, left: 0, bottom: 0 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                <XAxis dataKey="semana" tick={{ fontSize: 11, fill: "#6b7280" }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fontSize: 11, fill: "#6b7280" }} axisLine={false} tickLine={false} />
+                <Tooltip formatter={(v: number) => v.toLocaleString()} />
+                <Line type="monotone" dataKey="total" stroke="#0066FF" strokeWidth={3} dot={{ r: 3 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+          <a
+            href="https://app.amplitude.com/analytics/alegra/chart/j6et1f82?linkingDashboardId=3flr3tzd&source=dashboard"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-500 hover:text-neutral-800"
+          >
+            <ExternalLink className="h-3 w-3" /> Amplitude · j6et1f82 · creación de ítems repuntó a 5,370/semana en abril
+          </a>
+        </div>
+      </div>
+
       {/* Iniciativas: Desarrollo */}
       <div>
         <div className="mb-5 flex items-center gap-3">
