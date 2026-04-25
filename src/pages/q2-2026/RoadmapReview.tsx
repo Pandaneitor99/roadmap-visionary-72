@@ -1851,13 +1851,6 @@ function FeatureTagFilter({
 function ComportamientoCoreLiteView() {
   const [activeFeature, setActiveFeature] = useState<string | null>(null);
 
-  const allFeatures = Array.from(
-    new Set([
-      ...coreEvents.map((e) => e.label),
-      ...liteEvents.map((e) => e.label),
-    ]),
-  );
-
   const filteredCoreEvents = activeFeature
     ? coreEvents.filter((e) => e.label === activeFeature)
     : coreEvents;
@@ -1867,13 +1860,6 @@ function ComportamientoCoreLiteView() {
 
   return (
     <div className="space-y-6">
-      <FeatureTagFilter
-        features={allFeatures}
-        active={activeFeature}
-        onChange={setActiveFeature}
-        description="Selecciona un tag para filtrar los gráficos de adopción y engagement Core / Lite"
-      />
-
       {/* Adopción funcionalidades CORE vs LITE - barras VERTICALES */}
       <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
         <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
@@ -2151,23 +2137,23 @@ type EngagementEvent = {
 const coreEvents: EngagementEvent[] = [
   { num: 1, label: "Crear factura", adoption: 44.3, frequency: 45.3 },
   { num: 2, label: "Buscar factura", adoption: 38.2, frequency: 28.0 },
-  { num: 3, label: "Ver gráfico de ventas", adoption: 27.8, frequency: 9.3 },
+  { num: 6, label: "Ver gráfico de ventas", adoption: 27.8, frequency: 9.3 },
   { num: 4, label: "Crear cotización", adoption: 27.0, frequency: 27.1 },
-  { num: 5, label: "Crear contacto", adoption: 20.0, frequency: 10.6 },
-  { num: 6, label: "Crear ítem", adoption: 15.3, frequency: 7.3 },
-  { num: 7, label: "Crear remisión", adoption: 4.4, frequency: 42.4 },
-  { num: 8, label: "Crear factura de proveedor", adoption: 3.0, frequency: 10.4 },
-  { num: 9, label: "Crear gasto", adoption: 1.9, frequency: 9.4 },
+  { num: 3, label: "Crear contacto", adoption: 20.0, frequency: 10.6 },
+  { num: 5, label: "Crear ítem", adoption: 15.3, frequency: 7.3 },
+  { num: 8, label: "Crear remisión", adoption: 4.4, frequency: 42.4 },
+  { num: 9, label: "Crear factura de proveedor", adoption: 3.0, frequency: 10.4 },
+  { num: 10, label: "Crear gasto", adoption: 1.9, frequency: 9.4 },
 ];
 const liteEvents: EngagementEvent[] = [
   { num: 1, label: "Crear factura", adoption: 56.7, frequency: 13.2 },
-  { num: 2, label: "Crear contacto", adoption: 27.6, frequency: 4.8 },
-  { num: 3, label: "Crear cotización", adoption: 24.2, frequency: 7.6 },
-  { num: 4, label: "Buscar factura", adoption: 24.2, frequency: 10.8 },
+  { num: 3, label: "Crear contacto", adoption: 27.6, frequency: 4.8 },
+  { num: 4, label: "Crear cotización", adoption: 24.2, frequency: 7.6 },
+  { num: 2, label: "Buscar factura", adoption: 24.2, frequency: 10.8 },
   { num: 5, label: "Crear ítem", adoption: 23.2, frequency: 8.0 },
   { num: 6, label: "Ver gráfico de ventas", adoption: 21.8, frequency: 7.0 },
-  { num: 7, label: "Crear remisión", adoption: 2.5, frequency: 8.4 },
-  { num: 8, label: "Crear gasto", adoption: 2.0, frequency: 8.0 },
+  { num: 8, label: "Crear remisión", adoption: 2.5, frequency: 8.4 },
+  { num: 10, label: "Crear gasto", adoption: 2.0, frequency: 8.0 },
   { num: 9, label: "Crear factura de proveedor", adoption: 2.0, frequency: 8.2 },
 ];
 
@@ -2185,6 +2171,22 @@ const eventColorMap: Record<string, string> = {
   "Cuentas por cobrar": "#14B8A6",
 };
 const colorForEvent = (label: string) => eventColorMap[label] ?? "#737373";
+
+// Numeración global por funcionalidad — para que el mismo número represente la misma
+// feature (y mismo color) en CORE/LITE y BASE/SOS.
+const eventNumberMap: Record<string, number> = {
+  "Crear factura": 1,
+  "Buscar factura": 2,
+  "Crear contacto": 3,
+  "Crear cotización": 4,
+  "Crear ítem": 5,
+  "Ver gráfico de ventas": 6,
+  "Cuentas por cobrar": 7,
+  "Crear remisión": 8,
+  "Crear factura de proveedor": 9,
+  "Crear gasto": 10,
+};
+const numberForEvent = (label: string) => eventNumberMap[label] ?? 0;
 
 // Adopción CORE vs LITE - basado en % adoption Mar 2026
 const adopcionCoreLiteData = Array.from(
@@ -2251,27 +2253,27 @@ const adopcionBaseSosData = [
 // Engagement BASE - chart no1u7db2 (Mar 2026)
 const baseEvents: EngagementEvent[] = [
   { num: 1, label: "Crear factura", adoption: 92.9, frequency: 30.1 },
-  { num: 2, label: "Crear contacto", adoption: 43.6, frequency: 5.5 },
-  { num: 3, label: "Crear ítem", adoption: 34.0, frequency: 6.9 },
+  { num: 3, label: "Crear contacto", adoption: 43.6, frequency: 5.5 },
+  { num: 5, label: "Crear ítem", adoption: 34.0, frequency: 6.9 },
   { num: 4, label: "Crear cotización", adoption: 20.1, frequency: 6.3 },
-  { num: 5, label: "Buscar factura", adoption: 18.2, frequency: 11.8 },
+  { num: 2, label: "Buscar factura", adoption: 18.2, frequency: 11.8 },
   { num: 6, label: "Ver gráfico de ventas", adoption: 12.3, frequency: 2.6 },
-  { num: 7, label: "Crear factura de proveedor", adoption: 1.2, frequency: 7.4 },
-  { num: 8, label: "Crear gasto", adoption: 1.1, frequency: 17.4 },
-  { num: 9, label: "Crear remisión", adoption: 0.9, frequency: 6.1 },
+  { num: 9, label: "Crear factura de proveedor", adoption: 1.2, frequency: 7.4 },
+  { num: 10, label: "Crear gasto", adoption: 1.1, frequency: 17.4 },
+  { num: 8, label: "Crear remisión", adoption: 0.9, frequency: 6.1 },
 ];
 
 // Engagement SOS - chart ezbhdx9r (Mar 2026)
 const sosEvents: EngagementEvent[] = [
   { num: 1, label: "Crear factura", adoption: 24.6, frequency: 9.1 },
   { num: 2, label: "Buscar factura", adoption: 18.5, frequency: 14.0 },
-  { num: 3, label: "Crear cotización", adoption: 18.3, frequency: 16.2 },
-  { num: 4, label: "Ver gráfico de ventas", adoption: 12.8, frequency: 7.6 },
-  { num: 5, label: "Crear contacto", adoption: 10.0, frequency: 3.6 },
-  { num: 6, label: "Crear ítem", adoption: 6.1, frequency: 4.3 },
-  { num: 7, label: "Crear remisión", adoption: 2.4, frequency: 47.8 },
-  { num: 8, label: "Crear factura de proveedor", adoption: 1.3, frequency: 3.6 },
-  { num: 9, label: "Crear gasto", adoption: 1.1, frequency: 5.9 },
+  { num: 4, label: "Crear cotización", adoption: 18.3, frequency: 16.2 },
+  { num: 6, label: "Ver gráfico de ventas", adoption: 12.8, frequency: 7.6 },
+  { num: 3, label: "Crear contacto", adoption: 10.0, frequency: 3.6 },
+  { num: 5, label: "Crear ítem", adoption: 6.1, frequency: 4.3 },
+  { num: 8, label: "Crear remisión", adoption: 2.4, frequency: 47.8 },
+  { num: 9, label: "Crear factura de proveedor", adoption: 1.3, frequency: 3.6 },
+  { num: 10, label: "Crear gasto", adoption: 1.1, frequency: 5.9 },
 ];
 
 function NegocioView() {
@@ -3575,6 +3577,7 @@ const oportunidades = [
       "No existe una sección de pagos recibidos en la app. El usuario debe ir al PC para registrar el pago de una factura, lo que rompe el flujo móvil de cobro frente al cliente.",
     oportunidad:
       "Habilitar el registro y consulta de pagos recibidos desde la app, integrado al flujo de la factura de venta.",
+    link: "https://claude.ai/design/p/5a2581d3-60c3-4e07-96c9-701c04fbc999?file=Pagos+Recibidos.html&via=share",
   },
   {
     id: "factura-venta",
@@ -3591,9 +3594,10 @@ const oportunidades = [
     title: "Reportes",
     tags: ["Adopción", "Experiencia"],
     diagnostico:
-      "El usuario no puede descargar ni compartir los reportes desde la app. Faltan reportes clave para la operación: ventas generales, ventas por vendedor, ventas por ítem y reporte de inventario.",
+      "El usuario no puede descargar ni compartir los reportes desde la app. Faltan reportes clave para la operación: ventas generales, ventas por vendedor, ventas por ítem y reporte de inventario. No hay buscador, únicamente filtros.",
     oportunidad:
       "Construir un módulo de reportes nativo en la app, con descarga, compartir y los reportes que más demanda la Pyme BASE.",
+    link: "https://claude.ai/design/p/019dc097-2664-7687-9041-1fdc44865b74?file=Reportes.html&via=share",
   },
   {
     id: "busqueda",
