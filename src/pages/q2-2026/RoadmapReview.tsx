@@ -225,7 +225,7 @@ function Section1() {
         </div>
 
         {/* Filosofía — tarjetas pequeñas embebidas */}
-        <div className="mt-8 grid gap-3 md:grid-cols-3">
+        <div className="relative mt-8 grid gap-3 md:grid-cols-3">
           <div className="rounded-xl border border-neutral-200/80 bg-white/80 p-4 backdrop-blur-sm">
             <div
               className="inline-flex rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white"
