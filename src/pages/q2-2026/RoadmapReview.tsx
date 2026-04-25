@@ -3595,7 +3595,7 @@ function FunnelComboCard({
               contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }}
               formatter={(value: number, name: string, item) => {
                 const p = item.payload as FunnelComboDatum;
-                const isTodos = name === "Todos";
+                const isTodos = name === "Mobile App";
                 const pct = isTodos ? p.todosPct : p.mobilePct;
                 const count = isTodos ? p.todosCount : p.mobileCount;
                 return [
@@ -3608,7 +3608,7 @@ function FunnelComboCard({
             />
             <Legend wrapperStyle={{ fontSize: 11 }} iconType="square" />
             <Bar
-              name="Todos"
+              name="Mobile App"
               dataKey={mode === "pct" ? "todosPct" : "todosCount"}
               fill={ALEGRA_GREEN}
               radius={[6, 6, 0, 0]}
