@@ -4094,7 +4094,7 @@ function SectionFunnel() {
           data={funnelComboPQL}
         />
         <FunnelComboCard
-          title="Funnel Entero sin PQL — Todos vs Mobile web"
+          title="Funnel Entero sin PQL — Mobile App vs Mobile web"
           subtitle="Sin PQL · 3 pasos"
           source="Amplitude · charts 6lwwlzbl + jdusjvvg"
           data={funnelComboSinPQL}
