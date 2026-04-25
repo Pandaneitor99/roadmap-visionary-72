@@ -4535,14 +4535,19 @@ const itemsAppVsWebSeries = [
   { mes: "Abr '26", pct: 4.31 },
 ];
 
-// Intención de creación de Items - Web (chart 08ti0ts5, funnel ac-item-creation-attempted → ac-item-created)
-// % de conversión web por mes
+// Intención de creación de Items - App (chart 8a3546k8, funnel app-new-item-visited → app-item-created)
+// % de conversión por mes
 const itemsIntencion = [
-  { mes: "Ene '26", conversion: 85.4 },
-  { mes: "Feb '26", conversion: 88.5 },
-  { mes: "Mar '26", conversion: 87.5 },
-  { mes: "Abr '26", conversion: 87.9 },
+  { mes: "Ene '26", conversion: 77.7 },
+  { mes: "Feb '26", conversion: 78.1 },
+  { mes: "Mar '26", conversion: 75.6 },
+  { mes: "Abr '26", conversion: 65.1 },
 ];
+
+// % de participación de App en Items (último valor consolidado)
+const ITEMS_APP_PARTICIPACION = 4.33;
+// % de participación de App en Contactos (último valor consolidado)
+const CONTACTOS_APP_PARTICIPACION = 3.74;
 
 const itemsCamposFaltantes = [
   "Categoría — no se pueden crear",
