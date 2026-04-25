@@ -33,7 +33,6 @@ const sections = [
   { id: 6, title: "Issues", short: "Issues" },
   { id: 7, title: "Funnel", short: "Funnel" },
   { id: 8, title: "Diagnóstico y oportunidades", short: "Diagnóstico" },
-  { id: 9, title: "Próximos pasos", short: "Próximos pasos" },
 ];
 
 const ALEGRA_GREEN = "#00B386";
