@@ -5123,14 +5123,6 @@ function ContactosFuncDetail() {
         </div>
       </div>
 
-      <div className="rounded-xl border border-emerald-100 bg-emerald-50/40 p-4">
-        <p className="text-[11px] font-bold uppercase tracking-wider" style={{ color: ALEGRA_GREEN }}>
-          Estado actual
-        </p>
-        <p className="mt-2 text-sm leading-relaxed text-neutral-700">
-          Llenado automático de campos en contactos en desarrollo (ver iniciativa "Llenado automático campos contactos" en Resultados del período).
-        </p>
-      </div>
     </div>
   );
 }
