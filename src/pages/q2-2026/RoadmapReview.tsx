@@ -3566,7 +3566,7 @@ function FunnelComboCard({
       <div className="mt-4 flex flex-wrap items-baseline gap-x-6 gap-y-1">
         <div className="flex items-baseline gap-2">
           <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: ALEGRA_GREEN }} />
-          <span className="text-xs font-semibold text-neutral-700">Todos</span>
+          <span className="text-xs font-semibold text-neutral-700">Mobile App</span>
           <span className="text-lg font-bold" style={{ color: ALEGRA_GREEN }}>
             {finalTodos.toFixed(2)}%
           </span>
