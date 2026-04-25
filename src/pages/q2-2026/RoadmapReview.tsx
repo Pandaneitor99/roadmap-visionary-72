@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { ChevronLeft, ChevronRight, Sparkles, TrendingUp, TrendingDown, Wrench, ClipboardList, Star, ExternalLink, Users, AlertTriangle, Heart, Target, Lightbulb } from "lucide-react";
+import { ChevronLeft, ChevronRight, Sparkles, TrendingUp, TrendingDown, Wrench, ClipboardList, Star, ExternalLink, Users, AlertTriangle, Heart, Target, Lightbulb, Bug, LogIn, Headphones, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -3409,6 +3409,115 @@ function SectionIssues() {
   );
 }
 
+// --- Datos Soporte (Amplitude charts h88jlpxl + dfv2ba96) - últimos 3 meses ---
+const soporteData = [
+  { mes: "Feb '26", uniques: 268, totals: 493 },
+  { mes: "Mar '26", uniques: 289, totals: 510 },
+  { mes: "Abr '26", uniques: 155, totals: 298 },
+];
+
+function SoporteFuncDetail() {
+  const lastUniques = soporteData[soporteData.length - 1].uniques;
+  const lastTotals = soporteData[soporteData.length - 1].totals;
+
+  return (
+    <div className="space-y-5">
+      {/* Problema */}
+      <div className="rounded-xl border border-red-200 bg-red-50/60 p-4">
+        <p className="text-[11px] font-bold uppercase tracking-wider text-red-700">
+          Problema detectado
+        </p>
+        <p className="mt-2 text-sm leading-relaxed text-neutral-800">
+          El usuario tiene que <strong>ir a la web para realizar un reclamo</strong> de soporte. La app no permite gestionar tickets ni hacer seguimiento, generando fricción y abandono cuando el usuario necesita ayuda en el momento.
+        </p>
+      </div>
+
+      {/* Charts lado a lado */}
+      <div className="grid gap-4 lg:grid-cols-2">
+        {/* Únicos */}
+        <div className="rounded-xl border border-neutral-200 bg-white p-4">
+          <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
+            <div>
+              <h4 className="text-sm font-bold text-neutral-900">App Support Request — Únicos</h4>
+              <p className="mt-0.5 text-xs text-neutral-500">
+                Usuarios únicos que solicitaron soporte desde la app · mensual
+              </p>
+            </div>
+            <Badge variant="outline" className="text-[10px]" style={{ borderColor: "#FCA5A5", color: "#DC2626" }}>
+              Abr '26: {lastUniques}
+            </Badge>
+          </div>
+          <div className="h-[220px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={soporteData} margin={{ top: 16, right: 16, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                <XAxis dataKey="mes" tick={{ fontSize: 11 }} stroke="#6b7280" />
+                <YAxis tick={{ fontSize: 11 }} stroke="#6b7280" />
+                <Tooltip formatter={(v: number) => v.toLocaleString()} />
+                <Bar dataKey="uniques" fill="#DC2626" radius={[4, 4, 0, 0]}>
+                  <LabelList
+                    dataKey="uniques"
+                    position="top"
+                    style={{ fontSize: 11, fill: "#374151", fontWeight: 700 }}
+                  />
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+          <a
+            href="https://app.amplitude.com/analytics/alegra/chart/h88jlpxl"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-500 hover:text-neutral-800"
+          >
+            <ExternalLink className="h-3 w-3" /> Amplitude · h88jlpxl
+          </a>
+        </div>
+
+        {/* Totales */}
+        <div className="rounded-xl border border-neutral-200 bg-white p-4">
+          <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
+            <div>
+              <h4 className="text-sm font-bold text-neutral-900">App Support Request — Total</h4>
+              <p className="mt-0.5 text-xs text-neutral-500">
+                Total de solicitudes (eventos) de soporte desde la app · mensual
+              </p>
+            </div>
+            <Badge variant="outline" className="text-[10px]" style={{ borderColor: "#FCA5A5", color: "#DC2626" }}>
+              Abr '26: {lastTotals}
+            </Badge>
+          </div>
+          <div className="h-[220px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={soporteData} margin={{ top: 16, right: 16, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                <XAxis dataKey="mes" tick={{ fontSize: 11 }} stroke="#6b7280" />
+                <YAxis tick={{ fontSize: 11 }} stroke="#6b7280" />
+                <Tooltip formatter={(v: number) => v.toLocaleString()} />
+                <Bar dataKey="totals" fill="#FCA5A5" radius={[4, 4, 0, 0]}>
+                  <LabelList
+                    dataKey="totals"
+                    position="top"
+                    style={{ fontSize: 11, fill: "#374151", fontWeight: 700 }}
+                  />
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+          <a
+            href="https://app.amplitude.com/analytics/alegra/chart/dfv2ba96"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-500 hover:text-neutral-800"
+          >
+            <ExternalLink className="h-3 w-3" /> Amplitude · dfv2ba96
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 
 // === Sección 7: Funnel ===
 // Datos extraídos de Amplitude (range = This Year, segment entrepreneur)
@@ -3566,7 +3675,7 @@ function FunnelComboCard({
       <div className="mt-4 flex flex-wrap items-baseline gap-x-6 gap-y-1">
         <div className="flex items-baseline gap-2">
           <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: ALEGRA_GREEN }} />
-          <span className="text-xs font-semibold text-neutral-700">Todos</span>
+          <span className="text-xs font-semibold text-neutral-700">Mobile App</span>
           <span className="text-lg font-bold" style={{ color: ALEGRA_GREEN }}>
             {finalTodos.toFixed(2)}%
           </span>
@@ -3595,7 +3704,7 @@ function FunnelComboCard({
               contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }}
               formatter={(value: number, name: string, item) => {
                 const p = item.payload as FunnelComboDatum;
-                const isTodos = name === "Todos";
+                const isTodos = name === "Mobile App";
                 const pct = isTodos ? p.todosPct : p.mobilePct;
                 const count = isTodos ? p.todosCount : p.mobileCount;
                 return [
@@ -3608,7 +3717,7 @@ function FunnelComboCard({
             />
             <Legend wrapperStyle={{ fontSize: 11 }} iconType="square" />
             <Bar
-              name="Todos"
+              name="Mobile App"
               dataKey={mode === "pct" ? "todosPct" : "todosCount"}
               fill={ALEGRA_GREEN}
               radius={[6, 6, 0, 0]}
@@ -3782,10 +3891,59 @@ const COUNTRY_COLORS: Record<string, string> = {
   Peru: "#A855F7",
 };
 
-function FunnelByCountryCard() {
+function CountrySelectorCards({
+  selected,
+  setSelected,
+}: {
+  selected: string | null;
+  setSelected: (c: string | null) => void;
+}) {
   const countries = Object.keys(funnelPorPais);
-  const [selected, setSelected] = useState<string | null>(null);
+  return (
+    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      {countries.map((c) => {
+        const isActive = selected === c;
+        const d = funnelPorPais[c];
+        const color = COUNTRY_COLORS[c] ?? "#6b7280";
+        return (
+          <button
+            key={c}
+            onClick={() => setSelected(isActive ? null : c)}
+            className={cn(
+              "rounded-2xl border bg-white px-4 py-3 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md",
+              isActive
+                ? "border-transparent ring-2"
+                : "border-neutral-200 hover:border-neutral-300",
+            )}
+            style={
+              isActive
+                ? { backgroundColor: `${color}10`, borderColor: color, boxShadow: `0 0 0 2px ${color}40` }
+                : undefined
+            }
+          >
+            <div className="flex items-center gap-2">
+              <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: color }} />
+              <p className="text-xs font-bold uppercase tracking-wider text-neutral-700">{c}</p>
+            </div>
+            <p className="mt-1 text-2xl font-bold" style={{ color: isActive ? color : "#111827" }}>
+              {d.conv.toFixed(2)}%
+            </p>
+            <p className="text-[10px] text-neutral-500">{d.perfil.toLocaleString()} perfiles · conversión total</p>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
 
+function FunnelByCountryCard({
+  selected,
+  setSelected,
+}: {
+  selected: string | null;
+  setSelected: (c: string | null) => void;
+}) {
+  const countries = Object.keys(funnelPorPais);
   const stepKeys = ["perfil", "onboarding", "pql", "logo"] as const;
   const stepLabels = ["Perfil", "Onboarding", "PQL · Intento", "Logo · Pago"];
 
@@ -3824,38 +3982,7 @@ function FunnelByCountryCard() {
         </a>
       </div>
 
-      {/* Country cards selector (CO, MX, CR, PE) */}
-      <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
-        {countries.map((c) => {
-          const isActive = selected === c;
-          const d = funnelPorPais[c];
-          const color = COUNTRY_COLORS[c] ?? "#6b7280";
-          return (
-            <button
-              key={c}
-              onClick={() => setSelected(isActive ? null : c)}
-              className={cn(
-                "rounded-xl border px-3 py-2 text-left transition-all",
-                isActive
-                  ? "border-transparent shadow-md"
-                  : "border-neutral-200 bg-white hover:border-neutral-300 hover:bg-neutral-50",
-              )}
-              style={isActive ? { backgroundColor: `${color}15`, borderColor: color } : undefined}
-            >
-              <div className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />
-                <p className="truncate text-[11px] font-semibold text-neutral-700">{c}</p>
-              </div>
-              <p className="mt-0.5 text-base font-bold" style={{ color: isActive ? color : "#111827" }}>
-                {d.conv.toFixed(2)}%
-              </p>
-              <p className="text-[10px] text-neutral-500">{d.perfil.toLocaleString()} perfiles</p>
-            </button>
-          );
-        })}
-      </div>
-
-      <div className="mt-5 flex items-baseline gap-2">
+      <div className="mt-4 flex items-baseline gap-2">
         <span className="text-2xl font-bold text-neutral-900">
           {selected ?? "Comparativo 4 países"}
         </span>
@@ -3871,15 +3998,15 @@ function FunnelByCountryCard() {
             </button>
           </span>
         ) : (
-          <span className="text-xs text-neutral-500">click en un país para filtrar</span>
+          <span className="text-xs text-neutral-500">click en un país (arriba) para filtrar</span>
         )}
       </div>
 
-      <div className="mt-3 h-[300px]">
+      <div className="mt-4 h-[340px]">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData} margin={{ top: 24, right: 16, left: 0, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
-            <XAxis dataKey="step" tick={{ fontSize: 10, fill: "#6b7280" }} axisLine={false} tickLine={false} />
+            <XAxis dataKey="step" tick={{ fontSize: 11, fill: "#6b7280" }} axisLine={false} tickLine={false} />
             <YAxis
               tick={{ fontSize: 11, fill: "#6b7280" }}
               axisLine={false}
@@ -4059,6 +4186,7 @@ function EventosOnboardingSemanalCard() {
 }
 
 function SectionFunnel() {
+  const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -4079,32 +4207,46 @@ function SectionFunnel() {
             </p>
             <h2 className="mt-1 text-2xl font-bold text-neutral-900">Funnel</h2>
             <p className="mt-2 text-sm leading-relaxed text-neutral-600">
-              Segmento <strong>entrepreneur</strong> · Año en curso. Comparamos el funnel <strong>Todos los dispositivos</strong> frente a <strong>Mobile web</strong>, con y sin PQL (intento de factura). Debajo, el funnel <strong>App Mobile por país</strong> y la distribución de perfiles por mercado.
+              Segmento <strong>entrepreneur</strong> · Año en curso. Comparamos el funnel <strong>Mobile App</strong> frente a <strong>Mobile web</strong>, con y sin PQL (intento de factura). Debajo, el funnel <strong>App Mobile por país</strong> y la distribución de perfiles por mercado.
             </p>
           </div>
         </div>
       </div>
 
-      {/* Funnels combinados Todos vs Mobile - 2 columnas */}
+      {/* Funnels combinados Mobile App vs Mobile web - 2 columnas */}
       <div className="grid gap-6 lg:grid-cols-2">
         <FunnelComboCard
-          title="Funnel Entero — Todos vs Mobile web"
+          title="Funnel Entero — Mobile App vs Mobile web"
           subtitle="Con PQL · 4 pasos"
           source="Amplitude · charts tgvpb7n5 + ozsknaof"
           data={funnelComboPQL}
         />
         <FunnelComboCard
-          title="Funnel Entero sin PQL — Todos vs Mobile web"
+          title="Funnel Entero sin PQL — Mobile App vs Mobile web"
           subtitle="Sin PQL · 3 pasos"
           source="Amplitude · charts 6lwwlzbl + jdusjvvg"
           data={funnelComboSinPQL}
         />
       </div>
 
-      {/* Funnel por País + Perfil por País (lateral) */}
-      <div className="grid gap-6 lg:grid-cols-2">
-        <FunnelByCountryCard />
-        <PerfilPorPaisCard />
+      {/* Selector de países (afuera del dashboard) */}
+      <div>
+        <div className="mb-3 flex items-center gap-2">
+          <div className="h-1 w-10 rounded-full" style={{ backgroundColor: ALEGRA_GREEN }} />
+          <h3 className="text-base font-bold text-neutral-900">Selecciona un país</h3>
+          <span className="text-xs text-neutral-500">· filtra el funnel App Mobile</span>
+        </div>
+        <CountrySelectorCards selected={selectedCountry} setSelected={setSelectedCountry} />
+      </div>
+
+      {/* Funnel por País (3/4) + Perfil por País (1/4) */}
+      <div className="grid gap-6 lg:grid-cols-4">
+        <div className="lg:col-span-3">
+          <FunnelByCountryCard selected={selectedCountry} setSelected={setSelectedCountry} />
+        </div>
+        <div className="lg:col-span-1">
+          <PerfilPorPaisCard />
+        </div>
       </div>
 
       {/* Tendencia combinada con tag selector */}
@@ -4602,6 +4744,25 @@ function Section5() {
             </div>
             <ItemsFuncDetail />
           </div>
+
+          {/* Soporte */}
+          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+            <div className="mb-5 flex items-start gap-3">
+              <div
+                className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+                style={{ backgroundColor: "#FCA5A520" }}
+              >
+                <Headphones className="h-4 w-4 text-red-500" />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-neutral-900">Soporte</h3>
+                <p className="mt-0.5 text-xs text-neutral-500">
+                  Solicitudes de soporte desde la app · totales y únicos
+                </p>
+              </div>
+            </div>
+            <SoporteFuncDetail />
+          </div>
         </div>
       </div>
 
@@ -4700,6 +4861,50 @@ function Section5() {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Adquisición */}
+      <div>
+        <div className="mb-5 flex items-center gap-2">
+          <div className="h-1 w-10 rounded-full" style={{ backgroundColor: "#FF6B00" }} />
+          <h2 className="text-lg font-bold text-neutral-900">Adquisición</h2>
+          <span className="ml-2 text-xs text-neutral-500">Login para ver planes y pagar</span>
+        </div>
+
+        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+          <div className="mb-5 flex items-start gap-3">
+            <div
+              className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+              style={{ backgroundColor: "#FF6B0015" }}
+            >
+              <LogIn className="h-4 w-4" style={{ color: "#FF6B00" }} />
+            </div>
+            <div>
+              <h3 className="text-base font-bold text-neutral-900">
+                Funnel Entero sin PQL — Mobile App vs Mobile web
+              </h3>
+              <p className="mt-0.5 text-xs text-neutral-500">
+                Comparativo de adquisición entre canales · Año en curso · entrepreneur
+              </p>
+            </div>
+          </div>
+
+          <div className="mb-5 rounded-xl border border-orange-200 bg-orange-50/60 p-4">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-orange-700">
+              Problema detectado
+            </p>
+            <p className="mt-2 text-sm leading-relaxed text-neutral-800">
+              Los usuarios <strong>tienen que iniciar sesión dentro de la app</strong> para ver los planes y pagar, o <strong>ir a web</strong>. Este paso adicional fricciona la conversión a pago en Mobile App: <strong>Mobile web convierte 2.76% vs 1.96% en Mobile App</strong>.
+            </p>
+          </div>
+
+          <FunnelComboCard
+            title="Funnel Entero sin PQL — Mobile App vs Mobile web"
+            subtitle="Sin PQL · 3 pasos · Adquisición"
+            source="Amplitude · charts 6lwwlzbl + jdusjvvg"
+            data={funnelComboSinPQL}
+          />
         </div>
       </div>
 
@@ -4808,9 +5013,116 @@ function ItemsFuncDetail() {
   );
 }
 
+// --- Datos Contactos (Amplitude charts up58fj0c + 45ccva3n) - últimas 9 semanas ---
+const contactosHomeAContactos = [
+  { semana: "22 Feb", pct: 3.47 },
+  { semana: "01 Mar", pct: 3.46 },
+  { semana: "08 Mar", pct: 3.22 },
+  { semana: "15 Mar", pct: 2.99 },
+  { semana: "22 Mar", pct: 3.09 },
+  { semana: "29 Mar", pct: 2.65 },
+  { semana: "05 Abr", pct: 3.20 },
+  { semana: "12 Abr", pct: 6.84 },
+  { semana: "19 Abr", pct: 9.93 },
+];
+const contactosVisitaACreado = [
+  { semana: "22 Feb", pct: 81.91 },
+  { semana: "01 Mar", pct: 83.55 },
+  { semana: "08 Mar", pct: 77.05 },
+  { semana: "15 Mar", pct: 78.64 },
+  { semana: "22 Mar", pct: 81.91 },
+  { semana: "29 Mar", pct: 78.01 },
+  { semana: "05 Abr", pct: 65.31 },
+  { semana: "12 Abr", pct: 41.55 },
+  { semana: "19 Abr", pct: 30.70 },
+];
+
 function ContactosFuncDetail() {
+  const lastDescubre = contactosHomeAContactos[contactosHomeAContactos.length - 1].pct;
+  const lastCrea = contactosVisitaACreado[contactosVisitaACreado.length - 1].pct;
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
+      {/* Problema destacado */}
+      <div className="rounded-xl border border-orange-200 bg-orange-50/60 p-4">
+        <p className="text-[11px] font-bold uppercase tracking-wider text-orange-700">
+          Problema detectado
+        </p>
+        <p className="mt-2 text-sm leading-relaxed text-neutral-800">
+          Los usuarios <strong>descubren la sección de Contactos</strong> (visitas crecen +9.93% últ. semana) <strong>pero NO están creando</strong>: la conversión visita → contacto creado <strong>cae de 81.91% a 30.70%</strong> en 9 semanas. Hay intención de uso pero la creación no está cerrando.
+        </p>
+      </div>
+
+      {/* Charts lado a lado */}
+      <div className="grid gap-4 lg:grid-cols-2">
+        {/* Funnel home → contactos */}
+        <div className="rounded-xl border border-neutral-200 bg-white p-4">
+          <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
+            <div>
+              <h4 className="text-sm font-bold text-neutral-900">Funnel Home → Contactos</h4>
+              <p className="mt-0.5 text-xs text-neutral-500">
+                % de usuarios pagos que llegan a la sección de contactos desde el home · últ. 9 semanas
+              </p>
+            </div>
+            <Badge variant="outline" className="text-[10px]" style={{ borderColor: "#0066FF", color: "#0066FF" }}>
+              19 Abr: {lastDescubre.toFixed(2)}%
+            </Badge>
+          </div>
+          <div className="h-[220px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={contactosHomeAContactos} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                <XAxis dataKey="semana" tick={{ fontSize: 10 }} stroke="#6b7280" />
+                <YAxis tick={{ fontSize: 11 }} stroke="#6b7280" tickFormatter={(v) => `${v}%`} />
+                <Tooltip formatter={(v: number) => `${v.toFixed(2)}%`} />
+                <Line type="monotone" dataKey="pct" stroke="#0066FF" strokeWidth={3} dot={{ r: 3 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+          <a
+            href="https://app.amplitude.com/analytics/alegra/chart/up58fj0c"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-500 hover:text-neutral-800"
+          >
+            <ExternalLink className="h-3 w-3" /> Amplitude · up58fj0c
+          </a>
+        </div>
+
+        {/* Funnel visita → creado */}
+        <div className="rounded-xl border border-neutral-200 bg-white p-4">
+          <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
+            <div>
+              <h4 className="text-sm font-bold text-neutral-900">Funnel Visita Contactos → Contacto Creado</h4>
+              <p className="mt-0.5 text-xs text-neutral-500">
+                % de conversión: app-new-contact-visited → app-contact-created · últ. 9 semanas
+              </p>
+            </div>
+            <Badge variant="outline" className="text-[10px]" style={{ borderColor: "#FF6B00", color: "#FF6B00" }}>
+              19 Abr: {lastCrea.toFixed(2)}%
+            </Badge>
+          </div>
+          <div className="h-[220px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={contactosVisitaACreado} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                <XAxis dataKey="semana" tick={{ fontSize: 10 }} stroke="#6b7280" />
+                <YAxis tick={{ fontSize: 11 }} stroke="#6b7280" tickFormatter={(v) => `${v}%`} domain={[0, 100]} />
+                <Tooltip formatter={(v: number) => `${v.toFixed(2)}%`} />
+                <Line type="monotone" dataKey="pct" stroke="#FF6B00" strokeWidth={3} dot={{ r: 3 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+          <a
+            href="https://app.amplitude.com/analytics/alegra/chart/45ccva3n"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-500 hover:text-neutral-800"
+          >
+            <ExternalLink className="h-3 w-3" /> Amplitude · 45ccva3n
+          </a>
+        </div>
+      </div>
+
       <div className="rounded-xl border border-emerald-100 bg-emerald-50/40 p-4">
         <p className="text-[11px] font-bold uppercase tracking-wider" style={{ color: ALEGRA_GREEN }}>
           Estado actual
@@ -4819,9 +5131,6 @@ function ContactosFuncDetail() {
           Llenado automático de campos en contactos en desarrollo (ver iniciativa "Llenado automático campos contactos" en Resultados del período).
         </p>
       </div>
-      <p className="text-xs text-neutral-500">
-        Profundización adicional disponible próximamente.
-      </p>
     </div>
   );
 }
