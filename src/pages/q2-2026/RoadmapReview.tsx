@@ -4984,15 +4984,15 @@ function ItemsFuncDetail() {
           </p>
         </div>
 
-        {/* Intención de creación de Items - Web (funnel) */}
+        {/* Intención de creación de Items - App (funnel) */}
         <div className="rounded-xl border border-neutral-200 bg-white p-4">
           <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
             <div>
               <h4 className="text-sm font-bold text-neutral-900">
-                Intención de creación de Items — Web
+                Intención de creación de Items — App
               </h4>
               <p className="mt-0.5 text-xs text-neutral-500">
-                % de conversión: ac-item-creation-attempted → ac-item-created
+                % de conversión: app-new-item-visited → app-item-created
               </p>
             </div>
             <Badge variant="outline" className="text-[10px]" style={{ borderColor: ALEGRA_GREEN, color: ALEGRA_GREEN }}>
@@ -5010,9 +5010,40 @@ function ItemsFuncDetail() {
               </BarChart>
             </ResponsiveContainer>
           </div>
-          <p className="mt-2 text-[11px] text-neutral-500">
-            Fuente: Amplitude (chart 08ti0ts5) · conversión web sostenida ~87%.
-          </p>
+          <a
+            href="https://app.amplitude.com/analytics/alegra/chart/8a3546k8/edit/wh2ltvtf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-500 hover:text-neutral-800"
+          >
+            <ExternalLink className="h-3 w-3" /> Amplitude · 8a3546k8 · conversión App ~75%, cae a 65% en Abr
+          </a>
+        </div>
+      </div>
+
+      {/* Card destacada: % participación de App en Items */}
+      <div
+        className="rounded-2xl border p-5 shadow-sm"
+        style={{
+          borderColor: "#0066FF33",
+          background: "linear-gradient(135deg, rgba(0,102,255,0.06), rgba(0,102,255,0.02))",
+        }}
+      >
+        <div className="flex items-center justify-between gap-4 flex-wrap">
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-wider" style={{ color: "#0066FF" }}>
+              % de participación de App en Items
+            </p>
+            <p className="mt-1 text-xs text-neutral-600">
+              App vs total (App + Web) · ítems creados — últimos 30 días
+            </p>
+          </div>
+          <div className="text-right">
+            <p className="text-3xl font-bold" style={{ color: "#0066FF" }}>
+              {ITEMS_APP_PARTICIPACION.toFixed(2)}%
+            </p>
+            <p className="text-[10px] text-neutral-500">de los ítems se crean en la app</p>
+          </div>
         </div>
       </div>
 
