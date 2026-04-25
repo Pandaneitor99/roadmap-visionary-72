@@ -1867,13 +1867,6 @@ function ComportamientoCoreLiteView() {
 
   return (
     <div className="space-y-6">
-      <FeatureTagFilter
-        features={allFeatures}
-        active={activeFeature}
-        onChange={setActiveFeature}
-        description="Selecciona un tag para filtrar los gráficos de adopción y engagement Core / Lite"
-      />
-
       {/* Adopción funcionalidades CORE vs LITE - barras VERTICALES */}
       <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
         <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
