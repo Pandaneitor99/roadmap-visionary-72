@@ -3594,9 +3594,10 @@ const oportunidades = [
     title: "Reportes",
     tags: ["Adopción", "Experiencia"],
     diagnostico:
-      "El usuario no puede descargar ni compartir los reportes desde la app. Faltan reportes clave para la operación: ventas generales, ventas por vendedor, ventas por ítem y reporte de inventario.",
+      "El usuario no puede descargar ni compartir los reportes desde la app. Faltan reportes clave para la operación: ventas generales, ventas por vendedor, ventas por ítem y reporte de inventario. No hay buscador, únicamente filtros.",
     oportunidad:
       "Construir un módulo de reportes nativo en la app, con descarga, compartir y los reportes que más demanda la Pyme BASE.",
+    link: "https://claude.ai/design/p/019dc097-2664-7687-9041-1fdc44865b74?file=Reportes.html&via=share",
   },
   {
     id: "busqueda",
