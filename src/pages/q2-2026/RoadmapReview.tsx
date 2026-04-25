@@ -3577,6 +3577,7 @@ const oportunidades = [
       "No existe una sección de pagos recibidos en la app. El usuario debe ir al PC para registrar el pago de una factura, lo que rompe el flujo móvil de cobro frente al cliente.",
     oportunidad:
       "Habilitar el registro y consulta de pagos recibidos desde la app, integrado al flujo de la factura de venta.",
+    link: "https://claude.ai/design/p/5a2581d3-60c3-4e07-96c9-701c04fbc999?file=Pagos+Recibidos.html&via=share",
   },
   {
     id: "factura-venta",
