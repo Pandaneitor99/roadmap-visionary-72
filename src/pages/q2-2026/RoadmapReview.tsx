@@ -1851,13 +1851,6 @@ function FeatureTagFilter({
 function ComportamientoCoreLiteView() {
   const [activeFeature, setActiveFeature] = useState<string | null>(null);
 
-  const allFeatures = Array.from(
-    new Set([
-      ...coreEvents.map((e) => e.label),
-      ...liteEvents.map((e) => e.label),
-    ]),
-  );
-
   const filteredCoreEvents = activeFeature
     ? coreEvents.filter((e) => e.label === activeFeature)
     : coreEvents;
