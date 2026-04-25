@@ -3208,6 +3208,68 @@ function Section4() {
         </div>
       </div>
 
+      {/* Home · Items totales semanal (Amplitude j6et1f82) */}
+      <div>
+        <div className="mb-5 flex items-center gap-2">
+          <div className="h-1 w-10 rounded-full" style={{ backgroundColor: "#0066FF" }} />
+          <h2 className="text-lg font-bold text-neutral-900">Home · Items totales — Semanal</h2>
+        </div>
+        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+          <div className="flex items-start justify-between gap-3 flex-wrap">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">
+                Eventos `app-item-created`
+              </p>
+              <h3 className="mt-1 text-base font-bold text-neutral-900">
+                Ítems creados en la app por semana
+              </h3>
+              <p className="mt-1 text-xs text-neutral-500">
+                Últimas 12 semanas · todos los usuarios
+              </p>
+            </div>
+            <Badge variant="outline" className="text-[10px]" style={{ borderColor: "#0066FF", color: "#0066FF" }}>
+              19 Abr: 5,370
+            </Badge>
+          </div>
+          <div className="mt-5 h-[280px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart
+                data={[
+                  { semana: "25 Ene", total: 4720 },
+                  { semana: "01 Feb", total: 4615 },
+                  { semana: "08 Feb", total: 4840 },
+                  { semana: "15 Feb", total: 4552 },
+                  { semana: "22 Feb", total: 4451 },
+                  { semana: "01 Mar", total: 4616 },
+                  { semana: "08 Mar", total: 4029 },
+                  { semana: "15 Mar", total: 4050 },
+                  { semana: "22 Mar", total: 4364 },
+                  { semana: "29 Mar", total: 2779 },
+                  { semana: "05 Abr", total: 4265 },
+                  { semana: "12 Abr", total: 5295 },
+                  { semana: "19 Abr", total: 5370 },
+                ]}
+                margin={{ top: 10, right: 16, left: 0, bottom: 0 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                <XAxis dataKey="semana" tick={{ fontSize: 11, fill: "#6b7280" }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fontSize: 11, fill: "#6b7280" }} axisLine={false} tickLine={false} />
+                <Tooltip formatter={(v: number) => v.toLocaleString()} />
+                <Line type="monotone" dataKey="total" stroke="#0066FF" strokeWidth={3} dot={{ r: 3 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+          <a
+            href="https://app.amplitude.com/analytics/alegra/chart/j6et1f82?linkingDashboardId=3flr3tzd&source=dashboard"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-500 hover:text-neutral-800"
+          >
+            <ExternalLink className="h-3 w-3" /> Amplitude · j6et1f82 · creación de ítems repuntó a 5,370/semana en abril
+          </a>
+        </div>
+      </div>
+
       {/* Iniciativas: Desarrollo */}
       <div>
         <div className="mb-5 flex items-center gap-3">
@@ -4535,14 +4597,19 @@ const itemsAppVsWebSeries = [
   { mes: "Abr '26", pct: 4.31 },
 ];
 
-// Intención de creación de Items - Web (chart 08ti0ts5, funnel ac-item-creation-attempted → ac-item-created)
-// % de conversión web por mes
+// Intención de creación de Items - App (chart 8a3546k8, funnel app-new-item-visited → app-item-created)
+// % de conversión por mes
 const itemsIntencion = [
-  { mes: "Ene '26", conversion: 85.4 },
-  { mes: "Feb '26", conversion: 88.5 },
-  { mes: "Mar '26", conversion: 87.5 },
-  { mes: "Abr '26", conversion: 87.9 },
+  { mes: "Ene '26", conversion: 77.7 },
+  { mes: "Feb '26", conversion: 78.1 },
+  { mes: "Mar '26", conversion: 75.6 },
+  { mes: "Abr '26", conversion: 65.1 },
 ];
+
+// % de participación de App en Items (último valor consolidado)
+const ITEMS_APP_PARTICIPACION = 4.33;
+// % de participación de App en Contactos (último valor consolidado)
+const CONTACTOS_APP_PARTICIPACION = 3.74;
 
 const itemsCamposFaltantes = [
   "Categoría — no se pueden crear",
@@ -4979,15 +5046,15 @@ function ItemsFuncDetail() {
           </p>
         </div>
 
-        {/* Intención de creación de Items - Web (funnel) */}
+        {/* Intención de creación de Items - App (funnel) */}
         <div className="rounded-xl border border-neutral-200 bg-white p-4">
           <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
             <div>
               <h4 className="text-sm font-bold text-neutral-900">
-                Intención de creación de Items — Web
+                Intención de creación de Items — App
               </h4>
               <p className="mt-0.5 text-xs text-neutral-500">
-                % de conversión: ac-item-creation-attempted → ac-item-created
+                % de conversión: app-new-item-visited → app-item-created
               </p>
             </div>
             <Badge variant="outline" className="text-[10px]" style={{ borderColor: ALEGRA_GREEN, color: ALEGRA_GREEN }}>
@@ -5005,9 +5072,40 @@ function ItemsFuncDetail() {
               </BarChart>
             </ResponsiveContainer>
           </div>
-          <p className="mt-2 text-[11px] text-neutral-500">
-            Fuente: Amplitude (chart 08ti0ts5) · conversión web sostenida ~87%.
-          </p>
+          <a
+            href="https://app.amplitude.com/analytics/alegra/chart/8a3546k8/edit/wh2ltvtf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-500 hover:text-neutral-800"
+          >
+            <ExternalLink className="h-3 w-3" /> Amplitude · 8a3546k8 · conversión App ~75%, cae a 65% en Abr
+          </a>
+        </div>
+      </div>
+
+      {/* Card destacada: % participación de App en Items */}
+      <div
+        className="rounded-2xl border p-5 shadow-sm"
+        style={{
+          borderColor: "#0066FF33",
+          background: "linear-gradient(135deg, rgba(0,102,255,0.06), rgba(0,102,255,0.02))",
+        }}
+      >
+        <div className="flex items-center justify-between gap-4 flex-wrap">
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-wider" style={{ color: "#0066FF" }}>
+              % de participación de App en Items
+            </p>
+            <p className="mt-1 text-xs text-neutral-600">
+              App vs total (App + Web) · ítems creados — últimos 30 días
+            </p>
+          </div>
+          <div className="text-right">
+            <p className="text-3xl font-bold" style={{ color: "#0066FF" }}>
+              {ITEMS_APP_PARTICIPACION.toFixed(2)}%
+            </p>
+            <p className="text-[10px] text-neutral-500">de los ítems se crean en la app</p>
+          </div>
         </div>
       </div>
 
@@ -5151,6 +5249,32 @@ function ContactosFuncDetail() {
           >
             <ExternalLink className="h-3 w-3" /> Amplitude · 45ccva3n
           </a>
+        </div>
+      </div>
+
+      {/* Card destacada: % participación de App en Contactos */}
+      <div
+        className="rounded-2xl border p-5 shadow-sm"
+        style={{
+          borderColor: "#FF6B0033",
+          background: "linear-gradient(135deg, rgba(255,107,0,0.06), rgba(255,107,0,0.02))",
+        }}
+      >
+        <div className="flex items-center justify-between gap-4 flex-wrap">
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-wider" style={{ color: "#FF6B00" }}>
+              % de participación de App en Contactos
+            </p>
+            <p className="mt-1 text-xs text-neutral-600">
+              App vs total (App + Web) · contactos creados — últimos 30 días
+            </p>
+          </div>
+          <div className="text-right">
+            <p className="text-3xl font-bold" style={{ color: "#FF6B00" }}>
+              {CONTACTOS_APP_PARTICIPACION.toFixed(2)}%
+            </p>
+            <p className="text-[10px] text-neutral-500">de los contactos se crean en la app</p>
+          </div>
         </div>
       </div>
 
