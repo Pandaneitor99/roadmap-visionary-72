@@ -188,20 +188,41 @@ function Section1() {
           className="absolute left-0 top-0 h-full w-1.5"
           style={{ backgroundColor: ALEGRA_GREEN }}
         />
-        <div className="flex items-center gap-2">
-          <Sparkles className="h-5 w-5" style={{ color: ALEGRA_GREEN }} />
-          <span
-            className="text-xs font-semibold uppercase tracking-[0.18em]"
-            style={{ color: ALEGRA_GREEN }}
-          >
-            Visión
-          </span>
+
+        {/* Imagen difuminada de fondo */}
+        <div className="pointer-events-none absolute right-0 top-0 hidden h-full w-1/2 md:block">
+          <img
+            src={visionAppMockup}
+            alt=""
+            aria-hidden="true"
+            className="h-full w-full object-cover object-center opacity-40"
+            style={{ filter: "blur(6px)" }}
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(to right, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.7) 40%, rgba(255,255,255,0.4) 100%)",
+            }}
+          />
         </div>
-        <p className="mt-4 text-2xl font-semibold leading-snug text-neutral-900 md:text-3xl">
-          "Convertir la App de Alegra en el centro operativo móvil imprescindible
-          de la Pyme y el centro de control móvil en tiempo real del contador,
-          donde las decisiones y flujos críticos se resuelven en segundos."
-        </p>
+
+        <div className="relative">
+          <div className="flex items-center gap-2">
+            <Sparkles className="h-5 w-5" style={{ color: ALEGRA_GREEN }} />
+            <span
+              className="text-xs font-semibold uppercase tracking-[0.18em]"
+              style={{ color: ALEGRA_GREEN }}
+            >
+              Visión
+            </span>
+          </div>
+          <p className="mt-4 max-w-3xl text-2xl font-semibold leading-snug text-neutral-900 md:text-3xl">
+            "Convertir la App de Alegra en el centro operativo móvil imprescindible
+            de la Pyme y el centro de control móvil en tiempo real del contador,
+            donde las decisiones y flujos críticos se resuelven en segundos."
+          </p>
+        </div>
 
         {/* Filosofía — tarjetas pequeñas embebidas */}
         <div className="mt-8 grid gap-3 md:grid-cols-3">
