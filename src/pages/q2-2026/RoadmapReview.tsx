@@ -3775,20 +3775,34 @@ function TrendCombinedCard() {
 }
 
 // --- Funnel por País + selector de cards ---
+const COUNTRY_COLORS: Record<string, string> = {
+  Colombia: ALEGRA_GREEN,
+  Mexico: "#0066FF",
+  "Costa Rica": "#FF6B00",
+  Peru: "#A855F7",
+};
+
 function FunnelByCountryCard() {
   const countries = Object.keys(funnelPorPais);
-  const [selected, setSelected] = useState<string>("Colombia");
-  const data = funnelPorPais[selected];
-  const steps = [
-    { step: "Perfil", count: data.perfil, pct: 100 },
-    {
-      step: "Onboarding",
-      count: data.onboarding,
-      pct: data.perfil ? (data.onboarding / data.perfil) * 100 : 0,
-    },
-    { step: "PQL · Intento", count: data.pql, pct: data.perfil ? (data.pql / data.perfil) * 100 : 0 },
-    { step: "Logo · Pago", count: data.logo, pct: data.perfil ? (data.logo / data.perfil) * 100 : 0 },
-  ];
+  const [selected, setSelected] = useState<string | null>(null);
+
+  const stepKeys = ["perfil", "onboarding", "pql", "logo"] as const;
+  const stepLabels = ["Perfil", "Onboarding", "PQL · Intento", "Logo · Pago"];
+
+  const visibleCountries = selected ? [selected] : countries;
+
+  // Build chart data: one row per step, one bar per visible country (% over its own perfil)
+  const chartData = stepLabels.map((label, idx) => {
+    const key = stepKeys[idx];
+    const row: Record<string, number | string> = { step: label };
+    visibleCountries.forEach((c) => {
+      const d = funnelPorPais[c];
+      const base = d.perfil || 1;
+      row[c] = (d[key] / base) * 100;
+      row[`${c}__count`] = d[key];
+    });
+    return row;
+  });
 
   return (
     <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
@@ -3797,7 +3811,7 @@ function FunnelByCountryCard() {
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">App Mobile · por país</p>
           <h3 className="mt-1 text-base font-bold text-neutral-900">Funnel Entero App Mobile por País</h3>
           <p className="mt-1 text-xs text-neutral-500">
-            Amplitude · chart tnh09978 · This Year · entrepreneur
+            Amplitude · chart tnh09978 · This Year · entrepreneur · CO · MX · CR · PE
           </p>
         </div>
         <a
@@ -3810,29 +3824,29 @@ function FunnelByCountryCard() {
         </a>
       </div>
 
-      {/* Country cards selector */}
-      <div className="mt-4 grid grid-cols-3 gap-2 sm:grid-cols-5">
+      {/* Country cards selector (CO, MX, CR, PE) */}
+      <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
         {countries.map((c) => {
           const isActive = selected === c;
           const d = funnelPorPais[c];
+          const color = COUNTRY_COLORS[c] ?? "#6b7280";
           return (
             <button
               key={c}
-              onClick={() => setSelected(c)}
+              onClick={() => setSelected(isActive ? null : c)}
               className={cn(
                 "rounded-xl border px-3 py-2 text-left transition-all",
                 isActive
                   ? "border-transparent shadow-md"
                   : "border-neutral-200 bg-white hover:border-neutral-300 hover:bg-neutral-50",
               )}
-              style={
-                isActive
-                  ? { backgroundColor: `${ALEGRA_GREEN}15`, borderColor: ALEGRA_GREEN }
-                  : undefined
-              }
+              style={isActive ? { backgroundColor: `${color}15`, borderColor: color } : undefined}
             >
-              <p className="truncate text-[11px] font-semibold text-neutral-700">{c}</p>
-              <p className="mt-0.5 text-base font-bold" style={{ color: isActive ? ALEGRA_GREEN : "#111827" }}>
+              <div className="flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />
+                <p className="truncate text-[11px] font-semibold text-neutral-700">{c}</p>
+              </div>
+              <p className="mt-0.5 text-base font-bold" style={{ color: isActive ? color : "#111827" }}>
                 {d.conv.toFixed(2)}%
               </p>
               <p className="text-[10px] text-neutral-500">{d.perfil.toLocaleString()} perfiles</p>
@@ -3842,17 +3856,28 @@ function FunnelByCountryCard() {
       </div>
 
       <div className="mt-5 flex items-baseline gap-2">
-        <span className="text-2xl font-bold" style={{ color: ALEGRA_GREEN }}>
-          {selected}
+        <span className="text-2xl font-bold text-neutral-900">
+          {selected ?? "Comparativo 4 países"}
         </span>
-        <span className="text-xs text-neutral-500">
-          conversión total <span className="font-semibold text-neutral-800">{data.conv.toFixed(2)}%</span>
-        </span>
+        {selected ? (
+          <span className="text-xs text-neutral-500">
+            conversión total{" "}
+            <span className="font-semibold" style={{ color: COUNTRY_COLORS[selected] }}>
+              {funnelPorPais[selected].conv.toFixed(2)}%
+            </span>
+            {" · "}
+            <button onClick={() => setSelected(null)} className="underline hover:text-neutral-800">
+              ver todos
+            </button>
+          </span>
+        ) : (
+          <span className="text-xs text-neutral-500">click en un país para filtrar</span>
+        )}
       </div>
 
-      <div className="mt-3 h-[280px]">
+      <div className="mt-3 h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={steps} margin={{ top: 24, right: 16, left: 0, bottom: 0 }}>
+          <BarChart data={chartData} margin={{ top: 24, right: 16, left: 0, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
             <XAxis dataKey="step" tick={{ fontSize: 10, fill: "#6b7280" }} axisLine={false} tickLine={false} />
             <YAxis
@@ -3863,19 +3888,25 @@ function FunnelByCountryCard() {
             />
             <Tooltip
               contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }}
-              formatter={(_: number, __: string, item) => {
-                const p = item.payload as { count: number; pct: number };
-                return [`${p.pct.toFixed(2)}%  (${p.count.toLocaleString()} usuarios)`, "Conversión"];
+              formatter={(v: number, name: string, item) => {
+                const payload = item.payload as Record<string, number>;
+                const count = payload[`${name}__count`];
+                return [`${v.toFixed(2)}%  (${count?.toLocaleString?.() ?? count} usuarios)`, name];
               }}
             />
-            <Bar dataKey="pct" fill={ALEGRA_GREEN} radius={[6, 6, 0, 0]}>
-              <LabelList
-                dataKey="pct"
-                position="top"
-                style={{ fontSize: 11, fill: "#374151", fontWeight: 700 }}
-                formatter={(v: number) => `${v.toFixed(2)}%`}
-              />
-            </Bar>
+            {visibleCountries.length > 1 && <Legend wrapperStyle={{ fontSize: 11 }} iconType="circle" />}
+            {visibleCountries.map((c) => (
+              <Bar key={c} dataKey={c} fill={COUNTRY_COLORS[c] ?? "#6b7280"} radius={[6, 6, 0, 0]}>
+                {visibleCountries.length === 1 && (
+                  <LabelList
+                    dataKey={c}
+                    position="top"
+                    style={{ fontSize: 11, fill: "#374151", fontWeight: 700 }}
+                    formatter={(v: number) => `${v.toFixed(2)}%`}
+                  />
+                )}
+              </Bar>
+            ))}
           </BarChart>
         </ResponsiveContainer>
       </div>
