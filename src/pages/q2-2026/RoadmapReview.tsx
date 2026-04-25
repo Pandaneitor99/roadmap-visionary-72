@@ -23,6 +23,7 @@ import {
 
 import { initiativeDetailMap } from "./initiativeDetails";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import visionAppMockup from "@/assets/vision-app-mockup.png";
 
 const sections = [
   { id: 1, title: "Visión estratégica", short: "Visión" },
@@ -33,7 +34,6 @@ const sections = [
   { id: 6, title: "Issues", short: "Issues" },
   { id: 7, title: "Funnel", short: "Funnel" },
   { id: 8, title: "Diagnóstico y oportunidades", short: "Diagnóstico" },
-  { id: 9, title: "Próximos pasos", short: "Próximos pasos" },
 ];
 
 const ALEGRA_GREEN = "#00B386";
@@ -188,23 +188,44 @@ function Section1() {
           className="absolute left-0 top-0 h-full w-1.5"
           style={{ backgroundColor: ALEGRA_GREEN }}
         />
-        <div className="flex items-center gap-2">
-          <Sparkles className="h-5 w-5" style={{ color: ALEGRA_GREEN }} />
-          <span
-            className="text-xs font-semibold uppercase tracking-[0.18em]"
-            style={{ color: ALEGRA_GREEN }}
-          >
-            Visión
-          </span>
+
+        {/* Imagen difuminada de fondo */}
+        <div className="pointer-events-none absolute right-0 top-0 hidden h-full w-1/2 md:block">
+          <img
+            src={visionAppMockup}
+            alt=""
+            aria-hidden="true"
+            className="h-full w-full object-cover object-center opacity-40"
+            style={{ filter: "blur(6px)" }}
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(to right, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.7) 40%, rgba(255,255,255,0.4) 100%)",
+            }}
+          />
         </div>
-        <p className="mt-4 text-2xl font-semibold leading-snug text-neutral-900 md:text-3xl">
-          "Convertir la App de Alegra en el centro operativo móvil imprescindible
-          de la Pyme y el centro de control móvil en tiempo real del contador,
-          donde las decisiones y flujos críticos se resuelven en segundos."
-        </p>
+
+        <div className="relative">
+          <div className="flex items-center gap-2">
+            <Sparkles className="h-5 w-5" style={{ color: ALEGRA_GREEN }} />
+            <span
+              className="text-xs font-semibold uppercase tracking-[0.18em]"
+              style={{ color: ALEGRA_GREEN }}
+            >
+              Visión
+            </span>
+          </div>
+          <p className="mt-4 max-w-3xl text-2xl font-semibold leading-snug text-neutral-900 md:text-3xl">
+            "Convertir la App de Alegra en el centro operativo móvil imprescindible
+            de la Pyme y el centro de control móvil en tiempo real del contador,
+            donde las decisiones y flujos críticos se resuelven en segundos."
+          </p>
+        </div>
 
         {/* Filosofía — tarjetas pequeñas embebidas */}
-        <div className="mt-8 grid gap-3 md:grid-cols-3">
+        <div className="relative mt-8 grid gap-3 md:grid-cols-3">
           <div className="rounded-xl border border-neutral-200/80 bg-white/80 p-4 backdrop-blur-sm">
             <div
               className="inline-flex rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white"
@@ -4721,7 +4742,17 @@ function Section5() {
                 <Lightbulb className="h-4 w-4" style={{ color: "#0066FF" }} />
               </div>
               <div>
-                <h3 className="text-base font-bold text-neutral-900">Contactos</h3>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-base font-bold text-neutral-900">Contactos</h3>
+                  <Badge
+                    className="gap-1 border-0 text-[10px] font-bold uppercase tracking-wider text-white"
+                    style={{
+                      background: "linear-gradient(135deg, #00B386, #0066FF)",
+                    }}
+                  >
+                    <Sparkles className="h-3 w-3" /> IA
+                  </Badge>
+                </div>
                 <p className="mt-0.5 text-xs text-neutral-500">Llenado automático y captura rápida</p>
               </div>
             </div>
@@ -5048,7 +5079,7 @@ function ContactosFuncDetail() {
           Problema detectado
         </p>
         <p className="mt-2 text-sm leading-relaxed text-neutral-800">
-          Los usuarios <strong>descubren la sección de Contactos</strong> (visitas crecen +9.93% últ. semana) <strong>pero NO están creando</strong>: la conversión visita → contacto creado <strong>cae de 81.91% a 30.70%</strong> en 9 semanas. Hay intención de uso pero la creación no está cerrando.
+          <strong>Disparidad en algunos campos</strong> como nombre y apellido, municipio y departamento, sumado a <strong>poca claridad en la elección de cliente y vendedor</strong>. Esto genera fricción en la creación de contactos desde la app.
         </p>
       </div>
 
@@ -5123,14 +5154,6 @@ function ContactosFuncDetail() {
         </div>
       </div>
 
-      <div className="rounded-xl border border-emerald-100 bg-emerald-50/40 p-4">
-        <p className="text-[11px] font-bold uppercase tracking-wider" style={{ color: ALEGRA_GREEN }}>
-          Estado actual
-        </p>
-        <p className="mt-2 text-sm leading-relaxed text-neutral-700">
-          Llenado automático de campos en contactos en desarrollo (ver iniciativa "Llenado automático campos contactos" en Resultados del período).
-        </p>
-      </div>
     </div>
   );
 }
