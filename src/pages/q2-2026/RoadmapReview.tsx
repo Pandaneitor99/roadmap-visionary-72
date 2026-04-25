@@ -3461,37 +3461,44 @@ const tendenciaPerfilLogo = [
   { mes: "Mar '26", pct: 2.39 },
 ];
 
-// --- Funnel App Mobile por país (chart tnh09978) ---
+// --- Funnel App Mobile por país (chart tnh09978) - solo CO, MX, CR, PE ---
 const funnelPorPais: Record<string, { perfil: number; onboarding: number; pql: number; logo: number; conv: number }> = {
   Colombia: { perfil: 1236, onboarding: 1077, pql: 271, logo: 21, conv: 1.70 },
-  "Dominican Republic": { perfil: 713, onboarding: 620, pql: 109, logo: 8, conv: 1.12 },
   Mexico: { perfil: 569, onboarding: 498, pql: 78, logo: 5, conv: 0.88 },
-  Argentina: { perfil: 151, onboarding: 134, pql: 19, logo: 1, conv: 0.66 },
-  Peru: { perfil: 130, onboarding: 108, pql: 41, logo: 0, conv: 0 },
   "Costa Rica": { perfil: 126, onboarding: 111, pql: 25, logo: 2, conv: 1.59 },
-  Spain: { perfil: 111, onboarding: 84, pql: 7, logo: 1, conv: 0.90 },
-  "United States": { perfil: 88, onboarding: 77, pql: 9, logo: 0, conv: 0 },
-  Panama: { perfil: 72, onboarding: 60, pql: 14, logo: 1, conv: 1.39 },
+  Peru: { perfil: 130, onboarding: 108, pql: 41, logo: 0, conv: 0 },
 };
 
-// --- Perfil por país (chart 42w27hn3) - totales últimas 24 semanas ---
+// --- Perfil por país (chart 42w27hn3) - totales últimas 24 semanas (sin USA) ---
 const perfilPorPaisTotal: { country: string; uniques: number }[] = [
   { country: "Colombia", uniques: 1502 },
   { country: "Dominican Republic", uniques: 938 },
   { country: "Mexico", uniques: 642 },
   { country: "Argentina", uniques: 220 },
   { country: "Peru", uniques: 165 },
-  { country: "Costa Rica", uniques: 150 },
   { country: "Spain", uniques: 154 },
-  { country: "United States", uniques: 114 },
+  { country: "Costa Rica", uniques: 150 },
   { country: "Panama", uniques: 89 },
 ];
 
-// --- Eventos Onboarding Semanal (chart j30yk1tu) - últimas 12 semanas ---
+// --- Eventos Onboarding Semanal (chart j30yk1tu) - últimas 24 semanas ---
 const eventosOnboardingSemanal = [
-  { semana: "02 Feb", perfil: 217, mql: 182, pql: 38 },
-  { semana: "09 Feb", perfil: 231, mql: 191, pql: 62 },
-  { semana: "16 Feb", perfil: 248, mql: 217, pql: 58 },
+  { semana: "02 Nov", perfil: 84, mql: 77, pql: 30 },
+  { semana: "09 Nov", perfil: 99, mql: 89, pql: 31 },
+  { semana: "16 Nov", perfil: 89, mql: 79, pql: 22 },
+  { semana: "23 Nov", perfil: 99, mql: 89, pql: 30 },
+  { semana: "30 Nov", perfil: 87, mql: 78, pql: 28 },
+  { semana: "07 Dic", perfil: 69, mql: 58, pql: 17 },
+  { semana: "14 Dic", perfil: 65, mql: 60, pql: 19 },
+  { semana: "21 Dic", perfil: 54, mql: 45, pql: 17 },
+  { semana: "28 Dic", perfil: 60, mql: 52, pql: 13 },
+  { semana: "04 Ene", perfil: 105, mql: 96, pql: 33 },
+  { semana: "11 Ene", perfil: 117, mql: 96, pql: 35 },
+  { semana: "18 Ene", perfil: 98, mql: 86, pql: 28 },
+  { semana: "25 Ene", perfil: 141, mql: 116, pql: 31 },
+  { semana: "01 Feb", perfil: 217, mql: 182, pql: 38 },
+  { semana: "08 Feb", perfil: 231, mql: 191, pql: 62 },
+  { semana: "15 Feb", perfil: 248, mql: 217, pql: 58 },
   { semana: "22 Feb", perfil: 188, mql: 148, pql: 60 },
   { semana: "01 Mar", perfil: 178, mql: 153, pql: 45 },
   { semana: "08 Mar", perfil: 98, mql: 84, pql: 43 },
