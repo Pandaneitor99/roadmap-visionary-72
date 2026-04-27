@@ -670,11 +670,6 @@ const HOME_TAB_GROUPS: { id: string; label: string; tabs: { id: string; label: s
     ],
   },
   {
-    id: "items",
-    label: "Resultados",
-    tabs: [{ id: "itemsCreados", label: "Ítems creados / sem" }],
-  },
-  {
     id: "ttc",
     label: "Tiempo de conversión",
     tabs: [
@@ -683,6 +678,11 @@ const HOME_TAB_GROUPS: { id: string; label: string; tabs: { id: string; label: s
       { id: "ttcCotizacion", label: "TTC → Cotización" },
       { id: "ttcItem", label: "TTC → Item" },
     ],
+  },
+  {
+    id: "items",
+    label: "Resultados",
+    tabs: [{ id: "itemsCreados", label: "Ítems creados / sem" }],
   },
 ];
 
