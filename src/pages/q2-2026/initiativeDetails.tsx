@@ -1197,6 +1197,116 @@ export function RediseñoFacturacionCRDetail() {
   );
 }
 
+// ===== Onboarding del Q4 =====
+
+// Tendencia mensual Perfil → MQL (chart b6xrlqln)
+const onboardingPerfilMQL = [
+  { mes: "Oct '25", pct: 89.22 },
+  { mes: "Nov '25", pct: 92.03 },
+  { mes: "Dic '25", pct: 88.32 },
+  { mes: "Ene '26", pct: 87.04 },
+  { mes: "Feb '26", pct: 84.73 },
+  { mes: "Mar '26", pct: 86.89 },
+];
+
+// Eventos Onboarding Semanal — sólo Perfil y MQL (sin PQL)
+const onboardingEventosSemanal = [
+  { semana: "02 Nov", perfil: 84, mql: 77 },
+  { semana: "09 Nov", perfil: 99, mql: 89 },
+  { semana: "16 Nov", perfil: 89, mql: 79 },
+  { semana: "23 Nov", perfil: 99, mql: 89 },
+  { semana: "30 Nov", perfil: 87, mql: 78 },
+  { semana: "07 Dic", perfil: 69, mql: 58 },
+  { semana: "14 Dic", perfil: 65, mql: 60 },
+  { semana: "21 Dic", perfil: 54, mql: 45 },
+  { semana: "28 Dic", perfil: 60, mql: 52 },
+  { semana: "04 Ene", perfil: 105, mql: 96 },
+  { semana: "11 Ene", perfil: 117, mql: 96 },
+  { semana: "18 Ene", perfil: 98, mql: 86 },
+  { semana: "25 Ene", perfil: 141, mql: 116 },
+  { semana: "01 Feb", perfil: 217, mql: 182 },
+  { semana: "08 Feb", perfil: 231, mql: 191 },
+  { semana: "15 Feb", perfil: 248, mql: 217 },
+  { semana: "22 Feb", perfil: 188, mql: 148 },
+  { semana: "01 Mar", perfil: 178, mql: 153 },
+  { semana: "08 Mar", perfil: 98, mql: 84 },
+  { semana: "15 Mar", perfil: 222, mql: 190 },
+  { semana: "22 Mar", perfil: 264, mql: 224 },
+  { semana: "29 Mar", perfil: 260, mql: 214 },
+  { semana: "05 Abr", perfil: 322, mql: 289 },
+  { semana: "12 Abr", perfil: 281, mql: 242 },
+  { semana: "19 Abr", perfil: 257, mql: 219 },
+];
+
+export function OnboardingQ4Detail() {
+  const lastMQL = onboardingPerfilMQL[onboardingPerfilMQL.length - 1].pct;
+  const firstMQL = onboardingPerfilMQL[0].pct;
+  const deltaMQL = lastMQL - firstMQL;
+
+  return (
+    <div className="space-y-4">
+      <div className="grid gap-3 lg:grid-cols-2">
+        <ChartCard
+          title="Perfil → MQL"
+          subtitle="Onboarding finalizado · mensual"
+          url="https://app.amplitude.com/analytics/alegra/chart/b6xrlqln"
+          statLabel="Último mes"
+          statValue={`${lastMQL.toFixed(2)}%`}
+          statDelta={deltaMQL}
+          statBaselineLabel="vs Oct '25"
+        >
+          <LineChart data={onboardingPerfilMQL}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+            <XAxis dataKey="mes" tick={{ fontSize: 10 }} />
+            <YAxis tick={{ fontSize: 10 }} unit="%" domain={[80, 95]} />
+            <Tooltip formatter={(v: number) => `${v.toFixed(2)}%`} />
+            <Line type="monotone" dataKey="pct" stroke={ALEGRA_GREEN} strokeWidth={2.5} dot={{ r: 3 }} />
+          </LineChart>
+        </ChartCard>
+
+        <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm">
+          <div className="mb-2 flex items-start justify-between gap-2">
+            <div>
+              <h4 className="text-sm font-bold text-neutral-900">Eventos Onboarding Semanal</h4>
+              <p className="text-[11px] text-neutral-500">Perfil vs MQL · uniques semanales</p>
+            </div>
+            <a
+              href="https://app.amplitude.com/analytics/alegra/chart/j30yk1tu"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-neutral-400 hover:text-neutral-700"
+              title="Abrir en Amplitude"
+            >
+              <ExternalLink className="h-3.5 w-3.5" />
+            </a>
+          </div>
+          <div className="h-48">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={onboardingEventosSemanal}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <XAxis dataKey="semana" tick={{ fontSize: 9 }} interval={2} />
+                <YAxis tick={{ fontSize: 10 }} />
+                <Tooltip formatter={(v: number, n: string) => [v.toLocaleString("es-CO"), n]} />
+                <Legend wrapperStyle={{ fontSize: 10 }} iconType="circle" />
+                <Line type="monotone" name="Perfil" dataKey="perfil" stroke={ALEGRA_GREEN} strokeWidth={2} dot={false} />
+                <Line type="monotone" name="MQL" dataKey="mql" stroke={BLUE} strokeWidth={2} dot={false} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
+
+      <Insights
+        items={[
+          "Perfil → MQL se mantiene estable en ~85–92% mensual: el flujo de onboarding completa la mayoría de los registros que llegan al perfil.",
+          "Volumen semanal de Perfiles creció de ~85/sem (Nov '25) a ~260/sem (Abr '26), 3x en 6 meses.",
+          "MQL siguen de cerca al Perfil con tasa de finalización alta — el cuello de botella para activación está aguas abajo (PQL/Logo), no en el onboarding inicial.",
+        ]}
+      />
+    </div>
+  );
+}
+
 // Map title → detail component
 export const initiativeDetailMap: Record<string, () => JSX.Element> = {
   "Búsqueda de documentos e información": BusquedaDetail,
@@ -1204,8 +1314,10 @@ export const initiativeDetailMap: Record<string, () => JSX.Element> = {
   "Compartir y descargar remisiones": RemisionesDetail,
   "Llenado automático campos contactos": ContactosDetail,
   "Home — acciones rápidas": HomeDetail,
+  "Onboarding del Q4": OnboardingQ4Detail,
   "Creación de la sección de App en Alegra": AppSeccionDetail,
   "G&S para incentivar descarga de usuarios web": GySDetail,
   "Testeo de push notification dentro de la app": PushTestDetail,
   "Rediseño Facturación Costa Rica": RediseñoFacturacionCRDetail,
 };
+
