@@ -202,8 +202,8 @@ function Section1() {
             </span>
           </div>
           <p className="mt-4 max-w-3xl text-2xl font-semibold leading-snug text-neutral-900 md:text-3xl">
-            "Convertir la App de Alegra en el centro operativo móvil imprescindible
-            de la Pyme y el centro de control móvil en tiempo real del contador,
+            "Convertir la App de Alegra en el centro operativo móvil imprescindible de la Pyme<br />
+            y el centro de control móvil en tiempo real del contador,<br />
             donde las decisiones y flujos críticos se resuelven en segundos."
           </p>
         </div>
@@ -3126,21 +3126,21 @@ const devInitiativesS4 = [
   },
   {
     title: "Búsqueda de documentos e información",
-    tags: ["Experiencia"],
+    tags: ["Engagement"],
     problem:
       "Los usuarios no pueden encontrar fácilmente sus documentos e información dentro de la app, generando fricción en la consulta.",
     krs: ["KR 1.3"],
   },
   {
     title: "Compartir y descargar remisiones",
-    tags: ["Adopción"],
+    tags: ["Adopción", "Engagement"],
     problem:
       "Falta la capacidad de compartir y descargar remisiones desde la app, limitando la operación móvil del usuario.",
     krs: ["KR 2.2"],
   },
   {
     title: "Llenado automático campos contactos",
-    tags: ["Experiencia", "Adopción"],
+    tags: ["Adopción", "Engagement"],
     problem:
       "El llenado manual de campos en contactos es tedioso y aumenta la fricción al crear un nuevo contacto.",
     krs: ["KR 2.1"],
@@ -3553,15 +3553,17 @@ function SoporteFuncDetail() {
 const funnelComboPQL = [
   { step: "Perfil", todosCount: 3335, todosPct: 100, mobileCount: 10567, mobilePct: 100 },
   { step: "Onboarding", todosCount: 2886, todosPct: 86.54, mobileCount: 6960, mobilePct: 65.87 },
-  { step: "PQL · Intento factura", todosCount: 1005, todosPct: 30.13, mobileCount: 1593, mobilePct: 15.08 },
+  { step: "PQL · Intento factura", todosCount: 589, todosPct: 17.66, mobileCount: 1593, mobilePct: 15.08 },
   { step: "Logo · Pago", todosCount: 39, todosPct: 1.17, mobileCount: 105, mobilePct: 0.99 },
 ];
 
 // --- Funnels combinados sin PQL: Mobile App vs Mobile web ---
+// Mobile App (6lwwlzbl): 3338 → 2888 → 64 = 1.92%
+// Mobile web (jdusjvvg): 10577 → 6968 → 289 = 2.74%
 const funnelComboSinPQL = [
-  { step: "Perfil", todosCount: 3335, todosPct: 100, mobileCount: 10567, mobilePct: 100 },
-  { step: "Onboarding", todosCount: 2886, todosPct: 86.54, mobileCount: 6960, mobilePct: 65.87 },
-  { step: "Logo · Pago", todosCount: 39, todosPct: 1.17, mobileCount: 105, mobilePct: 0.99 },
+  { step: "Perfil", todosCount: 3338, todosPct: 100, mobileCount: 10577, mobilePct: 100 },
+  { step: "Onboarding", todosCount: 2888, todosPct: 86.52, mobileCount: 6968, mobilePct: 65.88 },
+  { step: "Logo · Pago", todosCount: 64, todosPct: 1.92, mobileCount: 289, mobilePct: 2.74 },
 ];
 
 // --- Tendencias mensuales actualizadas (Amplitude refresh) ---
@@ -4351,18 +4353,18 @@ function OKRMiniCard({
               <p className="mt-1 text-xs leading-relaxed text-neutral-600">
                 {kr.name}
               </p>
-              <div className="mt-2 flex items-center justify-between text-[11px] text-neutral-500">
+              <div className="mt-2 grid grid-cols-3 gap-2 text-[11px] text-neutral-500">
                 <span>
                   Base:{" "}
-                  <span className="font-semibold text-neutral-800">
-                    {kr.baseline}
-                  </span>
+                  <span className="font-semibold text-neutral-800">{kr.baseline}</span>
                 </span>
                 <span>
                   Target:{" "}
-                  <span className="font-semibold text-neutral-800">
-                    {kr.target}
-                  </span>
+                  <span className="font-semibold text-neutral-800">{kr.target}</span>
+                </span>
+                <span>
+                  Actual:{" "}
+                  <span className="font-semibold text-neutral-800">{kr.currentResult ?? "—"}</span>
                 </span>
               </div>
             </div>
@@ -4518,7 +4520,7 @@ const funcionalidadesCards: FuncCard[] = [
 ];
 
 // Funnel Home → New Item — chart w81wjr5i (semanal, last 12 weeks · cohort Pagos)
-// Conversión semanal: app-home-visited → app-new-item-visited
+// Conversión semanal: app-home-visited → app-new-item-visited (excl. última semana incompleta)
 const itemsAppVsWebSeries = [
   { mes: "01 Feb", pct: 3.61 },
   { mes: "08 Feb", pct: 3.30 },
@@ -4532,7 +4534,6 @@ const itemsAppVsWebSeries = [
   { mes: "05 Abr", pct: 3.55 },
   { mes: "12 Abr", pct: 8.21 },
   { mes: "19 Abr", pct: 7.08 },
-  { mes: "26 Abr", pct: 2.91 },
 ];
 
 // Intención de creación de Items — chart wh2ltvtf (semanal, last 12 weeks · all users)
@@ -4588,10 +4589,10 @@ function Section5() {
           <h2 className="text-lg font-bold text-neutral-900">Quién es nuestro mejor usuario</h2>
         </div>
 
-        <div className="grid gap-5 lg:grid-cols-4">
+        <div className="grid gap-5 lg:grid-cols-5">
           {/* Bloque texto (3/4) */}
           <div
-            className="relative overflow-hidden rounded-2xl border border-emerald-100 bg-white p-7 shadow-sm md:p-8 lg:col-span-3"
+            className="relative overflow-hidden rounded-2xl border border-emerald-100 bg-white p-7 shadow-sm md:p-8 lg:col-span-4"
             style={{
               backgroundImage:
                 "radial-gradient(circle at 100% 0%, rgba(0,179,134,0.08), transparent 55%)",
@@ -4970,7 +4971,7 @@ function Section5() {
               </a>
             </div>
             <p className="mt-2 text-sm leading-relaxed text-neutral-800">
-              Los usuarios <strong>tienen que iniciar sesión dentro de la app</strong> para ver los planes y pagar, o <strong>ir a web</strong>. Este paso adicional fricciona la conversión a pago en Mobile App: <strong>Mobile web convierte 0.99% vs 1.17% en Mobile App</strong>.
+              Los usuarios <strong>tienen que iniciar sesión dentro de la app</strong> para ver los planes y pagar, o <strong>ir a web</strong>. Este paso adicional fricciona la conversión a pago: <strong>Mobile web convierte 2.74% vs 1.92% en Mobile App</strong> (sin PQL).
             </p>
           </div>
 
@@ -5004,7 +5005,7 @@ function ItemsFuncDetail() {
               </p>
             </div>
             <Badge variant="outline" className="text-[10px]" style={{ borderColor: "#0066FF", color: "#0066FF" }}>
-              26 Abr: {itemsAppVsWebSeries[itemsAppVsWebSeries.length - 1].pct}%
+              19 Abr: {itemsAppVsWebSeries[itemsAppVsWebSeries.length - 1].pct}%
             </Badge>
           </div>
           <div className="h-[240px]">
