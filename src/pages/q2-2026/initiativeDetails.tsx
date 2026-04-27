@@ -88,6 +88,22 @@ const appVsWebRemisiones = [
   { mes: "Abr 26", pct: 8.81 },
 ];
 
+// Buscador remisiones — semanal (charts m7e69s6z uniques · l8i09ad1 totals)
+const buscadorRemisionesUnicos = [
+  { sem: "22 Mar", v: 0 },
+  { sem: "29 Mar", v: 0 },
+  { sem: "05 Abr", v: 0 },
+  { sem: "12 Abr", v: 15 },
+  { sem: "19 Abr", v: 74 },
+];
+const buscadorRemisionesTotales = [
+  { sem: "22 Mar", v: 0 },
+  { sem: "29 Mar", v: 0 },
+  { sem: "05 Abr", v: 0 },
+  { sem: "12 Abr", v: 136 },
+  { sem: "19 Abr", v: 975 },
+];
+
 // Contactos
 const contactosAutocompletado = [
   { name: "Autocompletado", value: 164, color: ALEGRA_GREEN },
