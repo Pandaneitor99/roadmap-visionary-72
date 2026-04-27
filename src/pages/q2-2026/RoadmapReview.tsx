@@ -3955,7 +3955,7 @@ const COUNTRY_COLORS: Record<string, string> = {
   Colombia: ALEGRA_GREEN,
   Mexico: "#0066FF",
   "Costa Rica": "#FF6B00",
-  Peru: "#A855F7",
+  "Rep. Dominicana": "#A855F7",
 };
 
 function CountrySelectorCards({
