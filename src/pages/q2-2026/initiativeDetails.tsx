@@ -150,6 +150,23 @@ const funnelHomeCotizacion = [
   { sem: "19 Abr", pct: 8.13 },
 ];
 
+// Ítems creados en la app por semana — Amplitude j6et1f82 (últimas 12 semanas)
+const itemsCreadosSemanal = [
+  { sem: "25 Ene", total: 4720 },
+  { sem: "01 Feb", total: 4615 },
+  { sem: "08 Feb", total: 4840 },
+  { sem: "15 Feb", total: 4552 },
+  { sem: "22 Feb", total: 4451 },
+  { sem: "01 Mar", total: 4616 },
+  { sem: "08 Mar", total: 4029 },
+  { sem: "15 Mar", total: 4050 },
+  { sem: "22 Mar", total: 4364 },
+  { sem: "29 Mar", total: 2779 },
+  { sem: "05 Abr", total: 4265 },
+  { sem: "12 Abr", total: 5295 },
+  { sem: "19 Abr", total: 5370 },
+];
+
 // Time to convert (segundos)
 const ttcFactura = [
   { sem: "22 Feb", s: 17183 },
