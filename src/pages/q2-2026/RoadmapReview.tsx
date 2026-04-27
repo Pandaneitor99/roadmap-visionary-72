@@ -4520,7 +4520,7 @@ const funcionalidadesCards: FuncCard[] = [
 ];
 
 // Funnel Home → New Item — chart w81wjr5i (semanal, last 12 weeks · cohort Pagos)
-// Conversión semanal: app-home-visited → app-new-item-visited
+// Conversión semanal: app-home-visited → app-new-item-visited (excl. última semana incompleta)
 const itemsAppVsWebSeries = [
   { mes: "01 Feb", pct: 3.61 },
   { mes: "08 Feb", pct: 3.30 },
@@ -4534,7 +4534,6 @@ const itemsAppVsWebSeries = [
   { mes: "05 Abr", pct: 3.55 },
   { mes: "12 Abr", pct: 8.21 },
   { mes: "19 Abr", pct: 7.08 },
-  { mes: "26 Abr", pct: 2.91 },
 ];
 
 // Intención de creación de Items — chart wh2ltvtf (semanal, last 12 weeks · all users)
