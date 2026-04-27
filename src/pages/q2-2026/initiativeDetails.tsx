@@ -41,7 +41,6 @@ const busquedaFacturasUniques = [
   { mes: "Ene 26", v: 2878 },
   { mes: "Feb 26", v: 2859 },
   { mes: "Mar 26", v: 3220 },
-  { mes: "Abr 26", v: 2441 },
 ];
 const usoBuscador = [
   { sem: "22 Feb", v: 807 },
@@ -671,11 +670,6 @@ const HOME_TAB_GROUPS: { id: string; label: string; tabs: { id: string; label: s
     ],
   },
   {
-    id: "items",
-    label: "Resultados",
-    tabs: [{ id: "itemsCreados", label: "Ítems creados / sem" }],
-  },
-  {
     id: "ttc",
     label: "Tiempo de conversión",
     tabs: [
@@ -684,6 +678,11 @@ const HOME_TAB_GROUPS: { id: string; label: string; tabs: { id: string; label: s
       { id: "ttcCotizacion", label: "TTC → Cotización" },
       { id: "ttcItem", label: "TTC → Item" },
     ],
+  },
+  {
+    id: "items",
+    label: "Resultados",
+    tabs: [{ id: "itemsCreados", label: "Ítems creados / sem" }],
   },
 ];
 

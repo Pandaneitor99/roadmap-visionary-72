@@ -3431,9 +3431,20 @@ function SoporteFuncDetail() {
     <div className="space-y-5">
       {/* Problema */}
       <div className="rounded-xl border border-red-200 bg-red-50/60 p-4">
-        <p className="text-[11px] font-bold uppercase tracking-wider text-red-700">
-          Problema detectado
-        </p>
+        <div className="flex items-start justify-between gap-3 flex-wrap">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-red-700">
+            Problema detectado
+          </p>
+          <a
+            href="https://claude.ai/design/p/9a44db74-0c3c-4b5a-9c38-c22c7b9d0ba0"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold transition-colors hover:bg-white"
+            style={{ borderColor: "#DC262633", color: "#DC2626", backgroundColor: "#DC262610" }}
+          >
+            <Sparkles className="h-3 w-3" /> Ver prototipo <ExternalLink className="h-2.5 w-2.5" />
+          </a>
+        </div>
         <p className="mt-2 text-sm leading-relaxed text-neutral-800">
           El usuario tiene que <strong>ir a la web para realizar un reclamo</strong> de soporte. La app no permite gestionar tickets ni hacer seguimiento, generando fricción y abandono cuando el usuario necesita ayuda en el momento.
         </p>
@@ -3522,13 +3533,7 @@ function SoporteFuncDetail() {
         </div>
       </div>
 
-      {/* Prototipo Soporte */}
-      <PrototypeCard
-        title="Prototipo · Soporte"
-        description="Gestión de tickets y reclamos directamente desde la app — sin necesidad de saltar a la web."
-        href="https://claude.ai/design/p/9a44db74-0c3c-4b5a-9c38-c22c7b9d0ba0"
-        accent="#DC2626"
-      />
+      {/* Prototipo movido al header del Problema detectado */}
     </div>
   );
 }
@@ -3544,18 +3549,19 @@ function SoporteFuncDetail() {
 //   j30yk1tu  Eventos Onboarding Semanal (Perfil/MQL/PQL)
 
 // --- Funnels combinados: Todos vs Mobile web (con PQL) ---
+// Datos refresh Amplitude (tgvpb7n5 + ozsknaof, This Year, segment entrepreneur)
 const funnelComboPQL = [
-  { step: "Perfil", todosCount: 3260, todosPct: 100, mobileCount: 10391, mobilePct: 100 },
-  { step: "Onboarding", todosCount: 2823, todosPct: 86.6, mobileCount: 6849, mobilePct: 65.9 },
-  { step: "PQL · Intento factura", todosCount: 1398, todosPct: 42.9, mobileCount: 1585, mobilePct: 15.3 },
-  { step: "Logo · Pago", todosCount: 39, todosPct: 1.20, mobileCount: 104, mobilePct: 1.00 },
+  { step: "Perfil", todosCount: 3335, todosPct: 100, mobileCount: 10567, mobilePct: 100 },
+  { step: "Onboarding", todosCount: 2886, todosPct: 86.54, mobileCount: 6960, mobilePct: 65.87 },
+  { step: "PQL · Intento factura", todosCount: 1005, todosPct: 30.13, mobileCount: 1593, mobilePct: 15.08 },
+  { step: "Logo · Pago", todosCount: 39, todosPct: 1.17, mobileCount: 105, mobilePct: 0.99 },
 ];
 
-// --- Funnels combinados sin PQL: Todos vs Mobile web ---
+// --- Funnels combinados sin PQL: Mobile App vs Mobile web ---
 const funnelComboSinPQL = [
-  { step: "Perfil", todosCount: 3260, todosPct: 100, mobileCount: 10391, mobilePct: 100 },
-  { step: "Onboarding", todosCount: 2823, todosPct: 86.6, mobileCount: 6849, mobilePct: 65.9 },
-  { step: "Logo · Pago", todosCount: 64, todosPct: 1.96, mobileCount: 287, mobilePct: 2.76 },
+  { step: "Perfil", todosCount: 3335, todosPct: 100, mobileCount: 10567, mobilePct: 100 },
+  { step: "Onboarding", todosCount: 2886, todosPct: 86.54, mobileCount: 6960, mobilePct: 65.87 },
+  { step: "Logo · Pago", todosCount: 39, todosPct: 1.17, mobileCount: 105, mobilePct: 0.99 },
 ];
 
 // --- Tendencias mensuales actualizadas (Amplitude refresh) ---
@@ -4742,26 +4748,36 @@ function Section5() {
         <div className="space-y-8">
           {/* Contactos */}
           <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-            <div className="mb-5 flex items-start gap-3">
-              <div
-                className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
-                style={{ backgroundColor: "#0066FF15" }}
-              >
-                <Lightbulb className="h-4 w-4" style={{ color: "#0066FF" }} />
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <h3 className="text-base font-bold text-neutral-900">Contactos</h3>
-                  <Badge
-                    className="gap-1 border-0 text-[10px] font-bold uppercase tracking-wider text-white"
-                    style={{
-                      background: "linear-gradient(135deg, #00B386, #0066FF)",
-                    }}
-                  >
-                    <Sparkles className="h-3 w-3" /> IA
-                  </Badge>
+            <div className="mb-5 flex items-start justify-between gap-3 flex-wrap">
+              <div className="flex items-start gap-3">
+                <div
+                  className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+                  style={{ backgroundColor: "#0066FF15" }}
+                >
+                  <Lightbulb className="h-4 w-4" style={{ color: "#0066FF" }} />
                 </div>
-                <p className="mt-0.5 text-xs text-neutral-500">Llenado automático y captura rápida</p>
+                <div>
+                  <h3 className="text-base font-bold text-neutral-900">Contactos</h3>
+                  <p className="mt-0.5 text-xs text-neutral-500">Llenado automático y captura rápida</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <span
+                  className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold"
+                  style={{ borderColor: "#FF6B0033", backgroundColor: "#FF6B0010", color: "#FF6B00" }}
+                >
+                  <span className="text-[9px] uppercase tracking-wider opacity-80">App vs total</span>
+                  <span className="text-[11px] font-bold">{CONTACTOS_APP_PARTICIPACION.toFixed(2)}%</span>
+                </span>
+                <a
+                  href="https://claude.ai/design/p/019dc695-1901-7519-a9d7-a74bd0eedfd0"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold transition-colors hover:bg-neutral-50"
+                  style={{ borderColor: "#FF6B0033", color: "#FF6B00" }}
+                >
+                  <Sparkles className="h-3 w-3" /> Ver prototipo <ExternalLink className="h-2.5 w-2.5" />
+                </a>
               </div>
             </div>
             <ContactosFuncDetail />
@@ -4769,17 +4785,26 @@ function Section5() {
 
           {/* Items */}
           <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-            <div className="mb-5 flex items-start gap-3">
-              <div
-                className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
-                style={{ backgroundColor: "#0066FF15" }}
+            <div className="mb-5 flex items-start justify-between gap-3 flex-wrap">
+              <div className="flex items-start gap-3">
+                <div
+                  className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+                  style={{ backgroundColor: "#0066FF15" }}
+                >
+                  <Lightbulb className="h-4 w-4" style={{ color: "#0066FF" }} />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-neutral-900">Items</h3>
+                  <p className="mt-0.5 text-xs text-neutral-500">Participación, intención y campos faltantes</p>
+                </div>
+              </div>
+              <span
+                className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold"
+                style={{ borderColor: "#0066FF33", backgroundColor: "#0066FF10", color: "#0066FF" }}
               >
-                <Lightbulb className="h-4 w-4" style={{ color: "#0066FF" }} />
-              </div>
-              <div>
-                <h3 className="text-base font-bold text-neutral-900">Items</h3>
-                <p className="mt-0.5 text-xs text-neutral-500">Participación, intención y campos faltantes</p>
-              </div>
+                <span className="text-[9px] uppercase tracking-wider opacity-80">App vs total</span>
+                <span className="text-[11px] font-bold">{ITEMS_APP_PARTICIPACION.toFixed(2)}%</span>
+              </span>
             </div>
             <ItemsFuncDetail />
           </div>
@@ -4801,30 +4826,6 @@ function Section5() {
               </div>
             </div>
             <SoporteFuncDetail />
-          </div>
-
-          {/* Onboarding */}
-          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-            <div className="mb-5 flex items-start gap-3">
-              <div
-                className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
-                style={{ backgroundColor: `${ALEGRA_GREEN}15` }}
-              >
-                <Sparkles className="h-4 w-4" style={{ color: ALEGRA_GREEN }} />
-              </div>
-              <div>
-                <h3 className="text-base font-bold text-neutral-900">Onboarding</h3>
-                <p className="mt-0.5 text-xs text-neutral-500">
-                  Nueva experiencia de bienvenida y activación
-                </p>
-              </div>
-            </div>
-            <PrototypeCard
-              title="Prototipo · Onboarding"
-              description="Rediseño del flujo de onboarding para acelerar Perfil → MQL → PQL en la app."
-              href="https://claude.ai/design/p/019dc058-65c2-700c-ba39-a56f47183a28?file=Alegra+Prototype.html"
-              accent={ALEGRA_GREEN}
-            />
           </div>
         </div>
       </div>
@@ -4954,11 +4955,22 @@ function Section5() {
           </div>
 
           <div className="mb-5 rounded-xl border border-orange-200 bg-orange-50/60 p-4">
-            <p className="text-[11px] font-bold uppercase tracking-wider text-orange-700">
-              Problema detectado
-            </p>
+            <div className="flex items-start justify-between gap-3 flex-wrap">
+              <p className="text-[11px] font-bold uppercase tracking-wider text-orange-700">
+                Problema detectado
+              </p>
+              <a
+                href="https://claude.ai/design/p/019dc058-65c2-700c-ba39-a56f47183a28?file=Alegra+Prototype.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold transition-colors hover:bg-white"
+                style={{ borderColor: "#FF6B0033", color: "#FF6B00", backgroundColor: "#FF6B0010" }}
+              >
+                <Sparkles className="h-3 w-3" /> Ver prototipo <ExternalLink className="h-2.5 w-2.5" />
+              </a>
+            </div>
             <p className="mt-2 text-sm leading-relaxed text-neutral-800">
-              Los usuarios <strong>tienen que iniciar sesión dentro de la app</strong> para ver los planes y pagar, o <strong>ir a web</strong>. Este paso adicional fricciona la conversión a pago en Mobile App: <strong>Mobile web convierte 2.76% vs 1.96% en Mobile App</strong>.
+              Los usuarios <strong>tienen que iniciar sesión dentro de la app</strong> para ver los planes y pagar, o <strong>ir a web</strong>. Este paso adicional fricciona la conversión a pago en Mobile App: <strong>Mobile web convierte 0.99% vs 1.17% en Mobile App</strong>.
             </p>
           </div>
 
@@ -5053,32 +5065,7 @@ function ItemsFuncDetail() {
         </div>
       </div>
 
-      {/* Card destacada: % participación de App en Items */}
-      <div
-        className="rounded-2xl border p-5 shadow-sm"
-        style={{
-          borderColor: "#0066FF33",
-          background: "linear-gradient(135deg, rgba(0,102,255,0.06), rgba(0,102,255,0.02))",
-        }}
-      >
-        <div className="flex items-center justify-between gap-4 flex-wrap">
-          <div>
-            <p className="text-[10px] font-bold uppercase tracking-wider" style={{ color: "#0066FF" }}>
-              % de participación de App en Items
-            </p>
-            <p className="mt-1 text-xs text-neutral-600">
-              App vs total (App + Web) · ítems creados — últimos 30 días
-            </p>
-          </div>
-          <div className="text-right">
-            <p className="text-3xl font-bold" style={{ color: "#0066FF" }}>
-              {ITEMS_APP_PARTICIPACION.toFixed(2)}%
-            </p>
-            <p className="text-[10px] text-neutral-500">de los ítems se crean en la app</p>
-          </div>
-        </div>
-      </div>
-
+      {/* % participación movido al header del módulo Items */}
       {/* Campos faltantes y UX deficiente */}
       <div className="grid gap-4 md:grid-cols-2">
         <div className="rounded-xl border border-orange-100 bg-orange-50/40 p-4">
@@ -5222,39 +5209,6 @@ function ContactosFuncDetail() {
         </div>
       </div>
 
-      {/* Card destacada: % participación de App en Contactos */}
-      <div
-        className="rounded-2xl border p-5 shadow-sm"
-        style={{
-          borderColor: "#FF6B0033",
-          background: "linear-gradient(135deg, rgba(255,107,0,0.06), rgba(255,107,0,0.02))",
-        }}
-      >
-        <div className="flex items-center justify-between gap-4 flex-wrap">
-          <div>
-            <p className="text-[10px] font-bold uppercase tracking-wider" style={{ color: "#FF6B00" }}>
-              % de participación de App en Contactos
-            </p>
-            <p className="mt-1 text-xs text-neutral-600">
-              App vs total (App + Web) · contactos creados — últimos 30 días
-            </p>
-          </div>
-          <div className="text-right">
-            <p className="text-3xl font-bold" style={{ color: "#FF6B00" }}>
-              {CONTACTOS_APP_PARTICIPACION.toFixed(2)}%
-            </p>
-            <p className="text-[10px] text-neutral-500">de los contactos se crean en la app</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Prototipo Contactos */}
-      <PrototypeCard
-        title="Prototipo · Contactos"
-        description="Nueva experiencia de creación de contactos: campos unificados (nombre/apellido, municipio/departamento) y selección clara de cliente vs vendedor."
-        href="https://claude.ai/design/p/019dc695-1901-7519-a9d7-a74bd0eedfd0"
-        accent="#FF6B00"
-      />
     </div>
   );
 }
