@@ -5008,19 +5008,19 @@ function ItemsFuncDetail() {
     <div className="space-y-5">
       {/* Charts lado a lado */}
       <div className="grid gap-4 lg:grid-cols-2">
-        {/* % participación App en Items */}
+        {/* Funnel Home → New Item (chart w81wjr5i) */}
         <div className="rounded-xl border border-neutral-200 bg-white p-4">
           <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
             <div>
               <h4 className="text-sm font-bold text-neutral-900">
-                % de participación de App en Items
+                Funnel Home → New Item
               </h4>
               <p className="mt-0.5 text-xs text-neutral-500">
-                % de ítems creados desde la App vs total (App + Web) · Abr '25 → Abr '26
+                % de conversión: app-home-visited → app-new-item-visited · cohort Pagos · últ. 12 semanas
               </p>
             </div>
             <Badge variant="outline" className="text-[10px]" style={{ borderColor: "#0066FF", color: "#0066FF" }}>
-              Abr 2026: {itemsAppVsWebSeries[itemsAppVsWebSeries.length - 1].pct}%
+              26 Abr: {itemsAppVsWebSeries[itemsAppVsWebSeries.length - 1].pct}%
             </Badge>
           </div>
           <div className="h-[240px]">
@@ -5028,37 +5028,42 @@ function ItemsFuncDetail() {
               <LineChart data={itemsAppVsWebSeries} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
                 <XAxis dataKey="mes" tick={{ fontSize: 10 }} stroke="#6b7280" />
-                <YAxis tick={{ fontSize: 11 }} stroke="#6b7280" tickFormatter={(v) => `${v}%`} domain={[0, 6]} />
+                <YAxis tick={{ fontSize: 11 }} stroke="#6b7280" tickFormatter={(v) => `${v}%`} domain={[0, 10]} />
                 <Tooltip formatter={(v: number) => `${v.toFixed(2)}%`} />
                 <Line type="monotone" dataKey="pct" stroke="#0066FF" strokeWidth={3} dot={{ r: 3 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
-          <p className="mt-2 text-[11px] text-neutral-500">
-            Fuente: Amplitude · se mantiene plana entre 3.3% – 4.3% durante 12 meses, sin tendencia de crecimiento.
-          </p>
+          <a
+            href="https://app.amplitude.com/analytics/alegra/chart/w81wjr5i"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-500 hover:text-neutral-800"
+          >
+            <ExternalLink className="h-3 w-3" /> Amplitude · w81wjr5i · pico 8.2% mid-Abr, cae a 2.9% al cierre
+          </a>
         </div>
 
-        {/* Intención de creación de Items - App (funnel) */}
+        {/* Intención de creación de Items (chart wh2ltvtf, semanal) */}
         <div className="rounded-xl border border-neutral-200 bg-white p-4">
           <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
             <div>
               <h4 className="text-sm font-bold text-neutral-900">
-                Intención de creación de Items — App
+                Intención de creación de Items
               </h4>
               <p className="mt-0.5 text-xs text-neutral-500">
-                % de conversión: app-new-item-visited → app-item-created
+                % de conversión: app-new-item-visited → app-item-created · all users · últ. 12 semanas
               </p>
             </div>
             <Badge variant="outline" className="text-[10px]" style={{ borderColor: ALEGRA_GREEN, color: ALEGRA_GREEN }}>
-              Abr 2026: {itemsIntencion[itemsIntencion.length - 1].conversion}%
+              26 Abr: {itemsIntencion[itemsIntencion.length - 1].conversion.toFixed(1)}%
             </Badge>
           </div>
           <div className="h-[240px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={itemsIntencion} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
-                <XAxis dataKey="mes" tick={{ fontSize: 11 }} stroke="#6b7280" />
+                <XAxis dataKey="mes" tick={{ fontSize: 10 }} stroke="#6b7280" />
                 <YAxis tick={{ fontSize: 11 }} stroke="#6b7280" tickFormatter={(v) => `${v}%`} domain={[0, 100]} />
                 <Tooltip formatter={(v: number) => `${v.toFixed(1)}%`} />
                 <Bar dataKey="conversion" fill={ALEGRA_GREEN} radius={[4, 4, 0, 0]} />
@@ -5071,7 +5076,7 @@ function ItemsFuncDetail() {
             rel="noopener noreferrer"
             className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-500 hover:text-neutral-800"
           >
-            <ExternalLink className="h-3 w-3" /> Amplitude · 8a3546k8 · conversión App ~75%, cae a 65% en Abr
+            <ExternalLink className="h-3 w-3" /> Amplitude · wh2ltvtf · cae de ~66% a 36% en abril
           </a>
         </div>
       </div>
