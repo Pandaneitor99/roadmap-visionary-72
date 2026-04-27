@@ -5403,14 +5403,27 @@ function OportunidadCard({
   };
   return (
     <div className="group flex h-full flex-col rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
-      <div className="flex items-start gap-2">
-        <div
-          className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
-          style={{ backgroundColor: `${ALEGRA_GREEN}15` }}
-        >
-          <Lightbulb className="h-4 w-4" style={{ color: ALEGRA_GREEN }} />
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex items-start gap-2 min-w-0">
+          <div
+            className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
+            style={{ backgroundColor: `${ALEGRA_GREEN}15` }}
+          >
+            <Lightbulb className="h-4 w-4" style={{ color: ALEGRA_GREEN }} />
+          </div>
+          <h3 className="text-sm font-bold leading-snug text-neutral-900">{op.title}</h3>
         </div>
-        <h3 className="text-sm font-bold leading-snug text-neutral-900">{op.title}</h3>
+        {op.link && (
+          <a
+            href={op.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex shrink-0 items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold transition-colors hover:bg-emerald-50"
+            style={{ borderColor: `${ALEGRA_GREEN}55`, color: ALEGRA_GREEN, backgroundColor: `${ALEGRA_GREEN}10` }}
+          >
+            <Sparkles className="h-3 w-3" /> Ver diseño <ExternalLink className="h-2.5 w-2.5" />
+          </a>
+        )}
       </div>
 
       <div className="mt-2 flex flex-wrap gap-1">
@@ -5441,18 +5454,6 @@ function OportunidadCard({
           Oportunidad
         </p>
         <p className="mt-1 text-xs leading-relaxed text-neutral-700">{op.oportunidad}</p>
-        {op.link && (
-          <a
-            href={op.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-3 inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[11px] font-semibold text-white transition-opacity hover:opacity-90"
-            style={{ backgroundColor: ALEGRA_GREEN }}
-          >
-            <ExternalLink className="h-3 w-3" />
-            Ver diseño
-          </a>
-        )}
       </div>
     </div>
   );
