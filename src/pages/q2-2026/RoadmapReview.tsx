@@ -4585,7 +4585,7 @@ const oportunidades = [
     title: "Pagos recibidos",
     tags: ["Adopción", "Engagement"],
     diagnostico:
-      "No existe una sección de pagos recibidos en la app. El usuario debe ir al PC para registrar el pago de una factura, lo que rompe el flujo móvil de cobro frente al cliente.",
+      "No existe una sección de pagos recibidos en la app. El usuario puede hacer el pago, pero no se visualizan, lo que rompe el flujo móvil de cobro frente al cliente.",
     oportunidad:
       "Habilitar el registro y consulta de pagos recibidos desde la app, integrado al flujo de la factura de venta.",
     link: "https://claude.ai/design/p/5a2581d3-60c3-4e07-96c9-701c04fbc999?file=Pagos+Recibidos.html&via=share",
@@ -4605,9 +4605,9 @@ const oportunidades = [
     title: "Reportes",
     tags: ["Adopción", "Experiencia"],
     diagnostico:
-      "El usuario no puede descargar ni compartir los reportes desde la app. Faltan reportes clave para la operación: ventas generales, ventas por vendedor, ventas por ítem y reporte de inventario. No hay buscador, únicamente filtros.",
+      "El usuario no puede descargar ni compartir los reportes. Faltan reportes clave para la operación: ventas generales, ventas por vendedor, ventas por ítem y reporte de inventario.",
     oportunidad:
-      "Construir un módulo de reportes nativo en la app, con descarga, compartir y los reportes que más demanda la Pyme BASE.",
+      "Construir las opciones faltantes, incluyendo las opciones de descarga y compartir.",
     link: "https://claude.ai/design/p/019dc097-2664-7687-9041-1fdc44865b74?file=Reportes.html&via=share",
   },
   {
@@ -4615,27 +4615,27 @@ const oportunidades = [
     title: "Búsqueda de documentos",
     tags: ["Experiencia", "Engagement"],
     diagnostico:
-      "La búsqueda de facturas solo funciona por numeración. No se pueden buscar pagos. No hay un buscador en el home ni una navegación rápida hacia las búsquedas existentes.",
+      "No hay un buscador en el home ni búsqueda de pagos. La búsqueda de facturas de compra es por numeración.",
     oportunidad:
-      "Buscador global en el home con acceso a facturas, pagos, contactos e ítems. Búsqueda por cliente, fecha o monto en facturas.",
+      "Buscador global en el home. Búsqueda por cliente en facturas de venta y pagos.",
   },
   {
     id: "operacion",
     title: "Reducir operación diaria",
     tags: ["Experiencia", "Adopción"],
     diagnostico:
-      "El usuario tiene que loguearse cada 7 días saliendo de la app. La app borra información guardada cuando queda en segundo plano. Lentitud de carga al cambiar de pestañas. No hay llenado automático de campos según preferencia.",
+      "El usuario tiene que loguearse cada 7 días saliendo de la app. Lentitud de carga al cambiar de pestañas. Algunos campos no se llenan con las preferencias.",
     oportunidad:
-      "Sesión persistente, estado guardado en background, mejoras de performance al navegar y autocompletado por preferencia del usuario.",
+      "Sesión persistente, mejoras de performance al navegar y autocompletado por preferencia del usuario.",
   },
   {
     id: "graficas-info-diaria",
     title: "Gráficas e información diaria",
     tags: ["Adopción", "Engagement"],
     diagnostico:
-      "Hoy en la app no se encuentran gráficas clave para la operación: ventas del día, productos más vendidos, top de clientes, comparativos por período. El usuario no tiene una vista rápida del pulso del negocio.",
+      "Hoy en la app no se encuentran gráficas clave para la operación: ventas del día, productos más vendidos, top de clientes, comparativos por período.",
     oportunidad:
-      "Construir un home con widgets de información diaria: ventas del día, productos top, clientes top y comparativos rápidos para que la Pyme BASE entienda su negocio en segundos al abrir la app.",
+      "Construir una sección de gráficas por venta, items y contactos.",
   },
 ];
 
