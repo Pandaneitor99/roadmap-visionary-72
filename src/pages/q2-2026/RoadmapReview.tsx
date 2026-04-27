@@ -3581,6 +3581,14 @@ function SoporteFuncDetail() {
           </a>
         </div>
       </div>
+
+      {/* Prototipo Soporte */}
+      <PrototypeCard
+        title="Prototipo · Soporte"
+        description="Gestión de tickets y reclamos directamente desde la app — sin necesidad de saltar a la web."
+        href="https://claude.ai/design/p/9a44db74-0c3c-4b5a-9c38-c22c7b9d0ba0"
+        accent="#DC2626"
+      />
     </div>
   );
 }
