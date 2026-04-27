@@ -4743,26 +4743,36 @@ function Section5() {
         <div className="space-y-8">
           {/* Contactos */}
           <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-            <div className="mb-5 flex items-start gap-3">
-              <div
-                className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
-                style={{ backgroundColor: "#0066FF15" }}
-              >
-                <Lightbulb className="h-4 w-4" style={{ color: "#0066FF" }} />
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <h3 className="text-base font-bold text-neutral-900">Contactos</h3>
-                  <Badge
-                    className="gap-1 border-0 text-[10px] font-bold uppercase tracking-wider text-white"
-                    style={{
-                      background: "linear-gradient(135deg, #00B386, #0066FF)",
-                    }}
-                  >
-                    <Sparkles className="h-3 w-3" /> IA
-                  </Badge>
+            <div className="mb-5 flex items-start justify-between gap-3 flex-wrap">
+              <div className="flex items-start gap-3">
+                <div
+                  className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+                  style={{ backgroundColor: "#0066FF15" }}
+                >
+                  <Lightbulb className="h-4 w-4" style={{ color: "#0066FF" }} />
                 </div>
-                <p className="mt-0.5 text-xs text-neutral-500">Llenado automático y captura rápida</p>
+                <div>
+                  <h3 className="text-base font-bold text-neutral-900">Contactos</h3>
+                  <p className="mt-0.5 text-xs text-neutral-500">Llenado automático y captura rápida</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <span
+                  className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold"
+                  style={{ borderColor: "#FF6B0033", backgroundColor: "#FF6B0010", color: "#FF6B00" }}
+                >
+                  <span className="text-[9px] uppercase tracking-wider opacity-80">App vs total</span>
+                  <span className="text-[11px] font-bold">{CONTACTOS_APP_PARTICIPACION.toFixed(2)}%</span>
+                </span>
+                <a
+                  href="https://claude.ai/design/p/019dc695-1901-7519-a9d7-a74bd0eedfd0"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold transition-colors hover:bg-neutral-50"
+                  style={{ borderColor: "#FF6B0033", color: "#FF6B00" }}
+                >
+                  <Sparkles className="h-3 w-3" /> Ver prototipo <ExternalLink className="h-2.5 w-2.5" />
+                </a>
               </div>
             </div>
             <ContactosFuncDetail />
@@ -4770,17 +4780,26 @@ function Section5() {
 
           {/* Items */}
           <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-            <div className="mb-5 flex items-start gap-3">
-              <div
-                className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
-                style={{ backgroundColor: "#0066FF15" }}
+            <div className="mb-5 flex items-start justify-between gap-3 flex-wrap">
+              <div className="flex items-start gap-3">
+                <div
+                  className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+                  style={{ backgroundColor: "#0066FF15" }}
+                >
+                  <Lightbulb className="h-4 w-4" style={{ color: "#0066FF" }} />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-neutral-900">Items</h3>
+                  <p className="mt-0.5 text-xs text-neutral-500">Participación, intención y campos faltantes</p>
+                </div>
+              </div>
+              <span
+                className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold"
+                style={{ borderColor: "#0066FF33", backgroundColor: "#0066FF10", color: "#0066FF" }}
               >
-                <Lightbulb className="h-4 w-4" style={{ color: "#0066FF" }} />
-              </div>
-              <div>
-                <h3 className="text-base font-bold text-neutral-900">Items</h3>
-                <p className="mt-0.5 text-xs text-neutral-500">Participación, intención y campos faltantes</p>
-              </div>
+                <span className="text-[9px] uppercase tracking-wider opacity-80">App vs total</span>
+                <span className="text-[11px] font-bold">{ITEMS_APP_PARTICIPACION.toFixed(2)}%</span>
+              </span>
             </div>
             <ItemsFuncDetail />
           </div>
@@ -4802,30 +4821,6 @@ function Section5() {
               </div>
             </div>
             <SoporteFuncDetail />
-          </div>
-
-          {/* Onboarding */}
-          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-            <div className="mb-5 flex items-start gap-3">
-              <div
-                className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
-                style={{ backgroundColor: `${ALEGRA_GREEN}15` }}
-              >
-                <Sparkles className="h-4 w-4" style={{ color: ALEGRA_GREEN }} />
-              </div>
-              <div>
-                <h3 className="text-base font-bold text-neutral-900">Onboarding</h3>
-                <p className="mt-0.5 text-xs text-neutral-500">
-                  Nueva experiencia de bienvenida y activación
-                </p>
-              </div>
-            </div>
-            <PrototypeCard
-              title="Prototipo · Onboarding"
-              description="Rediseño del flujo de onboarding para acelerar Perfil → MQL → PQL en la app."
-              href="https://claude.ai/design/p/019dc058-65c2-700c-ba39-a56f47183a28?file=Alegra+Prototype.html"
-              accent={ALEGRA_GREEN}
-            />
           </div>
         </div>
       </div>
