@@ -4563,31 +4563,40 @@ const funcionalidadesCards: FuncCard[] = [
   { id: "items", title: "Items", short: "Participación, intención y campos faltantes" },
 ];
 
-// % de participación de App en Items — datos reales Amplitude (chart 1barvuzk)
-// Fórmula: app-item-created / (app-item-created + ac-item-created)
+// Funnel Home → New Item — chart w81wjr5i (semanal, last 12 weeks · cohort Pagos)
+// Conversión semanal: app-home-visited → app-new-item-visited
 const itemsAppVsWebSeries = [
-  { mes: "Abr '25", pct: 3.45 },
-  { mes: "May '25", pct: 3.37 },
-  { mes: "Jun '25", pct: 3.54 },
-  { mes: "Jul '25", pct: 4.07 },
-  { mes: "Ago '25", pct: 3.39 },
-  { mes: "Sep '25", pct: 3.60 },
-  { mes: "Oct '25", pct: 3.60 },
-  { mes: "Nov '25", pct: 3.61 },
-  { mes: "Dic '25", pct: 3.33 },
-  { mes: "Ene '26", pct: 3.99 },
-  { mes: "Feb '26", pct: 3.95 },
-  { mes: "Mar '26", pct: 3.85 },
-  { mes: "Abr '26", pct: 4.31 },
+  { mes: "01 Feb", pct: 3.61 },
+  { mes: "08 Feb", pct: 3.30 },
+  { mes: "15 Feb", pct: 3.38 },
+  { mes: "22 Feb", pct: 3.27 },
+  { mes: "01 Mar", pct: 3.44 },
+  { mes: "08 Mar", pct: 3.68 },
+  { mes: "15 Mar", pct: 3.47 },
+  { mes: "22 Mar", pct: 3.15 },
+  { mes: "29 Mar", pct: 2.64 },
+  { mes: "05 Abr", pct: 3.55 },
+  { mes: "12 Abr", pct: 8.21 },
+  { mes: "19 Abr", pct: 7.08 },
+  { mes: "26 Abr", pct: 2.91 },
 ];
 
-// Intención de creación de Items - App (chart 8a3546k8, funnel app-new-item-visited → app-item-created)
-// % de conversión por mes
+// Intención de creación de Items — chart wh2ltvtf (semanal, last 12 weeks · all users)
+// Conversión: app-new-item-visited → app-item-created
 const itemsIntencion = [
-  { mes: "Ene '26", conversion: 77.7 },
-  { mes: "Feb '26", conversion: 78.1 },
-  { mes: "Mar '26", conversion: 75.6 },
-  { mes: "Abr '26", conversion: 65.1 },
+  { mes: "01 Feb", conversion: 64.13 },
+  { mes: "08 Feb", conversion: 70.53 },
+  { mes: "15 Feb", conversion: 65.54 },
+  { mes: "22 Feb", conversion: 64.75 },
+  { mes: "01 Mar", conversion: 66.67 },
+  { mes: "08 Mar", conversion: 70.38 },
+  { mes: "15 Mar", conversion: 66.18 },
+  { mes: "22 Mar", conversion: 61.65 },
+  { mes: "29 Mar", conversion: 65.69 },
+  { mes: "05 Abr", conversion: 52.95 },
+  { mes: "12 Abr", conversion: 36.36 },
+  { mes: "19 Abr", conversion: 39.46 },
+  { mes: "26 Abr", conversion: 36.13 },
 ];
 
 // % de participación de App en Items (último valor consolidado)
