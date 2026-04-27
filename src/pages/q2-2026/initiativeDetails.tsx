@@ -689,6 +689,14 @@ export function HomeDetail() {
                       <Tooltip />
                       <Bar dataKey="QuickActions" fill={ORANGE} />
                     </BarChart>
+                  ) : tab === "itemsCreados" ? (
+                    <LineChart data={itemsCreadosSemanal}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                      <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
+                      <YAxis tick={{ fontSize: 10 }} />
+                      <Tooltip formatter={(v: number) => v.toLocaleString("es-CO")} />
+                      <Line type="monotone" dataKey="total" stroke={BLUE} strokeWidth={2.5} dot={{ r: 3 }} />
+                    </LineChart>
                   ) : tab === "fnFactura" ? (
                     <LineChart data={funnelHomeFactura}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
