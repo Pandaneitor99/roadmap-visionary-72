@@ -3553,15 +3553,17 @@ function SoporteFuncDetail() {
 const funnelComboPQL = [
   { step: "Perfil", todosCount: 3335, todosPct: 100, mobileCount: 10567, mobilePct: 100 },
   { step: "Onboarding", todosCount: 2886, todosPct: 86.54, mobileCount: 6960, mobilePct: 65.87 },
-  { step: "PQL · Intento factura", todosCount: 1005, todosPct: 30.13, mobileCount: 1593, mobilePct: 15.08 },
+  { step: "PQL · Intento factura", todosCount: 589, todosPct: 17.66, mobileCount: 1593, mobilePct: 15.08 },
   { step: "Logo · Pago", todosCount: 39, todosPct: 1.17, mobileCount: 105, mobilePct: 0.99 },
 ];
 
 // --- Funnels combinados sin PQL: Mobile App vs Mobile web ---
+// Mobile App (6lwwlzbl): 3338 → 2888 → 64 = 1.92%
+// Mobile web (jdusjvvg): 10577 → 6968 → 289 = 2.74%
 const funnelComboSinPQL = [
-  { step: "Perfil", todosCount: 3335, todosPct: 100, mobileCount: 10567, mobilePct: 100 },
-  { step: "Onboarding", todosCount: 2886, todosPct: 86.54, mobileCount: 6960, mobilePct: 65.87 },
-  { step: "Logo · Pago", todosCount: 39, todosPct: 1.17, mobileCount: 105, mobilePct: 0.99 },
+  { step: "Perfil", todosCount: 3338, todosPct: 100, mobileCount: 10577, mobilePct: 100 },
+  { step: "Onboarding", todosCount: 2888, todosPct: 86.52, mobileCount: 6968, mobilePct: 65.88 },
+  { step: "Logo · Pago", todosCount: 64, todosPct: 1.92, mobileCount: 289, mobilePct: 2.74 },
 ];
 
 // --- Tendencias mensuales actualizadas (Amplitude refresh) ---
