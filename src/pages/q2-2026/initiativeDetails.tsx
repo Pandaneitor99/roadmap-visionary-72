@@ -88,6 +88,22 @@ const appVsWebRemisiones = [
   { mes: "Abr 26", pct: 8.81 },
 ];
 
+// Buscador remisiones — semanal (charts m7e69s6z uniques · l8i09ad1 totals)
+const buscadorRemisionesUnicos = [
+  { sem: "22 Mar", v: 0 },
+  { sem: "29 Mar", v: 0 },
+  { sem: "05 Abr", v: 0 },
+  { sem: "12 Abr", v: 15 },
+  { sem: "19 Abr", v: 74 },
+];
+const buscadorRemisionesTotales = [
+  { sem: "22 Mar", v: 0 },
+  { sem: "29 Mar", v: 0 },
+  { sem: "05 Abr", v: 0 },
+  { sem: "12 Abr", v: 136 },
+  { sem: "19 Abr", v: 975 },
+];
+
 // Contactos
 const contactosAutocompletado = [
   { name: "Autocompletado", value: 164, color: ALEGRA_GREEN },
@@ -589,10 +605,47 @@ export function RemisionesDetail() {
           </LineChart>
         </ChartCard>
       </div>
+      <div className="grid gap-3 md:grid-cols-2">
+        <ChartCard
+          title="Buscador remisiones — Únicos"
+          subtitle="Usuarios que usan el buscador en remisiones (semanal)"
+          url="https://app.amplitude.com/analytics/alegra/chart/m7e69s6z"
+          statLabel="Última sem"
+          statValue={lastVal(buscadorRemisionesUnicos, "v")}
+          statDelta={pctDelta(buscadorRemisionesUnicos, "v")}
+          statBaselineLabel="vs 12-Abr"
+        >
+          <BarChart data={buscadorRemisionesUnicos}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+            <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
+            <YAxis tick={{ fontSize: 10 }} />
+            <Tooltip />
+            <Bar dataKey="v" fill="#FF6B00" />
+          </BarChart>
+        </ChartCard>
+        <ChartCard
+          title="Buscador remisiones — Totales"
+          subtitle="Búsquedas totales en remisiones (semanal)"
+          url="https://app.amplitude.com/analytics/alegra/chart/l8i09ad1"
+          statLabel="Última sem"
+          statValue={lastVal(buscadorRemisionesTotales, "v")}
+          statDelta={pctDelta(buscadorRemisionesTotales, "v")}
+          statBaselineLabel="vs 12-Abr"
+        >
+          <BarChart data={buscadorRemisionesTotales}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+            <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
+            <YAxis tick={{ fontSize: 10 }} />
+            <Tooltip />
+            <Bar dataKey="v" fill={BLUE} />
+          </BarChart>
+        </ChartCard>
+      </div>
       <Insights
         items={[
           "Tras habilitar compartir/descargar remisiones, las remisiones semanales pasaron de ~1.5K a ~2.85K (crecimiento >85%).",
           "La participación de la app en el total de remisiones subió de 6.1% (feb) a 8.8% (abr), el máximo histórico.",
+          "El buscador de remisiones se lanzó en abril: pasó de 15 a 74 usuarios únicos (+393%) y de 136 a 975 búsquedas semanales (+617%) entre las semanas del 12 y 19 de abril.",
           "Confirma que cerrar gaps funcionales móviles desplaza uso de web a app (aporta a KR 2.2 — adopción).",
         ]}
       />
