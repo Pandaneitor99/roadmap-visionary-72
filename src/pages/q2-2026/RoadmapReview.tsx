@@ -4353,18 +4353,18 @@ function OKRMiniCard({
               <p className="mt-1 text-xs leading-relaxed text-neutral-600">
                 {kr.name}
               </p>
-              <div className="mt-2 flex items-center justify-between text-[11px] text-neutral-500">
+              <div className="mt-2 grid grid-cols-3 gap-2 text-[11px] text-neutral-500">
                 <span>
                   Base:{" "}
-                  <span className="font-semibold text-neutral-800">
-                    {kr.baseline}
-                  </span>
+                  <span className="font-semibold text-neutral-800">{kr.baseline}</span>
                 </span>
                 <span>
                   Target:{" "}
-                  <span className="font-semibold text-neutral-800">
-                    {kr.target}
-                  </span>
+                  <span className="font-semibold text-neutral-800">{kr.target}</span>
+                </span>
+                <span>
+                  Actual:{" "}
+                  <span className="font-semibold text-neutral-800">{kr.currentResult ?? "—"}</span>
                 </span>
               </div>
             </div>
