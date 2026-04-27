@@ -4862,6 +4862,30 @@ function Section5() {
             </div>
             <SoporteFuncDetail />
           </div>
+
+          {/* Onboarding */}
+          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+            <div className="mb-5 flex items-start gap-3">
+              <div
+                className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+                style={{ backgroundColor: `${ALEGRA_GREEN}15` }}
+              >
+                <Sparkles className="h-4 w-4" style={{ color: ALEGRA_GREEN }} />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-neutral-900">Onboarding</h3>
+                <p className="mt-0.5 text-xs text-neutral-500">
+                  Nueva experiencia de bienvenida y activación
+                </p>
+              </div>
+            </div>
+            <PrototypeCard
+              title="Prototipo · Onboarding"
+              description="Rediseño del flujo de onboarding para acelerar Perfil → MQL → PQL en la app."
+              href="https://claude.ai/design/p/019dc058-65c2-700c-ba39-a56f47183a28?file=Alegra+Prototype.html"
+              accent={ALEGRA_GREEN}
+            />
+          </div>
         </div>
       </div>
 
