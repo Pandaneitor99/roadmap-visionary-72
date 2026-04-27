@@ -95,29 +95,42 @@ const contactosAutocompletado = [
   { name: "Manual", value: 379, color: "#9CA3AF" },
 ];
 
-// Home — Funcionalidades weekly
+// Home — Funcionalidades weekly (chart 99xelesc · uniques semanales)
 const funcionalidadesHome = [
-  { sem: "22 Mar", Sidebar: 5438, Mas: 2972, Rango: 761, Perfil: 482, "G. Ventas": 724, "G. Trans": 316, QuickActions: 0 },
   { sem: "29 Mar", Sidebar: 4892, Mas: 2586, Rango: 839, Perfil: 457, "G. Ventas": 777, "G. Trans": 307, QuickActions: 0 },
   { sem: "05 Abr", Sidebar: 5362, Mas: 2964, Rango: 762, Perfil: 478, "G. Ventas": 680, "G. Trans": 269, QuickActions: 0 },
   { sem: "12 Abr", Sidebar: 4792, Mas: 2782, Rango: 748, Perfil: 449, "G. Ventas": 661, "G. Trans": 243, QuickActions: 2161 },
-  { sem: "19 Abr", Sidebar: 3050, Mas: 1709, Rango: 370, Perfil: 219, "G. Ventas": 401, "G. Trans": 124, QuickActions: 1302 },
+  { sem: "19 Abr", Sidebar: 4606, Mas: 2773, Rango: 735, Perfil: 491, "G. Ventas": 745, "G. Trans": 259, QuickActions: 2421 },
 ];
 
-// Funnels home → X
+// Quick Actions totals (chart mqhwxet0 · totals semanales)
+const quickActionsTotals = [
+  { sem: "29 Mar", v: 0 },
+  { sem: "05 Abr", v: 0 },
+  { sem: "12 Abr", v: 4393 },
+  { sem: "19 Abr", v: 5357 },
+];
+
+// Quick Actions breakdown (chart c5z4fzyu · uniques por acción)
+const quickActionsBreakdown = [
+  { name: "Factura", value: 4177, color: "#00B386" },
+  { name: "Cotización", value: 1939, color: "#0066FF" },
+  { name: "Contacto", value: 1266, color: "#FF6B00" },
+  { name: "Item", value: 1101, color: "#9333EA" },
+];
+
+// Funnels home → X (refreshed con data más reciente de Amplitude)
 const funnelHomeFactura = [
-  { sem: "22 Feb", pct: 43.86 },
   { sem: "01 Mar", pct: 42.56 },
   { sem: "08 Mar", pct: 43.20 },
   { sem: "15 Mar", pct: 43.28 },
   { sem: "22 Mar", pct: 42.78 },
-  { sem: "29 Mar", pct: 41.22 },
+  { sem: "29 Mar", pct: 41.21 },
   { sem: "05 Abr", pct: 44.31 },
   { sem: "12 Abr", pct: 54.33 },
-  { sem: "19 Abr", pct: 46.70 },
+  { sem: "19 Abr", pct: 53.83 },
 ];
 const funnelHomeContactos = [
-  { sem: "22 Feb", pct: 3.47 },
   { sem: "01 Mar", pct: 3.46 },
   { sem: "08 Mar", pct: 3.22 },
   { sem: "15 Mar", pct: 2.99 },
@@ -125,29 +138,30 @@ const funnelHomeContactos = [
   { sem: "29 Mar", pct: 2.65 },
   { sem: "05 Abr", pct: 3.20 },
   { sem: "12 Abr", pct: 6.84 },
-  { sem: "19 Abr", pct: 7.03 },
+  { sem: "19 Abr", pct: 10.01 },
 ];
 const funnelHomeItem = [
-  { sem: "22 Feb", pct: 3.27 },
-  { sem: "01 Mar", pct: 3.44 },
-  { sem: "08 Mar", pct: 3.68 },
-  { sem: "15 Mar", pct: 3.47 },
-  { sem: "22 Mar", pct: 3.15 },
-  { sem: "29 Mar", pct: 2.64 },
-  { sem: "05 Abr", pct: 3.55 },
-  { sem: "12 Abr", pct: 8.21 },
-  { sem: "19 Abr", pct: 4.62 },
+  { sem: "01 Feb", pct: 3.30 },
+  { sem: "08 Feb", pct: 3.38 },
+  { sem: "15 Feb", pct: 3.27 },
+  { sem: "22 Feb", pct: 3.44 },
+  { sem: "01 Mar", pct: 3.68 },
+  { sem: "08 Mar", pct: 3.47 },
+  { sem: "15 Mar", pct: 3.15 },
+  { sem: "22 Mar", pct: 2.64 },
+  { sem: "29 Mar", pct: 3.55 },
+  { sem: "05 Abr", pct: 8.21 },
+  { sem: "12 Abr", pct: 7.08 },
 ];
 const funnelHomeCotizacion = [
-  { sem: "22 Feb", pct: 5.12 },
-  { sem: "01 Mar", pct: 4.98 },
-  { sem: "08 Mar", pct: 5.31 },
-  { sem: "15 Mar", pct: 5.14 },
-  { sem: "22 Mar", pct: 4.86 },
-  { sem: "29 Mar", pct: 4.71 },
-  { sem: "05 Abr", pct: 5.02 },
-  { sem: "12 Abr", pct: 9.64 },
-  { sem: "19 Abr", pct: 8.13 },
+  { sem: "01 Mar", pct: 19.21 },
+  { sem: "08 Mar", pct: 18.42 },
+  { sem: "15 Mar", pct: 18.63 },
+  { sem: "22 Mar", pct: 18.45 },
+  { sem: "29 Mar", pct: 15.56 },
+  { sem: "05 Abr", pct: 19.33 },
+  { sem: "12 Abr", pct: 22.98 },
+  { sem: "19 Abr", pct: 23.99 },
 ];
 
 // Ítems creados en la app por semana — Amplitude j6et1f82 (últimas 12 semanas)
