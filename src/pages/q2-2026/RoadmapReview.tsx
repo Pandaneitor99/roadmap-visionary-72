@@ -4585,7 +4585,7 @@ const oportunidades = [
     title: "Pagos recibidos",
     tags: ["Adopción", "Engagement"],
     diagnostico:
-      "No existe una sección de pagos recibidos en la app. El usuario debe ir al PC para registrar el pago de una factura, lo que rompe el flujo móvil de cobro frente al cliente.",
+      "No existe una sección de pagos recibidos en la app. El usuario puede hacer el pago, pero no se visualizan, lo que rompe el flujo móvil de cobro frente al cliente.",
     oportunidad:
       "Habilitar el registro y consulta de pagos recibidos desde la app, integrado al flujo de la factura de venta.",
     link: "https://claude.ai/design/p/5a2581d3-60c3-4e07-96c9-701c04fbc999?file=Pagos+Recibidos.html&via=share",
@@ -4605,9 +4605,9 @@ const oportunidades = [
     title: "Reportes",
     tags: ["Adopción", "Experiencia"],
     diagnostico:
-      "El usuario no puede descargar ni compartir los reportes desde la app. Faltan reportes clave para la operación: ventas generales, ventas por vendedor, ventas por ítem y reporte de inventario. No hay buscador, únicamente filtros.",
+      "El usuario no puede descargar ni compartir los reportes. Faltan reportes clave para la operación: ventas generales, ventas por vendedor, ventas por ítem y reporte de inventario.",
     oportunidad:
-      "Construir un módulo de reportes nativo en la app, con descarga, compartir y los reportes que más demanda la Pyme BASE.",
+      "Construir las opciones faltantes, incluyendo las opciones de descarga y compartir.",
     link: "https://claude.ai/design/p/019dc097-2664-7687-9041-1fdc44865b74?file=Reportes.html&via=share",
   },
   {
@@ -4615,27 +4615,27 @@ const oportunidades = [
     title: "Búsqueda de documentos",
     tags: ["Experiencia", "Engagement"],
     diagnostico:
-      "La búsqueda de facturas solo funciona por numeración. No se pueden buscar pagos. No hay un buscador en el home ni una navegación rápida hacia las búsquedas existentes.",
+      "No hay un buscador en el home ni búsqueda de pagos. La búsqueda de facturas de compra es por numeración.",
     oportunidad:
-      "Buscador global en el home con acceso a facturas, pagos, contactos e ítems. Búsqueda por cliente, fecha o monto en facturas.",
+      "Buscador global en el home. Búsqueda por cliente en facturas de venta y pagos.",
   },
   {
     id: "operacion",
     title: "Reducir operación diaria",
     tags: ["Experiencia", "Adopción"],
     diagnostico:
-      "El usuario tiene que loguearse cada 7 días saliendo de la app. La app borra información guardada cuando queda en segundo plano. Lentitud de carga al cambiar de pestañas. No hay llenado automático de campos según preferencia.",
+      "El usuario tiene que loguearse cada 7 días saliendo de la app. Lentitud de carga al cambiar de pestañas. Algunos campos no se llenan con las preferencias.",
     oportunidad:
-      "Sesión persistente, estado guardado en background, mejoras de performance al navegar y autocompletado por preferencia del usuario.",
+      "Sesión persistente, mejoras de performance al navegar y autocompletado por preferencia del usuario.",
   },
   {
     id: "graficas-info-diaria",
     title: "Gráficas e información diaria",
     tags: ["Adopción", "Engagement"],
     diagnostico:
-      "Hoy en la app no se encuentran gráficas clave para la operación: ventas del día, productos más vendidos, top de clientes, comparativos por período. El usuario no tiene una vista rápida del pulso del negocio.",
+      "Hoy en la app no se encuentran gráficas clave para la operación: ventas del día, productos más vendidos, top de clientes, comparativos por período.",
     oportunidad:
-      "Construir un home con widgets de información diaria: ventas del día, productos top, clientes top y comparativos rápidos para que la Pyme BASE entienda su negocio en segundos al abrir la app.",
+      "Construir una sección de gráficas por venta, items y contactos.",
   },
 ];
 
@@ -5115,6 +5115,137 @@ function Section5() {
         </div>
       </div>
 
+      {/* Contadores */}
+      <div>
+        <div className="mb-5 flex items-center gap-2">
+          <div className="h-1 w-10 rounded-full" style={{ backgroundColor: "rgb(48,171,169)" }} />
+          <h2 className="text-lg font-bold text-neutral-900">Contadores</h2>
+          <span className="ml-2 text-xs text-neutral-500">Acciones más importantes · voces de campo</span>
+        </div>
+
+        <ContadoresSection />
+      </div>
+
+    </div>
+  );
+}
+
+function ContadoresSection() {
+  const TEAL = "rgb(48,171,169)";
+  const acciones = [
+    { evento: "ac-form-bill-visited", label: "Ver facturas de compra", pctMau: 26.6, veces: 31.5 },
+    { evento: "ac-bill-created", label: "Crear factura de compra", pctMau: 24.0, veces: 32.9 },
+    { evento: "ac-invoice-attempted", label: "Intentar facturar", pctMau: 17.8, veces: 30.4 },
+    { evento: "ac-invoice-managed", label: "Gestionar facturas", pctMau: 16.8, veces: 50.9 },
+    { evento: "ac-invoice-submitted", label: "Enviar factura", pctMau: 14.6, veces: 27.6 },
+    { evento: "ac-report-generated", label: "Generar reportes", pctMau: 13.9, veces: 30.8 },
+  ];
+  const maxPct = Math.max(...acciones.map((a) => a.pctMau));
+  const maxVeces = Math.max(...acciones.map((a) => a.veces));
+
+  return (
+    <div className="space-y-6">
+      {/* Power Features chart */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+        <div className="mb-4 flex items-start gap-3">
+          <div
+            className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+            style={{ backgroundColor: `${TEAL}20` }}
+          >
+            <Star className="h-4 w-4" style={{ color: TEAL }} />
+          </div>
+          <div>
+            <h3 className="text-base font-bold text-neutral-900">
+              Acciones más importantes para los Contadores
+            </h3>
+            <p className="mt-0.5 text-xs text-neutral-500">
+              Alto alcance + alta frecuencia · "Power Features" estrella
+            </p>
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          {acciones.map((a) => (
+            <div
+              key={a.evento}
+              className="rounded-xl border border-neutral-100 bg-neutral-50/40 p-3"
+            >
+              <div className="mb-2 flex items-baseline justify-between gap-3 flex-wrap">
+                <div className="min-w-0">
+                  <p className="text-sm font-bold text-neutral-900">{a.label}</p>
+                  <p className="text-[10px] font-mono text-neutral-500">{a.evento}</p>
+                </div>
+                <div className="flex gap-4 text-[11px]">
+                  <span style={{ color: TEAL }}>
+                    % MAU <strong className="text-sm">{a.pctMau}%</strong>
+                  </span>
+                  <span className="text-orange-600">
+                    Veces/usuario <strong className="text-sm">{a.veces}x</strong>
+                  </span>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="relative h-2 overflow-hidden rounded-full bg-neutral-200">
+                  <div
+                    className="absolute left-0 top-0 h-full rounded-full"
+                    style={{ width: `${(a.pctMau / maxPct) * 100}%`, backgroundColor: TEAL }}
+                  />
+                </div>
+                <div className="relative h-2 overflow-hidden rounded-full bg-neutral-200">
+                  <div
+                    className="absolute left-0 top-0 h-full rounded-full"
+                    style={{ width: `${(a.veces / maxVeces) * 100}%`, backgroundColor: "#FF6B00" }}
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Insight cards - voces de contadores */}
+      <div className="grid gap-4 md:grid-cols-2">
+        <div
+          className="rounded-2xl border bg-white p-5 shadow-sm"
+          style={{ borderColor: `${TEAL}40` }}
+        >
+          <div className="mb-3 flex items-center gap-2">
+            <div
+              className="flex h-8 w-8 items-center justify-center rounded-lg"
+              style={{ backgroundColor: `${TEAL}20` }}
+            >
+              <Sparkles className="h-4 w-4" style={{ color: TEAL }} />
+            </div>
+            <h4 className="text-sm font-bold text-neutral-900">
+              Recuperación instantánea de documentos
+            </h4>
+          </div>
+          <blockquote
+            className="rounded-lg border-l-4 bg-neutral-50/60 p-3 text-xs italic leading-relaxed text-neutral-700"
+            style={{ borderLeftColor: TEAL }}
+          >
+            "De repente, salgo de la oficina para una reunión y un cliente me pide un documento. Desde donde esté, lo descargo y se lo envío por WhatsApp."
+          </blockquote>
+        </div>
+
+        <div
+          className="rounded-2xl border bg-white p-5 shadow-sm"
+          style={{ borderColor: "#FF6B0040" }}
+        >
+          <div className="mb-3 flex items-center gap-2">
+            <div
+              className="flex h-8 w-8 items-center justify-center rounded-lg"
+              style={{ backgroundColor: "#FF6B0020" }}
+            >
+              <Sparkles className="h-4 w-4 text-orange-600" />
+            </div>
+            <h4 className="text-sm font-bold text-neutral-900">Generación de facturas</h4>
+          </div>
+          <blockquote className="rounded-lg border-l-4 border-orange-500 bg-neutral-50/60 p-3 text-xs italic leading-relaxed text-neutral-700">
+            "Si configuras tu producto y cliente, puedo generar una factura en segundos. Simplemente ingresas el cliente y el servicio, creas la factura y se envía por WhatsApp en segundos."
+          </blockquote>
+        </div>
+      </div>
     </div>
   );
 }
@@ -5403,14 +5534,27 @@ function OportunidadCard({
   };
   return (
     <div className="group flex h-full flex-col rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
-      <div className="flex items-start gap-2">
-        <div
-          className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
-          style={{ backgroundColor: `${ALEGRA_GREEN}15` }}
-        >
-          <Lightbulb className="h-4 w-4" style={{ color: ALEGRA_GREEN }} />
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex items-start gap-2 min-w-0">
+          <div
+            className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
+            style={{ backgroundColor: `${ALEGRA_GREEN}15` }}
+          >
+            <Lightbulb className="h-4 w-4" style={{ color: ALEGRA_GREEN }} />
+          </div>
+          <h3 className="text-sm font-bold leading-snug text-neutral-900">{op.title}</h3>
         </div>
-        <h3 className="text-sm font-bold leading-snug text-neutral-900">{op.title}</h3>
+        {op.link && (
+          <a
+            href={op.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex shrink-0 items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold transition-colors hover:bg-emerald-50"
+            style={{ borderColor: `${ALEGRA_GREEN}55`, color: ALEGRA_GREEN, backgroundColor: `${ALEGRA_GREEN}10` }}
+          >
+            <Sparkles className="h-3 w-3" /> Ver diseño <ExternalLink className="h-2.5 w-2.5" />
+          </a>
+        )}
       </div>
 
       <div className="mt-2 flex flex-wrap gap-1">
@@ -5441,18 +5585,6 @@ function OportunidadCard({
           Oportunidad
         </p>
         <p className="mt-1 text-xs leading-relaxed text-neutral-700">{op.oportunidad}</p>
-        {op.link && (
-          <a
-            href={op.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-3 inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[11px] font-semibold text-white transition-opacity hover:opacity-90"
-            style={{ backgroundColor: ALEGRA_GREEN }}
-          >
-            <ExternalLink className="h-3 w-3" />
-            Ver diseño
-          </a>
-        )}
       </div>
     </div>
   );
