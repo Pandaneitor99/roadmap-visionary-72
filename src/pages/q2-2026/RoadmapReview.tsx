@@ -5276,10 +5276,62 @@ function ContactosFuncDetail() {
         </div>
       </div>
 
+      {/* Prototipo Contactos */}
+      <PrototypeCard
+        title="Prototipo · Contactos"
+        description="Nueva experiencia de creación de contactos: campos unificados (nombre/apellido, municipio/departamento) y selección clara de cliente vs vendedor."
+        href="https://claude.ai/design/p/019dc695-1901-7519-a9d7-a74bd0eedfd0"
+        accent="#FF6B00"
+      />
     </div>
   );
 }
 
+function PrototypeCard({
+  title,
+  description,
+  href,
+  accent,
+}: {
+  title: string;
+  description: string;
+  href: string;
+  accent: string;
+}) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group block rounded-2xl border bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+      style={{ borderColor: `${accent}33` }}
+    >
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex items-start gap-3">
+          <div
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+            style={{ backgroundColor: `${accent}15` }}
+          >
+            <Sparkles className="h-4 w-4" style={{ color: accent }} />
+          </div>
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-wider" style={{ color: accent }}>
+              Prototipo
+            </p>
+            <h4 className="mt-0.5 text-sm font-bold text-neutral-900">{title}</h4>
+            <p className="mt-1 text-xs leading-relaxed text-neutral-600">{description}</p>
+          </div>
+        </div>
+        <div
+          className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-[11px] font-semibold transition-colors group-hover:opacity-90"
+          style={{ backgroundColor: `${accent}15`, color: accent }}
+        >
+          Ver prototipo <ExternalLink className="h-3 w-3" />
+        </div>
+      </div>
+    </a>
+  );
+}
 function OportunidadCard({
   op,
 }: {
