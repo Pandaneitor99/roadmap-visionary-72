@@ -5005,7 +5005,7 @@ function ItemsFuncDetail() {
               </p>
             </div>
             <Badge variant="outline" className="text-[10px]" style={{ borderColor: "#0066FF", color: "#0066FF" }}>
-              26 Abr: {itemsAppVsWebSeries[itemsAppVsWebSeries.length - 1].pct}%
+              19 Abr: {itemsAppVsWebSeries[itemsAppVsWebSeries.length - 1].pct}%
             </Badge>
           </div>
           <div className="h-[240px]">
