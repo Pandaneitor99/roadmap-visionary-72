@@ -3126,21 +3126,21 @@ const devInitiativesS4 = [
   },
   {
     title: "Búsqueda de documentos e información",
-    tags: ["Experiencia"],
+    tags: ["Engagement"],
     problem:
       "Los usuarios no pueden encontrar fácilmente sus documentos e información dentro de la app, generando fricción en la consulta.",
     krs: ["KR 1.3"],
   },
   {
     title: "Compartir y descargar remisiones",
-    tags: ["Adopción"],
+    tags: ["Adopción", "Engagement"],
     problem:
       "Falta la capacidad de compartir y descargar remisiones desde la app, limitando la operación móvil del usuario.",
     krs: ["KR 2.2"],
   },
   {
     title: "Llenado automático campos contactos",
-    tags: ["Experiencia", "Adopción"],
+    tags: ["Adopción", "Engagement"],
     problem:
       "El llenado manual de campos en contactos es tedioso y aumenta la fricción al crear un nuevo contacto.",
     krs: ["KR 2.1"],
