@@ -4955,9 +4955,20 @@ function Section5() {
           </div>
 
           <div className="mb-5 rounded-xl border border-orange-200 bg-orange-50/60 p-4">
-            <p className="text-[11px] font-bold uppercase tracking-wider text-orange-700">
-              Problema detectado
-            </p>
+            <div className="flex items-start justify-between gap-3 flex-wrap">
+              <p className="text-[11px] font-bold uppercase tracking-wider text-orange-700">
+                Problema detectado
+              </p>
+              <a
+                href="https://claude.ai/design/p/019dc058-65c2-700c-ba39-a56f47183a28?file=Alegra+Prototype.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold transition-colors hover:bg-white"
+                style={{ borderColor: "#FF6B0033", color: "#FF6B00", backgroundColor: "#FF6B0010" }}
+              >
+                <Sparkles className="h-3 w-3" /> Ver prototipo <ExternalLink className="h-2.5 w-2.5" />
+              </a>
+            </div>
             <p className="mt-2 text-sm leading-relaxed text-neutral-800">
               Los usuarios <strong>tienen que iniciar sesión dentro de la app</strong> para ver los planes y pagar, o <strong>ir a web</strong>. Este paso adicional fricciona la conversión a pago en Mobile App: <strong>Mobile web convierte 0.99% vs 1.17% en Mobile App</strong>.
             </p>
