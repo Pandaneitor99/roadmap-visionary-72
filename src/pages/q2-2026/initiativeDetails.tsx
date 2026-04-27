@@ -41,7 +41,6 @@ const busquedaFacturasUniques = [
   { mes: "Ene 26", v: 2878 },
   { mes: "Feb 26", v: 2859 },
   { mes: "Mar 26", v: 3220 },
-  { mes: "Abr 26", v: 2441 },
 ];
 const usoBuscador = [
   { sem: "22 Feb", v: 807 },
