@@ -649,7 +649,11 @@ export function HomeDetail() {
             const last = funcionalidadesHome[funcionalidadesHome.length - 1].QuickActions;
             return { label: "Quick Actions sem", value: last.toLocaleString("es-CO"), delta: 0, hideDelta: true, note: "Lanzado 12-Abr" };
           }
-          if (tab === "fnFactura") return { label: "Funnel actual", value: `${lastVal(funnelHomeFactura, "pct").toFixed(2)}%`, delta: pctDelta(funnelHomeFactura, "pct") };
+          if (tab === "itemsCreados") {
+            const last = itemsCreadosSemanal[itemsCreadosSemanal.length - 1].total;
+            const first = itemsCreadosSemanal[0].total;
+            return { label: "Ítems última sem", value: last.toLocaleString("es-CO"), delta: ((last - first) / first) * 100 };
+          }
           if (tab === "fnContactos") return { label: "Funnel actual", value: `${lastVal(funnelHomeContactos, "pct").toFixed(2)}%`, delta: pctDelta(funnelHomeContactos, "pct") };
           if (tab === "fnCotizacion") return { label: "Funnel actual", value: `${lastVal(funnelHomeCotizacion, "pct").toFixed(2)}%`, delta: pctDelta(funnelHomeCotizacion, "pct") };
           if (tab === "fnItem") return { label: "Funnel actual", value: `${lastVal(funnelHomeItem, "pct").toFixed(2)}%`, delta: pctDelta(funnelHomeItem, "pct") };
