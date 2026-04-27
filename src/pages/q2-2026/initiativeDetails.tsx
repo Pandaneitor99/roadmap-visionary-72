@@ -181,9 +181,8 @@ const itemsCreadosSemanal = [
   { sem: "19 Abr", total: 5370 },
 ];
 
-// Time to convert (segundos)
+// Time to convert (segundos) — refrescados desde Amplitude
 const ttcFactura = [
-  { sem: "22 Feb", s: 17183 },
   { sem: "01 Mar", s: 17673 },
   { sem: "08 Mar", s: 17021 },
   { sem: "15 Mar", s: 17578 },
@@ -191,18 +190,37 @@ const ttcFactura = [
   { sem: "29 Mar", s: 16113 },
   { sem: "05 Abr", s: 16500 },
   { sem: "12 Abr", s: 12295 },
-  { sem: "19 Abr", s: 12181 },
+  { sem: "19 Abr", s: 13455 },
 ];
 const ttcContactos = [
-  { sem: "22 Feb", s: 9420 },
-  { sem: "01 Mar", s: 9678 },
-  { sem: "08 Mar", s: 9512 },
-  { sem: "15 Mar", s: 9301 },
-  { sem: "22 Mar", s: 9183 },
-  { sem: "29 Mar", s: 8975 },
-  { sem: "05 Abr", s: 8602 },
-  { sem: "12 Abr", s: 6830 },
-  { sem: "19 Abr", s: 6420 },
+  { sem: "01 Mar", s: 36750 },
+  { sem: "08 Mar", s: 29666 },
+  { sem: "15 Mar", s: 26500 },
+  { sem: "22 Mar", s: 35000 },
+  { sem: "29 Mar", s: 26333 },
+  { sem: "05 Abr", s: 29125 },
+  { sem: "12 Abr", s: 21400 },
+  { sem: "19 Abr", s: 23555 },
+];
+const ttcCotizacion = [
+  { sem: "01 Mar", s: 16478 },
+  { sem: "08 Mar", s: 15362 },
+  { sem: "15 Mar", s: 13620 },
+  { sem: "22 Mar", s: 13821 },
+  { sem: "29 Mar", s: 12960 },
+  { sem: "05 Abr", s: 13926 },
+  { sem: "12 Abr", s: 10386 },
+  { sem: "19 Abr", s: 11870 },
+];
+const ttcItem = [
+  { sem: "01 Feb", s: 94250 },
+  { sem: "08 Feb", s: 69000 },
+  { sem: "15 Feb", s: 73000 },
+  { sem: "22 Feb", s: 54000 },
+  { sem: "01 Mar", s: 53000 },
+  { sem: "08 Mar", s: 50000 },
+  { sem: "15 Mar", s: 25750 },
+  { sem: "22 Mar", s: 35000 },
 ];
 
 // ===== UI Components =====
