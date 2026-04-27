@@ -5115,6 +5115,137 @@ function Section5() {
         </div>
       </div>
 
+      {/* Contadores */}
+      <div>
+        <div className="mb-5 flex items-center gap-2">
+          <div className="h-1 w-10 rounded-full" style={{ backgroundColor: "rgb(48,171,169)" }} />
+          <h2 className="text-lg font-bold text-neutral-900">Contadores</h2>
+          <span className="ml-2 text-xs text-neutral-500">Acciones más importantes · voces de campo</span>
+        </div>
+
+        <ContadoresSection />
+      </div>
+
+    </div>
+  );
+}
+
+function ContadoresSection() {
+  const TEAL = "rgb(48,171,169)";
+  const acciones = [
+    { evento: "ac-form-bill-visited", label: "Ver facturas de compra", pctMau: 26.6, veces: 31.5 },
+    { evento: "ac-bill-created", label: "Crear factura de compra", pctMau: 24.0, veces: 32.9 },
+    { evento: "ac-invoice-attempted", label: "Intentar facturar", pctMau: 17.8, veces: 30.4 },
+    { evento: "ac-invoice-managed", label: "Gestionar facturas", pctMau: 16.8, veces: 50.9 },
+    { evento: "ac-invoice-submitted", label: "Enviar factura", pctMau: 14.6, veces: 27.6 },
+    { evento: "ac-report-generated", label: "Generar reportes", pctMau: 13.9, veces: 30.8 },
+  ];
+  const maxPct = Math.max(...acciones.map((a) => a.pctMau));
+  const maxVeces = Math.max(...acciones.map((a) => a.veces));
+
+  return (
+    <div className="space-y-6">
+      {/* Power Features chart */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+        <div className="mb-4 flex items-start gap-3">
+          <div
+            className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+            style={{ backgroundColor: `${TEAL}20` }}
+          >
+            <Star className="h-4 w-4" style={{ color: TEAL }} />
+          </div>
+          <div>
+            <h3 className="text-base font-bold text-neutral-900">
+              Acciones más importantes para los Contadores
+            </h3>
+            <p className="mt-0.5 text-xs text-neutral-500">
+              Alto alcance + alta frecuencia · "Power Features" estrella
+            </p>
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          {acciones.map((a) => (
+            <div
+              key={a.evento}
+              className="rounded-xl border border-neutral-100 bg-neutral-50/40 p-3"
+            >
+              <div className="mb-2 flex items-baseline justify-between gap-3 flex-wrap">
+                <div className="min-w-0">
+                  <p className="text-sm font-bold text-neutral-900">{a.label}</p>
+                  <p className="text-[10px] font-mono text-neutral-500">{a.evento}</p>
+                </div>
+                <div className="flex gap-4 text-[11px]">
+                  <span style={{ color: TEAL }}>
+                    % MAU <strong className="text-sm">{a.pctMau}%</strong>
+                  </span>
+                  <span className="text-orange-600">
+                    Veces/usuario <strong className="text-sm">{a.veces}x</strong>
+                  </span>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="relative h-2 overflow-hidden rounded-full bg-neutral-200">
+                  <div
+                    className="absolute left-0 top-0 h-full rounded-full"
+                    style={{ width: `${(a.pctMau / maxPct) * 100}%`, backgroundColor: TEAL }}
+                  />
+                </div>
+                <div className="relative h-2 overflow-hidden rounded-full bg-neutral-200">
+                  <div
+                    className="absolute left-0 top-0 h-full rounded-full"
+                    style={{ width: `${(a.veces / maxVeces) * 100}%`, backgroundColor: "#FF6B00" }}
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Insight cards - voces de contadores */}
+      <div className="grid gap-4 md:grid-cols-2">
+        <div
+          className="rounded-2xl border bg-white p-5 shadow-sm"
+          style={{ borderColor: `${TEAL}40` }}
+        >
+          <div className="mb-3 flex items-center gap-2">
+            <div
+              className="flex h-8 w-8 items-center justify-center rounded-lg"
+              style={{ backgroundColor: `${TEAL}20` }}
+            >
+              <Sparkles className="h-4 w-4" style={{ color: TEAL }} />
+            </div>
+            <h4 className="text-sm font-bold text-neutral-900">
+              Recuperación instantánea de documentos
+            </h4>
+          </div>
+          <blockquote
+            className="rounded-lg border-l-4 bg-neutral-50/60 p-3 text-xs italic leading-relaxed text-neutral-700"
+            style={{ borderLeftColor: TEAL }}
+          >
+            "De repente, salgo de la oficina para una reunión y un cliente me pide un documento. Desde donde esté, lo descargo y se lo envío por WhatsApp."
+          </blockquote>
+        </div>
+
+        <div
+          className="rounded-2xl border bg-white p-5 shadow-sm"
+          style={{ borderColor: "#FF6B0040" }}
+        >
+          <div className="mb-3 flex items-center gap-2">
+            <div
+              className="flex h-8 w-8 items-center justify-center rounded-lg"
+              style={{ backgroundColor: "#FF6B0020" }}
+            >
+              <Sparkles className="h-4 w-4 text-orange-600" />
+            </div>
+            <h4 className="text-sm font-bold text-neutral-900">Generación de facturas</h4>
+          </div>
+          <blockquote className="rounded-lg border-l-4 border-orange-500 bg-neutral-50/60 p-3 text-xs italic leading-relaxed text-neutral-700">
+            "Si configuras tu producto y cliente, puedo generar una factura en segundos. Simplemente ingresas el cliente y el servicio, creas la factura y se envía por WhatsApp en segundos."
+          </blockquote>
+        </div>
+      </div>
     </div>
   );
 }
