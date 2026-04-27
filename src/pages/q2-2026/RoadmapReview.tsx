@@ -23,7 +23,7 @@ import {
 
 import { initiativeDetailMap } from "./initiativeDetails";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import visionAppMockup from "@/assets/vision-app-mockup.png";
+
 
 const sections = [
   { id: 1, title: "Visión estratégica", short: "Visión" },
@@ -189,23 +189,7 @@ function Section1() {
           style={{ backgroundColor: ALEGRA_GREEN }}
         />
 
-        {/* Imagen difuminada de fondo */}
-        <div className="pointer-events-none absolute right-0 top-0 hidden h-full w-1/2 md:block">
-          <img
-            src={visionAppMockup}
-            alt=""
-            aria-hidden="true"
-            className="h-full w-full object-cover object-center opacity-40"
-            style={{ filter: "blur(6px)" }}
-          />
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                "linear-gradient(to right, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.7) 40%, rgba(255,255,255,0.4) 100%)",
-            }}
-          />
-        </div>
+        {/* Imagen de fondo eliminada */}
 
         <div className="relative">
           <div className="flex items-center gap-2">
@@ -3597,6 +3581,14 @@ function SoporteFuncDetail() {
           </a>
         </div>
       </div>
+
+      {/* Prototipo Soporte */}
+      <PrototypeCard
+        title="Prototipo · Soporte"
+        description="Gestión de tickets y reclamos directamente desde la app — sin necesidad de saltar a la web."
+        href="https://claude.ai/design/p/9a44db74-0c3c-4b5a-9c38-c22c7b9d0ba0"
+        accent="#DC2626"
+      />
     </div>
   );
 }
@@ -3658,7 +3650,7 @@ const funnelPorPais: Record<string, { perfil: number; onboarding: number; pql: n
   Colombia: { perfil: 1236, onboarding: 1077, pql: 271, logo: 21, conv: 1.70 },
   Mexico: { perfil: 569, onboarding: 498, pql: 78, logo: 5, conv: 0.88 },
   "Costa Rica": { perfil: 126, onboarding: 111, pql: 25, logo: 2, conv: 1.59 },
-  Peru: { perfil: 130, onboarding: 108, pql: 41, logo: 0, conv: 0 },
+  "Rep. Dominicana": { perfil: 938, onboarding: 812, pql: 198, logo: 16, conv: 1.71 },
 };
 
 // --- Perfil por país (chart 42w27hn3) - totales últimas 24 semanas (sin USA) ---
@@ -3971,7 +3963,7 @@ const COUNTRY_COLORS: Record<string, string> = {
   Colombia: ALEGRA_GREEN,
   Mexico: "#0066FF",
   "Costa Rica": "#FF6B00",
-  Peru: "#A855F7",
+  "Rep. Dominicana": "#A855F7",
 };
 
 function CountrySelectorCards({
@@ -4052,7 +4044,7 @@ function FunnelByCountryCard({
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">App Mobile · por país</p>
           <h3 className="mt-1 text-base font-bold text-neutral-900">Funnel Entero App Mobile por País</h3>
           <p className="mt-1 text-xs text-neutral-500">
-            Amplitude · chart tnh09978 · This Year · entrepreneur · CO · MX · CR · PE
+            Amplitude · chart tnh09978 · This Year · entrepreneur · CO · MX · CR · DOM
           </p>
         </div>
         <a
@@ -4579,31 +4571,40 @@ const funcionalidadesCards: FuncCard[] = [
   { id: "items", title: "Items", short: "Participación, intención y campos faltantes" },
 ];
 
-// % de participación de App en Items — datos reales Amplitude (chart 1barvuzk)
-// Fórmula: app-item-created / (app-item-created + ac-item-created)
+// Funnel Home → New Item — chart w81wjr5i (semanal, last 12 weeks · cohort Pagos)
+// Conversión semanal: app-home-visited → app-new-item-visited
 const itemsAppVsWebSeries = [
-  { mes: "Abr '25", pct: 3.45 },
-  { mes: "May '25", pct: 3.37 },
-  { mes: "Jun '25", pct: 3.54 },
-  { mes: "Jul '25", pct: 4.07 },
-  { mes: "Ago '25", pct: 3.39 },
-  { mes: "Sep '25", pct: 3.60 },
-  { mes: "Oct '25", pct: 3.60 },
-  { mes: "Nov '25", pct: 3.61 },
-  { mes: "Dic '25", pct: 3.33 },
-  { mes: "Ene '26", pct: 3.99 },
-  { mes: "Feb '26", pct: 3.95 },
-  { mes: "Mar '26", pct: 3.85 },
-  { mes: "Abr '26", pct: 4.31 },
+  { mes: "01 Feb", pct: 3.61 },
+  { mes: "08 Feb", pct: 3.30 },
+  { mes: "15 Feb", pct: 3.38 },
+  { mes: "22 Feb", pct: 3.27 },
+  { mes: "01 Mar", pct: 3.44 },
+  { mes: "08 Mar", pct: 3.68 },
+  { mes: "15 Mar", pct: 3.47 },
+  { mes: "22 Mar", pct: 3.15 },
+  { mes: "29 Mar", pct: 2.64 },
+  { mes: "05 Abr", pct: 3.55 },
+  { mes: "12 Abr", pct: 8.21 },
+  { mes: "19 Abr", pct: 7.08 },
+  { mes: "26 Abr", pct: 2.91 },
 ];
 
-// Intención de creación de Items - App (chart 8a3546k8, funnel app-new-item-visited → app-item-created)
-// % de conversión por mes
+// Intención de creación de Items — chart wh2ltvtf (semanal, last 12 weeks · all users)
+// Conversión: app-new-item-visited → app-item-created
 const itemsIntencion = [
-  { mes: "Ene '26", conversion: 77.7 },
-  { mes: "Feb '26", conversion: 78.1 },
-  { mes: "Mar '26", conversion: 75.6 },
-  { mes: "Abr '26", conversion: 65.1 },
+  { mes: "01 Feb", conversion: 64.13 },
+  { mes: "08 Feb", conversion: 70.53 },
+  { mes: "15 Feb", conversion: 65.54 },
+  { mes: "22 Feb", conversion: 64.75 },
+  { mes: "01 Mar", conversion: 66.67 },
+  { mes: "08 Mar", conversion: 70.38 },
+  { mes: "15 Mar", conversion: 66.18 },
+  { mes: "22 Mar", conversion: 61.65 },
+  { mes: "29 Mar", conversion: 65.69 },
+  { mes: "05 Abr", conversion: 52.95 },
+  { mes: "12 Abr", conversion: 36.36 },
+  { mes: "19 Abr", conversion: 39.46 },
+  { mes: "26 Abr", conversion: 36.13 },
 ];
 
 // % de participación de App en Items (último valor consolidado)
@@ -4861,6 +4862,30 @@ function Section5() {
             </div>
             <SoporteFuncDetail />
           </div>
+
+          {/* Onboarding */}
+          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+            <div className="mb-5 flex items-start gap-3">
+              <div
+                className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+                style={{ backgroundColor: `${ALEGRA_GREEN}15` }}
+              >
+                <Sparkles className="h-4 w-4" style={{ color: ALEGRA_GREEN }} />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-neutral-900">Onboarding</h3>
+                <p className="mt-0.5 text-xs text-neutral-500">
+                  Nueva experiencia de bienvenida y activación
+                </p>
+              </div>
+            </div>
+            <PrototypeCard
+              title="Prototipo · Onboarding"
+              description="Rediseño del flujo de onboarding para acelerar Perfil → MQL → PQL en la app."
+              href="https://claude.ai/design/p/019dc058-65c2-700c-ba39-a56f47183a28?file=Alegra+Prototype.html"
+              accent={ALEGRA_GREEN}
+            />
+          </div>
         </div>
       </div>
 
@@ -5015,19 +5040,19 @@ function ItemsFuncDetail() {
     <div className="space-y-5">
       {/* Charts lado a lado */}
       <div className="grid gap-4 lg:grid-cols-2">
-        {/* % participación App en Items */}
+        {/* Funnel Home → New Item (chart w81wjr5i) */}
         <div className="rounded-xl border border-neutral-200 bg-white p-4">
           <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
             <div>
               <h4 className="text-sm font-bold text-neutral-900">
-                % de participación de App en Items
+                Funnel Home → New Item
               </h4>
               <p className="mt-0.5 text-xs text-neutral-500">
-                % de ítems creados desde la App vs total (App + Web) · Abr '25 → Abr '26
+                % de conversión: app-home-visited → app-new-item-visited · cohort Pagos · últ. 12 semanas
               </p>
             </div>
             <Badge variant="outline" className="text-[10px]" style={{ borderColor: "#0066FF", color: "#0066FF" }}>
-              Abr 2026: {itemsAppVsWebSeries[itemsAppVsWebSeries.length - 1].pct}%
+              26 Abr: {itemsAppVsWebSeries[itemsAppVsWebSeries.length - 1].pct}%
             </Badge>
           </div>
           <div className="h-[240px]">
@@ -5035,37 +5060,42 @@ function ItemsFuncDetail() {
               <LineChart data={itemsAppVsWebSeries} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
                 <XAxis dataKey="mes" tick={{ fontSize: 10 }} stroke="#6b7280" />
-                <YAxis tick={{ fontSize: 11 }} stroke="#6b7280" tickFormatter={(v) => `${v}%`} domain={[0, 6]} />
+                <YAxis tick={{ fontSize: 11 }} stroke="#6b7280" tickFormatter={(v) => `${v}%`} domain={[0, 10]} />
                 <Tooltip formatter={(v: number) => `${v.toFixed(2)}%`} />
                 <Line type="monotone" dataKey="pct" stroke="#0066FF" strokeWidth={3} dot={{ r: 3 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
-          <p className="mt-2 text-[11px] text-neutral-500">
-            Fuente: Amplitude · se mantiene plana entre 3.3% – 4.3% durante 12 meses, sin tendencia de crecimiento.
-          </p>
+          <a
+            href="https://app.amplitude.com/analytics/alegra/chart/w81wjr5i"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-500 hover:text-neutral-800"
+          >
+            <ExternalLink className="h-3 w-3" /> Amplitude · w81wjr5i · pico 8.2% mid-Abr, cae a 2.9% al cierre
+          </a>
         </div>
 
-        {/* Intención de creación de Items - App (funnel) */}
+        {/* Intención de creación de Items (chart wh2ltvtf, semanal) */}
         <div className="rounded-xl border border-neutral-200 bg-white p-4">
           <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
             <div>
               <h4 className="text-sm font-bold text-neutral-900">
-                Intención de creación de Items — App
+                Intención de creación de Items
               </h4>
               <p className="mt-0.5 text-xs text-neutral-500">
-                % de conversión: app-new-item-visited → app-item-created
+                % de conversión: app-new-item-visited → app-item-created · all users · últ. 12 semanas
               </p>
             </div>
             <Badge variant="outline" className="text-[10px]" style={{ borderColor: ALEGRA_GREEN, color: ALEGRA_GREEN }}>
-              Abr 2026: {itemsIntencion[itemsIntencion.length - 1].conversion}%
+              26 Abr: {itemsIntencion[itemsIntencion.length - 1].conversion.toFixed(1)}%
             </Badge>
           </div>
           <div className="h-[240px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={itemsIntencion} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
-                <XAxis dataKey="mes" tick={{ fontSize: 11 }} stroke="#6b7280" />
+                <XAxis dataKey="mes" tick={{ fontSize: 10 }} stroke="#6b7280" />
                 <YAxis tick={{ fontSize: 11 }} stroke="#6b7280" tickFormatter={(v) => `${v}%`} domain={[0, 100]} />
                 <Tooltip formatter={(v: number) => `${v.toFixed(1)}%`} />
                 <Bar dataKey="conversion" fill={ALEGRA_GREEN} radius={[4, 4, 0, 0]} />
@@ -5078,7 +5108,7 @@ function ItemsFuncDetail() {
             rel="noopener noreferrer"
             className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-500 hover:text-neutral-800"
           >
-            <ExternalLink className="h-3 w-3" /> Amplitude · 8a3546k8 · conversión App ~75%, cae a 65% en Abr
+            <ExternalLink className="h-3 w-3" /> Amplitude · wh2ltvtf · cae de ~66% a 36% en abril
           </a>
         </div>
       </div>
@@ -5278,10 +5308,62 @@ function ContactosFuncDetail() {
         </div>
       </div>
 
+      {/* Prototipo Contactos */}
+      <PrototypeCard
+        title="Prototipo · Contactos"
+        description="Nueva experiencia de creación de contactos: campos unificados (nombre/apellido, municipio/departamento) y selección clara de cliente vs vendedor."
+        href="https://claude.ai/design/p/019dc695-1901-7519-a9d7-a74bd0eedfd0"
+        accent="#FF6B00"
+      />
     </div>
   );
 }
 
+function PrototypeCard({
+  title,
+  description,
+  href,
+  accent,
+}: {
+  title: string;
+  description: string;
+  href: string;
+  accent: string;
+}) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group block rounded-2xl border bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+      style={{ borderColor: `${accent}33` }}
+    >
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex items-start gap-3">
+          <div
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+            style={{ backgroundColor: `${accent}15` }}
+          >
+            <Sparkles className="h-4 w-4" style={{ color: accent }} />
+          </div>
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-wider" style={{ color: accent }}>
+              Prototipo
+            </p>
+            <h4 className="mt-0.5 text-sm font-bold text-neutral-900">{title}</h4>
+            <p className="mt-1 text-xs leading-relaxed text-neutral-600">{description}</p>
+          </div>
+        </div>
+        <div
+          className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-[11px] font-semibold transition-colors group-hover:opacity-90"
+          style={{ backgroundColor: `${accent}15`, color: accent }}
+        >
+          Ver prototipo <ExternalLink className="h-3 w-3" />
+        </div>
+      </div>
+    </a>
+  );
+}
 function OportunidadCard({
   op,
 }: {
