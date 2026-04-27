@@ -4589,7 +4589,7 @@ function Section5() {
           <h2 className="text-lg font-bold text-neutral-900">Quién es nuestro mejor usuario</h2>
         </div>
 
-        <div className="grid gap-5 lg:grid-cols-4">
+        <div className="grid gap-5 lg:grid-cols-5">
           {/* Bloque texto (3/4) */}
           <div
             className="relative overflow-hidden rounded-2xl border border-emerald-100 bg-white p-7 shadow-sm md:p-8 lg:col-span-3"
