@@ -3544,18 +3544,19 @@ function SoporteFuncDetail() {
 //   j30yk1tu  Eventos Onboarding Semanal (Perfil/MQL/PQL)
 
 // --- Funnels combinados: Todos vs Mobile web (con PQL) ---
+// Datos refresh Amplitude (tgvpb7n5 + ozsknaof, This Year, segment entrepreneur)
 const funnelComboPQL = [
-  { step: "Perfil", todosCount: 3260, todosPct: 100, mobileCount: 10391, mobilePct: 100 },
-  { step: "Onboarding", todosCount: 2823, todosPct: 86.6, mobileCount: 6849, mobilePct: 65.9 },
-  { step: "PQL · Intento factura", todosCount: 1398, todosPct: 42.9, mobileCount: 1585, mobilePct: 15.3 },
-  { step: "Logo · Pago", todosCount: 39, todosPct: 1.20, mobileCount: 104, mobilePct: 1.00 },
+  { step: "Perfil", todosCount: 3335, todosPct: 100, mobileCount: 10567, mobilePct: 100 },
+  { step: "Onboarding", todosCount: 2886, todosPct: 86.54, mobileCount: 6960, mobilePct: 65.87 },
+  { step: "PQL · Intento factura", todosCount: 1005, todosPct: 30.13, mobileCount: 1593, mobilePct: 15.08 },
+  { step: "Logo · Pago", todosCount: 39, todosPct: 1.17, mobileCount: 105, mobilePct: 0.99 },
 ];
 
-// --- Funnels combinados sin PQL: Todos vs Mobile web ---
+// --- Funnels combinados sin PQL: Mobile App vs Mobile web ---
 const funnelComboSinPQL = [
-  { step: "Perfil", todosCount: 3260, todosPct: 100, mobileCount: 10391, mobilePct: 100 },
-  { step: "Onboarding", todosCount: 2823, todosPct: 86.6, mobileCount: 6849, mobilePct: 65.9 },
-  { step: "Logo · Pago", todosCount: 64, todosPct: 1.96, mobileCount: 287, mobilePct: 2.76 },
+  { step: "Perfil", todosCount: 3335, todosPct: 100, mobileCount: 10567, mobilePct: 100 },
+  { step: "Onboarding", todosCount: 2886, todosPct: 86.54, mobileCount: 6960, mobilePct: 65.87 },
+  { step: "Logo · Pago", todosCount: 39, todosPct: 1.17, mobileCount: 105, mobilePct: 0.99 },
 ];
 
 // --- Tendencias mensuales actualizadas (Amplitude refresh) ---
