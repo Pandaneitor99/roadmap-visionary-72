@@ -627,6 +627,7 @@ export function HomeDetail() {
         options={[
           { id: "funcionalidades", label: "Funcionalidades home" },
           { id: "quick", label: "Quick Actions" },
+          { id: "itemsCreados", label: "Ítems creados / sem" },
           { id: "fnFactura", label: "Funnel → Factura" },
           { id: "fnContactos", label: "Funnel → Contactos" },
           { id: "fnCotizacion", label: "Funnel → Cotización" },
