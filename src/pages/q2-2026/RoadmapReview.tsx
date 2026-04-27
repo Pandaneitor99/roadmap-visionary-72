@@ -189,23 +189,7 @@ function Section1() {
           style={{ backgroundColor: ALEGRA_GREEN }}
         />
 
-        {/* Imagen difuminada de fondo */}
-        <div className="pointer-events-none absolute right-0 top-0 hidden h-full w-1/2 md:block">
-          <img
-            src={visionAppMockup}
-            alt=""
-            aria-hidden="true"
-            className="h-full w-full object-cover object-center opacity-40"
-            style={{ filter: "blur(6px)" }}
-          />
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                "linear-gradient(to right, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.7) 40%, rgba(255,255,255,0.4) 100%)",
-            }}
-          />
-        </div>
+        {/* Imagen de fondo eliminada */}
 
         <div className="relative">
           <div className="flex items-center gap-2">
