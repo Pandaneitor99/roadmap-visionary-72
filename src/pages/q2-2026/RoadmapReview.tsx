@@ -5164,39 +5164,37 @@ function ContadoresSection() {
           </div>
         </div>
 
-        <div className="space-y-3">
-          {acciones.map((a) => (
+        <div className="overflow-hidden rounded-xl border border-neutral-100">
+          <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 border-b border-neutral-100 bg-neutral-50 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-neutral-500">
+            <span>Acción</span>
+            <span className="w-12 text-right">% MAU</span>
+            <span>Veces/usuario</span>
+          </div>
+          {acciones.map((a, i) => (
             <div
               key={a.evento}
-              className="rounded-xl border border-neutral-100 bg-neutral-50/40 p-3"
+              className={cn(
+                "grid grid-cols-[1fr_auto_1fr] items-center gap-3 px-3 py-1.5",
+                i !== acciones.length - 1 && "border-b border-neutral-100"
+              )}
             >
-              <div className="mb-2 flex items-baseline justify-between gap-3 flex-wrap">
-                <div className="min-w-0">
-                  <p className="text-sm font-bold text-neutral-900">{a.label}</p>
-                  <p className="text-[10px] font-mono text-neutral-500">{a.evento}</p>
-                </div>
-                <div className="flex gap-4 text-[11px]">
-                  <span style={{ color: TEAL }}>
-                    % MAU <strong className="text-sm">{a.pctMau}%</strong>
-                  </span>
-                  <span className="text-orange-600">
-                    Veces/usuario <strong className="text-sm">{a.veces}x</strong>
-                  </span>
-                </div>
+              <div className="min-w-0">
+                <p className="truncate text-xs font-semibold text-neutral-900">{a.label}</p>
+                <p className="truncate text-[9px] font-mono text-neutral-400">{a.evento}</p>
               </div>
-              <div className="grid grid-cols-2 gap-2">
-                <div className="relative h-2 overflow-hidden rounded-full bg-neutral-200">
-                  <div
-                    className="absolute left-0 top-0 h-full rounded-full"
-                    style={{ width: `${(a.pctMau / maxPct) * 100}%`, backgroundColor: TEAL }}
-                  />
-                </div>
-                <div className="relative h-2 overflow-hidden rounded-full bg-neutral-200">
+              <span className="w-12 text-right text-xs font-bold" style={{ color: TEAL }}>
+                {a.pctMau}%
+              </span>
+              <div className="flex items-center gap-2">
+                <div className="relative h-1.5 flex-1 overflow-hidden rounded-full bg-neutral-100">
                   <div
                     className="absolute left-0 top-0 h-full rounded-full"
                     style={{ width: `${(a.veces / maxVeces) * 100}%`, backgroundColor: "#FF6B00" }}
                   />
                 </div>
+                <span className="w-10 text-right text-[11px] font-bold text-orange-600">
+                  {a.veces}x
+                </span>
               </div>
             </div>
           ))}
