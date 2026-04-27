@@ -5049,32 +5049,7 @@ function ItemsFuncDetail() {
         </div>
       </div>
 
-      {/* Card destacada: % participación de App en Items */}
-      <div
-        className="rounded-2xl border p-5 shadow-sm"
-        style={{
-          borderColor: "#0066FF33",
-          background: "linear-gradient(135deg, rgba(0,102,255,0.06), rgba(0,102,255,0.02))",
-        }}
-      >
-        <div className="flex items-center justify-between gap-4 flex-wrap">
-          <div>
-            <p className="text-[10px] font-bold uppercase tracking-wider" style={{ color: "#0066FF" }}>
-              % de participación de App en Items
-            </p>
-            <p className="mt-1 text-xs text-neutral-600">
-              App vs total (App + Web) · ítems creados — últimos 30 días
-            </p>
-          </div>
-          <div className="text-right">
-            <p className="text-3xl font-bold" style={{ color: "#0066FF" }}>
-              {ITEMS_APP_PARTICIPACION.toFixed(2)}%
-            </p>
-            <p className="text-[10px] text-neutral-500">de los ítems se crean en la app</p>
-          </div>
-        </div>
-      </div>
-
+      {/* % participación movido al header del módulo Items */}
       {/* Campos faltantes y UX deficiente */}
       <div className="grid gap-4 md:grid-cols-2">
         <div className="rounded-xl border border-orange-100 bg-orange-50/40 p-4">
