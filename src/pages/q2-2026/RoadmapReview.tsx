@@ -4959,7 +4959,7 @@ function Section5() {
               Problema detectado
             </p>
             <p className="mt-2 text-sm leading-relaxed text-neutral-800">
-              Los usuarios <strong>tienen que iniciar sesión dentro de la app</strong> para ver los planes y pagar, o <strong>ir a web</strong>. Este paso adicional fricciona la conversión a pago en Mobile App: <strong>Mobile web convierte 2.76% vs 1.96% en Mobile App</strong>.
+              Los usuarios <strong>tienen que iniciar sesión dentro de la app</strong> para ver los planes y pagar, o <strong>ir a web</strong>. Este paso adicional fricciona la conversión a pago en Mobile App: <strong>Mobile web convierte 0.99% vs 1.17% en Mobile App</strong>.
             </p>
           </div>
 
