@@ -1647,29 +1647,93 @@ function BaseSosView() {
         <BaseSosPorPais />
       </div>
 
-      {/* MRR placeholder */}
+      {/* MRR BASE - aporte real (si la app cerrara, los BASE dejarían de pagar) */}
       <div>
-        <div className="mb-4 flex items-baseline gap-3">
-          <h3 className="text-lg font-bold text-neutral-900">MRR</h3>
+        <div className="mb-4 flex items-baseline gap-3 flex-wrap">
+          <h3 className="text-lg font-bold text-neutral-900">MRR BASE</h3>
           <span className="text-xs text-neutral-500">
-            Aporte de MRR de BASE y SOS · próximamente
+            Aporte de MRR de los usuarios BASE — usan la app como su sistema principal, si la app cerrara dejarían de pagar
           </span>
         </div>
         <div className="grid gap-6 lg:grid-cols-2">
-          <div className="flex min-h-[220px] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-neutral-200 bg-white/60 p-8 text-center">
-            <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-400">
-              MRR BASE
+          {/* MRR USD */}
+          <div className="rounded-2xl border border-neutral-200 bg-white/80 p-6 shadow-sm backdrop-blur-md">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
+              Promedio MRR (USD)
             </p>
-            <p className="mt-2 text-sm text-neutral-500">
-              Espacio reservado para el aporte de MRR del segmento BASE (próximamente)
-            </p>
+            <div className="mt-4 space-y-3">
+              <div className="flex items-center justify-between border-b border-neutral-100 pb-2">
+                <span className="text-sm text-neutral-600">Q4-2025 · Core</span>
+                <span className="text-sm font-semibold text-neutral-900">$10,054</span>
+              </div>
+              <div className="flex items-center justify-between border-b border-neutral-100 pb-2">
+                <span className="text-sm text-neutral-600">Q1-2026 · Core</span>
+                <span className="text-sm font-semibold text-neutral-900">$11,021</span>
+              </div>
+              <div className="flex items-center justify-between border-b border-neutral-100 pb-2">
+                <span className="text-sm font-medium text-[rgb(48,171,169)]">Variación Core</span>
+                <span className="text-sm font-bold text-[#00C853]">+9.61%</span>
+              </div>
+              <div className="flex items-center justify-between border-b border-neutral-100 pb-2 pt-2">
+                <span className="text-sm text-neutral-600">Q4-2025 · Lite</span>
+                <span className="text-sm font-semibold text-neutral-900">$17,446</span>
+              </div>
+              <div className="flex items-center justify-between border-b border-neutral-100 pb-2">
+                <span className="text-sm text-neutral-600">Q1-2026 · Lite</span>
+                <span className="text-sm font-semibold text-neutral-900">$18,601</span>
+              </div>
+              <div className="flex items-center justify-between border-b border-neutral-100 pb-2">
+                <span className="text-sm font-medium text-[rgb(48,171,169)]">Variación Lite</span>
+                <span className="text-sm font-bold text-[#00C853]">+6.62%</span>
+              </div>
+              <div className="mt-3 flex items-center justify-between rounded-lg bg-neutral-50 px-3 py-2">
+                <span className="text-sm font-bold text-neutral-900">Total Q4-2025</span>
+                <span className="text-base font-bold text-neutral-900">$27,500</span>
+              </div>
+              <div className="flex items-center justify-between rounded-lg bg-neutral-50 px-3 py-2">
+                <span className="text-sm font-bold text-neutral-900">Total Q1-2026</span>
+                <span className="text-base font-bold text-neutral-900">$29,621</span>
+              </div>
+              <div className="flex items-center justify-between rounded-lg bg-[#00C853]/10 px-3 py-2">
+                <span className="text-sm font-bold text-[#00785A]">Variación Total</span>
+                <span className="text-base font-bold text-[#00C853]">+7.71%</span>
+              </div>
+            </div>
           </div>
-          <div className="flex min-h-[220px] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-neutral-200 bg-white/60 p-8 text-center">
-            <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-400">
-              MRR SOS
+
+          {/* Mix Core / Lite */}
+          <div className="rounded-2xl border border-neutral-200 bg-white/80 p-6 shadow-sm backdrop-blur-md">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
+              Mix MRR · Core vs Lite
             </p>
-            <p className="mt-2 text-sm text-neutral-500">
-              Espacio reservado para el aporte de MRR del segmento SOS (próximamente)
+            <div className="mt-4 space-y-3">
+              <div className="flex items-center justify-between border-b border-neutral-100 pb-2">
+                <span className="text-sm text-neutral-600">MRR Core · Q4-2025</span>
+                <span className="text-sm font-semibold text-neutral-900">36.56%</span>
+              </div>
+              <div className="flex items-center justify-between border-b border-neutral-100 pb-2">
+                <span className="text-sm text-neutral-600">MRR Core · Q1-2026</span>
+                <span className="text-sm font-semibold text-neutral-900">37.21%</span>
+              </div>
+              <div className="flex items-center justify-between border-b border-neutral-100 pb-2">
+                <span className="text-sm font-medium text-[rgb(48,171,169)]">Variación Core</span>
+                <span className="text-sm font-bold text-[#00C853]">+1.76%</span>
+              </div>
+              <div className="flex items-center justify-between border-b border-neutral-100 pb-2 pt-2">
+                <span className="text-sm text-neutral-600">MRR Lite · Q4-2025</span>
+                <span className="text-sm font-semibold text-neutral-900">63.44%</span>
+              </div>
+              <div className="flex items-center justify-between border-b border-neutral-100 pb-2">
+                <span className="text-sm text-neutral-600">MRR Lite · Q1-2026</span>
+                <span className="text-sm font-semibold text-neutral-900">62.79%</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-[rgb(48,171,169)]">Variación Lite</span>
+                <span className="text-sm font-bold text-[#FF6B00]">-1.02%</span>
+              </div>
+            </div>
+            <p className="mt-4 text-[11px] text-neutral-400">
+              El mix se mantiene estable, con un leve aumento del peso de Core en el MRR total de los usuarios BASE.
             </p>
           </div>
         </div>
