@@ -649,27 +649,89 @@ export function ContactosDetail() {
   );
 }
 
+// Tabs grouped by category for HomeDetail
+const HOME_TAB_GROUPS: { id: string; label: string; tabs: { id: string; label: string }[] }[] = [
+  {
+    id: "func",
+    label: "Funcionalidad",
+    tabs: [
+      { id: "funcionalidades", label: "Funcionalidades home" },
+      { id: "quick", label: "Quick Actions" },
+      { id: "quickBreakdown", label: "Quick Actions · Distribución" },
+    ],
+  },
+  {
+    id: "homefunc",
+    label: "Home — Funcionalidad",
+    tabs: [
+      { id: "fnFactura", label: "Home → Factura" },
+      { id: "fnContactos", label: "Home → Contactos" },
+      { id: "fnCotizacion", label: "Home → Cotización" },
+      { id: "fnItem", label: "Home → Item" },
+    ],
+  },
+  {
+    id: "items",
+    label: "Resultados",
+    tabs: [{ id: "itemsCreados", label: "Ítems creados / sem" }],
+  },
+  {
+    id: "ttc",
+    label: "Tiempo de conversión",
+    tabs: [
+      { id: "ttcFactura", label: "TTC → Factura" },
+      { id: "ttcContactos", label: "TTC → Contactos" },
+      { id: "ttcCotizacion", label: "TTC → Cotización" },
+      { id: "ttcItem", label: "TTC → Item" },
+    ],
+  },
+];
+
+const GROUP_COLORS: Record<string, string> = {
+  func: ALEGRA_GREEN,
+  homefunc: BLUE,
+  items: "#9333EA",
+  ttc: ORANGE,
+};
+
 export function HomeDetail() {
   const [tab, setTab] = useState("funcionalidades");
+  const activeGroup = HOME_TAB_GROUPS.find((g) => g.tabs.some((t) => t.id === tab))?.id ?? "func";
+
   return (
     <div className="space-y-4">
-      <Tabs
-        active={tab}
-        onChange={setTab}
-        options={[
-          { id: "funcionalidades", label: "Funcionalidades home" },
-          { id: "quick", label: "Quick Actions" },
-          { id: "itemsCreados", label: "Ítems creados / sem" },
-          { id: "fnFactura", label: "Funnel → Factura" },
-          { id: "fnContactos", label: "Funnel → Contactos" },
-          { id: "fnCotizacion", label: "Funnel → Cotización" },
-          { id: "fnItem", label: "Funnel → Item" },
-          { id: "ttcFactura", label: "TTC → Factura" },
-          { id: "ttcContactos", label: "TTC → Contactos" },
-          { id: "ttcCotizacion", label: "TTC → Cotización" },
-          { id: "ttcItem", label: "TTC → Item" },
-        ]}
-      />
+      {/* Category tags + tab pills */}
+      <div className="space-y-3">
+        <div className="flex flex-wrap gap-2">
+          {HOME_TAB_GROUPS.map((g) => {
+            const isActive = activeGroup === g.id;
+            const color = GROUP_COLORS[g.id];
+            return (
+              <button
+                key={g.id}
+                onClick={() => setTab(g.tabs[0].id)}
+                className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-bold uppercase tracking-wider transition-all ${
+                  isActive
+                    ? "text-white shadow-sm"
+                    : "border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300"
+                }`}
+                style={isActive ? { backgroundColor: color, borderColor: color } : undefined}
+              >
+                <span
+                  className="h-1.5 w-1.5 rounded-full"
+                  style={{ backgroundColor: isActive ? "#fff" : color }}
+                />
+                {g.label}
+              </button>
+            );
+          })}
+        </div>
+        <Tabs
+          active={tab}
+          onChange={setTab}
+          options={HOME_TAB_GROUPS.find((g) => g.id === activeGroup)!.tabs}
+        />
+      </div>
 
       {(() => {
         const stat = (() => {
@@ -678,23 +740,65 @@ export function HomeDetail() {
             return { label: "Sidebar última sem", value: last.Sidebar.toLocaleString("es-CO"), delta: ((last.Sidebar - funcionalidadesHome[0].Sidebar) / funcionalidadesHome[0].Sidebar) * 100 };
           }
           if (tab === "quick") {
-            const last = funcionalidadesHome[funcionalidadesHome.length - 1].QuickActions;
+            const last = quickActionsTotals[quickActionsTotals.length - 1].v;
             return { label: "Quick Actions sem", value: last.toLocaleString("es-CO"), delta: 0, hideDelta: true, note: "Lanzado 12-Abr" };
+          }
+          if (tab === "quickBreakdown") {
+            const total = quickActionsBreakdown.reduce((s, x) => s + x.value, 0);
+            return { label: "Total acciones", value: total.toLocaleString("es-CO"), delta: 0, hideDelta: true, note: "Últimas 4 semanas" };
           }
           if (tab === "itemsCreados") {
             const last = itemsCreadosSemanal[itemsCreadosSemanal.length - 1].total;
             const first = itemsCreadosSemanal[0].total;
             return { label: "Ítems última sem", value: last.toLocaleString("es-CO"), delta: ((last - first) / first) * 100 };
           }
+          if (tab === "fnFactura") return { label: "Funnel actual", value: `${lastVal(funnelHomeFactura, "pct").toFixed(2)}%`, delta: pctDelta(funnelHomeFactura, "pct") };
           if (tab === "fnContactos") return { label: "Funnel actual", value: `${lastVal(funnelHomeContactos, "pct").toFixed(2)}%`, delta: pctDelta(funnelHomeContactos, "pct") };
           if (tab === "fnCotizacion") return { label: "Funnel actual", value: `${lastVal(funnelHomeCotizacion, "pct").toFixed(2)}%`, delta: pctDelta(funnelHomeCotizacion, "pct") };
           if (tab === "fnItem") return { label: "Funnel actual", value: `${lastVal(funnelHomeItem, "pct").toFixed(2)}%`, delta: pctDelta(funnelHomeItem, "pct") };
           if (tab === "ttcFactura") return { label: "TTC actual", value: `${lastVal(ttcFactura, "s").toLocaleString("es-CO")}s`, delta: pctDelta(ttcFactura, "s"), invert: true };
           if (tab === "ttcContactos") return { label: "TTC actual", value: `${lastVal(ttcContactos, "s").toLocaleString("es-CO")}s`, delta: pctDelta(ttcContactos, "s"), invert: true };
+          if (tab === "ttcCotizacion") return { label: "TTC actual", value: `${lastVal(ttcCotizacion, "s").toLocaleString("es-CO")}s`, delta: pctDelta(ttcCotizacion, "s"), invert: true };
+          if (tab === "ttcItem") return { label: "TTC actual", value: `${lastVal(ttcItem, "s").toLocaleString("es-CO")}s`, delta: pctDelta(ttcItem, "s"), invert: true };
           return null;
         })();
+
+        const chartUrl: Record<string, string> = {
+          funcionalidades: "https://app.amplitude.com/analytics/alegra/chart/99xelesc",
+          quick: "https://app.amplitude.com/analytics/alegra/chart/mqhwxet0",
+          quickBreakdown: "https://app.amplitude.com/analytics/alegra/chart/c5z4fzyu",
+          itemsCreados: "https://app.amplitude.com/analytics/alegra/chart/j6et1f82",
+          fnFactura: "https://app.amplitude.com/analytics/alegra/chart/24552723",
+          fnContactos: "https://app.amplitude.com/analytics/alegra/chart/up58fj0c",
+          fnCotizacion: "https://app.amplitude.com/analytics/alegra/chart/j5qy0tqd",
+          fnItem: "https://app.amplitude.com/analytics/alegra/chart/w81wjr5i",
+          ttcFactura: "https://app.amplitude.com/analytics/alegra/chart/5n2hj2pe",
+          ttcContactos: "https://app.amplitude.com/analytics/alegra/chart/tlrtxied",
+          ttcCotizacion: "https://app.amplitude.com/analytics/alegra/chart/phd97cxa",
+          ttcItem: "https://app.amplitude.com/analytics/alegra/chart/a3cwza0t",
+        };
+
         return (
           <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm">
+            <div className="mb-3 flex items-start justify-between gap-2">
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-neutral-500">
+                {HOME_TAB_GROUPS.find((g) => g.id === activeGroup)?.label} ·{" "}
+                <span className="text-neutral-700">
+                  {HOME_TAB_GROUPS.flatMap((g) => g.tabs).find((t) => t.id === tab)?.label}
+                </span>
+              </p>
+              {chartUrl[tab] && (
+                <a
+                  href={chartUrl[tab]}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-neutral-400 hover:text-neutral-700"
+                  title="Abrir en Amplitude"
+                >
+                  <ExternalLink className="h-3.5 w-3.5" />
+                </a>
+              )}
+            </div>
             <div className="grid grid-cols-1 gap-3 md:grid-cols-[1fr_auto]">
               <div className="h-72">
                 <ResponsiveContainer width="100%" height="100%">
@@ -714,13 +818,23 @@ export function HomeDetail() {
                       <Line type="monotone" dataKey="G. Trans" stroke="#EC4899" />
                     </LineChart>
                   ) : tab === "quick" ? (
-                    <BarChart data={funcionalidadesHome}>
+                    <BarChart data={quickActionsTotals}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                       <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
                       <YAxis tick={{ fontSize: 10 }} />
-                      <Tooltip />
-                      <Bar dataKey="QuickActions" fill={ORANGE} />
+                      <Tooltip formatter={(v: number) => v.toLocaleString("es-CO")} />
+                      <Bar dataKey="v" fill={ORANGE} name="Quick Actions clicks" />
                     </BarChart>
+                  ) : tab === "quickBreakdown" ? (
+                    <PieChart>
+                      <Pie data={quickActionsBreakdown} dataKey="value" nameKey="name" outerRadius={100} label={(e: any) => `${e.name}: ${e.value.toLocaleString("es-CO")}`}>
+                        {quickActionsBreakdown.map((e, i) => (
+                          <Cell key={i} fill={e.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip formatter={(v: number) => v.toLocaleString("es-CO")} />
+                      <Legend wrapperStyle={{ fontSize: 11 }} />
+                    </PieChart>
                   ) : tab === "itemsCreados" ? (
                     <LineChart data={itemsCreadosSemanal}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -778,9 +892,21 @@ export function HomeDetail() {
                       <Line type="monotone" dataKey="s" stroke={BLUE} strokeWidth={2} />
                     </LineChart>
                   ) : tab === "ttcCotizacion" ? (
-                    <iframe src="https://app.amplitude.com/analytics/share/embed/phd97cxa" className="h-full w-full rounded border-0" title="TTC Cotización" />
+                    <LineChart data={ttcCotizacion}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                      <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
+                      <YAxis tick={{ fontSize: 10 }} unit="s" />
+                      <Tooltip formatter={(v: number) => `${v.toLocaleString()}s`} />
+                      <Line type="monotone" dataKey="s" stroke="#9333EA" strokeWidth={2} />
+                    </LineChart>
                   ) : (
-                    <iframe src="https://app.amplitude.com/analytics/share/embed/a3cwza0t" className="h-full w-full rounded border-0" title="TTC Item" />
+                    <LineChart data={ttcItem}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                      <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
+                      <YAxis tick={{ fontSize: 10 }} unit="s" />
+                      <Tooltip formatter={(v: number) => `${v.toLocaleString()}s`} />
+                      <Line type="monotone" dataKey="s" stroke={ORANGE} strokeWidth={2} />
+                    </LineChart>
                   )}
                 </ResponsiveContainer>
               </div>
@@ -809,16 +935,17 @@ export function HomeDetail() {
 
       <Insights
         items={[
-          "Quick Actions tuvo lanzamiento la semana del 12 de abril y arrancó con 2,161 usuarios únicos en su primera semana — segundo módulo más usado del home tras el Sidebar.",
-          "El funnel Home → Factura saltó de un baseline de 41–44% a 54.3% en abril (+10pp), demostrando el impacto directo de Quick Actions en la conversión a la acción crítica principal.",
-          "Funnel Home → Contactos pasó de ~3% a 7.0% (+133%) y Home → Item alcanzó pico de 8.2% (vs 3.5% base).",
-          "Time to Convert Home → Factura cayó de ~17,500s a 12,181s (-30%): los usuarios convierten significativamente más rápido.",
-          "Sidebar sigue siendo el componente más usado (~5K uniques/sem) pero su uso bajó tras Quick Actions, indicando canibalización positiva hacia un acceso más directo.",
+          "Quick Actions arrancó la semana del 12 de abril y ya alcanza 2,421 uniques y 5,357 clicks/sem (chart c5z4fzyu): Factura concentra ~48%, Cotización ~22%, Contacto ~15% e Item ~13%.",
+          "Funnel Home → Factura saltó de 41–44% a 53.8% (+10pp) y Home → Contactos pasó de ~3% a 10.0% (+200%) tras el lanzamiento de Quick Actions.",
+          "Funnel Home → Cotización pasó de 18–19% a 24.0% y Home → Item alcanzó pico de 8.2% (vs ~3.4% base).",
+          "Time to Convert Home → Factura cayó de ~17,500s a 13,455s (-24%); Home → Cotización de 16,478s a 11,870s (-28%).",
+          "Sidebar mantiene ~4.6K uniques/sem aún tras Quick Actions, indicando que Quick Actions amplió el alcance sin canibalizar el resto del Home.",
         ]}
       />
     </div>
   );
 }
+
 
 // ===== Sección 4 — No Desarrollo =====
 
