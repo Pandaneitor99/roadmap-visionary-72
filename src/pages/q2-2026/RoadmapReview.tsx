@@ -201,7 +201,7 @@ function Section1() {
               Visión
             </span>
           </div>
-          <p className="mt-4 max-w-3xl text-2xl font-semibold leading-snug text-neutral-900 md:text-3xl">
+          <p className="mt-4 text-2xl font-semibold leading-snug text-neutral-900 md:text-3xl">
             "Convertir la App de Alegra en el centro operativo móvil imprescindible de la Pyme<br />
             y el centro de control móvil en tiempo real del contador,<br />
             donde las decisiones y flujos críticos se resuelven en segundos."
