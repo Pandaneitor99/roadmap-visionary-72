@@ -3642,7 +3642,7 @@ const funnelPorPais: Record<string, { perfil: number; onboarding: number; pql: n
   Colombia: { perfil: 1236, onboarding: 1077, pql: 271, logo: 21, conv: 1.70 },
   Mexico: { perfil: 569, onboarding: 498, pql: 78, logo: 5, conv: 0.88 },
   "Costa Rica": { perfil: 126, onboarding: 111, pql: 25, logo: 2, conv: 1.59 },
-  Peru: { perfil: 130, onboarding: 108, pql: 41, logo: 0, conv: 0 },
+  "Rep. Dominicana": { perfil: 938, onboarding: 812, pql: 198, logo: 16, conv: 1.71 },
 };
 
 // --- Perfil por país (chart 42w27hn3) - totales últimas 24 semanas (sin USA) ---
