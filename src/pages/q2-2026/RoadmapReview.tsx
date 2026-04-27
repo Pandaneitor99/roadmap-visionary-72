@@ -4036,7 +4036,7 @@ function FunnelByCountryCard({
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">App Mobile · por país</p>
           <h3 className="mt-1 text-base font-bold text-neutral-900">Funnel Entero App Mobile por País</h3>
           <p className="mt-1 text-xs text-neutral-500">
-            Amplitude · chart tnh09978 · This Year · entrepreneur · CO · MX · CR · PE
+            Amplitude · chart tnh09978 · This Year · entrepreneur · CO · MX · CR · DOM
           </p>
         </div>
         <a
