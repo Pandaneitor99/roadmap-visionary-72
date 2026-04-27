@@ -150,6 +150,23 @@ const funnelHomeCotizacion = [
   { sem: "19 Abr", pct: 8.13 },
 ];
 
+// Ítems creados en la app por semana — Amplitude j6et1f82 (últimas 12 semanas)
+const itemsCreadosSemanal = [
+  { sem: "25 Ene", total: 4720 },
+  { sem: "01 Feb", total: 4615 },
+  { sem: "08 Feb", total: 4840 },
+  { sem: "15 Feb", total: 4552 },
+  { sem: "22 Feb", total: 4451 },
+  { sem: "01 Mar", total: 4616 },
+  { sem: "08 Mar", total: 4029 },
+  { sem: "15 Mar", total: 4050 },
+  { sem: "22 Mar", total: 4364 },
+  { sem: "29 Mar", total: 2779 },
+  { sem: "05 Abr", total: 4265 },
+  { sem: "12 Abr", total: 5295 },
+  { sem: "19 Abr", total: 5370 },
+];
+
 // Time to convert (segundos)
 const ttcFactura = [
   { sem: "22 Feb", s: 17183 },
@@ -610,6 +627,7 @@ export function HomeDetail() {
         options={[
           { id: "funcionalidades", label: "Funcionalidades home" },
           { id: "quick", label: "Quick Actions" },
+          { id: "itemsCreados", label: "Ítems creados / sem" },
           { id: "fnFactura", label: "Funnel → Factura" },
           { id: "fnContactos", label: "Funnel → Contactos" },
           { id: "fnCotizacion", label: "Funnel → Cotización" },
@@ -631,7 +649,11 @@ export function HomeDetail() {
             const last = funcionalidadesHome[funcionalidadesHome.length - 1].QuickActions;
             return { label: "Quick Actions sem", value: last.toLocaleString("es-CO"), delta: 0, hideDelta: true, note: "Lanzado 12-Abr" };
           }
-          if (tab === "fnFactura") return { label: "Funnel actual", value: `${lastVal(funnelHomeFactura, "pct").toFixed(2)}%`, delta: pctDelta(funnelHomeFactura, "pct") };
+          if (tab === "itemsCreados") {
+            const last = itemsCreadosSemanal[itemsCreadosSemanal.length - 1].total;
+            const first = itemsCreadosSemanal[0].total;
+            return { label: "Ítems última sem", value: last.toLocaleString("es-CO"), delta: ((last - first) / first) * 100 };
+          }
           if (tab === "fnContactos") return { label: "Funnel actual", value: `${lastVal(funnelHomeContactos, "pct").toFixed(2)}%`, delta: pctDelta(funnelHomeContactos, "pct") };
           if (tab === "fnCotizacion") return { label: "Funnel actual", value: `${lastVal(funnelHomeCotizacion, "pct").toFixed(2)}%`, delta: pctDelta(funnelHomeCotizacion, "pct") };
           if (tab === "fnItem") return { label: "Funnel actual", value: `${lastVal(funnelHomeItem, "pct").toFixed(2)}%`, delta: pctDelta(funnelHomeItem, "pct") };
@@ -667,6 +689,14 @@ export function HomeDetail() {
                       <Tooltip />
                       <Bar dataKey="QuickActions" fill={ORANGE} />
                     </BarChart>
+                  ) : tab === "itemsCreados" ? (
+                    <LineChart data={itemsCreadosSemanal}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                      <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
+                      <YAxis tick={{ fontSize: 10 }} />
+                      <Tooltip formatter={(v: number) => v.toLocaleString("es-CO")} />
+                      <Line type="monotone" dataKey="total" stroke={BLUE} strokeWidth={2.5} dot={{ r: 3 }} />
+                    </LineChart>
                   ) : tab === "fnFactura" ? (
                     <LineChart data={funnelHomeFactura}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
