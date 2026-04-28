@@ -482,9 +482,9 @@ export const okrs: OKR[] = [
     objective: "Impulsar la adopción de la app móvil mejorando el flujo de creación de facturas y de ítems para que los usuarios facturen de forma recurrente desde el móvil.",
     type: "adoption",
     keyResults: [
-      { id: "kr-2.1", name: "Lograr que al menos 10000 usuarios pagos que facturan en web instalen la app móvil y realicen una acción de valor desde la app durante el trimestre", baseline: "7601", target: "10000", percentage: "31.56%", currentResult: "7977", achievedIncrease: "4.95%" },
-      { id: "kr-2.2", name: "Alcanzar 30k facturas de venta semanales creadas desde la app móvil al final del trimestre", baseline: "23.813", target: "30k", percentage: "26%", currentResult: "23497", achievedIncrease: "-1.33%" },
-      { id: "kr-2.3", name: "Incrementar de 3500 ítems a 5000 ítems creados semanales desde la app que luego son usados en facturas", baseline: "3500", target: "5000", percentage: "42.86%", currentResult: "5434", achievedIncrease: "55.26%" },
+      { id: "kr-2.1", name: "Lograr que al menos 10000 usuarios pagos que facturan en web instalen la app móvil y realicen una acción de valor desde la app durante el trimestre", baseline: "7601", target: "10000", percentage: "4.95%", currentResult: "7977", achievedIncrease: "4.95%" },
+      { id: "kr-2.2", name: "Alcanzar 30k facturas de venta semanales creadas desde la app móvil al final del trimestre", baseline: "23.813", target: "30k", percentage: "-1.33%", currentResult: "23497", achievedIncrease: "-1.33%" },
+      { id: "kr-2.3", name: "Incrementar de 3500 ítems a 5000 ítems creados semanales desde la app que luego son usados en facturas", baseline: "3500", target: "5000", percentage: "55.26%", currentResult: "5434", achievedIncrease: "55.26%" },
     ],
   },
 ];
