@@ -1361,7 +1361,7 @@ export function OnboardingQ4Detail() {
               </span>
               <p className="w-full text-[11px] text-neutral-500">Perfil vs MQL · uniques semanales</p>
             </div>
-            <
+            <a
               href="https://app.amplitude.com/analytics/alegra/chart/j30yk1tu"
               target="_blank"
               rel="noopener noreferrer"
