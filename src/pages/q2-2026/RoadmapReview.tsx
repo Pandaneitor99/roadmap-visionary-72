@@ -1779,7 +1779,7 @@ function MrrBaseSection() {
             </ResponsiveContainer>
             <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
               <span className="text-[10px] font-semibold uppercase tracking-wider text-neutral-400">Total Q1</span>
-              <span className="text-lg font-bold text-neutral-900">$29.6k</span>
+              <span className="text-lg font-bold text-neutral-900">$79.2k</span>
             </div>
           </div>
           <div className="space-y-2">
