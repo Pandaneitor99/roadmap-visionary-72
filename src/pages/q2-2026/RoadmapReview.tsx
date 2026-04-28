@@ -5187,19 +5187,30 @@ function Section5() {
         <div className="grid gap-4 md:grid-cols-2">
           {/* Card Ola RD */}
           <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-            <div className="flex items-start gap-3">
-              <div
-                className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-lg"
-                style={{ backgroundColor: "#7C3AED15" }}
+            <div className="flex items-start justify-between gap-3 flex-wrap">
+              <div className="flex items-start gap-3">
+                <div
+                  className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-lg"
+                  style={{ backgroundColor: "#7C3AED15" }}
+                >
+                  🇩🇴
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-neutral-900">Ola Rep. Dominicana</h3>
+                  <p className="mt-0.5 text-xs text-neutral-500">
+                    Localización fiscal pendiente en factura de venta
+                  </p>
+                </div>
+              </div>
+              <a
+                href="https://www.figma.com/design/G4L7LYtkISB6T4DwLJ4wHS/MOB---Redise%C3%B1o-Facturaci%C3%B3n?node-id=3872-17740&p=f&t=CosijuUBHpbR7JeB-0"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold transition-colors hover:bg-neutral-50"
+                style={{ borderColor: "#7C3AED33", color: "#7C3AED" }}
               >
-                🇩🇴
-              </div>
-              <div>
-                <h3 className="text-base font-bold text-neutral-900">Ola Rep. Dominicana</h3>
-                <p className="mt-0.5 text-xs text-neutral-500">
-                  Localización fiscal pendiente en factura de venta
-                </p>
-              </div>
+                <Sparkles className="h-3 w-3" /> Ver prototipo <ExternalLink className="h-2.5 w-2.5" />
+              </a>
             </div>
 
             <div className="mt-4 rounded-lg border border-neutral-100 bg-neutral-50/60 p-3">
