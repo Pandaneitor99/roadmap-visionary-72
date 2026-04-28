@@ -280,27 +280,27 @@ function Section1() {
       </div>
 
       {/* Two cards: roles */}
-      <div className="grid gap-5 md:grid-cols-2">
-        <div className="group rounded-2xl border border-neutral-200 bg-white p-7 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="group rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
           <div
             className="inline-flex rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white"
             style={{ backgroundColor: ALEGRA_GREEN }}
           >
             Para la Pyme
           </div>
-          <h3 className="mt-4 text-xl font-bold text-neutral-900">
+          <h3 className="mt-3 text-lg font-bold text-neutral-900">
             Centro operativo mobile
           </h3>
-          <p className="mt-2 text-sm text-neutral-600">Ejecución inmediata</p>
+          <p className="mt-1 text-sm text-neutral-600">Ejecución inmediata</p>
         </div>
-        <div className="group rounded-2xl border border-neutral-200 bg-white p-7 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+        <div className="group rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
           <div className="inline-flex rounded-full bg-neutral-900 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
             Para el contador
           </div>
-          <h3 className="mt-4 text-xl font-bold text-neutral-900">
+          <h3 className="mt-3 text-lg font-bold text-neutral-900">
             Centro de control mobile
           </h3>
-          <p className="mt-2 text-sm text-neutral-600">Control y validación</p>
+          <p className="mt-1 text-sm text-neutral-600">Control y validación</p>
         </div>
       </div>
 
