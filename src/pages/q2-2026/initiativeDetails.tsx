@@ -505,8 +505,6 @@ const erroresApiWeekly = [
   { sem: "22 Mar", v: 1622 },
   { sem: "29 Mar", v: 1145 },
   { sem: "05 Abr", v: 1808 },
-  { sem: "12 Abr", v: 232 },
-  { sem: "19 Abr", v: 311 },
 ];
 
 const erroresApiPorError = [
@@ -520,8 +518,6 @@ const erroresApiPorError = [
   { sem: "22 Mar", "Usuario/clave inválida": 43, "No se encontraron registros (404)": 941, "Basic header requerido": 22, "Query obligatorio (902)": 597, "Email/password obligatorios": 4 },
   { sem: "29 Mar", "Usuario/clave inválida": 37, "No se encontraron registros (404)": 687, "Basic header requerido": 8, "Query obligatorio (902)": 406, "Email/password obligatorios": 1 },
   { sem: "05 Abr", "Usuario/clave inválida": 60, "No se encontraron registros (404)": 1003, "Basic header requerido": 3, "Query obligatorio (902)": 762, "Email/password obligatorios": 3 },
-  { sem: "12 Abr", "Usuario/clave inválida": 4, "No se encontraron registros (404)": 132, "Basic header requerido": 0, "Query obligatorio (902)": 96, "Email/password obligatorios": 0 },
-  { sem: "19 Abr", "Usuario/clave inválida": 6, "No se encontraron registros (404)": 164, "Basic header requerido": 8, "Query obligatorio (902)": 132, "Email/password obligatorios": 1 },
 ];
 
 export function EstabilizacionDetail() {
@@ -556,12 +552,17 @@ export function EstabilizacionDetail() {
           statBaselineLabel="Usuario/clave vs 22-Feb"
           invertDelta
         >
-          <LineChart data={erroresApiPorError}>
+          <LineChart data={erroresApiPorError} margin={{ top: 5, right: 8, left: 0, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
             <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
             <YAxis tick={{ fontSize: 10 }} />
             <Tooltip formatter={(v: number) => v.toLocaleString("es-CO")} />
-            <Legend wrapperStyle={{ fontSize: 10 }} />
+            <Legend
+              layout="vertical"
+              align="right"
+              verticalAlign="middle"
+              wrapperStyle={{ fontSize: 10, paddingLeft: 8, lineHeight: "16px" }}
+            />
             <Line type="monotone" dataKey="Usuario/clave inválida" stroke="#EF4444" strokeWidth={2} dot={false} />
             <Line type="monotone" dataKey="No se encontraron registros (404)" stroke={ORANGE} strokeWidth={2} dot={false} />
             <Line type="monotone" dataKey="Basic header requerido" stroke={BLUE} strokeWidth={2} dot={false} />
