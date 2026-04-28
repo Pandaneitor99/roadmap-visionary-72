@@ -301,11 +301,10 @@ function Section1() {
             </div>
 
             {/* Row 1 */}
-            <TradeoffCell>Profundizar los flujos críticos existentes</TradeoffCell>
-            <TradeoffCell>Agregar nuevas funcionalidades complejas</TradeoffCell>
+            <TradeoffCell>Profundizar los flujos críticos existentes y creación de funcionalidad esenciales básicas</TradeoffCell>
+            <TradeoffCell>Agregar nuevas funcionalidades complejas o procesos complejos</TradeoffCell>
             <TradeoffCell last>
-              El 57% de las acciones ocurren en Factura de Venta — mejorar lo
-              que ya existe tiene más impacto que expandir.
+              El 90% de las acciones gira en torno a los ingresos y gastos, mejorar lo que ya existe tiene más impacto que expandir en funcionalidades segmento específico.
             </TradeoffCell>
 
             {/* Row 2 */}
@@ -1656,17 +1655,17 @@ function BaseSosView() {
 
 // === MRR BASE — Q4-2025 vs Q1-2026 ===
 const mrrBaseComparison = [
-  { plan: "Core", q4: 10054, q1: 11021, variation: 9.61 },
-  { plan: "Lite", q4: 17446, q1: 18601, variation: 6.62 },
+  { plan: "Core", q4: 32717, q1: 36733, variation: 12.27 },
+  { plan: "Lite", q4: 39514, q1: 42455, variation: 7.44 },
 ];
-const mrrBaseTotalVar = 7.71;
+const mrrBaseTotalVar = 9.63;
 const mrrMixQ1 = [
-  { name: "Core", value: 37.21, color: "#0066FF" },
-  { name: "Lite", value: 62.79, color: "rgb(48,171,169)" },
+  { name: "Core", value: 46.39, color: "#0066FF" },
+  { name: "Lite", value: 53.61, color: "rgb(48,171,169)" },
 ];
 const mrrMixVariation = [
-  { plan: "Core", q4: 36.56, q1: 37.21, delta: 1.76 },
-  { plan: "Lite", q4: 63.44, q1: 62.79, delta: -1.02 },
+  { plan: "Core", q4: 45.30, q1: 46.39, delta: 2.41 },
+  { plan: "Lite", q4: 54.70, q1: 53.61, delta: -2.00 },
 ];
 
 function MrrKpi({
@@ -1717,10 +1716,10 @@ function MrrBaseSection() {
 
       {/* KPI hero cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <MrrKpi label="MRR Total · Q1-2026" value="$29,621" sub="Promedio mensual" delta={mrrBaseTotalVar} accent="#00C853" />
-        <MrrKpi label="MRR Total · Q4-2025" value="$27,500" sub="Promedio mensual" accent="#94A3B8" />
-        <MrrKpi label="MRR Core · Q1-2026" value="$11,021" sub="37.21% del total" delta={9.61} accent="#0066FF" />
-        <MrrKpi label="MRR Lite · Q1-2026" value="$18,601" sub="62.79% del total" delta={6.62} accent="rgb(48,171,169)" />
+        <MrrKpi label="MRR Total · Q1-2026" value="$79,189" sub="Promedio mensual" delta={mrrBaseTotalVar} accent="#00C853" />
+        <MrrKpi label="MRR Total · Q4-2025" value="$72,231" sub="Promedio mensual" accent="#94A3B8" />
+        <MrrKpi label="MRR Core · Q1-2026" value="$36,733" sub="46.39% del total" delta={12.27} accent="#0066FF" />
+        <MrrKpi label="MRR Lite · Q1-2026" value="$42,455" sub="53.61% del total" delta={7.44} accent="rgb(48,171,169)" />
       </div>
 
       {/* Charts row */}
@@ -1733,7 +1732,7 @@ function MrrBaseSection() {
               <p className="mt-1 text-xs text-neutral-500">Aporte mensual en USD por tipo de plan</p>
             </div>
             <div className="inline-flex items-center gap-1 rounded-full bg-[#00C853]/10 px-3 py-1 text-xs font-bold text-[#00785A]">
-              <TrendingUp className="h-3 w-3" /> +7.71% total
+              <TrendingUp className="h-3 w-3" /> +9.63% total
             </div>
           </div>
           <div className="mt-4 h-[280px]">
@@ -1780,7 +1779,7 @@ function MrrBaseSection() {
             </ResponsiveContainer>
             <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
               <span className="text-[10px] font-semibold uppercase tracking-wider text-neutral-400">Total Q1</span>
-              <span className="text-lg font-bold text-neutral-900">$29.6k</span>
+              <span className="text-lg font-bold text-neutral-900">$79.2k</span>
             </div>
           </div>
           <div className="space-y-2">
@@ -1810,7 +1809,7 @@ function MrrBaseSection() {
       <PlanDistributionCard
         title="Distribución por tipo de plan · BASE y SOS"
         subtitle="Usuarios pagos BASE y SOS segmentados por plan comercial"
-        total={1351}
+        total={2787}
         data={planDistributionBaseSos}
       />
     </div>
@@ -1819,14 +1818,16 @@ function MrrBaseSection() {
 
 // === Distribución por tipo de plan ===
 const planDistributionBaseSos = [
-  { plan: "EMPRENDEDOR", count: 708, pct: 52.29 },
-  { plan: "PYME", count: 472, pct: 34.86 },
-  { plan: "PRO", count: 137, pct: 10.12 },
-  { plan: "PLUS", count: 30, pct: 2.22 },
-  { plan: "PREMIUM", count: 2, pct: 0.15 },
-  { plan: "Plan Standard", count: 2, pct: 0.15 },
-  { plan: "Plan Tienda", count: 1, pct: 0.07 },
-  { plan: "Plan Starter", count: 2, pct: 0.15 },
+  { plan: "EMPRENDEDOR", count: 1166, pct: 41.84 },
+  { plan: "PYME", count: 1051, pct: 37.71 },
+  { plan: "PRO", count: 409, pct: 14.68 },
+  { plan: "PLUS", count: 121, pct: 4.34 },
+  { plan: "PREMIUM", count: 15, pct: 0.54 },
+  { plan: "Plan Tienda", count: 13, pct: 0.47 },
+  { plan: "Plan Standard", count: 7, pct: 0.25 },
+  { plan: "Plan Starter", count: 3, pct: 0.11 },
+  { plan: "MultiRFC Contado", count: 1, pct: 0.04 },
+  { plan: "MultiCuenta Contado", count: 1, pct: 0.04 },
 ];
 
 const planDistributionCoreLite = [
