@@ -1716,10 +1716,10 @@ function MrrBaseSection() {
 
       {/* KPI hero cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <MrrKpi label="MRR Total · Q1-2026" value="$29,621" sub="Promedio mensual" delta={mrrBaseTotalVar} accent="#00C853" />
-        <MrrKpi label="MRR Total · Q4-2025" value="$27,500" sub="Promedio mensual" accent="#94A3B8" />
-        <MrrKpi label="MRR Core · Q1-2026" value="$11,021" sub="37.21% del total" delta={9.61} accent="#0066FF" />
-        <MrrKpi label="MRR Lite · Q1-2026" value="$18,601" sub="62.79% del total" delta={6.62} accent="rgb(48,171,169)" />
+        <MrrKpi label="MRR Total · Q1-2026" value="$79,189" sub="Promedio mensual" delta={mrrBaseTotalVar} accent="#00C853" />
+        <MrrKpi label="MRR Total · Q4-2025" value="$72,231" sub="Promedio mensual" accent="#94A3B8" />
+        <MrrKpi label="MRR Core · Q1-2026" value="$36,733" sub="46.39% del total" delta={12.27} accent="#0066FF" />
+        <MrrKpi label="MRR Lite · Q1-2026" value="$42,455" sub="53.61% del total" delta={7.44} accent="rgb(48,171,169)" />
       </div>
 
       {/* Charts row */}
