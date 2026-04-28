@@ -493,29 +493,35 @@ export function BusquedaDetail() {
   );
 }
 
-// Errores API — datos semanales reales (Sentry + Amplitude)
+// Errores API — datos semanales reales (Amplitude charts cnbbpxr5 y 70xrqgyp)
 const erroresApiWeekly = [
-  { sem: "22 Feb", v: 9120 },
-  { sem: "01 Mar", v: 8870 },
-  { sem: "08 Mar", v: 9450 },
-  { sem: "15 Mar", v: 8210 },
-  { sem: "22 Mar", v: 7980 },
-  { sem: "29 Mar", v: 8390 },
-  { sem: "05 Abr", v: 7740 },
-  { sem: "12 Abr", v: 7320 },
-  { sem: "19 Abr", v: 6985 },
+  { sem: "01 Feb", v: 220 },
+  { sem: "08 Feb", v: 165 },
+  { sem: "15 Feb", v: 142 },
+  { sem: "22 Feb", v: 1247 },
+  { sem: "01 Mar", v: 2271 },
+  { sem: "08 Mar", v: 2056 },
+  { sem: "15 Mar", v: 1893 },
+  { sem: "22 Mar", v: 1622 },
+  { sem: "29 Mar", v: 1145 },
+  { sem: "05 Abr", v: 1808 },
+  { sem: "12 Abr", v: 232 },
+  { sem: "19 Abr", v: 311 },
 ];
 
 const erroresApiPorError = [
-  { sem: "22 Feb", "DIAN-CO": 4180, "Validación": 2310, "Auth": 1420, "Otros": 1210 },
-  { sem: "01 Mar", "DIAN-CO": 4020, "Validación": 2180, "Auth": 1430, "Otros": 1240 },
-  { sem: "08 Mar", "DIAN-CO": 4310, "Validación": 2410, "Auth": 1480, "Otros": 1250 },
-  { sem: "15 Mar", "DIAN-CO": 3680, "Validación": 2050, "Auth": 1320, "Otros": 1160 },
-  { sem: "22 Mar", "DIAN-CO": 3580, "Validación": 1980, "Auth": 1310, "Otros": 1110 },
-  { sem: "29 Mar", "DIAN-CO": 3760, "Validación": 2090, "Auth": 1380, "Otros": 1160 },
-  { sem: "05 Abr", "DIAN-CO": 3470, "Validación": 1920, "Auth": 1280, "Otros": 1070 },
-  { sem: "12 Abr", "DIAN-CO": 3290, "Validación": 1810, "Auth": 1220, "Otros": 1000 },
-  { sem: "19 Abr", "DIAN-CO": 3140, "Validación": 1730, "Auth": 1170, "Otros": 945 },
+  { sem: "01 Feb", "Usuario/clave inválida": 161, "No se encontraron registros (404)": 0, "Basic header requerido": 39, "Query obligatorio (902)": 0, "Email/password obligatorios": 20 },
+  { sem: "08 Feb", "Usuario/clave inválida": 126, "No se encontraron registros (404)": 0, "Basic header requerido": 26, "Query obligatorio (902)": 0, "Email/password obligatorios": 13 },
+  { sem: "15 Feb", "Usuario/clave inválida": 116, "No se encontraron registros (404)": 0, "Basic header requerido": 16, "Query obligatorio (902)": 0, "Email/password obligatorios": 10 },
+  { sem: "22 Feb", "Usuario/clave inválida": 98, "No se encontraron registros (404)": 660, "Basic header requerido": 12, "Query obligatorio (902)": 453, "Email/password obligatorios": 6 },
+  { sem: "01 Mar", "Usuario/clave inválida": 54, "No se encontraron registros (404)": 1227, "Basic header requerido": 24, "Query obligatorio (902)": 961, "Email/password obligatorios": 5 },
+  { sem: "08 Mar", "Usuario/clave inválida": 71, "No se encontraron registros (404)": 1123, "Basic header requerido": 22, "Query obligatorio (902)": 837, "Email/password obligatorios": 10 },
+  { sem: "15 Mar", "Usuario/clave inválida": 62, "No se encontraron registros (404)": 1051, "Basic header requerido": 13, "Query obligatorio (902)": 752, "Email/password obligatorios": 7 },
+  { sem: "22 Mar", "Usuario/clave inválida": 43, "No se encontraron registros (404)": 941, "Basic header requerido": 22, "Query obligatorio (902)": 597, "Email/password obligatorios": 4 },
+  { sem: "29 Mar", "Usuario/clave inválida": 37, "No se encontraron registros (404)": 687, "Basic header requerido": 8, "Query obligatorio (902)": 406, "Email/password obligatorios": 1 },
+  { sem: "05 Abr", "Usuario/clave inválida": 60, "No se encontraron registros (404)": 1003, "Basic header requerido": 3, "Query obligatorio (902)": 762, "Email/password obligatorios": 3 },
+  { sem: "12 Abr", "Usuario/clave inválida": 4, "No se encontraron registros (404)": 132, "Basic header requerido": 0, "Query obligatorio (902)": 96, "Email/password obligatorios": 0 },
+  { sem: "19 Abr", "Usuario/clave inválida": 6, "No se encontraron registros (404)": 164, "Basic header requerido": 8, "Query obligatorio (902)": 132, "Email/password obligatorios": 1 },
 ];
 
 export function EstabilizacionDetail() {
@@ -529,7 +535,7 @@ export function EstabilizacionDetail() {
           statLabel="Última sem"
           statValue={lastVal(erroresApiWeekly, "v").toLocaleString("es-CO")}
           statDelta={pctDelta(erroresApiWeekly, "v")}
-          statBaselineLabel="vs 22-Feb"
+          statBaselineLabel="vs 01-Feb"
           invertDelta
         >
           <LineChart data={erroresApiWeekly}>
@@ -545,9 +551,9 @@ export function EstabilizacionDetail() {
           subtitle="Desglose por tipo de error"
           url="https://app.amplitude.com/analytics/alegra/chart/70xrqgyp"
           statLabel="Top error"
-          statValue="DIAN-CO"
-          statDelta={-7.6}
-          statBaselineLabel="DIAN-CO vs 22-Feb"
+          statValue="Usuario o clave inválida"
+          statDelta={-93.9}
+          statBaselineLabel="Usuario/clave vs 22-Feb"
           invertDelta
         >
           <LineChart data={erroresApiPorError}>
@@ -556,18 +562,19 @@ export function EstabilizacionDetail() {
             <YAxis tick={{ fontSize: 10 }} />
             <Tooltip formatter={(v: number) => v.toLocaleString("es-CO")} />
             <Legend wrapperStyle={{ fontSize: 10 }} />
-            <Line type="monotone" dataKey="DIAN-CO" stroke="#EF4444" strokeWidth={2} dot={false} />
-            <Line type="monotone" dataKey="Validación" stroke={ORANGE} strokeWidth={2} dot={false} />
-            <Line type="monotone" dataKey="Auth" stroke={BLUE} strokeWidth={2} dot={false} />
-            <Line type="monotone" dataKey="Otros" stroke="#9CA3AF" strokeWidth={2} dot={false} />
+            <Line type="monotone" dataKey="Usuario/clave inválida" stroke="#EF4444" strokeWidth={2} dot={false} />
+            <Line type="monotone" dataKey="No se encontraron registros (404)" stroke={ORANGE} strokeWidth={2} dot={false} />
+            <Line type="monotone" dataKey="Basic header requerido" stroke={BLUE} strokeWidth={2} dot={false} />
+            <Line type="monotone" dataKey="Query obligatorio (902)" stroke="#8B5CF6" strokeWidth={2} dot={false} />
+            <Line type="monotone" dataKey="Email/password obligatorios" stroke="#9CA3AF" strokeWidth={2} dot={false} />
           </LineChart>
         </ChartCard>
       </div>
       <Insights
         items={[
-          "Errores API totales bajaron de ~9.1K (22-Feb) a ~7.0K semanales (19-Abr): -23% en 8 semanas.",
-          "DIAN-CO sigue siendo el principal foco (~45% del total), pero ya muestra reducción sostenida (-7.6%).",
-          "El monitoreo desglosado permite priorizar fixes por impacto y mantener el ritmo de mejora del KR 1.3.",
+          "Errores API totales bajaron de ~2.3K (01-Mar) a ~311 semanales (19-Abr): caída sostenida en las últimas semanas.",
+          "El principal foco histórico fue 'Usuario o clave inválida' (pico de 3.3K en Nov-25), hoy reducido a menos de 10 por semana.",
+          "Los errores de búsqueda (404 y query obligatorio) emergieron como nuevos focos desde Feb-26 y ya muestran mejora en Abr.",
         ]}
       />
     </div>
