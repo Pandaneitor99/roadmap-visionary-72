@@ -179,7 +179,7 @@ function Section1() {
     <div className="space-y-10">
       {/* Vision block + filosofía embebida */}
       <div
-        className="relative overflow-hidden rounded-2xl border border-emerald-100 bg-white p-8 shadow-sm md:p-12"
+        className="relative overflow-hidden rounded-2xl border border-emerald-100 bg-white p-5 shadow-sm md:p-6"
         style={{
           backgroundImage:
             "radial-gradient(circle at 100% 0%, rgba(0,179,134,0.08), transparent 50%)",
