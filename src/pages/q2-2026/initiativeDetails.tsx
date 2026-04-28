@@ -494,19 +494,23 @@ export function BusquedaDetail() {
 }
 
 // Errores API — datos semanales reales (Amplitude charts cnbbpxr5 y 70xrqgyp)
+// Totales = suma del desglose por tipo (chart 70xrqgyp, Last 24 Weeks, excluye semanas incompletas)
 const erroresApiWeekly = [
   { sem: "01 Feb", v: 220 },
   { sem: "08 Feb", v: 165 },
   { sem: "15 Feb", v: 142 },
-  { sem: "22 Feb", v: 1247 },
+  { sem: "22 Feb", v: 1229 },
   { sem: "01 Mar", v: 2271 },
-  { sem: "08 Mar", v: 2056 },
-  { sem: "15 Mar", v: 1893 },
-  { sem: "22 Mar", v: 1622 },
-  { sem: "29 Mar", v: 1145 },
-  { sem: "05 Abr", v: 1808 },
+  { sem: "08 Mar", v: 2063 },
+  { sem: "15 Mar", v: 1885 },
+  { sem: "22 Mar", v: 1607 },
+  { sem: "29 Mar", v: 1139 },
+  { sem: "05 Abr", v: 1831 },
+  { sem: "12 Abr", v: 232 },
+  { sem: "19 Abr", v: 311 },
 ];
 
+// Desglose por tipo de error (chart 70xrqgyp · totals semanales)
 const erroresApiPorError = [
   { sem: "01 Feb", "Usuario/clave inválida": 161, "No se encontraron registros (404)": 0, "Basic header requerido": 39, "Query obligatorio (902)": 0, "Email/password obligatorios": 20 },
   { sem: "08 Feb", "Usuario/clave inválida": 126, "No se encontraron registros (404)": 0, "Basic header requerido": 26, "Query obligatorio (902)": 0, "Email/password obligatorios": 13 },
@@ -518,6 +522,8 @@ const erroresApiPorError = [
   { sem: "22 Mar", "Usuario/clave inválida": 43, "No se encontraron registros (404)": 941, "Basic header requerido": 22, "Query obligatorio (902)": 597, "Email/password obligatorios": 4 },
   { sem: "29 Mar", "Usuario/clave inválida": 37, "No se encontraron registros (404)": 687, "Basic header requerido": 8, "Query obligatorio (902)": 406, "Email/password obligatorios": 1 },
   { sem: "05 Abr", "Usuario/clave inválida": 60, "No se encontraron registros (404)": 1003, "Basic header requerido": 3, "Query obligatorio (902)": 762, "Email/password obligatorios": 3 },
+  { sem: "12 Abr", "Usuario/clave inválida": 4, "No se encontraron registros (404)": 132, "Basic header requerido": 0, "Query obligatorio (902)": 96, "Email/password obligatorios": 0 },
+  { sem: "19 Abr", "Usuario/clave inválida": 6, "No se encontraron registros (404)": 164, "Basic header requerido": 8, "Query obligatorio (902)": 132, "Email/password obligatorios": 1 },
 ];
 
 export function EstabilizacionDetail() {
@@ -548,8 +554,8 @@ export function EstabilizacionDetail() {
           url="https://app.amplitude.com/analytics/alegra/chart/70xrqgyp"
           statLabel="Top error"
           statValue="Usuario o clave inválida"
-          statDelta={-93.9}
-          statBaselineLabel="Usuario/clave vs 22-Feb"
+          statDelta={-96.3}
+          statBaselineLabel="Usuario/clave vs 01-Feb"
           invertDelta
         >
           <LineChart data={erroresApiPorError} margin={{ top: 5, right: 8, left: 0, bottom: 5 }}>
@@ -573,9 +579,9 @@ export function EstabilizacionDetail() {
       </div>
       <Insights
         items={[
-          "Errores API totales bajaron de ~2.3K (01-Mar) a ~311 semanales (19-Abr): caída sostenida en las últimas semanas.",
-          "El principal foco histórico fue 'Usuario o clave inválida' (pico de 3.3K en Nov-25), hoy reducido a menos de 10 por semana.",
-          "Los errores de búsqueda (404 y query obligatorio) emergieron como nuevos focos desde Feb-26 y ya muestran mejora en Abr.",
+          "Errores API totales cayeron de ~2.3K (01-Mar) a 311 semanales (19-Abr): caída sostenida de -86% en 7 semanas.",
+          "El principal foco histórico fue 'Usuario o clave inválida' (pico de 3.3K en Nov-25), hoy reducido a ~6 por semana (-96% vs 01-Feb).",
+          "Los errores de búsqueda (404 y query 902) emergieron en Feb-26 pero ya muestran fuerte caída en Abr (de ~1K a ~150 por semana).",
         ]}
       />
     </div>
@@ -1308,7 +1314,12 @@ const onboardingEventosSemanal = [
 export function OnboardingQ4Detail() {
   const lastMQL = onboardingPerfilMQL[onboardingPerfilMQL.length - 1].pct;
   const firstMQL = onboardingPerfilMQL[0].pct;
-  const deltaMQL = lastMQL - firstMQL;
+  const deltaMQLPct = ((lastMQL - firstMQL) / firstMQL) * 100; // % crecimiento relativo
+
+  const lastWeek = onboardingEventosSemanal[onboardingEventosSemanal.length - 1];
+  const firstWeek = onboardingEventosSemanal[0];
+  const perfilDeltaPct = ((lastWeek.perfil - firstWeek.perfil) / firstWeek.perfil) * 100;
+  const mqlDeltaPct = ((lastWeek.mql - firstWeek.mql) / firstWeek.mql) * 100;
 
   return (
     <div className="space-y-4">
@@ -1319,7 +1330,7 @@ export function OnboardingQ4Detail() {
           url="https://app.amplitude.com/analytics/alegra/chart/b6xrlqln"
           statLabel="Último mes"
           statValue={`${lastMQL.toFixed(2)}%`}
-          statDelta={deltaMQL}
+          statDelta={deltaMQLPct}
           statBaselineLabel="vs Oct '25"
         >
           <LineChart data={onboardingPerfilMQL}>
@@ -1347,18 +1358,38 @@ export function OnboardingQ4Detail() {
               <ExternalLink className="h-3.5 w-3.5" />
             </a>
           </div>
-          <div className="h-48">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={onboardingEventosSemanal}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis dataKey="semana" tick={{ fontSize: 9 }} interval={2} />
-                <YAxis tick={{ fontSize: 10 }} />
-                <Tooltip formatter={(v: number, n: string) => [v.toLocaleString("es-CO"), n]} />
-                <Legend wrapperStyle={{ fontSize: 10 }} iconType="circle" />
-                <Line type="monotone" name="Perfil" dataKey="perfil" stroke={ALEGRA_GREEN} strokeWidth={2} dot={false} />
-                <Line type="monotone" name="MQL" dataKey="mql" stroke={BLUE} strokeWidth={2} dot={false} />
-              </LineChart>
-            </ResponsiveContainer>
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-[1fr_auto]">
+            <div className="h-48">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={onboardingEventosSemanal}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                  <XAxis dataKey="semana" tick={{ fontSize: 9 }} interval={2} />
+                  <YAxis tick={{ fontSize: 10 }} />
+                  <Tooltip formatter={(v: number, n: string) => [v.toLocaleString("es-CO"), n]} />
+                  <Legend wrapperStyle={{ fontSize: 10 }} iconType="circle" />
+                  <Line type="monotone" name="Perfil" dataKey="perfil" stroke={ALEGRA_GREEN} strokeWidth={2} dot={false} />
+                  <Line type="monotone" name="MQL" dataKey="mql" stroke={BLUE} strokeWidth={2} dot={false} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="flex flex-col justify-center gap-3 rounded-lg border border-neutral-100 bg-neutral-50/60 p-3 md:min-w-[150px]">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">Perfil · última sem</p>
+                <p className="mt-0.5 text-xl font-bold text-neutral-900">{lastWeek.perfil.toLocaleString("es-CO")}</p>
+                <p className="mt-0.5 flex items-center gap-1 text-[11px] font-bold text-emerald-600">
+                  <TrendingUp className="h-3 w-3" />+{perfilDeltaPct.toFixed(1)}%
+                  <span className="font-medium text-neutral-500">vs 02-Nov</span>
+                </p>
+              </div>
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">MQL · última sem</p>
+                <p className="mt-0.5 text-xl font-bold text-neutral-900">{lastWeek.mql.toLocaleString("es-CO")}</p>
+                <p className="mt-0.5 flex items-center gap-1 text-[11px] font-bold text-emerald-600">
+                  <TrendingUp className="h-3 w-3" />+{mqlDeltaPct.toFixed(1)}%
+                  <span className="font-medium text-neutral-500">vs 02-Nov</span>
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1366,7 +1397,7 @@ export function OnboardingQ4Detail() {
       <Insights
         items={[
           "Perfil → MQL se mantiene estable en ~85–92% mensual: el flujo de onboarding completa la mayoría de los registros que llegan al perfil.",
-          "Volumen semanal de Perfiles creció de ~85/sem (Nov '25) a ~260/sem (Abr '26), 3x en 6 meses.",
+          `Volumen semanal de Perfiles creció +${perfilDeltaPct.toFixed(0)}% (de ${firstWeek.perfil} a ${lastWeek.perfil}/sem) y MQL +${mqlDeltaPct.toFixed(0)}% (de ${firstWeek.mql} a ${lastWeek.mql}/sem) entre 02-Nov y 19-Abr.`,
           "MQL siguen de cerca al Perfil con tasa de finalización alta — el cuello de botella para activación está aguas abajo (PQL/Logo), no en el onboarding inicial.",
         ]}
       />
