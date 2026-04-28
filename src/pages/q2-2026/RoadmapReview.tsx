@@ -4789,6 +4789,36 @@ function SimpleInitiativeCard({
 
 // === Sección 5: Diagnóstico y oportunidades ===
 
+function CollapsibleSection({
+  title,
+  subtitle,
+  color,
+  defaultOpen = false,
+  children,
+}: {
+  title: string;
+  subtitle?: string;
+  color: string;
+  defaultOpen?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <Collapsible defaultOpen={defaultOpen} className="group/collap">
+      <CollapsibleTrigger className="flex w-full items-center justify-between rounded-2xl border border-neutral-200 bg-white px-5 py-4 text-left shadow-sm transition hover:bg-neutral-50">
+        <div className="flex items-center gap-2">
+          <div className="h-1 w-10 rounded-full" style={{ backgroundColor: color }} />
+          <h2 className="text-lg font-bold text-neutral-900">{title}</h2>
+          {subtitle && <span className="ml-2 text-xs text-neutral-500">{subtitle}</span>}
+        </div>
+        <ChevronDown className="h-4 w-4 text-neutral-500 transition-transform group-data-[state=open]/collap:rotate-180" />
+      </CollapsibleTrigger>
+      <CollapsibleContent>
+        <div className="mt-3">{children}</div>
+      </CollapsibleContent>
+    </Collapsible>
+  );
+}
+
 // Funcionalidades que más utilizan los BASE por fuera de la App (web).
 // Conteo de eventos · Cohort MAC Mobile BASE Marzo 2026 · 2026-03-29 → 2026-04-26
 // Fuente: Amplitude chart h6i1m5l2
