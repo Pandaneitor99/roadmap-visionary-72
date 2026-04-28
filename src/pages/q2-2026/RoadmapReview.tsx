@@ -497,16 +497,15 @@ function SegmentosObjetivo() {
                   : undefined
               }
             >
-              <div className="col-span-3 font-semibold text-neutral-900">
+              <div className="col-span-4 font-semibold text-neutral-900">
                 {s.nombre}
                 <span className="ml-2 text-[10px] font-medium text-neutral-500">
                   {s.badge}
                 </span>
               </div>
-              <div className="col-span-3 text-neutral-600">{s.tamano}</div>
+              <div className="col-span-4 text-neutral-600">{s.tamano}</div>
               <div className="col-span-2 text-neutral-600">{s.dolor}</div>
-              <div className="col-span-3 text-neutral-600">{s.alternativa}</div>
-              <div className="col-span-1 text-right">
+              <div className="col-span-2 text-right">
                 <span
                   className="inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold uppercase text-white"
                   style={{
