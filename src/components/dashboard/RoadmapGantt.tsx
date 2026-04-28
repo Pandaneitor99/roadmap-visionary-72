@@ -508,6 +508,7 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
             row={row}
             items={rowItems}
             totalWeeks={totalWeeks}
+            startWeek={startWeek}
             onItemClick={handleItemClick}
             getItemColor={getItemColor}
             onDragStart={handleDragStart}
@@ -569,7 +570,7 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
                 key={i}
                 className="rounded-sm bg-card/60 border border-border/50 px-0.5 py-0.5 text-center text-[9px] text-muted-foreground"
               >
-                W{i + 1}
+                W{startWeek + i}
               </div>
             ))}
           </div>
