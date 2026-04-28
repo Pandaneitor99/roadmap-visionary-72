@@ -4756,23 +4756,24 @@ function SimpleInitiativeCard({
 // === Sección 5: Diagnóstico y oportunidades ===
 
 // Funcionalidades que más utilizan los BASE por fuera de la App (web).
-// Conteo de eventos en las últimas 4 semanas · Cohort BASE (s8shexr4)
+// Conteo de eventos · Cohort MAC Mobile BASE Marzo 2026 · 2026-03-29 → 2026-04-26
 // Fuente: Amplitude chart h6i1m5l2
 const baseFueraDeApp = [
-  { feature: "Creación Factura", uso: 10649 },
-  { feature: "Registrar pago", uso: 6949 },
-  { feature: "Imprimir factura", uso: 3840 },
-  { feature: "Descargar factura", uso: 3385 },
-  { feature: "Generar reporte", uso: 3376 },
-  { feature: "Editar factura", uso: 3060 },
-  { feature: "Descargar reportes", uso: 2001 },
-  { feature: "Editar retenciones", uso: 1712 },
-  { feature: "Crear contactos", uso: 1690 },
-  { feature: "Generar reportes (otros)", uso: 1637 },
-  { feature: "Clonar factura", uso: 1571 },
-  { feature: "Factura de compra", uso: 1461 },
-  { feature: "Crear ítems", uso: 1189 },
-  { feature: "Nota de crédito", uso: 953 },
+  { feature: "Registrar pago", uso: 15900 },
+  { feature: "Imprimir factura", uso: 14717 },
+  { feature: "Editar factura", uso: 13776 },
+  { feature: "Descargar factura", uso: 5927 },
+  { feature: "Reportes por vendedor", uso: 5601 },
+  { feature: "Reporte de inventario", uso: 3766 },
+  { feature: "Reporte ventas por ítem", uso: 3171 },
+  { feature: "Timbrar factura", uso: 2450 },
+  { feature: "Compartir factura", uso: 2097 },
+  { feature: "Clonar factura", uso: 2040 },
+  { feature: "Aplicar crédito", uso: 1740 },
+  { feature: "Editar retenciones", uso: 1677 },
+  { feature: "Cancelar factura", uso: 1433 },
+  { feature: "Reporte rentabilidad ítems", uso: 1345 },
+  { feature: "Reporte facturas abiertas", uso: 1125 },
 ];
 
 const oportunidades = [
