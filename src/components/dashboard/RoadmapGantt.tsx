@@ -122,7 +122,12 @@ interface ResizeState {
   originalEnd: number;
 }
 
-export function RoadmapGantt() {
+interface RoadmapGanttProps {
+  startSprint?: number;
+  initialSprintCount?: number;
+}
+
+export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPRINT_COUNT }: RoadmapGanttProps = {}) {
   const [items, setItems] = useState<RoadmapItem[]>(initialItems);
   const [rows, setRows] = useState<RowDef[]>(initialRows);
   const [loading, setLoading] = useState(true);
@@ -132,9 +137,10 @@ export function RoadmapGantt() {
   const dragRef = useRef<DragState | null>(null);
   const resizeRef = useRef<ResizeState | null>(null);
   const [dragRowId, setDragRowId] = useState<string | null>(null);
-  const [sprintCount, setSprintCount] = useState(INITIAL_SPRINT_COUNT);
-  const sprints = generateSprints(sprintCount);
+  const [sprintCount, setSprintCount] = useState(initialSprintCount);
+  const sprints = generateSprints(sprintCount, startSprint);
   const totalWeeks = sprintCount * 2;
+  const startWeek = (startSprint - 1) * 2 + 1;
   const [resizingItemId, setResizingItemId] = useState<string | null>(null);
 
   // New item creation state
