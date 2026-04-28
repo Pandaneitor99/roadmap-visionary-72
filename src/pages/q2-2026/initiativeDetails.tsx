@@ -333,6 +333,13 @@ function pctDelta(arr: { v?: number; pct?: number; s?: number }[], key: "v" | "p
   if (!first) return 0;
   return ((last - first) / first) * 100;
 }
+// % delta usando un índice base específico (ej: semana previa a un lanzamiento)
+function pctDeltaFromIndex(arr: { v?: number; pct?: number; s?: number }[], key: "v" | "pct" | "s", baseIdx: number) {
+  const base = arr[baseIdx]?.[key] ?? 0;
+  const last = arr[arr.length - 1]?.[key] ?? 0;
+  if (!base) return 0;
+  return ((last - base) / base) * 100;
+}
 function lastVal(arr: { v?: number; pct?: number; s?: number }[], key: "v" | "pct" | "s") {
   return arr[arr.length - 1]?.[key] ?? 0;
 }
