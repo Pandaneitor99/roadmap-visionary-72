@@ -1818,14 +1818,16 @@ function MrrBaseSection() {
 
 // === Distribución por tipo de plan ===
 const planDistributionBaseSos = [
-  { plan: "EMPRENDEDOR", count: 708, pct: 52.29 },
-  { plan: "PYME", count: 472, pct: 34.86 },
-  { plan: "PRO", count: 137, pct: 10.12 },
-  { plan: "PLUS", count: 30, pct: 2.22 },
-  { plan: "PREMIUM", count: 2, pct: 0.15 },
-  { plan: "Plan Standard", count: 2, pct: 0.15 },
-  { plan: "Plan Tienda", count: 1, pct: 0.07 },
-  { plan: "Plan Starter", count: 2, pct: 0.15 },
+  { plan: "EMPRENDEDOR", count: 1166, pct: 41.84 },
+  { plan: "PYME", count: 1051, pct: 37.71 },
+  { plan: "PRO", count: 409, pct: 14.68 },
+  { plan: "PLUS", count: 121, pct: 4.34 },
+  { plan: "PREMIUM", count: 15, pct: 0.54 },
+  { plan: "Plan Tienda", count: 13, pct: 0.47 },
+  { plan: "Plan Standard", count: 7, pct: 0.25 },
+  { plan: "Plan Starter", count: 3, pct: 0.11 },
+  { plan: "MultiRFC Contado", count: 1, pct: 0.04 },
+  { plan: "MultiCuenta Contado", count: 1, pct: 0.04 },
 ];
 
 const planDistributionCoreLite = [
