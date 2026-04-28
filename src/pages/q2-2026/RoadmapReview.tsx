@@ -5594,7 +5594,7 @@ function ItemsFuncDetail() {
           <p className="text-[11px] font-bold uppercase tracking-wider text-blue-700">
             Deficiente UX en campos
           </p>
-          <ul className="mt-2 space-y-1.5 text-xs text-neutral-700">
+          <ul className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1.5 text-xs text-neutral-700">
             {itemsUxDeficiente.map((c) => (
               <li key={c} className="flex items-start gap-2">
                 <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-500" />
