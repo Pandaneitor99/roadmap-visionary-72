@@ -4819,6 +4819,7 @@ const oportunidades = [
       "No hay un buscador en el home ni búsqueda de pagos. La búsqueda de facturas de compra es por numeración.",
     oportunidad:
       "Buscador global en el home. Búsqueda por cliente en facturas de venta y pagos.",
+    link: "https://claude.ai/design/p/019dd183-c0d0-72dc-9fbf-65c1d4cfcba0?file=Buscador.html",
   },
   {
     id: "operacion",
@@ -4837,6 +4838,7 @@ const oportunidades = [
       "Hoy en la app no se encuentran gráficas clave para la operación: ventas del día, productos más vendidos, top de clientes, comparativos por período.",
     oportunidad:
       "Construir una sección de gráficas por venta, items y contactos.",
+    link: "https://claude.ai/design/p/019dd004-199a-7e2c-963c-4e8f8c157a59?file=Estadisticas.html",
   },
 ];
 
