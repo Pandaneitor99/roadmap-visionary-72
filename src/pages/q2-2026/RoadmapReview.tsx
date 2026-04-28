@@ -4467,12 +4467,34 @@ function PerfilPorPaisCard() {
 
 // --- Eventos Onboarding Semanal (chart j30yk1tu) ---
 function EventosOnboardingSemanalCard() {
+  const first = eventosOnboardingSemanal[0];
+  const last = eventosOnboardingSemanal[eventosOnboardingSemanal.length - 1];
+  const perfilDelta = ((last.perfil - first.perfil) / first.perfil) * 100;
+  const mqlDelta = ((last.mql - first.mql) / first.mql) * 100;
+  const pqlDelta = ((last.pql - first.pql) / first.pql) * 100;
+  const tag = (label: string, v: number) => (
+    <span
+      className={cn(
+        "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold ring-1",
+        v >= 0 ? "bg-emerald-50 text-emerald-700 ring-emerald-200" : "bg-orange-50 text-orange-700 ring-orange-200",
+      )}
+    >
+      {v >= 0 ? <TrendingUp className="h-2.5 w-2.5" /> : <TrendingDown className="h-2.5 w-2.5" />}
+      {label} {v >= 0 ? "+" : ""}
+      {v.toFixed(1)}%
+    </span>
+  );
   return (
     <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-      <div className="flex items-start justify-between gap-3">
+      <div className="flex items-start justify-between gap-3 flex-wrap">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">Volumen semanal</p>
-          <h3 className="mt-1 text-base font-bold text-neutral-900">Eventos Onboarding Semanal</h3>
+          <div className="mt-1 flex flex-wrap items-center gap-2">
+            <h3 className="text-base font-bold text-neutral-900">Eventos Onboarding Semanal</h3>
+            {tag("Perfil", perfilDelta)}
+            {tag("MQL", mqlDelta)}
+            {tag("PQL", pqlDelta)}
+          </div>
         </div>
         <a
           href="https://app.amplitude.com/analytics/alegra/chart/j30yk1tu"
