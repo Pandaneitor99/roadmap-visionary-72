@@ -5346,7 +5346,7 @@ function Section5() {
               </div>
             </div>
             <p className="mt-2 text-sm leading-relaxed text-neutral-800">
-              Los usuarios <strong>tienen que iniciar sesión dentro de la app</strong> para ver los planes y pagar, o <strong>ir a web</strong>. Este paso adicional fricciona la conversión a pago: <strong>Mobile web convierte 2.74% vs 1.92% en Mobile App</strong> (sin PQL).
+              Los usuarios <strong>tienen que iniciar sesión dentro de la app</strong> para ver los planes y pagar, o <strong>ir a web</strong>. Este paso adicional fricciona la conversión a pago.
             </p>
           </div>
 
