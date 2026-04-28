@@ -1655,17 +1655,17 @@ function BaseSosView() {
 
 // === MRR BASE — Q4-2025 vs Q1-2026 ===
 const mrrBaseComparison = [
-  { plan: "Core", q4: 10054, q1: 11021, variation: 9.61 },
-  { plan: "Lite", q4: 17446, q1: 18601, variation: 6.62 },
+  { plan: "Core", q4: 32717, q1: 36733, variation: 12.27 },
+  { plan: "Lite", q4: 39514, q1: 42455, variation: 7.44 },
 ];
-const mrrBaseTotalVar = 7.71;
+const mrrBaseTotalVar = 9.63;
 const mrrMixQ1 = [
-  { name: "Core", value: 37.21, color: "#0066FF" },
-  { name: "Lite", value: 62.79, color: "rgb(48,171,169)" },
+  { name: "Core", value: 46.39, color: "#0066FF" },
+  { name: "Lite", value: 53.61, color: "rgb(48,171,169)" },
 ];
 const mrrMixVariation = [
-  { plan: "Core", q4: 36.56, q1: 37.21, delta: 1.76 },
-  { plan: "Lite", q4: 63.44, q1: 62.79, delta: -1.02 },
+  { plan: "Core", q4: 45.30, q1: 46.39, delta: 2.41 },
+  { plan: "Lite", q4: 54.70, q1: 53.61, delta: -2.00 },
 ];
 
 function MrrKpi({
