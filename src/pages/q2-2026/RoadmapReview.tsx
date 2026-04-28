@@ -1847,14 +1847,14 @@ const planDistributionCoreLite = [
 
 const PLAN_COLORS = ["#0066FF", "rgb(48,171,169)", "#00C853", "#FF6B00", "#9333EA", "#F59E0B", "#EC4899", "#14B8A6", "#6366F1", "#84CC16", "#EF4444", "#0EA5E9", "#A855F7"];
 
-function PlanDistributionCard({ title, subtitle, total, data }: { title: string; subtitle: string; total: number; data: { plan: string; count: number; pct: number }[] }) {
+function PlanDistributionCard({ title, subtitle, total, data }: { title: string; subtitle?: string; total: number; data: { plan: string; count: number; pct: number }[] }) {
   const maxPct = Math.max(...data.map((d) => d.pct));
   return (
     <div className="mt-6 rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <div>
           <h4 className="text-base font-bold text-neutral-900">{title}</h4>
-          <p className="mt-1 text-xs text-neutral-500">{subtitle}</p>
+          {subtitle && <p className="mt-1 text-xs text-neutral-500">{subtitle}</p>}
         </div>
         <span className="text-xs font-semibold text-neutral-600">Total: {total.toLocaleString("es-CO")} usuarios</span>
       </div>
