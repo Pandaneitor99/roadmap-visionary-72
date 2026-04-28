@@ -2697,34 +2697,128 @@ function NegocioView() {
         </div>
       </div>
 
-      {/* === MRR === */}
-      <div>
-        <div className="mb-4 flex items-baseline gap-3">
-          <h3 className="text-lg font-bold text-neutral-900">MRR</h3>
-          <span className="text-xs text-neutral-500">
-            Ingreso recurrente mensual y mix de planes de pago
-          </span>
-        </div>
-        <div className="grid gap-6 lg:grid-cols-2">
-          <div className="flex min-h-[220px] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-neutral-200 bg-white/60 p-8 text-center">
-            <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-400">
-              MRR
-            </p>
-            <p className="mt-2 text-sm text-neutral-500">
-              Espacio reservado para la métrica de MRR (próximamente)
-            </p>
+      {/* === MRR Total Core / Lite === */}
+      <MrrTotalSection />
+
+    </div>
+  );
+}
+
+// === MRR TOTAL — Q4-2025 vs Q1-2026 (Core + Lite, todos los usuarios pagos) ===
+const mrrTotalComparison = [
+  { plan: "Core", q4: 186256, q1: 210741, variation: 13.15 },
+  { plan: "Lite", q4: 108340, q1: 118355, variation: 9.24 },
+];
+const mrrTotalVar = 11.71;
+const mrrTotalMixQ1 = [
+  { name: "Core", value: 64.04, color: "#0066FF" },
+  { name: "Lite", value: 35.96, color: "rgb(48,171,169)" },
+];
+const mrrTotalMixVariation = [
+  { plan: "Core", q4: 63.22, q1: 64.04, delta: 1.28 },
+  { plan: "Lite", q4: 36.78, q1: 35.96, delta: -2.21 },
+];
+
+function MrrTotalSection() {
+  return (
+    <div>
+      <div className="mb-5 flex items-baseline gap-3 flex-wrap">
+        <h3 className="text-lg font-bold text-neutral-900">MRR Total · Core y Lite</h3>
+        <span className="text-xs text-neutral-500">
+          Ingreso recurrente mensual de todos los usuarios pagos por tipo de negocio
+        </span>
+      </div>
+
+      {/* KPI hero cards */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <MrrKpi label="MRR Total · Q1-2026" value="$329,095" sub="Promedio mensual" delta={mrrTotalVar} accent="#00C853" />
+        <MrrKpi label="MRR Total · Q4-2025" value="$294,595" sub="Promedio mensual" accent="#94A3B8" />
+        <MrrKpi label="MRR Core · Q1-2026" value="$210,741" sub="64.04% del total" delta={13.15} accent="#0066FF" />
+        <MrrKpi label="MRR Lite · Q1-2026" value="$118,355" sub="35.96% del total" delta={9.24} accent="rgb(48,171,169)" />
+      </div>
+
+      {/* Charts row */}
+      <div className="mt-6 grid gap-6 lg:grid-cols-5">
+        {/* Comparativa Q4 vs Q1 */}
+        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm lg:col-span-3">
+          <div className="flex items-baseline justify-between flex-wrap gap-2">
+            <div>
+              <h4 className="text-base font-bold text-neutral-900">Promedio MRR · Q4-2025 vs Q1-2026</h4>
+              <p className="mt-1 text-xs text-neutral-500">Aporte mensual en USD por tipo de plan</p>
+            </div>
+            <div className="inline-flex items-center gap-1 rounded-full bg-[#00C853]/10 px-3 py-1 text-xs font-bold text-[#00785A]">
+              <TrendingUp className="h-3 w-3" /> +{mrrTotalVar}% total
+            </div>
           </div>
-          <div className="flex min-h-[220px] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-neutral-200 bg-white/60 p-8 text-center">
-            <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-400">
-              Planes de pago
-            </p>
-            <p className="mt-2 text-sm text-neutral-500">
-              Espacio reservado para la distribución de planes de pago (próximamente)
-            </p>
+          <div className="mt-4 h-[280px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={mrrTotalComparison} margin={{ top: 24, right: 16, left: 8, bottom: 8 }} barCategoryGap="30%">
+                <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" vertical={false} />
+                <XAxis dataKey="plan" tick={{ fontSize: 12, fill: "#475569", fontWeight: 600 }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fontSize: 11, fill: "#94A3B8" }} axisLine={false} tickLine={false} tickFormatter={(v) => `$${(v / 1000).toFixed(0)}k`} />
+                <Tooltip cursor={{ fill: "rgba(0,0,0,0.03)" }} formatter={(v: number) => `$${v.toLocaleString()}`} contentStyle={{ borderRadius: 12, border: "1px solid #E5E7EB", fontSize: 12 }} />
+                <Legend wrapperStyle={{ fontSize: 12, paddingTop: 8 }} iconType="circle" />
+                <Bar dataKey="q4" name="Q4-2025" fill="#CBD5E1" radius={[8, 8, 0, 0]}>
+                  <LabelList dataKey="q4" position="top" formatter={(v: number) => `$${(v / 1000).toFixed(1)}k`} style={{ fontSize: 11, fill: "#64748B", fontWeight: 600 }} />
+                </Bar>
+                <Bar dataKey="q1" name="Q1-2026" fill="#0066FF" radius={[8, 8, 0, 0]}>
+                  <LabelList dataKey="q1" position="top" formatter={(v: number) => `$${(v / 1000).toFixed(1)}k`} style={{ fontSize: 11, fill: "#0066FF", fontWeight: 700 }} />
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="mt-2 grid grid-cols-2 gap-3">
+            {mrrTotalComparison.map((row) => (
+              <div key={row.plan} className="flex items-center justify-between rounded-lg bg-neutral-50 px-3 py-2">
+                <span className="text-xs font-semibold text-neutral-700">Variación {row.plan}</span>
+                <span className="text-sm font-bold text-[#00C853]">+{row.variation}%</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Mix Core / Lite */}
+        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm lg:col-span-2">
+          <h4 className="text-base font-bold text-neutral-900">Mix MRR · Q1-2026</h4>
+          <p className="mt-1 text-xs text-neutral-500">Distribución Core vs Lite del MRR Total</p>
+          <div className="relative mt-2 h-[200px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie data={mrrTotalMixQ1} dataKey="value" nameKey="name" innerRadius={55} outerRadius={85} paddingAngle={3} stroke="none">
+                  {mrrTotalMixQ1.map((entry) => (
+                    <Cell key={entry.name} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip formatter={(v: number) => `${v}%`} contentStyle={{ borderRadius: 12, border: "1px solid #E5E7EB", fontSize: 12 }} />
+              </PieChart>
+            </ResponsiveContainer>
+            <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-neutral-400">Total Q1</span>
+              <span className="text-lg font-bold text-neutral-900">$329k</span>
+            </div>
+          </div>
+          <div className="space-y-2">
+            {mrrTotalMixVariation.map((row) => {
+              const positive = row.delta >= 0;
+              const color = row.plan === "Core" ? "#0066FF" : "rgb(48,171,169)";
+              return (
+                <div key={row.plan} className="flex items-center justify-between rounded-lg border border-neutral-100 px-3 py-2">
+                  <div className="flex items-center gap-2">
+                    <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: color }} />
+                    <span className="text-xs font-semibold text-neutral-700">{row.plan}</span>
+                    <span className="text-[11px] text-neutral-400">{row.q4}% → {row.q1}%</span>
+                  </div>
+                  <span className={cn("inline-flex items-center gap-1 text-xs font-bold", positive ? "text-[#00C853]" : "text-[#FF6B00]")}>
+                    {positive ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+                    {positive ? "+" : ""}
+                    {row.delta}%
+                  </span>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
-
     </div>
   );
 }
