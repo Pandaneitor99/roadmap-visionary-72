@@ -5131,15 +5131,13 @@ function Section5() {
         </div>
       </CollapsibleSection>
 
-      {/* Funcionalidades — Contactos & Items (siempre expandidos) */}
-      <div>
-        <div className="mb-5 flex items-center gap-2">
-          <div className="h-1 w-10 rounded-full" style={{ backgroundColor: "#0066FF" }} />
-          <h2 className="text-lg font-bold text-neutral-900">Funcionalidades</h2>
-          <span className="ml-2 text-xs text-neutral-500">Profundización por módulo</span>
-        </div>
-
-        <div className="space-y-8">
+      {/* Funcionalidades — Contactos & Items (colapsable) */}
+      <CollapsibleSection
+        title="Funcionalidades"
+        subtitle="Profundización por módulo"
+        color="#0066FF"
+      >
+        <div className="space-y-6">
           {/* Contactos */}
           <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
             <div className="mb-5 flex items-start justify-between gap-3 flex-wrap">
@@ -5213,27 +5211,30 @@ function Section5() {
             </div>
             <ItemsFuncDetail />
           </div>
-
-          {/* Soporte */}
-          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-            <div className="mb-5 flex items-start gap-3">
-              <div
-                className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
-                style={{ backgroundColor: "#FCA5A520" }}
-              >
-                <Headphones className="h-4 w-4 text-red-500" />
-              </div>
-              <div>
-                <h3 className="text-base font-bold text-neutral-900">Soporte</h3>
-                <p className="mt-0.5 text-xs text-neutral-500">
-                  Solicitudes de soporte desde la app · totales y únicos
-                </p>
-              </div>
-            </div>
-            <SoporteFuncDetail />
-          </div>
         </div>
-      </div>
+      </CollapsibleSection>
+
+      {/* Soporte (sección aparte, colapsable) */}
+      <CollapsibleSection
+        title="Soporte"
+        subtitle="Solicitudes de soporte desde la app · totales y únicos"
+        color="#F59E0B"
+      >
+        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+          <div className="mb-5 flex items-start gap-3">
+            <div
+              className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+              style={{ backgroundColor: "#F59E0B20" }}
+            >
+              <Headphones className="h-4 w-4 text-amber-500" />
+            </div>
+            <div>
+              <h3 className="text-base font-bold text-neutral-900">Soporte</h3>
+            </div>
+          </div>
+          <SoporteFuncDetail />
+        </div>
+      </CollapsibleSection>
 
       {/* Olas */}
       <div>
