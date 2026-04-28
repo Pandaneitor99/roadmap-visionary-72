@@ -36,10 +36,11 @@ const BASE_DATE = new Date(2026, 0, 5); // Jan 5, 2026
 
 const MONTH_NAMES_ES = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
 
-function generateSprints(count: number) {
+function generateSprints(count: number, startSprint = 1) {
   return Array.from({ length: count }, (_, i) => {
+    const sprintNum = startSprint + i;
     const startDay = new Date(BASE_DATE);
-    startDay.setDate(startDay.getDate() + i * 14); // each sprint = 2 weeks
+    startDay.setDate(startDay.getDate() + (sprintNum - 1) * 14); // each sprint = 2 weeks
     const endDay = new Date(startDay);
     endDay.setDate(endDay.getDate() + 13); // 14 days total (Mon to Sun next week)
 
@@ -47,10 +48,10 @@ function generateSprints(count: number) {
     const endStr = `${MONTH_NAMES_ES[endDay.getMonth()]} ${endDay.getDate()}`;
 
     return {
-      id: i + 1,
-      label: `S${i + 1}`,
+      id: sprintNum,
+      label: `S${sprintNum}`,
       dates: `${startStr} - ${endStr}`,
-      weeks: [i * 2 + 1, i * 2 + 2] as [number, number],
+      weeks: [(sprintNum - 1) * 2 + 1, (sprintNum - 1) * 2 + 2] as [number, number],
     };
   });
 }
