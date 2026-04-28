@@ -5237,13 +5237,7 @@ function Section5() {
       </CollapsibleSection>
 
       {/* Olas */}
-      <div>
-        <div className="mb-5 flex items-center gap-2">
-          <div className="h-1 w-10 rounded-full" style={{ backgroundColor: "#7C3AED" }} />
-          <h2 className="text-lg font-bold text-neutral-900">Olas</h2>
-          <span className="ml-2 text-xs text-neutral-500">Iniciativas por país</span>
-        </div>
-
+      <CollapsibleSection title="Olas" subtitle="Iniciativas por país" color="#7C3AED">
         <div className="grid gap-4 md:grid-cols-2">
           {/* Card Ola RD */}
           <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
