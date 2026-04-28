@@ -333,6 +333,13 @@ function pctDelta(arr: { v?: number; pct?: number; s?: number }[], key: "v" | "p
   if (!first) return 0;
   return ((last - first) / first) * 100;
 }
+// % delta usando un índice base específico (ej: semana previa a un lanzamiento)
+function pctDeltaFromIndex(arr: { v?: number; pct?: number; s?: number }[], key: "v" | "pct" | "s", baseIdx: number) {
+  const base = arr[baseIdx]?.[key] ?? 0;
+  const last = arr[arr.length - 1]?.[key] ?? 0;
+  if (!base) return 0;
+  return ((last - base) / base) * 100;
+}
 function lastVal(arr: { v?: number; pct?: number; s?: number }[], key: "v" | "pct" | "s") {
   return arr[arr.length - 1]?.[key] ?? 0;
 }
@@ -804,10 +811,10 @@ export function HomeDetail() {
             const first = itemsCreadosSemanal[0].total;
             return { label: "Ítems última sem", value: last.toLocaleString("es-CO"), delta: ((last - first) / first) * 100 };
           }
-          if (tab === "fnFactura") return { label: "Funnel actual", value: `${lastVal(funnelHomeFactura, "pct").toFixed(2)}%`, delta: pctDelta(funnelHomeFactura, "pct") };
-          if (tab === "fnContactos") return { label: "Funnel actual", value: `${lastVal(funnelHomeContactos, "pct").toFixed(2)}%`, delta: pctDelta(funnelHomeContactos, "pct") };
-          if (tab === "fnCotizacion") return { label: "Funnel actual", value: `${lastVal(funnelHomeCotizacion, "pct").toFixed(2)}%`, delta: pctDelta(funnelHomeCotizacion, "pct") };
-          if (tab === "fnItem") return { label: "Funnel actual", value: `${lastVal(funnelHomeItem, "pct").toFixed(2)}%`, delta: pctDelta(funnelHomeItem, "pct") };
+          if (tab === "fnFactura") return { label: "Funnel actual", value: `${lastVal(funnelHomeFactura, "pct").toFixed(2)}%`, delta: pctDeltaFromIndex(funnelHomeFactura, "pct", 5), note: "vs semana previa a Quick Actions (05 Abr)" };
+          if (tab === "fnContactos") return { label: "Funnel actual", value: `${lastVal(funnelHomeContactos, "pct").toFixed(2)}%`, delta: pctDeltaFromIndex(funnelHomeContactos, "pct", 5), note: "vs semana previa a Quick Actions (05 Abr)" };
+          if (tab === "fnCotizacion") return { label: "Funnel actual", value: `${lastVal(funnelHomeCotizacion, "pct").toFixed(2)}%`, delta: pctDeltaFromIndex(funnelHomeCotizacion, "pct", 5), note: "vs semana previa a Quick Actions (05 Abr)" };
+          if (tab === "fnItem") return { label: "Funnel actual", value: `${lastVal(funnelHomeItem, "pct").toFixed(2)}%`, delta: pctDeltaFromIndex(funnelHomeItem, "pct", 8), note: "vs semana previa a Quick Actions (29 Mar)" };
           if (tab === "ttcFactura") return { label: "TTC actual", value: `${lastVal(ttcFactura, "s").toLocaleString("es-CO")}s`, delta: pctDelta(ttcFactura, "s"), invert: true };
           if (tab === "ttcContactos") return { label: "TTC actual", value: `${lastVal(ttcContactos, "s").toLocaleString("es-CO")}s`, delta: pctDelta(ttcContactos, "s"), invert: true };
           if (tab === "ttcCotizacion") return { label: "TTC actual", value: `${lastVal(ttcCotizacion, "s").toLocaleString("es-CO")}s`, delta: pctDelta(ttcCotizacion, "s"), invert: true };
@@ -970,7 +977,7 @@ export function HomeDetail() {
                     <p className={`mt-1 flex items-center gap-1 text-xs font-bold ${(stat.invert ? stat.delta < 0 : stat.delta >= 0) ? "text-emerald-600" : "text-red-600"}`}>
                       {(stat.invert ? stat.delta < 0 : stat.delta >= 0) ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
                       {stat.delta >= 0 ? "+" : ""}{stat.delta.toFixed(1)}%
-                      <span className="ml-0.5 text-[10px] font-medium text-neutral-500">vs primera sem</span>
+                      {!stat.note && <span className="ml-0.5 text-[10px] font-medium text-neutral-500">vs primera sem</span>}
                     </p>
                   )}
                   {stat.note && <p className="mt-1 text-[10px] text-neutral-500">{stat.note}</p>}
