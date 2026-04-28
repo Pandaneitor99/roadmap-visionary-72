@@ -493,21 +493,28 @@ export function BusquedaDetail() {
   );
 }
 
-// Errores API — datos semanales reales (Amplitude charts cnbbpxr5 y 70xrqgyp)
-// Totales = suma del desglose por tipo (chart 70xrqgyp, Last 24 Weeks, excluye semanas incompletas)
+// Errores API Weakly — datos semanales reales (Amplitude chart cnbbpxr5)
+// Rango: Nov 23, 2025 – Apr 4, 2026 (Weekly, Current Total Events)
 const erroresApiWeekly = [
-  { sem: "01 Feb", v: 220 },
-  { sem: "08 Feb", v: 165 },
-  { sem: "15 Feb", v: 142 },
-  { sem: "22 Feb", v: 1229 },
-  { sem: "01 Mar", v: 2271 },
-  { sem: "08 Mar", v: 2063 },
-  { sem: "15 Mar", v: 1885 },
-  { sem: "22 Mar", v: 1607 },
-  { sem: "29 Mar", v: 1139 },
-  { sem: "05 Abr", v: 1831 },
-  { sem: "12 Abr", v: 232 },
-  { sem: "19 Abr", v: 311 },
+  { sem: "23 Nov", v: 9400 },
+  { sem: "30 Nov", v: 10600 },
+  { sem: "07 Dic", v: 9800 },
+  { sem: "14 Dic", v: 10000 },
+  { sem: "21 Dic", v: 6200 },
+  { sem: "28 Dic", v: 6500 },
+  { sem: "04 Ene", v: 10200 },
+  { sem: "11 Ene", v: 8400 },
+  { sem: "18 Ene", v: 8500 },
+  { sem: "25 Ene", v: 4900 },
+  { sem: "01 Feb", v: 4850 },
+  { sem: "08 Feb", v: 5950 },
+  { sem: "15 Feb", v: 4900 },
+  { sem: "22 Feb", v: 5100 },
+  { sem: "01 Mar", v: 7950 },
+  { sem: "08 Mar", v: 6800 },
+  { sem: "15 Mar", v: 6500 },
+  { sem: "22 Mar", v: 5800 },
+  { sem: "29 Mar", v: 4450 },
 ];
 
 // Desglose por tipo de error (chart 70xrqgyp · totals semanales)
