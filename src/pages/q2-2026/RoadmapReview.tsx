@@ -308,50 +308,53 @@ function Section1() {
       {/* Segmentos Objetivo */}
       <SegmentosObjetivo />
 
-      {/* Trade-offs table — al final */}
-      <div>
-        <h2 className="mb-4 text-lg font-bold text-neutral-900">
-          Trade-offs estratégicos
-        </h2>
-        <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
-          <div className="grid grid-cols-1 md:grid-cols-3">
-            <div className="border-b border-neutral-200 bg-neutral-50 px-5 py-3 text-xs font-bold uppercase tracking-wider text-neutral-600 md:border-b md:border-r">
-              Elegimos
-            </div>
-            <div className="border-b border-neutral-200 bg-neutral-50 px-5 py-3 text-xs font-bold uppercase tracking-wider text-neutral-600 md:border-b md:border-r">
-              En lugar de
-            </div>
-            <div className="border-b border-neutral-200 bg-neutral-50 px-5 py-3 text-xs font-bold uppercase tracking-wider text-neutral-600 md:border-b">
-              Porqué
-            </div>
+      {/* Trade-offs table — colapsable */}
+      <Collapsible className="group/collap">
+        <CollapsibleTrigger className="flex w-full items-center justify-between rounded-xl border border-neutral-200 bg-white px-5 py-3 text-left shadow-sm transition hover:bg-neutral-50">
+          <h2 className="text-lg font-bold text-neutral-900">Trade-offs estratégicos</h2>
+          <ChevronDown className="h-4 w-4 text-neutral-500 transition-transform group-data-[state=open]/collap:rotate-180" />
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          <div className="mt-3 overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
+            <div className="grid grid-cols-1 md:grid-cols-3">
+              <div className="border-b border-neutral-200 bg-neutral-50 px-5 py-3 text-xs font-bold uppercase tracking-wider text-neutral-600 md:border-b md:border-r">
+                Elegimos
+              </div>
+              <div className="border-b border-neutral-200 bg-neutral-50 px-5 py-3 text-xs font-bold uppercase tracking-wider text-neutral-600 md:border-b md:border-r">
+                En lugar de
+              </div>
+              <div className="border-b border-neutral-200 bg-neutral-50 px-5 py-3 text-xs font-bold uppercase tracking-wider text-neutral-600 md:border-b">
+                Porqué
+              </div>
 
-            {/* Row 1 */}
-            <TradeoffCell>Profundizar los flujos críticos existentes y creación de funcionalidad esenciales básicas</TradeoffCell>
-            <TradeoffCell>Agregar nuevas funcionalidades complejas o procesos complejos</TradeoffCell>
-            <TradeoffCell last>
-              El 90% de las acciones gira en torno a los ingresos y gastos, mejorar lo que ya existe tiene más impacto que expandir en funcionalidades segmento específico.
-            </TradeoffCell>
+              {/* Row 1 */}
+              <TradeoffCell>Profundizar los flujos críticos existentes y creación de funcionalidad esenciales básicas</TradeoffCell>
+              <TradeoffCell>Agregar nuevas funcionalidades complejas o procesos complejos</TradeoffCell>
+              <TradeoffCell last>
+                El 90% de las acciones gira en torno a los ingresos y gastos, mejorar lo que ya existe tiene más impacto que expandir en funcionalidades segmento específico.
+              </TradeoffCell>
 
-            {/* Row 2 */}
-            <TradeoffCell>Complemento estratégico de la web</TradeoffCell>
-            <TradeoffCell>Paridad total con la web</TradeoffCell>
-            <TradeoffCell last>
-              La web es el sistema de gestión profunda; intentar copiarla en
-              móvil crearía una app confusa e imposible de mantener.
-            </TradeoffCell>
+              {/* Row 2 */}
+              <TradeoffCell>Complemento estratégico de la web</TradeoffCell>
+              <TradeoffCell>Paridad total con la web</TradeoffCell>
+              <TradeoffCell last>
+                La web es el sistema de gestión profunda; intentar copiarla en
+                móvil crearía una app confusa e imposible de mantener.
+              </TradeoffCell>
 
-            {/* Row 3 - Highlighted */}
-            <TradeoffCell highlighted>
-              Retención y Adopción de usuarios actuales
-            </TradeoffCell>
-            <TradeoffCell highlighted>Adquisición de nuevos usuarios</TradeoffCell>
-            <TradeoffCell highlighted last>
-              Solo el 22% del total de usuarios pagos web obtiene valor real de
-              la app.
-            </TradeoffCell>
+              {/* Row 3 - Highlighted */}
+              <TradeoffCell highlighted>
+                Retención y Adopción de usuarios actuales
+              </TradeoffCell>
+              <TradeoffCell highlighted>Adquisición de nuevos usuarios</TradeoffCell>
+              <TradeoffCell highlighted last>
+                Solo el 22% del total de usuarios pagos web obtiene valor real de
+                la app.
+              </TradeoffCell>
+            </div>
           </div>
-        </div>
-      </div>
+        </CollapsibleContent>
+      </Collapsible>
     </div>
   );
 }
