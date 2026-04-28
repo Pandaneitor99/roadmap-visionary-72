@@ -1,36 +1,22 @@
+## Cambio
 
+En `src/data/initiatives.ts`, igualar el campo `percentage` con `achievedIncrease` en todos los Key Results del Q1 para que el tag de crecimiento mostrado siempre refleje el % logrado (base → actual) y se elimine la confusión actual (donde KR 2.2 mostraba "26%" cuando en realidad decreció -1.33%).
 
-## Actualizar dataset "Funcionalidades que más utilizan los BASE por fuera de App"
+## Valores finales
 
-Reemplazar el array `baseFueraDeApp` en `src/pages/q2-2026/RoadmapReview.tsx` (líneas 2927–2942) con los valores reales del chart Amplitude `h6i1m5l2` que aparecen en la captura.
+| KR | Base | Actual | `percentage` y `achievedIncrease` |
+|---|---|---|---|
+| 1.1 | 4.6 | 4.7 | +2.17% |
+| 1.2 | 4.3 | 4.4 | +2.33% |
+| 1.3 | 10k | 6k | -40% |
+| 2.1 | 7601 | 7977 | +4.95% |
+| 2.2 | 23.813 | 23497 | **-1.33%** |
+| 2.3 | 3500 | 5434 | +55.26% |
 
-### Nuevo dataset (14 eventos, ordenados desc.)
+## Archivo
 
-```ts
-const baseFueraDeApp = [
-  { feature: "Creación Factura",          uso: 10649 },
-  { feature: "Registrar pago",            uso: 6949 },
-  { feature: "Imprimir factura",          uso: 3840 },
-  { feature: "Descargar factura",         uso: 3385 },
-  { feature: "Generar reporte",           uso: 3376 },
-  { feature: "Editar factura",            uso: 3060 },
-  { feature: "Descargar reportes",        uso: 2001 },
-  { feature: "Editar retenciones",        uso: 1712 },
-  { feature: "Crear contactos",           uso: 1690 },
-  { feature: "Generar reportes (otros)",  uso: 1637 },
-  { feature: "Clonar factura",            uso: 1571 },
-  { feature: "Factura de compra",         uso: 1461 },
-  { feature: "Crear ítems",               uso: 1189 },
-  { feature: "Nota de crédito",           uso: 953 },
-];
-```
+- `src/data/initiatives.ts` — actualizar el campo `percentage` de KR 2.1 (31.56% → 4.95%), KR 2.2 (26% → -1.33%) y KR 2.3 (42.86% → 55.26%). El resto ya están alineados.
 
-### Detalles técnicos
+## Resultado visual
 
-- Solo se cambia el contenido del array. El `BarChart` (vertical, naranja, con `LabelList`) ya funciona y se reajusta automáticamente.
-- Se conserva la altura `h-[460px]` y `YAxis width=220` — los nuevos labels caben en ese ancho.
-- Se mantiene el comentario de fuente apuntando a `chart/h6i1m5l2`.
-- No se tocan otras secciones del archivo.
-
-**Archivo editado:** `src/pages/q2-2026/RoadmapReview.tsx` (solo líneas 2927–2942).
-
+El badge en `OKRCard` ya prioriza `achievedIncrease ?? percentage`, así que los tags ya se ven bien; este cambio garantiza coherencia interna y previene errores si en el futuro algún componente lee `percentage` directamente.
