@@ -5133,13 +5133,24 @@ function Section5() {
                   <p className="mt-0.5 text-xs text-neutral-500">Participación, intención y campos faltantes</p>
                 </div>
               </div>
-              <span
-                className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold"
-                style={{ borderColor: "#0066FF33", backgroundColor: "#0066FF10", color: "#0066FF" }}
-              >
-                <span className="text-[9px] uppercase tracking-wider opacity-80">App vs total</span>
-                <span className="text-[11px] font-bold">{ITEMS_APP_PARTICIPACION.toFixed(2)}%</span>
-              </span>
+              <div className="flex items-center gap-2">
+                <span
+                  className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold"
+                  style={{ borderColor: "#0066FF33", backgroundColor: "#0066FF10", color: "#0066FF" }}
+                >
+                  <span className="text-[9px] uppercase tracking-wider opacity-80">App vs total</span>
+                  <span className="text-[11px] font-bold">{ITEMS_APP_PARTICIPACION.toFixed(2)}%</span>
+                </span>
+                <a
+                  href="https://www.figma.com/design/VjC6hok9QSdr9Wd8iasWms/Secci%C3%B3n-items-App?node-id=2266-3088&t=Vbquk9q4yag4jbVR-0"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold transition-colors hover:bg-neutral-50"
+                  style={{ borderColor: "#0066FF33", color: "#0066FF" }}
+                >
+                  <Sparkles className="h-3 w-3" /> Ver prototipo <ExternalLink className="h-2.5 w-2.5" />
+                </a>
+              </div>
             </div>
             <ItemsFuncDetail />
           </div>
