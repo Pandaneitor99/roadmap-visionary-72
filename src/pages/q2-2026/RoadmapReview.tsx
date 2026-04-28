@@ -2470,30 +2470,30 @@ function zip(months: string[], vals: number[]): { month: string; pct: number }[]
 
 // === Comportamiento BASE / SOS — datos reales Amplitude ===
 
-// Adopción funcionalidades BASE vs SOS - chart aq7o241v (Mar 2026)
+// Adopción funcionalidades BASE vs SOS - chart aq7o241v (Mar 29 - Abr 26 2026)
 const adopcionBaseSosData = [
-  { event: "Crear factura", BASE: 96.6, SOS: 48.6 },
-  { event: "Crear contacto", BASE: 51.4, SOS: 20.5 },
-  { event: "Crear ítem", BASE: 39.2, SOS: 13.8 },
-  { event: "Buscar factura", BASE: 28.5, SOS: 44.6 },
-  { event: "Crear cotización", BASE: 23.1, SOS: 32.3 },
-  { event: "Ver gráfico de ventas", BASE: 18.4, SOS: 32.9 },
-  { event: "Cuentas por cobrar", BASE: 6.6, SOS: 19.3 },
-  { event: "Crear factura de proveedor", BASE: 1.5, SOS: 2.8 },
-  { event: "Crear remisión", BASE: 1.1, SOS: 4.8 },
+  { event: "Crear factura", BASE: 79.8, SOS: 49.2 },
+  { event: "Crear contacto", BASE: 43.1, SOS: 21.2 },
+  { event: "Crear ítem", BASE: 36.8, SOS: 13.2 },
+  { event: "Buscar factura", BASE: 30.4, SOS: 40.4 },
+  { event: "Crear cotización", BASE: 29.8, SOS: 34.6 },
+  { event: "Ver gráfico de ventas", BASE: 27.2, SOS: 32.3 },
+  { event: "Cuentas por cobrar", BASE: 9.9, SOS: 19.8 },
+  { event: "Crear factura de proveedor", BASE: 3.2, SOS: 2.8 },
+  { event: "Crear remisión", BASE: 3.1, SOS: 5.1 },
 ];
 
-// Engagement BASE - chart no1u7db2 (Mar 2026)
+// Engagement BASE - chart no1u7db2 (Mar 29 - Abr 26 2026)
 const baseEvents: EngagementEvent[] = [
-  { num: 1, label: "Crear factura", adoption: 92.9, frequency: 30.1 },
-  { num: 3, label: "Crear contacto", adoption: 43.6, frequency: 5.5 },
-  { num: 5, label: "Crear ítem", adoption: 34.0, frequency: 6.9 },
-  { num: 4, label: "Crear cotización", adoption: 20.1, frequency: 6.3 },
-  { num: 2, label: "Buscar factura", adoption: 18.2, frequency: 11.8 },
-  { num: 6, label: "Ver gráfico de ventas", adoption: 12.3, frequency: 2.6 },
-  { num: 9, label: "Crear factura de proveedor", adoption: 1.2, frequency: 7.4 },
-  { num: 10, label: "Crear gasto", adoption: 1.1, frequency: 17.4 },
-  { num: 8, label: "Crear remisión", adoption: 0.9, frequency: 6.1 },
+  { num: 1, label: "Crear factura", adoption: 71.3, frequency: 35.4 },
+  { num: 3, label: "Crear contacto", adoption: 37.2, frequency: 8.0 },
+  { num: 5, label: "Crear ítem", adoption: 32.1, frequency: 9.3 },
+  { num: 4, label: "Crear cotización", adoption: 26.2, frequency: 15.2 },
+  { num: 2, label: "Buscar factura", adoption: 21.5, frequency: 25.6 },
+  { num: 6, label: "Ver gráfico de ventas", adoption: 20.3, frequency: 13.1 },
+  { num: 9, label: "Crear factura de proveedor", adoption: 2.9, frequency: 16.9 },
+  { num: 8, label: "Crear remisión", adoption: 2.8, frequency: 31.8 },
+  { num: 10, label: "Crear gasto", adoption: 2.1, frequency: 12.3 },
 ];
 
 // Engagement SOS - chart ezbhdx9r (Mar 2026)
@@ -4756,23 +4756,24 @@ function SimpleInitiativeCard({
 // === Sección 5: Diagnóstico y oportunidades ===
 
 // Funcionalidades que más utilizan los BASE por fuera de la App (web).
-// Conteo de eventos en las últimas 4 semanas · Cohort BASE (s8shexr4)
+// Conteo de eventos · Cohort MAC Mobile BASE Marzo 2026 · 2026-03-29 → 2026-04-26
 // Fuente: Amplitude chart h6i1m5l2
 const baseFueraDeApp = [
-  { feature: "Creación Factura", uso: 10649 },
-  { feature: "Registrar pago", uso: 6949 },
-  { feature: "Imprimir factura", uso: 3840 },
-  { feature: "Descargar factura", uso: 3385 },
-  { feature: "Generar reporte", uso: 3376 },
-  { feature: "Editar factura", uso: 3060 },
-  { feature: "Descargar reportes", uso: 2001 },
-  { feature: "Editar retenciones", uso: 1712 },
-  { feature: "Crear contactos", uso: 1690 },
-  { feature: "Generar reportes (otros)", uso: 1637 },
-  { feature: "Clonar factura", uso: 1571 },
-  { feature: "Factura de compra", uso: 1461 },
-  { feature: "Crear ítems", uso: 1189 },
-  { feature: "Nota de crédito", uso: 953 },
+  { feature: "Registrar pago", uso: 15900 },
+  { feature: "Imprimir factura", uso: 14717 },
+  { feature: "Editar factura", uso: 13776 },
+  { feature: "Descargar factura", uso: 5927 },
+  { feature: "Reportes por vendedor", uso: 5601 },
+  { feature: "Reporte de inventario", uso: 3766 },
+  { feature: "Reporte ventas por ítem", uso: 3171 },
+  { feature: "Timbrar factura", uso: 2450 },
+  { feature: "Compartir factura", uso: 2097 },
+  { feature: "Clonar factura", uso: 2040 },
+  { feature: "Aplicar crédito", uso: 1740 },
+  { feature: "Editar retenciones", uso: 1677 },
+  { feature: "Cancelar factura", uso: 1433 },
+  { feature: "Reporte rentabilidad ítems", uso: 1345 },
+  { feature: "Reporte facturas abiertas", uso: 1125 },
 ];
 
 const oportunidades = [
