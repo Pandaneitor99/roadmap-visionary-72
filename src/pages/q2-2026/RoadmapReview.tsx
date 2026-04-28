@@ -301,11 +301,10 @@ function Section1() {
             </div>
 
             {/* Row 1 */}
-            <TradeoffCell>Profundizar los flujos críticos existentes</TradeoffCell>
-            <TradeoffCell>Agregar nuevas funcionalidades complejas</TradeoffCell>
+            <TradeoffCell>Profundizar los flujos críticos existentes y creación de funcionalidad esenciales básicas</TradeoffCell>
+            <TradeoffCell>Agregar nuevas funcionalidades complejas o procesos complejos</TradeoffCell>
             <TradeoffCell last>
-              El 57% de las acciones ocurren en Factura de Venta — mejorar lo
-              que ya existe tiene más impacto que expandir.
+              El 90% de las acciones gira en torno a los ingresos y gastos, mejorar lo que ya existe tiene más impacto que expandir en funcionalidades segmento específico.
             </TradeoffCell>
 
             {/* Row 2 */}
