@@ -977,7 +977,7 @@ export function HomeDetail() {
                     <p className={`mt-1 flex items-center gap-1 text-xs font-bold ${(stat.invert ? stat.delta < 0 : stat.delta >= 0) ? "text-emerald-600" : "text-red-600"}`}>
                       {(stat.invert ? stat.delta < 0 : stat.delta >= 0) ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
                       {stat.delta >= 0 ? "+" : ""}{stat.delta.toFixed(1)}%
-                      <span className="ml-0.5 text-[10px] font-medium text-neutral-500">vs primera sem</span>
+                      {!stat.note && <span className="ml-0.5 text-[10px] font-medium text-neutral-500">vs primera sem</span>}
                     </p>
                   )}
                   {stat.note && <p className="mt-1 text-[10px] text-neutral-500">{stat.note}</p>}
