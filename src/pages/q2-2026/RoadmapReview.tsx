@@ -1732,7 +1732,7 @@ function MrrBaseSection() {
               <p className="mt-1 text-xs text-neutral-500">Aporte mensual en USD por tipo de plan</p>
             </div>
             <div className="inline-flex items-center gap-1 rounded-full bg-[#00C853]/10 px-3 py-1 text-xs font-bold text-[#00785A]">
-              <TrendingUp className="h-3 w-3" /> +7.71% total
+              <TrendingUp className="h-3 w-3" /> +9.63% total
             </div>
           </div>
           <div className="mt-4 h-[280px]">
