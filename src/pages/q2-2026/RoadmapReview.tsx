@@ -5340,13 +5340,7 @@ function Section5() {
       </CollapsibleSection>
 
       {/* Adquisición */}
-      <div>
-        <div className="mb-5 flex items-center gap-2">
-          <div className="h-1 w-10 rounded-full" style={{ backgroundColor: "#FF6B00" }} />
-          <h2 className="text-lg font-bold text-neutral-900">Adquisición</h2>
-          <span className="ml-2 text-xs text-neutral-500">Login para ver planes y pagar</span>
-        </div>
-
+      <CollapsibleSection title="Adquisición" subtitle="Login para ver planes y pagar" color="#FF6B00">
         <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
           <div className="mb-5 flex items-start gap-3">
             <div
@@ -5403,18 +5397,12 @@ function Section5() {
             data={funnelComboSinPQL}
           />
         </div>
-      </div>
+      </CollapsibleSection>
 
       {/* Contadores */}
-      <div>
-        <div className="mb-5 flex items-center gap-2">
-          <div className="h-1 w-10 rounded-full" style={{ backgroundColor: "rgb(48,171,169)" }} />
-          <h2 className="text-lg font-bold text-neutral-900">Contadores</h2>
-          <span className="ml-2 text-xs text-neutral-500">Acciones más importantes · voces de campo</span>
-        </div>
-
+      <CollapsibleSection title="Contadores" subtitle="Acciones más importantes · voces de campo" color="rgb(48,171,169)">
         <ContadoresSection />
-      </div>
+      </CollapsibleSection>
 
     </div>
   );
