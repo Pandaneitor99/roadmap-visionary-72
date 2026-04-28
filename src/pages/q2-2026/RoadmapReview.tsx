@@ -2913,6 +2913,14 @@ function MrrTotalSection() {
           </div>
         </div>
       </div>
+
+      {/* Distribución por tipo de plan — CORE y LITE */}
+      <PlanDistributionCard
+        title="Distribución por tipo de plan · CORE y LITE"
+        subtitle="Usuarios pagos CORE y LITE segmentados por plan comercial"
+        total={8173}
+        data={planDistributionCoreLite}
+      />
     </div>
   );
 }
