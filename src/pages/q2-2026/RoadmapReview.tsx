@@ -5337,7 +5337,7 @@ function Section5() {
             </div>
           </div>
         </div>
-      </div>
+      </CollapsibleSection>
 
       {/* Adquisición */}
       <div>
