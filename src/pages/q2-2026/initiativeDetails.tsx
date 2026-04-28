@@ -579,9 +579,9 @@ export function EstabilizacionDetail() {
       </div>
       <Insights
         items={[
-          "Errores API totales bajaron de ~2.3K (01-Mar) a ~311 semanales (19-Abr): caída sostenida en las últimas semanas.",
-          "El principal foco histórico fue 'Usuario o clave inválida' (pico de 3.3K en Nov-25), hoy reducido a menos de 10 por semana.",
-          "Los errores de búsqueda (404 y query obligatorio) emergieron como nuevos focos desde Feb-26 y ya muestran mejora en Abr.",
+          "Errores API totales cayeron de ~2.3K (01-Mar) a 311 semanales (19-Abr): caída sostenida de -86% en 7 semanas.",
+          "El principal foco histórico fue 'Usuario o clave inválida' (pico de 3.3K en Nov-25), hoy reducido a ~6 por semana (-96% vs 01-Feb).",
+          "Los errores de búsqueda (404 y query 902) emergieron en Feb-26 pero ya muestran fuerte caída en Abr (de ~1K a ~150 por semana).",
         ]}
       />
     </div>
