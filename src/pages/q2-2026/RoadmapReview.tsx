@@ -2914,10 +2914,9 @@ function MrrTotalSection() {
         </div>
       </div>
 
-      {/* Distribución por tipo de plan — CORE y LITE */}
+      {/* Distribución por tipo de plan */}
       <PlanDistributionCard
-        title="Distribución por tipo de plan · CORE y LITE"
-        subtitle="Usuarios pagos CORE y LITE segmentados por plan comercial"
+        title="Distribución por tipo de plan"
         total={8173}
         data={planDistributionCoreLite}
       />
