@@ -811,10 +811,10 @@ export function HomeDetail() {
             const first = itemsCreadosSemanal[0].total;
             return { label: "Ítems última sem", value: last.toLocaleString("es-CO"), delta: ((last - first) / first) * 100 };
           }
-          if (tab === "fnFactura") return { label: "Funnel actual", value: `${lastVal(funnelHomeFactura, "pct").toFixed(2)}%`, delta: pctDeltaFromIndex(funnelHomeFactura, "pct", 5), note: "vs semana previa a Quick Actions (05 Abr)" };
-          if (tab === "fnContactos") return { label: "Funnel actual", value: `${lastVal(funnelHomeContactos, "pct").toFixed(2)}%`, delta: pctDeltaFromIndex(funnelHomeContactos, "pct", 5), note: "vs semana previa a Quick Actions (05 Abr)" };
-          if (tab === "fnCotizacion") return { label: "Funnel actual", value: `${lastVal(funnelHomeCotizacion, "pct").toFixed(2)}%`, delta: pctDeltaFromIndex(funnelHomeCotizacion, "pct", 5), note: "vs semana previa a Quick Actions (05 Abr)" };
-          if (tab === "fnItem") return { label: "Funnel actual", value: `${lastVal(funnelHomeItem, "pct").toFixed(2)}%`, delta: pctDeltaFromIndex(funnelHomeItem, "pct", 8), note: "vs semana previa a Quick Actions (29 Mar)" };
+          if (tab === "fnFactura") return { label: "Funnel actual", value: `${lastVal(funnelHomeFactura, "pct").toFixed(2)}%`, delta: pctDelta(funnelHomeFactura, "pct") };
+          if (tab === "fnContactos") return { label: "Funnel actual", value: `${lastVal(funnelHomeContactos, "pct").toFixed(2)}%`, delta: pctDelta(funnelHomeContactos, "pct") };
+          if (tab === "fnCotizacion") return { label: "Funnel actual", value: `${lastVal(funnelHomeCotizacion, "pct").toFixed(2)}%`, delta: pctDelta(funnelHomeCotizacion, "pct") };
+          if (tab === "fnItem") return { label: "Funnel actual", value: `${lastVal(funnelHomeItem, "pct").toFixed(2)}%`, delta: pctDelta(funnelHomeItem, "pct") };
           if (tab === "ttcFactura") return { label: "TTC actual", value: `${lastVal(ttcFactura, "s").toLocaleString("es-CO")}s`, delta: pctDelta(ttcFactura, "s"), invert: true };
           if (tab === "ttcContactos") return { label: "TTC actual", value: `${lastVal(ttcContactos, "s").toLocaleString("es-CO")}s`, delta: pctDelta(ttcContactos, "s"), invert: true };
           if (tab === "ttcCotizacion") return { label: "TTC actual", value: `${lastVal(ttcCotizacion, "s").toLocaleString("es-CO")}s`, delta: pctDelta(ttcCotizacion, "s"), invert: true };
