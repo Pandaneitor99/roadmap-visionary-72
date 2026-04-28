@@ -36,10 +36,11 @@ const BASE_DATE = new Date(2026, 0, 5); // Jan 5, 2026
 
 const MONTH_NAMES_ES = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
 
-function generateSprints(count: number) {
+function generateSprints(count: number, startSprint = 1) {
   return Array.from({ length: count }, (_, i) => {
+    const sprintNum = startSprint + i;
     const startDay = new Date(BASE_DATE);
-    startDay.setDate(startDay.getDate() + i * 14); // each sprint = 2 weeks
+    startDay.setDate(startDay.getDate() + (sprintNum - 1) * 14); // each sprint = 2 weeks
     const endDay = new Date(startDay);
     endDay.setDate(endDay.getDate() + 13); // 14 days total (Mon to Sun next week)
 
@@ -47,10 +48,10 @@ function generateSprints(count: number) {
     const endStr = `${MONTH_NAMES_ES[endDay.getMonth()]} ${endDay.getDate()}`;
 
     return {
-      id: i + 1,
-      label: `S${i + 1}`,
+      id: sprintNum,
+      label: `S${sprintNum}`,
       dates: `${startStr} - ${endStr}`,
-      weeks: [i * 2 + 1, i * 2 + 2] as [number, number],
+      weeks: [(sprintNum - 1) * 2 + 1, (sprintNum - 1) * 2 + 2] as [number, number],
     };
   });
 }
@@ -121,7 +122,12 @@ interface ResizeState {
   originalEnd: number;
 }
 
-export function RoadmapGantt() {
+interface RoadmapGanttProps {
+  startSprint?: number;
+  initialSprintCount?: number;
+}
+
+export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPRINT_COUNT }: RoadmapGanttProps = {}) {
   const [items, setItems] = useState<RoadmapItem[]>(initialItems);
   const [rows, setRows] = useState<RowDef[]>(initialRows);
   const [loading, setLoading] = useState(true);
@@ -131,9 +137,10 @@ export function RoadmapGantt() {
   const dragRef = useRef<DragState | null>(null);
   const resizeRef = useRef<ResizeState | null>(null);
   const [dragRowId, setDragRowId] = useState<string | null>(null);
-  const [sprintCount, setSprintCount] = useState(INITIAL_SPRINT_COUNT);
-  const sprints = generateSprints(sprintCount);
+  const [sprintCount, setSprintCount] = useState(initialSprintCount);
+  const sprints = generateSprints(sprintCount, startSprint);
   const totalWeeks = sprintCount * 2;
+  const startWeek = (startSprint - 1) * 2 + 1;
   const [resizingItemId, setResizingItemId] = useState<string | null>(null);
 
   // New item creation state
@@ -501,6 +508,7 @@ export function RoadmapGantt() {
             row={row}
             items={rowItems}
             totalWeeks={totalWeeks}
+            startWeek={startWeek}
             onItemClick={handleItemClick}
             getItemColor={getItemColor}
             onDragStart={handleDragStart}
@@ -562,7 +570,7 @@ export function RoadmapGantt() {
                 key={i}
                 className="rounded-sm bg-card/60 border border-border/50 px-0.5 py-0.5 text-center text-[9px] text-muted-foreground"
               >
-                W{i + 1}
+                W{startWeek + i}
               </div>
             ))}
           </div>
@@ -936,6 +944,7 @@ interface RoadmapRowProps {
   row: RowDef;
   items: RoadmapItem[];
   totalWeeks: number;
+  startWeek?: number;
   onItemClick: (item: RoadmapItem) => void;
   getItemColor: (item: RoadmapItem) => string;
   onDragStart: (e: React.DragEvent, item: RoadmapItem, week: number) => void;
@@ -958,6 +967,7 @@ function RoadmapRow({
   row,
   items,
   totalWeeks,
+  startWeek = 1,
   onItemClick,
   getItemColor,
   onDragStart,
@@ -1007,7 +1017,7 @@ function RoadmapRow({
 
       {/* Week cells */}
       {Array.from({ length: totalWeeks }, (_, weekIndex) => {
-        const week = weekIndex + 1;
+        const week = startWeek + weekIndex;
         const item = items.find(i => week >= i.weekStart && week <= i.weekEnd);
         const isStart = item?.weekStart === week;
         const isEnd = item?.weekEnd === week;

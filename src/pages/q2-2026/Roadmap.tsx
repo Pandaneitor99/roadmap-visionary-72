@@ -10,7 +10,7 @@ export default function RoadmapQ22026() {
         </p>
       </div>
 
-      <RoadmapGantt />
+      <RoadmapGantt startSprint={9} initialSprintCount={8} />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
-import { ChevronLeft, ChevronRight, Sparkles, TrendingUp, TrendingDown, Wrench, ClipboardList, Star, ExternalLink, Users, AlertTriangle, Heart, Target, Lightbulb, Bug, LogIn, Headphones, UserPlus, Info } from "lucide-react";
+import { ChevronLeft, ChevronRight, ChevronDown, Sparkles, TrendingUp, TrendingDown, Wrench, ClipboardList, Star, ExternalLink, Users, AlertTriangle, Heart, Target, Lightbulb, Bug, LogIn, Headphones, UserPlus, Info } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -179,7 +180,7 @@ function Section1() {
     <div className="space-y-10">
       {/* Vision block + filosofía embebida */}
       <div
-        className="relative overflow-hidden rounded-2xl border border-emerald-100 bg-white p-8 shadow-sm md:p-12"
+        className="relative overflow-hidden rounded-2xl border border-emerald-100 bg-white p-5 shadow-sm md:p-6"
         style={{
           backgroundImage:
             "radial-gradient(circle at 100% 0%, rgba(0,179,134,0.08), transparent 50%)",
@@ -225,7 +226,7 @@ function Section1() {
               Visión
             </span>
           </div>
-          <p className="mt-4 text-2xl font-semibold leading-snug text-neutral-900 md:text-3xl">
+          <p className="mt-3 text-xl font-semibold leading-snug text-neutral-900 md:text-2xl">
             "Convertir la App de Alegra en el centro operativo móvil imprescindible de la Pyme<br />
             y el centro de control móvil en tiempo real del contador,<br />
             donde las decisiones y flujos críticos se resuelven en segundos."
@@ -233,7 +234,7 @@ function Section1() {
         </div>
 
         {/* Filosofía — tarjetas pequeñas embebidas */}
-        <div className="relative mt-8 grid gap-3 md:grid-cols-3">
+        <div className="relative mt-5 grid gap-3 md:grid-cols-3">
           <div className="rounded-xl border border-neutral-200/80 bg-white/80 p-4 backdrop-blur-sm">
             <div
               className="inline-flex rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white"
@@ -280,77 +281,80 @@ function Section1() {
       </div>
 
       {/* Two cards: roles */}
-      <div className="grid gap-5 md:grid-cols-2">
-        <div className="group rounded-2xl border border-neutral-200 bg-white p-7 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="group rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
           <div
             className="inline-flex rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white"
             style={{ backgroundColor: ALEGRA_GREEN }}
           >
             Para la Pyme
           </div>
-          <h3 className="mt-4 text-xl font-bold text-neutral-900">
+          <h3 className="mt-3 text-lg font-bold text-neutral-900">
             Centro operativo mobile
           </h3>
-          <p className="mt-2 text-sm text-neutral-600">Ejecución inmediata</p>
+          <p className="mt-1 text-sm text-neutral-600">Ejecución inmediata</p>
         </div>
-        <div className="group rounded-2xl border border-neutral-200 bg-white p-7 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+        <div className="group rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
           <div className="inline-flex rounded-full bg-neutral-900 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
             Para el contador
           </div>
-          <h3 className="mt-4 text-xl font-bold text-neutral-900">
+          <h3 className="mt-3 text-lg font-bold text-neutral-900">
             Centro de control mobile
           </h3>
-          <p className="mt-2 text-sm text-neutral-600">Control y validación</p>
+          <p className="mt-1 text-sm text-neutral-600">Control y validación</p>
         </div>
       </div>
 
       {/* Segmentos Objetivo */}
       <SegmentosObjetivo />
 
-      {/* Trade-offs table — al final */}
-      <div>
-        <h2 className="mb-4 text-lg font-bold text-neutral-900">
-          Trade-offs estratégicos
-        </h2>
-        <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
-          <div className="grid grid-cols-1 md:grid-cols-3">
-            <div className="border-b border-neutral-200 bg-neutral-50 px-5 py-3 text-xs font-bold uppercase tracking-wider text-neutral-600 md:border-b md:border-r">
-              Elegimos
-            </div>
-            <div className="border-b border-neutral-200 bg-neutral-50 px-5 py-3 text-xs font-bold uppercase tracking-wider text-neutral-600 md:border-b md:border-r">
-              En lugar de
-            </div>
-            <div className="border-b border-neutral-200 bg-neutral-50 px-5 py-3 text-xs font-bold uppercase tracking-wider text-neutral-600 md:border-b">
-              Porqué
-            </div>
+      {/* Trade-offs table — colapsable */}
+      <Collapsible className="group/collap">
+        <CollapsibleTrigger className="flex w-full items-center justify-between rounded-xl border border-neutral-200 bg-white px-5 py-3 text-left shadow-sm transition hover:bg-neutral-50">
+          <h2 className="text-lg font-bold text-neutral-900">Trade-offs estratégicos</h2>
+          <ChevronDown className="h-4 w-4 text-neutral-500 transition-transform group-data-[state=open]/collap:rotate-180" />
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          <div className="mt-3 overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
+            <div className="grid grid-cols-1 md:grid-cols-3">
+              <div className="border-b border-neutral-200 bg-neutral-50 px-5 py-3 text-xs font-bold uppercase tracking-wider text-neutral-600 md:border-b md:border-r">
+                Elegimos
+              </div>
+              <div className="border-b border-neutral-200 bg-neutral-50 px-5 py-3 text-xs font-bold uppercase tracking-wider text-neutral-600 md:border-b md:border-r">
+                En lugar de
+              </div>
+              <div className="border-b border-neutral-200 bg-neutral-50 px-5 py-3 text-xs font-bold uppercase tracking-wider text-neutral-600 md:border-b">
+                Porqué
+              </div>
 
-            {/* Row 1 */}
-            <TradeoffCell>Profundizar los flujos críticos existentes y creación de funcionalidad esenciales básicas</TradeoffCell>
-            <TradeoffCell>Agregar nuevas funcionalidades complejas o procesos complejos</TradeoffCell>
-            <TradeoffCell last>
-              El 90% de las acciones gira en torno a los ingresos y gastos, mejorar lo que ya existe tiene más impacto que expandir en funcionalidades segmento específico.
-            </TradeoffCell>
+              {/* Row 1 */}
+              <TradeoffCell>Profundizar los flujos críticos existentes y creación de funcionalidad esenciales básicas</TradeoffCell>
+              <TradeoffCell>Agregar nuevas funcionalidades complejas o procesos complejos</TradeoffCell>
+              <TradeoffCell last>
+                El 90% de las acciones gira en torno a los ingresos y gastos, mejorar lo que ya existe tiene más impacto que expandir en funcionalidades segmento específico.
+              </TradeoffCell>
 
-            {/* Row 2 */}
-            <TradeoffCell>Complemento estratégico de la web</TradeoffCell>
-            <TradeoffCell>Paridad total con la web</TradeoffCell>
-            <TradeoffCell last>
-              La web es el sistema de gestión profunda; intentar copiarla en
-              móvil crearía una app confusa e imposible de mantener.
-            </TradeoffCell>
+              {/* Row 2 */}
+              <TradeoffCell>Complemento estratégico de la web</TradeoffCell>
+              <TradeoffCell>Paridad total con la web</TradeoffCell>
+              <TradeoffCell last>
+                La web es el sistema de gestión profunda; intentar copiarla en
+                móvil crearía una app confusa e imposible de mantener.
+              </TradeoffCell>
 
-            {/* Row 3 - Highlighted */}
-            <TradeoffCell highlighted>
-              Retención y Adopción de usuarios actuales
-            </TradeoffCell>
-            <TradeoffCell highlighted>Adquisición de nuevos usuarios</TradeoffCell>
-            <TradeoffCell highlighted last>
-              Solo el 22% del total de usuarios pagos web obtiene valor real de
-              la app.
-            </TradeoffCell>
+              {/* Row 3 - Highlighted */}
+              <TradeoffCell highlighted>
+                Retención y Adopción de usuarios actuales
+              </TradeoffCell>
+              <TradeoffCell highlighted>Adquisición de nuevos usuarios</TradeoffCell>
+              <TradeoffCell highlighted last>
+                Solo el 22% del total de usuarios pagos web obtiene valor real de
+                la app.
+              </TradeoffCell>
+            </div>
           </div>
-        </div>
-      </div>
+        </CollapsibleContent>
+      </Collapsible>
     </div>
   );
 }
@@ -466,11 +470,10 @@ function SegmentosObjetivo() {
       {/* Tabla resumen */}
       <div className="mb-6 overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
         <div className="grid grid-cols-12 border-b border-neutral-200 bg-neutral-50 px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-neutral-600">
-          <div className="col-span-3">Segmento</div>
-          <div className="col-span-3">Tamaño</div>
+          <div className="col-span-4">Segmento</div>
+          <div className="col-span-4">Tamaño</div>
           <div className="col-span-2">Nivel de dolor</div>
-          <div className="col-span-3">Alternativa actual</div>
-          <div className="col-span-1 text-right">Prioridad</div>
+          <div className="col-span-2 text-right">Prioridad</div>
         </div>
         {segmentos.map((s) => {
           const active = s.id === selected;
@@ -494,16 +497,15 @@ function SegmentosObjetivo() {
                   : undefined
               }
             >
-              <div className="col-span-3 font-semibold text-neutral-900">
+              <div className="col-span-4 font-semibold text-neutral-900">
                 {s.nombre}
                 <span className="ml-2 text-[10px] font-medium text-neutral-500">
                   {s.badge}
                 </span>
               </div>
-              <div className="col-span-3 text-neutral-600">{s.tamano}</div>
+              <div className="col-span-4 text-neutral-600">{s.tamano}</div>
               <div className="col-span-2 text-neutral-600">{s.dolor}</div>
-              <div className="col-span-3 text-neutral-600">{s.alternativa}</div>
-              <div className="col-span-1 text-right">
+              <div className="col-span-2 text-right">
                 <span
                   className="inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold uppercase text-white"
                   style={{
@@ -4787,6 +4789,36 @@ function SimpleInitiativeCard({
 
 // === Sección 5: Diagnóstico y oportunidades ===
 
+function CollapsibleSection({
+  title,
+  subtitle,
+  color,
+  defaultOpen = false,
+  children,
+}: {
+  title: string;
+  subtitle?: string;
+  color: string;
+  defaultOpen?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <Collapsible defaultOpen={defaultOpen} className="group/collap">
+      <CollapsibleTrigger className="flex w-full items-center justify-between rounded-2xl border border-neutral-200 bg-white px-5 py-4 text-left shadow-sm transition hover:bg-neutral-50">
+        <div className="flex items-center gap-2">
+          <div className="h-1 w-10 rounded-full" style={{ backgroundColor: color }} />
+          <h2 className="text-lg font-bold text-neutral-900">{title}</h2>
+          {subtitle && <span className="ml-2 text-xs text-neutral-500">{subtitle}</span>}
+        </div>
+        <ChevronDown className="h-4 w-4 text-neutral-500 transition-transform group-data-[state=open]/collap:rotate-180" />
+      </CollapsibleTrigger>
+      <CollapsibleContent>
+        <div className="mt-3">{children}</div>
+      </CollapsibleContent>
+    </Collapsible>
+  );
+}
+
 // Funcionalidades que más utilizan los BASE por fuera de la App (web).
 // Conteo de eventos · Cohort MAC Mobile BASE Marzo 2026 · 2026-03-29 → 2026-04-26
 // Fuente: Amplitude chart h6i1m5l2
@@ -5026,93 +5058,86 @@ function Section5() {
         </div>
       </div>
 
-      {/* Funcionalidades que la BASE usa por fuera de App (en %) */}
-      <div>
-        <div className="mb-5 flex items-center gap-2">
-          <div className="h-1 w-10 rounded-full" style={{ backgroundColor: "#FF6B00" }} />
-          <h2 className="text-lg font-bold text-neutral-900">Funcionalidades que más usa la Pyme BASE por fuera de la App</h2>
-        </div>
-
-        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-          <div className="mb-4 flex items-start justify-between gap-4 flex-wrap">
-            <div>
-              <p className="text-sm font-semibold text-neutral-900">
-                Funcionalidades que más utilizan los BASE por fuera de App
-              </p>
-              <p className="mt-0.5 text-xs text-neutral-500">
-                Últimas 4 semanas · Cohort BASE (s8shexr4) · Conteo de eventos en web
-              </p>
+      {/* Funcionalidades fuera de App + Oportunidades (combinado, colapsable) */}
+      <CollapsibleSection
+        title="Funcionalidades fuera de App y Oportunidades"
+        subtitle={`${oportunidades.length} frentes detectados`}
+        color="#FF6B00"
+      >
+        <div className="space-y-6">
+          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+            <div className="mb-4 flex items-start justify-between gap-4 flex-wrap">
+              <div>
+                <p className="text-sm font-semibold text-neutral-900">
+                  Funcionalidades que más utilizan los BASE por fuera de App
+                </p>
+                <p className="mt-0.5 text-xs text-neutral-500">
+                  Últimas 4 semanas · Cohort BASE (s8shexr4) · Conteo de eventos en web
+                </p>
+              </div>
+              <a
+                href="https://app.amplitude.com/analytics/alegra/chart/h6i1m5l2"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+              >
+                Amplitude <ExternalLink className="h-3 w-3" />
+              </a>
             </div>
-            <a
-              href="https://app.amplitude.com/analytics/alegra/chart/h6i1m5l2"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
-            >
-              Amplitude <ExternalLink className="h-3 w-3" />
-            </a>
-          </div>
 
-          <div className="h-[460px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={baseFueraDeApp} layout="vertical" margin={{ top: 8, right: 56, left: 8, bottom: 8 }}>
-                <CartesianGrid horizontal={false} stroke="#f1f5f9" />
-                <XAxis
-                  type="number"
-                  tick={{ fontSize: 11, fill: "#64748b" }}
-                  tickFormatter={(v) => v.toLocaleString("es-CO")}
-                />
-                <YAxis
-                  type="category"
-                  dataKey="feature"
-                  width={220}
-                  tick={{ fontSize: 11, fill: "#0f172a" }}
-                />
-                <Tooltip
-                  cursor={{ fill: "rgba(255,107,0,0.06)" }}
-                  formatter={(v: number) => [v.toLocaleString("es-CO"), "Eventos"]}
-                />
-                <Bar dataKey="uso" fill="#FF6B00" radius={[0, 6, 6, 0]}>
-                  {baseFueraDeApp.map((_, i) => (
-                    <Cell key={i} />
-                  ))}
-                  <LabelList
-                    dataKey="uso"
-                    position="right"
-                    formatter={(v: number) => v.toLocaleString("es-CO")}
-                    style={{ fontSize: 11, fill: "#475569", fontWeight: 600 }}
+            <div className="h-[460px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={baseFueraDeApp} layout="vertical" margin={{ top: 8, right: 56, left: 8, bottom: 8 }}>
+                  <CartesianGrid horizontal={false} stroke="#f1f5f9" />
+                  <XAxis
+                    type="number"
+                    tick={{ fontSize: 11, fill: "#64748b" }}
+                    tickFormatter={(v) => v.toLocaleString("es-CO")}
                   />
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
+                  <YAxis
+                    type="category"
+                    dataKey="feature"
+                    width={220}
+                    tick={{ fontSize: 11, fill: "#0f172a" }}
+                  />
+                  <Tooltip
+                    cursor={{ fill: "rgba(255,107,0,0.06)" }}
+                    formatter={(v: number) => [v.toLocaleString("es-CO"), "Eventos"]}
+                  />
+                  <Bar dataKey="uso" fill="#FF6B00" radius={[0, 6, 6, 0]}>
+                    {baseFueraDeApp.map((_, i) => (
+                      <Cell key={i} />
+                    ))}
+                    <LabelList
+                      dataKey="uso"
+                      position="right"
+                      formatter={(v: number) => v.toLocaleString("es-CO")}
+                      style={{ fontSize: 11, fill: "#475569", fontWeight: 600 }}
+                    />
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          <div>
+            <h3 className="mb-3 text-sm font-bold uppercase tracking-wider text-neutral-600">Oportunidades</h3>
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {oportunidades.map((op) => (
+                <OportunidadCard key={op.id} op={op} />
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      </CollapsibleSection>
 
-      {/* Oportunidades */}
-      <div>
-        <div className="mb-5 flex items-center gap-2">
-          <div className="h-1 w-10 rounded-full" style={{ backgroundColor: ALEGRA_GREEN }} />
-          <h2 className="text-lg font-bold text-neutral-900">Oportunidades</h2>
-          <span className="ml-2 text-xs text-neutral-500">{oportunidades.length} frentes detectados</span>
-        </div>
-
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {oportunidades.map((op) => (
-            <OportunidadCard key={op.id} op={op} />
-          ))}
-        </div>
-      </div>
-
-      {/* Funcionalidades — Contactos & Items (siempre expandidos) */}
-      <div>
-        <div className="mb-5 flex items-center gap-2">
-          <div className="h-1 w-10 rounded-full" style={{ backgroundColor: "#0066FF" }} />
-          <h2 className="text-lg font-bold text-neutral-900">Funcionalidades</h2>
-          <span className="ml-2 text-xs text-neutral-500">Profundización por módulo</span>
-        </div>
-
-        <div className="space-y-8">
+      {/* Funcionalidades — Contactos & Items (colapsable) */}
+      <CollapsibleSection
+        title="Funcionalidades"
+        subtitle="Profundización por módulo"
+        color="#0066FF"
+      >
+        <div className="space-y-6">
           {/* Contactos */}
           <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
             <div className="mb-5 flex items-start justify-between gap-3 flex-wrap">
@@ -5186,36 +5211,33 @@ function Section5() {
             </div>
             <ItemsFuncDetail />
           </div>
-
-          {/* Soporte */}
-          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-            <div className="mb-5 flex items-start gap-3">
-              <div
-                className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
-                style={{ backgroundColor: "#FCA5A520" }}
-              >
-                <Headphones className="h-4 w-4 text-red-500" />
-              </div>
-              <div>
-                <h3 className="text-base font-bold text-neutral-900">Soporte</h3>
-                <p className="mt-0.5 text-xs text-neutral-500">
-                  Solicitudes de soporte desde la app · totales y únicos
-                </p>
-              </div>
-            </div>
-            <SoporteFuncDetail />
-          </div>
         </div>
-      </div>
+      </CollapsibleSection>
+
+      {/* Soporte (sección aparte, colapsable) */}
+      <CollapsibleSection
+        title="Soporte"
+        subtitle="Solicitudes de soporte desde la app · totales y únicos"
+        color="#F59E0B"
+      >
+        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+          <div className="mb-5 flex items-start gap-3">
+            <div
+              className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+              style={{ backgroundColor: "#F59E0B20" }}
+            >
+              <Headphones className="h-4 w-4 text-amber-500" />
+            </div>
+            <div>
+              <h3 className="text-base font-bold text-neutral-900">Soporte</h3>
+            </div>
+          </div>
+          <SoporteFuncDetail />
+        </div>
+      </CollapsibleSection>
 
       {/* Olas */}
-      <div>
-        <div className="mb-5 flex items-center gap-2">
-          <div className="h-1 w-10 rounded-full" style={{ backgroundColor: "#7C3AED" }} />
-          <h2 className="text-lg font-bold text-neutral-900">Olas</h2>
-          <span className="ml-2 text-xs text-neutral-500">Iniciativas por país</span>
-        </div>
-
+      <CollapsibleSection title="Olas" subtitle="Iniciativas por país" color="#7C3AED">
         <div className="grid gap-4 md:grid-cols-2">
           {/* Card Ola RD */}
           <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
@@ -5315,16 +5337,10 @@ function Section5() {
             </div>
           </div>
         </div>
-      </div>
+      </CollapsibleSection>
 
       {/* Adquisición */}
-      <div>
-        <div className="mb-5 flex items-center gap-2">
-          <div className="h-1 w-10 rounded-full" style={{ backgroundColor: "#FF6B00" }} />
-          <h2 className="text-lg font-bold text-neutral-900">Adquisición</h2>
-          <span className="ml-2 text-xs text-neutral-500">Login para ver planes y pagar</span>
-        </div>
-
+      <CollapsibleSection title="Adquisición" subtitle="Login para ver planes y pagar" color="#FF6B00">
         <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
           <div className="mb-5 flex items-start gap-3">
             <div
@@ -5381,18 +5397,12 @@ function Section5() {
             data={funnelComboSinPQL}
           />
         </div>
-      </div>
+      </CollapsibleSection>
 
       {/* Contadores */}
-      <div>
-        <div className="mb-5 flex items-center gap-2">
-          <div className="h-1 w-10 rounded-full" style={{ backgroundColor: "rgb(48,171,169)" }} />
-          <h2 className="text-lg font-bold text-neutral-900">Contadores</h2>
-          <span className="ml-2 text-xs text-neutral-500">Acciones más importantes · voces de campo</span>
-        </div>
-
+      <CollapsibleSection title="Contadores" subtitle="Acciones más importantes · voces de campo" color="rgb(48,171,169)">
         <ContadoresSection />
-      </div>
+      </CollapsibleSection>
 
     </div>
   );
