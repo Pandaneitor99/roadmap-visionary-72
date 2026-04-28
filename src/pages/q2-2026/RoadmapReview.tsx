@@ -225,7 +225,7 @@ function Section1() {
               Visión
             </span>
           </div>
-          <p className="mt-4 text-2xl font-semibold leading-snug text-neutral-900 md:text-3xl">
+          <p className="mt-3 text-xl font-semibold leading-snug text-neutral-900 md:text-2xl">
             "Convertir la App de Alegra en el centro operativo móvil imprescindible de la Pyme<br />
             y el centro de control móvil en tiempo real del contador,<br />
             donde las decisiones y flujos críticos se resuelven en segundos."
@@ -233,7 +233,7 @@ function Section1() {
         </div>
 
         {/* Filosofía — tarjetas pequeñas embebidas */}
-        <div className="relative mt-8 grid gap-3 md:grid-cols-3">
+        <div className="relative mt-5 grid gap-3 md:grid-cols-3">
           <div className="rounded-xl border border-neutral-200/80 bg-white/80 p-4 backdrop-blur-sm">
             <div
               className="inline-flex rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white"
