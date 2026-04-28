@@ -3755,25 +3755,21 @@ function SoporteFuncDetail() {
 
   return (
     <div className="space-y-5">
-      {/* Problema */}
-      <div className="rounded-xl border border-red-200 bg-red-50/60 p-4">
-        <div className="flex items-start justify-between gap-3 flex-wrap">
-          <p className="text-[11px] font-bold uppercase tracking-wider text-red-700">
-            Problema detectado
-          </p>
-          <a
-            href="https://claude.ai/design/p/9a44db74-0c3c-4b5a-9c38-c22c7b9d0ba0"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold transition-colors hover:bg-white"
-            style={{ borderColor: "#DC262633", color: "#DC2626", backgroundColor: "#DC262610" }}
-          >
-            <Sparkles className="h-3 w-3" /> Ver prototipo <ExternalLink className="h-2.5 w-2.5" />
-          </a>
-        </div>
-        <p className="mt-2 text-sm leading-relaxed text-neutral-800">
-          El usuario tiene que <strong>ir a la web para realizar un reclamo</strong> de soporte. La app no permite gestionar tickets ni hacer seguimiento, generando fricción y abandono cuando el usuario necesita ayuda en el momento.
+      {/* Problema — compacto en una línea */}
+      <div className="flex items-center justify-between gap-3 rounded-lg border border-amber-200 bg-amber-50/50 px-3 py-2 flex-wrap">
+        <p className="text-xs text-neutral-800">
+          <span className="mr-2 text-[10px] font-bold uppercase tracking-wider text-amber-700">Problema:</span>
+          El usuario debe ir a la web para realizar un reclamo de soporte; la app no gestiona tickets.
         </p>
+        <a
+          href="https://claude.ai/design/p/9a44db74-0c3c-4b5a-9c38-c22c7b9d0ba0"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold transition-colors hover:bg-white"
+          style={{ borderColor: "#F59E0B33", color: "#B45309", backgroundColor: "#F59E0B10" }}
+        >
+          <Sparkles className="h-3 w-3" /> Ver prototipo <ExternalLink className="h-2.5 w-2.5" />
+        </a>
       </div>
 
       {/* Charts lado a lado */}
