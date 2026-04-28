@@ -5637,13 +5637,11 @@ function ContactosFuncDetail() {
   const lastCrea = contactosVisitaACreado[contactosVisitaACreado.length - 1].pct;
   return (
     <div className="space-y-5">
-      {/* Problema destacado */}
-      <div className="rounded-xl border border-orange-200 bg-orange-50/60 p-4">
-        <p className="text-[11px] font-bold uppercase tracking-wider text-orange-700">
-          Problema detectado
-        </p>
-        <p className="mt-2 text-sm leading-relaxed text-neutral-800">
-          <strong>Disparidad en algunos campos</strong> como nombre y apellido, municipio y departamento, sumado a <strong>poca claridad en la elección de cliente y vendedor</strong>. Esto genera fricción en la creación de contactos desde la app.
+      {/* Problema destacado — compacto */}
+      <div className="rounded-lg border border-orange-200 bg-orange-50/50 px-3 py-2">
+        <p className="text-[10px] font-bold uppercase tracking-wider text-orange-700">Problema detectado</p>
+        <p className="mt-1 text-xs leading-relaxed text-neutral-800">
+          <strong>Disparidad en algunos campos no obligatorios</strong>, sumado a <strong>poca claridad en la elección de cliente y vendedor</strong>. Esto genera fricción en la creación de contactos desde la app.
         </p>
       </div>
 
