@@ -1805,10 +1805,9 @@ function MrrBaseSection() {
         </div>
       </div>
 
-      {/* Distribución por tipo de plan — BASE y SOS */}
+      {/* Distribución por tipo de plan — BASE */}
       <PlanDistributionCard
-        title="Distribución por tipo de plan · BASE y SOS"
-        subtitle="Usuarios pagos BASE y SOS segmentados por plan comercial"
+        title="Distribución por tipo de plan · BASE"
         total={2787}
         data={planDistributionBaseSos}
       />
@@ -1848,14 +1847,14 @@ const planDistributionCoreLite = [
 
 const PLAN_COLORS = ["#0066FF", "rgb(48,171,169)", "#00C853", "#FF6B00", "#9333EA", "#F59E0B", "#EC4899", "#14B8A6", "#6366F1", "#84CC16", "#EF4444", "#0EA5E9", "#A855F7"];
 
-function PlanDistributionCard({ title, subtitle, total, data }: { title: string; subtitle: string; total: number; data: { plan: string; count: number; pct: number }[] }) {
+function PlanDistributionCard({ title, subtitle, total, data }: { title: string; subtitle?: string; total: number; data: { plan: string; count: number; pct: number }[] }) {
   const maxPct = Math.max(...data.map((d) => d.pct));
   return (
     <div className="mt-6 rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <div>
           <h4 className="text-base font-bold text-neutral-900">{title}</h4>
-          <p className="mt-1 text-xs text-neutral-500">{subtitle}</p>
+          {subtitle && <p className="mt-1 text-xs text-neutral-500">{subtitle}</p>}
         </div>
         <span className="text-xs font-semibold text-neutral-600">Total: {total.toLocaleString("es-CO")} usuarios</span>
       </div>
@@ -2915,10 +2914,9 @@ function MrrTotalSection() {
         </div>
       </div>
 
-      {/* Distribución por tipo de plan — CORE y LITE */}
+      {/* Distribución por tipo de plan */}
       <PlanDistributionCard
-        title="Distribución por tipo de plan · CORE y LITE"
-        subtitle="Usuarios pagos CORE y LITE segmentados por plan comercial"
+        title="Distribución por tipo de plan"
         total={8173}
         data={planDistributionCoreLite}
       />
@@ -3757,25 +3755,21 @@ function SoporteFuncDetail() {
 
   return (
     <div className="space-y-5">
-      {/* Problema */}
-      <div className="rounded-xl border border-red-200 bg-red-50/60 p-4">
-        <div className="flex items-start justify-between gap-3 flex-wrap">
-          <p className="text-[11px] font-bold uppercase tracking-wider text-red-700">
-            Problema detectado
-          </p>
-          <a
-            href="https://claude.ai/design/p/9a44db74-0c3c-4b5a-9c38-c22c7b9d0ba0"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold transition-colors hover:bg-white"
-            style={{ borderColor: "#DC262633", color: "#DC2626", backgroundColor: "#DC262610" }}
-          >
-            <Sparkles className="h-3 w-3" /> Ver prototipo <ExternalLink className="h-2.5 w-2.5" />
-          </a>
-        </div>
-        <p className="mt-2 text-sm leading-relaxed text-neutral-800">
-          El usuario tiene que <strong>ir a la web para realizar un reclamo</strong> de soporte. La app no permite gestionar tickets ni hacer seguimiento, generando fricción y abandono cuando el usuario necesita ayuda en el momento.
+      {/* Problema — compacto en una línea */}
+      <div className="flex items-center justify-between gap-3 rounded-lg border border-amber-200 bg-amber-50/50 px-3 py-2 flex-wrap">
+        <p className="text-xs text-neutral-800">
+          <span className="mr-2 text-[10px] font-bold uppercase tracking-wider text-amber-700">Problema:</span>
+          El usuario debe ir a la web para realizar un reclamo de soporte; la app no gestiona tickets.
         </p>
+        <a
+          href="https://claude.ai/design/p/9a44db74-0c3c-4b5a-9c38-c22c7b9d0ba0"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold transition-colors hover:bg-white"
+          style={{ borderColor: "#F59E0B33", color: "#B45309", backgroundColor: "#F59E0B10" }}
+        >
+          <Sparkles className="h-3 w-3" /> Ver prototipo <ExternalLink className="h-2.5 w-2.5" />
+        </a>
       </div>
 
       {/* Charts lado a lado */}
@@ -3789,7 +3783,7 @@ function SoporteFuncDetail() {
                 Usuarios únicos que solicitaron soporte desde la app · mensual
               </p>
             </div>
-            <Badge variant="outline" className="text-[10px]" style={{ borderColor: "#FCA5A5", color: "#DC2626" }}>
+            <Badge variant="outline" className="text-[10px]" style={{ borderColor: "#FCD34D", color: "#B45309" }}>
               Abr '26: {lastUniques}
             </Badge>
           </div>
@@ -3800,7 +3794,7 @@ function SoporteFuncDetail() {
                 <XAxis dataKey="mes" tick={{ fontSize: 11 }} stroke="#6b7280" />
                 <YAxis tick={{ fontSize: 11 }} stroke="#6b7280" />
                 <Tooltip formatter={(v: number) => v.toLocaleString()} />
-                <Bar dataKey="uniques" fill="#DC2626" radius={[4, 4, 0, 0]}>
+                <Bar dataKey="uniques" fill="#F59E0B" radius={[4, 4, 0, 0]}>
                   <LabelList
                     dataKey="uniques"
                     position="top"
@@ -3829,7 +3823,7 @@ function SoporteFuncDetail() {
                 Total de solicitudes (eventos) de soporte desde la app · mensual
               </p>
             </div>
-            <Badge variant="outline" className="text-[10px]" style={{ borderColor: "#FCA5A5", color: "#DC2626" }}>
+            <Badge variant="outline" className="text-[10px]" style={{ borderColor: "#FCD34D", color: "#B45309" }}>
               Abr '26: {lastTotals}
             </Badge>
           </div>
@@ -3840,7 +3834,7 @@ function SoporteFuncDetail() {
                 <XAxis dataKey="mes" tick={{ fontSize: 11 }} stroke="#6b7280" />
                 <YAxis tick={{ fontSize: 11 }} stroke="#6b7280" />
                 <Tooltip formatter={(v: number) => v.toLocaleString()} />
-                <Bar dataKey="totals" fill="#FCA5A5" radius={[4, 4, 0, 0]}>
+                <Bar dataKey="totals" fill="#FCD34D" radius={[4, 4, 0, 0]}>
                   <LabelList
                     dataKey="totals"
                     position="top"
@@ -4140,6 +4134,7 @@ function TrendCombinedCard() {
   const oct = cfg.data[0]?.pct ?? 0;
   const last = cfg.data[cfg.data.length - 1]?.pct ?? 0;
   const delta = last - oct;
+  const deltaPct = oct !== 0 ? (delta / oct) * 100 : 0;
   const positive = delta >= 0;
 
   return (
@@ -4184,7 +4179,7 @@ function TrendCombinedCard() {
         >
           {positive ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
           {positive ? "+" : ""}
-          {delta.toFixed(2)} pp vs Oct
+          {deltaPct.toFixed(2)}% vs Oct
         </span>
       </div>
 
@@ -4468,12 +4463,34 @@ function PerfilPorPaisCard() {
 
 // --- Eventos Onboarding Semanal (chart j30yk1tu) ---
 function EventosOnboardingSemanalCard() {
+  const first = eventosOnboardingSemanal[0];
+  const last = eventosOnboardingSemanal[eventosOnboardingSemanal.length - 1];
+  const perfilDelta = ((last.perfil - first.perfil) / first.perfil) * 100;
+  const mqlDelta = ((last.mql - first.mql) / first.mql) * 100;
+  const pqlDelta = ((last.pql - first.pql) / first.pql) * 100;
+  const tag = (label: string, v: number) => (
+    <span
+      className={cn(
+        "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold ring-1",
+        v >= 0 ? "bg-emerald-50 text-emerald-700 ring-emerald-200" : "bg-orange-50 text-orange-700 ring-orange-200",
+      )}
+    >
+      {v >= 0 ? <TrendingUp className="h-2.5 w-2.5" /> : <TrendingDown className="h-2.5 w-2.5" />}
+      {label} {v >= 0 ? "+" : ""}
+      {v.toFixed(1)}%
+    </span>
+  );
   return (
     <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-      <div className="flex items-start justify-between gap-3">
+      <div className="flex items-start justify-between gap-3 flex-wrap">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">Volumen semanal</p>
-          <h3 className="mt-1 text-base font-bold text-neutral-900">Eventos Onboarding Semanal</h3>
+          <div className="mt-1 flex flex-wrap items-center gap-2">
+            <h3 className="text-base font-bold text-neutral-900">Eventos Onboarding Semanal</h3>
+            {tag("Perfil", perfilDelta)}
+            {tag("MQL", mqlDelta)}
+            {tag("PQL", pqlDelta)}
+          </div>
         </div>
         <a
           href="https://app.amplitude.com/analytics/alegra/chart/j30yk1tu"
@@ -5329,7 +5346,7 @@ function Section5() {
               </div>
             </div>
             <p className="mt-2 text-sm leading-relaxed text-neutral-800">
-              Los usuarios <strong>tienen que iniciar sesión dentro de la app</strong> para ver los planes y pagar, o <strong>ir a web</strong>. Este paso adicional fricciona la conversión a pago: <strong>Mobile web convierte 2.74% vs 1.92% en Mobile App</strong> (sin PQL).
+              Los usuarios <strong>tienen que iniciar sesión dentro de la app</strong> para ver los planes y pagar, o <strong>ir a web</strong>. Este paso adicional fricciona la conversión a pago.
             </p>
           </div>
 
@@ -5573,7 +5590,7 @@ function ItemsFuncDetail() {
           <p className="text-[11px] font-bold uppercase tracking-wider text-blue-700">
             Deficiente UX en campos
           </p>
-          <ul className="mt-2 space-y-1.5 text-xs text-neutral-700">
+          <ul className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1.5 text-xs text-neutral-700">
             {itemsUxDeficiente.map((c) => (
               <li key={c} className="flex items-start gap-2">
                 <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-500" />
@@ -5616,13 +5633,11 @@ function ContactosFuncDetail() {
   const lastCrea = contactosVisitaACreado[contactosVisitaACreado.length - 1].pct;
   return (
     <div className="space-y-5">
-      {/* Problema destacado */}
-      <div className="rounded-xl border border-orange-200 bg-orange-50/60 p-4">
-        <p className="text-[11px] font-bold uppercase tracking-wider text-orange-700">
-          Problema detectado
-        </p>
-        <p className="mt-2 text-sm leading-relaxed text-neutral-800">
-          <strong>Disparidad en algunos campos</strong> como nombre y apellido, municipio y departamento, sumado a <strong>poca claridad en la elección de cliente y vendedor</strong>. Esto genera fricción en la creación de contactos desde la app.
+      {/* Problema destacado — compacto */}
+      <div className="rounded-lg border border-orange-200 bg-orange-50/50 px-3 py-2">
+        <p className="text-[10px] font-bold uppercase tracking-wider text-orange-700">Problema detectado</p>
+        <p className="mt-1 text-xs leading-relaxed text-neutral-800">
+          <strong>Disparidad en algunos campos no obligatorios</strong>, sumado a <strong>poca claridad en la elección de cliente y vendedor</strong>. Esto genera fricción en la creación de contactos desde la app.
         </p>
       </div>
 
