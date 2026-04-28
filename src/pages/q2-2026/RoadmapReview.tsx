@@ -4819,6 +4819,7 @@ const oportunidades = [
       "No hay un buscador en el home ni búsqueda de pagos. La búsqueda de facturas de compra es por numeración.",
     oportunidad:
       "Buscador global en el home. Búsqueda por cliente en facturas de venta y pagos.",
+    link: "https://claude.ai/design/p/019dd183-c0d0-72dc-9fbf-65c1d4cfcba0?file=Buscador.html",
   },
   {
     id: "operacion",
@@ -4837,6 +4838,7 @@ const oportunidades = [
       "Hoy en la app no se encuentran gráficas clave para la operación: ventas del día, productos más vendidos, top de clientes, comparativos por período.",
     oportunidad:
       "Construir una sección de gráficas por venta, items y contactos.",
+    link: "https://claude.ai/design/p/019dd004-199a-7e2c-963c-4e8f8c157a59?file=Estadisticas.html",
   },
 ];
 
@@ -5131,13 +5133,24 @@ function Section5() {
                   <p className="mt-0.5 text-xs text-neutral-500">Participación, intención y campos faltantes</p>
                 </div>
               </div>
-              <span
-                className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold"
-                style={{ borderColor: "#0066FF33", backgroundColor: "#0066FF10", color: "#0066FF" }}
-              >
-                <span className="text-[9px] uppercase tracking-wider opacity-80">App vs total</span>
-                <span className="text-[11px] font-bold">{ITEMS_APP_PARTICIPACION.toFixed(2)}%</span>
-              </span>
+              <div className="flex items-center gap-2">
+                <span
+                  className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold"
+                  style={{ borderColor: "#0066FF33", backgroundColor: "#0066FF10", color: "#0066FF" }}
+                >
+                  <span className="text-[9px] uppercase tracking-wider opacity-80">App vs total</span>
+                  <span className="text-[11px] font-bold">{ITEMS_APP_PARTICIPACION.toFixed(2)}%</span>
+                </span>
+                <a
+                  href="https://www.figma.com/design/VjC6hok9QSdr9Wd8iasWms/Secci%C3%B3n-items-App?node-id=2266-3088&t=Vbquk9q4yag4jbVR-0"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold transition-colors hover:bg-neutral-50"
+                  style={{ borderColor: "#0066FF33", color: "#0066FF" }}
+                >
+                  <Sparkles className="h-3 w-3" /> Ver prototipo <ExternalLink className="h-2.5 w-2.5" />
+                </a>
+              </div>
             </div>
             <ItemsFuncDetail />
           </div>
@@ -5174,19 +5187,30 @@ function Section5() {
         <div className="grid gap-4 md:grid-cols-2">
           {/* Card Ola RD */}
           <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-            <div className="flex items-start gap-3">
-              <div
-                className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-lg"
-                style={{ backgroundColor: "#7C3AED15" }}
+            <div className="flex items-start justify-between gap-3 flex-wrap">
+              <div className="flex items-start gap-3">
+                <div
+                  className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-lg"
+                  style={{ backgroundColor: "#7C3AED15" }}
+                >
+                  🇩🇴
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-neutral-900">Ola Rep. Dominicana</h3>
+                  <p className="mt-0.5 text-xs text-neutral-500">
+                    Localización fiscal pendiente en factura de venta
+                  </p>
+                </div>
+              </div>
+              <a
+                href="https://www.figma.com/design/G4L7LYtkISB6T4DwLJ4wHS/MOB---Redise%C3%B1o-Facturaci%C3%B3n?node-id=3872-17740&p=f&t=CosijuUBHpbR7JeB-0"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold transition-colors hover:bg-neutral-50"
+                style={{ borderColor: "#7C3AED33", color: "#7C3AED" }}
               >
-                🇩🇴
-              </div>
-              <div>
-                <h3 className="text-base font-bold text-neutral-900">Ola Rep. Dominicana</h3>
-                <p className="mt-0.5 text-xs text-neutral-500">
-                  Localización fiscal pendiente en factura de venta
-                </p>
-              </div>
+                <Sparkles className="h-3 w-3" /> Ver prototipo <ExternalLink className="h-2.5 w-2.5" />
+              </a>
             </div>
 
             <div className="mt-4 rounded-lg border border-neutral-100 bg-neutral-50/60 p-3">
@@ -5292,15 +5316,26 @@ function Section5() {
               <p className="text-[11px] font-bold uppercase tracking-wider text-orange-700">
                 Problema detectado
               </p>
-              <a
-                href="https://claude.ai/design/p/019dc058-65c2-700c-ba39-a56f47183a28?file=Alegra+Prototype.html"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold transition-colors hover:bg-white"
-                style={{ borderColor: "#FF6B0033", color: "#FF6B00", backgroundColor: "#FF6B0010" }}
-              >
-                <Sparkles className="h-3 w-3" /> Ver prototipo <ExternalLink className="h-2.5 w-2.5" />
-              </a>
+              <div className="flex flex-wrap items-center gap-2">
+                <a
+                  href="https://claude.ai/design/p/019dc058-65c2-700c-ba39-a56f47183a28?file=Alegra+Prototype.html"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold transition-colors hover:bg-white"
+                  style={{ borderColor: "#FF6B0033", color: "#FF6B00", backgroundColor: "#FF6B0010" }}
+                >
+                  <Sparkles className="h-3 w-3" /> Ver prototipo 1 <ExternalLink className="h-2.5 w-2.5" />
+                </a>
+                <a
+                  href="https://www.figma.com/proto/mwZw2uwa23VqYfWeAfM55R/ACT---Test-ABC-invitaci%C3%B3n-a-descargar-app-Alegra-para-usuarios-mobile?node-id=7001-303&viewport=-124%2C-500%2C0.18&t=8Gb8o270oF3s50V7-1&scaling=min-zoom&content-scaling=fixed&page-id=1%3A2"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold transition-colors hover:bg-white"
+                  style={{ borderColor: "#FF6B0033", color: "#FF6B00", backgroundColor: "#FF6B0010" }}
+                >
+                  <Sparkles className="h-3 w-3" /> Ver prototipo 2 <ExternalLink className="h-2.5 w-2.5" />
+                </a>
+              </div>
             </div>
             <p className="mt-2 text-sm leading-relaxed text-neutral-800">
               Los usuarios <strong>tienen que iniciar sesión dentro de la app</strong> para ver los planes y pagar, o <strong>ir a web</strong>. Este paso adicional fricciona la conversión a pago: <strong>Mobile web convierte 2.74% vs 1.92% en Mobile App</strong> (sin PQL).
