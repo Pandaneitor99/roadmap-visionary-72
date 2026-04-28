@@ -1314,7 +1314,12 @@ const onboardingEventosSemanal = [
 export function OnboardingQ4Detail() {
   const lastMQL = onboardingPerfilMQL[onboardingPerfilMQL.length - 1].pct;
   const firstMQL = onboardingPerfilMQL[0].pct;
-  const deltaMQL = lastMQL - firstMQL;
+  const deltaMQLPct = ((lastMQL - firstMQL) / firstMQL) * 100; // % crecimiento relativo
+
+  const lastWeek = onboardingEventosSemanal[onboardingEventosSemanal.length - 1];
+  const firstWeek = onboardingEventosSemanal[0];
+  const perfilDeltaPct = ((lastWeek.perfil - firstWeek.perfil) / firstWeek.perfil) * 100;
+  const mqlDeltaPct = ((lastWeek.mql - firstWeek.mql) / firstWeek.mql) * 100;
 
   return (
     <div className="space-y-4">
@@ -1325,7 +1330,7 @@ export function OnboardingQ4Detail() {
           url="https://app.amplitude.com/analytics/alegra/chart/b6xrlqln"
           statLabel="Último mes"
           statValue={`${lastMQL.toFixed(2)}%`}
-          statDelta={deltaMQL}
+          statDelta={deltaMQLPct}
           statBaselineLabel="vs Oct '25"
         >
           <LineChart data={onboardingPerfilMQL}>
@@ -1353,18 +1358,38 @@ export function OnboardingQ4Detail() {
               <ExternalLink className="h-3.5 w-3.5" />
             </a>
           </div>
-          <div className="h-48">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={onboardingEventosSemanal}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis dataKey="semana" tick={{ fontSize: 9 }} interval={2} />
-                <YAxis tick={{ fontSize: 10 }} />
-                <Tooltip formatter={(v: number, n: string) => [v.toLocaleString("es-CO"), n]} />
-                <Legend wrapperStyle={{ fontSize: 10 }} iconType="circle" />
-                <Line type="monotone" name="Perfil" dataKey="perfil" stroke={ALEGRA_GREEN} strokeWidth={2} dot={false} />
-                <Line type="monotone" name="MQL" dataKey="mql" stroke={BLUE} strokeWidth={2} dot={false} />
-              </LineChart>
-            </ResponsiveContainer>
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-[1fr_auto]">
+            <div className="h-48">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={onboardingEventosSemanal}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                  <XAxis dataKey="semana" tick={{ fontSize: 9 }} interval={2} />
+                  <YAxis tick={{ fontSize: 10 }} />
+                  <Tooltip formatter={(v: number, n: string) => [v.toLocaleString("es-CO"), n]} />
+                  <Legend wrapperStyle={{ fontSize: 10 }} iconType="circle" />
+                  <Line type="monotone" name="Perfil" dataKey="perfil" stroke={ALEGRA_GREEN} strokeWidth={2} dot={false} />
+                  <Line type="monotone" name="MQL" dataKey="mql" stroke={BLUE} strokeWidth={2} dot={false} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="flex flex-col justify-center gap-3 rounded-lg border border-neutral-100 bg-neutral-50/60 p-3 md:min-w-[150px]">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">Perfil · última sem</p>
+                <p className="mt-0.5 text-xl font-bold text-neutral-900">{lastWeek.perfil.toLocaleString("es-CO")}</p>
+                <p className="mt-0.5 flex items-center gap-1 text-[11px] font-bold text-emerald-600">
+                  <TrendingUp className="h-3 w-3" />+{perfilDeltaPct.toFixed(1)}%
+                  <span className="font-medium text-neutral-500">vs 02-Nov</span>
+                </p>
+              </div>
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">MQL · última sem</p>
+                <p className="mt-0.5 text-xl font-bold text-neutral-900">{lastWeek.mql.toLocaleString("es-CO")}</p>
+                <p className="mt-0.5 flex items-center gap-1 text-[11px] font-bold text-emerald-600">
+                  <TrendingUp className="h-3 w-3" />+{mqlDeltaPct.toFixed(1)}%
+                  <span className="font-medium text-neutral-500">vs 02-Nov</span>
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1372,7 +1397,7 @@ export function OnboardingQ4Detail() {
       <Insights
         items={[
           "Perfil → MQL se mantiene estable en ~85–92% mensual: el flujo de onboarding completa la mayoría de los registros que llegan al perfil.",
-          "Volumen semanal de Perfiles creció de ~85/sem (Nov '25) a ~260/sem (Abr '26), 3x en 6 meses.",
+          `Volumen semanal de Perfiles creció +${perfilDeltaPct.toFixed(0)}% (de ${firstWeek.perfil} a ${lastWeek.perfil}/sem) y MQL +${mqlDeltaPct.toFixed(0)}% (de ${firstWeek.mql} a ${lastWeek.mql}/sem) entre 02-Nov y 19-Abr.`,
           "MQL siguen de cerca al Perfil con tasa de finalización alta — el cuello de botella para activación está aguas abajo (PQL/Logo), no en el onboarding inicial.",
         ]}
       />
