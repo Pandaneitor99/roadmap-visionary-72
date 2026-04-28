@@ -470,11 +470,10 @@ function SegmentosObjetivo() {
       {/* Tabla resumen */}
       <div className="mb-6 overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
         <div className="grid grid-cols-12 border-b border-neutral-200 bg-neutral-50 px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-neutral-600">
-          <div className="col-span-3">Segmento</div>
-          <div className="col-span-3">Tamaño</div>
+          <div className="col-span-4">Segmento</div>
+          <div className="col-span-4">Tamaño</div>
           <div className="col-span-2">Nivel de dolor</div>
-          <div className="col-span-3">Alternativa actual</div>
-          <div className="col-span-1 text-right">Prioridad</div>
+          <div className="col-span-2 text-right">Prioridad</div>
         </div>
         {segmentos.map((s) => {
           const active = s.id === selected;
