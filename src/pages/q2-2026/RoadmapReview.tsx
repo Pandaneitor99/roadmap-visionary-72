@@ -3986,7 +3986,7 @@ function FunnelComboCard({
 }: {
   title: string;
   subtitle: string;
-  source: string;
+  source?: string;
   data: FunnelComboDatum[];
 }) {
   const [mode, setMode] = useState<"pct" | "num">("pct");
@@ -3999,7 +3999,7 @@ function FunnelComboCard({
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">{subtitle}</p>
           <h3 className="mt-1 text-base font-bold text-neutral-900">{title}</h3>
-          <p className="mt-1 text-xs text-neutral-500">{source}</p>
+          {source && <p className="mt-1 text-xs text-neutral-500">{source}</p>}
         </div>
         <div className="inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-0.5">
           <button
@@ -4319,9 +4319,6 @@ function FunnelByCountryCard({
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">App Mobile · por país</p>
           <h3 className="mt-1 text-base font-bold text-neutral-900">Funnel Entero App Mobile por País</h3>
-          <p className="mt-1 text-xs text-neutral-500">
-            Amplitude · chart tnh09978 · This Year · entrepreneur · CO · MX · CR · DOM
-          </p>
         </div>
         <a
           href="https://app.amplitude.com/analytics/alegra/chart/tnh09978"
@@ -4404,9 +4401,6 @@ function PerfilPorPaisCard() {
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">Distribución</p>
           <h3 className="mt-1 text-base font-bold text-neutral-900">Perfil por País</h3>
-          <p className="mt-1 text-xs text-neutral-500">
-            Amplitude · chart 42w27hn3 · últimas 24 semanas · entrepreneur
-          </p>
         </div>
         <a
           href="https://app.amplitude.com/analytics/alegra/chart/42w27hn3"
@@ -4480,9 +4474,6 @@ function EventosOnboardingSemanalCard() {
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">Volumen semanal</p>
           <h3 className="mt-1 text-base font-bold text-neutral-900">Eventos Onboarding Semanal</h3>
-          <p className="mt-1 text-xs text-neutral-500">
-            Amplitude · chart j30yk1tu · uniques semanales (Perfil / MQL / PQL)
-          </p>
         </div>
         <a
           href="https://app.amplitude.com/analytics/alegra/chart/j30yk1tu"
@@ -4569,13 +4560,12 @@ function SectionFunnel() {
         <FunnelComboCard
           title="Funnel Entero — Mobile App vs Mobile web"
           subtitle="Con PQL · 4 pasos"
-          source="Amplitude · charts tgvpb7n5 + ozsknaof"
+          
           data={funnelComboPQL}
         />
         <FunnelComboCard
           title="Funnel Entero sin PQL — Mobile App vs Mobile web"
           subtitle="Sin PQL · 3 pasos"
-          source="Amplitude · charts 6lwwlzbl + jdusjvvg"
           data={funnelComboSinPQL}
         />
       </div>
@@ -5346,7 +5336,7 @@ function Section5() {
           <FunnelComboCard
             title="Funnel Entero sin PQL — Mobile App vs Mobile web"
             subtitle="Sin PQL · 3 pasos · Adquisición"
-            source="Amplitude · charts 6lwwlzbl + jdusjvvg"
+            
             data={funnelComboSinPQL}
           />
         </div>
