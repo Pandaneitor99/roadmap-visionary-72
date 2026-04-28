@@ -1805,6 +1805,100 @@ function MrrBaseSection() {
           </div>
         </div>
       </div>
+
+      {/* Distribución por tipo de plan — BASE y SOS */}
+      <PlanDistributionCard
+        title="Distribución por tipo de plan · BASE y SOS"
+        subtitle="Usuarios pagos BASE y SOS segmentados por plan comercial"
+        total={1351}
+        data={planDistributionBaseSos}
+      />
+    </div>
+  );
+}
+
+// === Distribución por tipo de plan ===
+const planDistributionBaseSos = [
+  { plan: "EMPRENDEDOR", count: 708, pct: 52.29 },
+  { plan: "PYME", count: 472, pct: 34.86 },
+  { plan: "PRO", count: 137, pct: 10.12 },
+  { plan: "PLUS", count: 30, pct: 2.22 },
+  { plan: "PREMIUM", count: 2, pct: 0.15 },
+  { plan: "Plan Standard", count: 2, pct: 0.15 },
+  { plan: "Plan Tienda", count: 1, pct: 0.07 },
+  { plan: "Plan Starter", count: 2, pct: 0.15 },
+];
+
+const planDistributionCoreLite = [
+  { plan: "PYME", count: 2955, pct: 36.16 },
+  { plan: "EMPRENDEDOR", count: 2423, pct: 29.65 },
+  { plan: "PRO", count: 1747, pct: 21.38 },
+  { plan: "PLUS", count: 788, pct: 9.64 },
+  { plan: "PREMIUM", count: 167, pct: 2.04 },
+  { plan: "Plan Tienda", count: 63, pct: 0.77 },
+  { plan: "Plan Standard", count: 8, pct: 0.10 },
+  { plan: "MultiCuenta Contado", count: 6, pct: 0.07 },
+  { plan: "MultiRFC Contado", count: 6, pct: 0.07 },
+  { plan: "Plan Starter", count: 7, pct: 0.09 },
+  { plan: "Solo facturación E", count: 1, pct: 0.01 },
+  { plan: "Plan Empresarial", count: 1, pct: 0.01 },
+  { plan: "Plan básico", count: 1, pct: 0.01 },
+];
+
+const PLAN_COLORS = ["#0066FF", "rgb(48,171,169)", "#00C853", "#FF6B00", "#9333EA", "#F59E0B", "#EC4899", "#14B8A6", "#6366F1", "#84CC16", "#EF4444", "#0EA5E9", "#A855F7"];
+
+function PlanDistributionCard({ title, subtitle, total, data }: { title: string; subtitle: string; total: number; data: { plan: string; count: number; pct: number }[] }) {
+  const maxPct = Math.max(...data.map((d) => d.pct));
+  return (
+    <div className="mt-6 rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <div>
+          <h4 className="text-base font-bold text-neutral-900">{title}</h4>
+          <p className="mt-1 text-xs text-neutral-500">{subtitle}</p>
+        </div>
+        <span className="text-xs font-semibold text-neutral-600">Total: {total.toLocaleString("es-CO")} usuarios</span>
+      </div>
+      <div className="mt-5 grid gap-6 lg:grid-cols-5">
+        {/* Donut */}
+        <div className="relative h-[240px] lg:col-span-2">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie data={data} dataKey="pct" nameKey="plan" innerRadius={60} outerRadius={95} paddingAngle={2} stroke="none">
+                {data.map((entry, i) => (
+                  <Cell key={entry.plan} fill={PLAN_COLORS[i % PLAN_COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip
+                formatter={(v: number, _n, p: any) => [`${v}% · ${p.payload.count.toLocaleString("es-CO")}`, p.payload.plan]}
+                contentStyle={{ borderRadius: 12, border: "1px solid #E5E7EB", fontSize: 12 }}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+          <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-neutral-400">Planes</span>
+            <span className="text-lg font-bold text-neutral-900">{data.length}</span>
+          </div>
+        </div>
+        {/* Lista barras */}
+        <div className="space-y-2 lg:col-span-3">
+          {data.map((row, i) => {
+            const color = PLAN_COLORS[i % PLAN_COLORS.length];
+            const widthPct = (row.pct / maxPct) * 100;
+            return (
+              <div key={row.plan} className="flex items-center gap-3">
+                <span className="w-40 shrink-0 text-xs font-semibold text-neutral-700">{row.plan}</span>
+                <div className="relative h-5 flex-1 rounded-md bg-neutral-100">
+                  <div className="h-full rounded-md transition-all" style={{ width: `${widthPct}%`, backgroundColor: color }} />
+                </div>
+                <span className="w-24 shrink-0 text-right text-xs tabular-nums text-neutral-600">
+                  {row.count.toLocaleString("es-CO")}
+                </span>
+                <span className="w-14 shrink-0 text-right text-xs font-bold tabular-nums text-neutral-900">{row.pct}%</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }
