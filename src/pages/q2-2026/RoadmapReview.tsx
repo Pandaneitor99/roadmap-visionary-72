@@ -5316,15 +5316,26 @@ function Section5() {
               <p className="text-[11px] font-bold uppercase tracking-wider text-orange-700">
                 Problema detectado
               </p>
-              <a
-                href="https://claude.ai/design/p/019dc058-65c2-700c-ba39-a56f47183a28?file=Alegra+Prototype.html"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold transition-colors hover:bg-white"
-                style={{ borderColor: "#FF6B0033", color: "#FF6B00", backgroundColor: "#FF6B0010" }}
-              >
-                <Sparkles className="h-3 w-3" /> Ver prototipo <ExternalLink className="h-2.5 w-2.5" />
-              </a>
+              <div className="flex flex-wrap items-center gap-2">
+                <a
+                  href="https://claude.ai/design/p/019dc058-65c2-700c-ba39-a56f47183a28?file=Alegra+Prototype.html"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold transition-colors hover:bg-white"
+                  style={{ borderColor: "#FF6B0033", color: "#FF6B00", backgroundColor: "#FF6B0010" }}
+                >
+                  <Sparkles className="h-3 w-3" /> Ver prototipo 1 <ExternalLink className="h-2.5 w-2.5" />
+                </a>
+                <a
+                  href="https://www.figma.com/proto/mwZw2uwa23VqYfWeAfM55R/ACT---Test-ABC-invitaci%C3%B3n-a-descargar-app-Alegra-para-usuarios-mobile?node-id=7001-303&viewport=-124%2C-500%2C0.18&t=8Gb8o270oF3s50V7-1&scaling=min-zoom&content-scaling=fixed&page-id=1%3A2"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold transition-colors hover:bg-white"
+                  style={{ borderColor: "#FF6B0033", color: "#FF6B00", backgroundColor: "#FF6B0010" }}
+                >
+                  <Sparkles className="h-3 w-3" /> Ver prototipo 2 <ExternalLink className="h-2.5 w-2.5" />
+                </a>
+              </div>
             </div>
             <p className="mt-2 text-sm leading-relaxed text-neutral-800">
               Los usuarios <strong>tienen que iniciar sesión dentro de la app</strong> para ver los planes y pagar, o <strong>ir a web</strong>. Este paso adicional fricciona la conversión a pago: <strong>Mobile web convierte 2.74% vs 1.92% en Mobile App</strong> (sin PQL).
