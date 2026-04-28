@@ -1809,7 +1809,7 @@ function MrrBaseSection() {
       <PlanDistributionCard
         title="Distribución por tipo de plan · BASE y SOS"
         subtitle="Usuarios pagos BASE y SOS segmentados por plan comercial"
-        total={1351}
+        total={2787}
         data={planDistributionBaseSos}
       />
     </div>
