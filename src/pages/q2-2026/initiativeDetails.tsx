@@ -552,12 +552,17 @@ export function EstabilizacionDetail() {
           statBaselineLabel="Usuario/clave vs 22-Feb"
           invertDelta
         >
-          <LineChart data={erroresApiPorError}>
+          <LineChart data={erroresApiPorError} margin={{ top: 5, right: 8, left: 0, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
             <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
             <YAxis tick={{ fontSize: 10 }} />
             <Tooltip formatter={(v: number) => v.toLocaleString("es-CO")} />
-            <Legend wrapperStyle={{ fontSize: 10 }} />
+            <Legend
+              layout="vertical"
+              align="right"
+              verticalAlign="middle"
+              wrapperStyle={{ fontSize: 10, paddingLeft: 8, lineHeight: "16px" }}
+            />
             <Line type="monotone" dataKey="Usuario/clave inválida" stroke="#EF4444" strokeWidth={2} dot={false} />
             <Line type="monotone" dataKey="No se encontraron registros (404)" stroke={ORANGE} strokeWidth={2} dot={false} />
             <Line type="monotone" dataKey="Basic header requerido" stroke={BLUE} strokeWidth={2} dot={false} />
