@@ -517,32 +517,6 @@ const erroresApiWeekly = [
   { sem: "29 Mar", v: 4450 },
 ];
 
-// Desglose por tipo de error (chart 70xrqgyp · totals semanales)
-// Datos reales Amplitude — Last 24 Weeks (excluye últimas 2 semanas incompletas)
-const erroresApiPorError = [
-  { sem: "16 Nov", "Usuario/clave inválida": 1261, "No se encontraron registros (404)": 0, "Basic header requerido": 197, "Query obligatorio (902)": 0, "Email/password obligatorios": 105 },
-  { sem: "23 Nov", "Usuario/clave inválida": 3305, "No se encontraron registros (404)": 0, "Basic header requerido": 639, "Query obligatorio (902)": 0, "Email/password obligatorios": 347 },
-  { sem: "30 Nov", "Usuario/clave inválida": 3242, "No se encontraron registros (404)": 0, "Basic header requerido": 620, "Query obligatorio (902)": 0, "Email/password obligatorios": 321 },
-  { sem: "07 Dic", "Usuario/clave inválida": 3087, "No se encontraron registros (404)": 0, "Basic header requerido": 601, "Query obligatorio (902)": 0, "Email/password obligatorios": 330 },
-  { sem: "14 Dic", "Usuario/clave inválida": 3033, "No se encontraron registros (404)": 0, "Basic header requerido": 594, "Query obligatorio (902)": 0, "Email/password obligatorios": 347 },
-  { sem: "21 Dic", "Usuario/clave inválida": 2294, "No se encontraron registros (404)": 0, "Basic header requerido": 471, "Query obligatorio (902)": 0, "Email/password obligatorios": 344 },
-  { sem: "28 Dic", "Usuario/clave inválida": 2446, "No se encontraron registros (404)": 0, "Basic header requerido": 399, "Query obligatorio (902)": 0, "Email/password obligatorios": 260 },
-  { sem: "04 Ene", "Usuario/clave inválida": 3091, "No se encontraron registros (404)": 0, "Basic header requerido": 483, "Query obligatorio (902)": 0, "Email/password obligatorios": 291 },
-  { sem: "11 Ene", "Usuario/clave inválida": 3143, "No se encontraron registros (404)": 0, "Basic header requerido": 520, "Query obligatorio (902)": 0, "Email/password obligatorios": 301 },
-  { sem: "18 Ene", "Usuario/clave inválida": 2102, "No se encontraron registros (404)": 0, "Basic header requerido": 580, "Query obligatorio (902)": 0, "Email/password obligatorios": 264 },
-  { sem: "25 Ene", "Usuario/clave inválida": 497, "No se encontraron registros (404)": 0, "Basic header requerido": 108, "Query obligatorio (902)": 0, "Email/password obligatorios": 58 },
-  { sem: "01 Feb", "Usuario/clave inválida": 161, "No se encontraron registros (404)": 0, "Basic header requerido": 39, "Query obligatorio (902)": 0, "Email/password obligatorios": 20 },
-  { sem: "08 Feb", "Usuario/clave inválida": 126, "No se encontraron registros (404)": 0, "Basic header requerido": 26, "Query obligatorio (902)": 0, "Email/password obligatorios": 13 },
-  { sem: "15 Feb", "Usuario/clave inválida": 116, "No se encontraron registros (404)": 0, "Basic header requerido": 16, "Query obligatorio (902)": 0, "Email/password obligatorios": 10 },
-  { sem: "22 Feb", "Usuario/clave inválida": 98, "No se encontraron registros (404)": 660, "Basic header requerido": 12, "Query obligatorio (902)": 453, "Email/password obligatorios": 6 },
-  { sem: "01 Mar", "Usuario/clave inválida": 54, "No se encontraron registros (404)": 1227, "Basic header requerido": 24, "Query obligatorio (902)": 961, "Email/password obligatorios": 5 },
-  { sem: "08 Mar", "Usuario/clave inválida": 71, "No se encontraron registros (404)": 1123, "Basic header requerido": 22, "Query obligatorio (902)": 837, "Email/password obligatorios": 10 },
-  { sem: "15 Mar", "Usuario/clave inválida": 62, "No se encontraron registros (404)": 1051, "Basic header requerido": 13, "Query obligatorio (902)": 752, "Email/password obligatorios": 7 },
-  { sem: "22 Mar", "Usuario/clave inválida": 43, "No se encontraron registros (404)": 941, "Basic header requerido": 22, "Query obligatorio (902)": 597, "Email/password obligatorios": 4 },
-  { sem: "29 Mar", "Usuario/clave inválida": 37, "No se encontraron registros (404)": 687, "Basic header requerido": 8, "Query obligatorio (902)": 406, "Email/password obligatorios": 1 },
-  { sem: "05 Abr", "Usuario/clave inválida": 60, "No se encontraron registros (404)": 1003, "Basic header requerido": 3, "Query obligatorio (902)": 762, "Email/password obligatorios": 3 },
-];
-
 export function EstabilizacionDetail() {
   return (
     <div className="space-y-4">
