@@ -796,7 +796,7 @@ export function HomeDetail() {
         const stat = (() => {
           if (tab === "funcionalidades") {
             const last = funcionalidadesHome[funcionalidadesHome.length - 1];
-            return { label: "Sidebar última sem", value: last.Sidebar.toLocaleString("es-CO"), delta: ((last.Sidebar - funcionalidadesHome[0].Sidebar) / funcionalidadesHome[0].Sidebar) * 100 };
+            return { label: "Sidebar última sem", value: last.Sidebar.toLocaleString("es-CO"), delta: ((last.Sidebar - funcionalidadesHome[1].Sidebar) / funcionalidadesHome[1].Sidebar) * 100, note: "vs semana previa a Quick Actions (05 Abr)" };
           }
           if (tab === "quick") {
             const last = quickActionsTotals[quickActionsTotals.length - 1].v;
