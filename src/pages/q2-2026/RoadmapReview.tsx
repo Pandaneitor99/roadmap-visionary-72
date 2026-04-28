@@ -3783,7 +3783,7 @@ function SoporteFuncDetail() {
                 Usuarios únicos que solicitaron soporte desde la app · mensual
               </p>
             </div>
-            <Badge variant="outline" className="text-[10px]" style={{ borderColor: "#FCA5A5", color: "#DC2626" }}>
+            <Badge variant="outline" className="text-[10px]" style={{ borderColor: "#FCD34D", color: "#B45309" }}>
               Abr '26: {lastUniques}
             </Badge>
           </div>
@@ -3794,7 +3794,7 @@ function SoporteFuncDetail() {
                 <XAxis dataKey="mes" tick={{ fontSize: 11 }} stroke="#6b7280" />
                 <YAxis tick={{ fontSize: 11 }} stroke="#6b7280" />
                 <Tooltip formatter={(v: number) => v.toLocaleString()} />
-                <Bar dataKey="uniques" fill="#DC2626" radius={[4, 4, 0, 0]}>
+                <Bar dataKey="uniques" fill="#F59E0B" radius={[4, 4, 0, 0]}>
                   <LabelList
                     dataKey="uniques"
                     position="top"
@@ -3823,7 +3823,7 @@ function SoporteFuncDetail() {
                 Total de solicitudes (eventos) de soporte desde la app · mensual
               </p>
             </div>
-            <Badge variant="outline" className="text-[10px]" style={{ borderColor: "#FCA5A5", color: "#DC2626" }}>
+            <Badge variant="outline" className="text-[10px]" style={{ borderColor: "#FCD34D", color: "#B45309" }}>
               Abr '26: {lastTotals}
             </Badge>
           </div>
@@ -3834,7 +3834,7 @@ function SoporteFuncDetail() {
                 <XAxis dataKey="mes" tick={{ fontSize: 11 }} stroke="#6b7280" />
                 <YAxis tick={{ fontSize: 11 }} stroke="#6b7280" />
                 <Tooltip formatter={(v: number) => v.toLocaleString()} />
-                <Bar dataKey="totals" fill="#FCA5A5" radius={[4, 4, 0, 0]}>
+                <Bar dataKey="totals" fill="#FCD34D" radius={[4, 4, 0, 0]}>
                   <LabelList
                     dataKey="totals"
                     position="top"
