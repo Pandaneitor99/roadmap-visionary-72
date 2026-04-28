@@ -1351,9 +1351,15 @@ export function OnboardingQ4Detail() {
 
         <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm">
           <div className="mb-2 flex items-start justify-between gap-2">
-            <div>
+            <div className="flex flex-wrap items-center gap-2">
               <h4 className="text-sm font-bold text-neutral-900">Eventos Onboarding Semanal</h4>
-              <p className="text-[11px] text-neutral-500">Perfil vs MQL · uniques semanales</p>
+              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700 ring-1 ring-emerald-200">
+                <TrendingUp className="h-2.5 w-2.5" />Perfil +{perfilDeltaPct.toFixed(1)}%
+              </span>
+              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700 ring-1 ring-emerald-200">
+                <TrendingUp className="h-2.5 w-2.5" />MQL +{mqlDeltaPct.toFixed(1)}%
+              </span>
+              <p className="w-full text-[11px] text-neutral-500">Perfil vs MQL · uniques semanales</p>
             </div>
             <a
               href="https://app.amplitude.com/analytics/alegra/chart/j30yk1tu"
