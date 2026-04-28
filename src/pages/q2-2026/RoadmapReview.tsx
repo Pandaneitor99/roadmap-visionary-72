@@ -4759,21 +4759,25 @@ function SimpleInitiativeCard({
 // Conteo de eventos · Cohort MAC Mobile BASE Marzo 2026 · 2026-03-29 → 2026-04-26
 // Fuente: Amplitude chart h6i1m5l2
 const baseFueraDeApp = [
-  { feature: "Registrar pago", uso: 15900 },
-  { feature: "Imprimir factura", uso: 14717 },
-  { feature: "Editar factura", uso: 13776 },
-  { feature: "Descargar factura", uso: 5927 },
+  { feature: "Creación Factura", uso: 34089 },
+  { feature: "Pago recibido", uso: 22989 },
+  { feature: "Reportes", uso: 18519 },
+  { feature: "Imprimir fv", uso: 14717 },
+  { feature: "Editar fv", uso: 13774 },
+  { feature: "Items", uso: 10935 },
+  { feature: "Factura de compra", uso: 7605 },
+  { feature: "Pago de gastos", uso: 6284 },
+  { feature: "Descargar fv", uso: 5927 },
+  { feature: "Descargar reportes", uso: 5710 },
   { feature: "Reportes por vendedor", uso: 5601 },
-  { feature: "Reporte de inventario", uso: 3766 },
-  { feature: "Reporte ventas por ítem", uso: 3171 },
-  { feature: "Timbrar factura", uso: 2450 },
-  { feature: "Compartir factura", uso: 2097 },
-  { feature: "Clonar factura", uso: 2040 },
-  { feature: "Aplicar crédito", uso: 1740 },
+  { feature: "Contacto", uso: 3460 },
+  { feature: "Cotizaciones", uso: 3420 },
+  { feature: "Compartir fv", uso: 2050 },
+  { feature: "Clonar", uso: 2040 },
+  { feature: "Remisiones", uso: 1690 },
   { feature: "Editar retenciones", uso: 1677 },
-  { feature: "Cancelar factura", uso: 1433 },
-  { feature: "Reporte rentabilidad ítems", uso: 1345 },
-  { feature: "Reporte facturas abiertas", uso: 1125 },
+  { feature: "Nota de crédito", uso: 1619 },
+  { feature: "Multicompañía", uso: 1000 },
 ];
 
 const oportunidades = [
