@@ -554,8 +554,8 @@ export function EstabilizacionDetail() {
           url="https://app.amplitude.com/analytics/alegra/chart/70xrqgyp"
           statLabel="Top error"
           statValue="Usuario o clave inválida"
-          statDelta={-93.9}
-          statBaselineLabel="Usuario/clave vs 22-Feb"
+          statDelta={-96.3}
+          statBaselineLabel="Usuario/clave vs 01-Feb"
           invertDelta
         >
           <LineChart data={erroresApiPorError} margin={{ top: 5, right: 8, left: 0, bottom: 5 }}>
