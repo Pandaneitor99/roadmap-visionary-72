@@ -2470,17 +2470,17 @@ function zip(months: string[], vals: number[]): { month: string; pct: number }[]
 
 // === Comportamiento BASE / SOS — datos reales Amplitude ===
 
-// Adopción funcionalidades BASE vs SOS - chart aq7o241v (Mar 2026)
+// Adopción funcionalidades BASE vs SOS - chart aq7o241v (Mar 29 - Abr 26 2026)
 const adopcionBaseSosData = [
-  { event: "Crear factura", BASE: 96.6, SOS: 48.6 },
-  { event: "Crear contacto", BASE: 51.4, SOS: 20.5 },
-  { event: "Crear ítem", BASE: 39.2, SOS: 13.8 },
-  { event: "Buscar factura", BASE: 28.5, SOS: 44.6 },
-  { event: "Crear cotización", BASE: 23.1, SOS: 32.3 },
-  { event: "Ver gráfico de ventas", BASE: 18.4, SOS: 32.9 },
-  { event: "Cuentas por cobrar", BASE: 6.6, SOS: 19.3 },
-  { event: "Crear factura de proveedor", BASE: 1.5, SOS: 2.8 },
-  { event: "Crear remisión", BASE: 1.1, SOS: 4.8 },
+  { event: "Crear factura", BASE: 79.8, SOS: 49.2 },
+  { event: "Crear contacto", BASE: 43.1, SOS: 21.2 },
+  { event: "Crear ítem", BASE: 36.8, SOS: 13.2 },
+  { event: "Buscar factura", BASE: 30.4, SOS: 40.4 },
+  { event: "Crear cotización", BASE: 29.8, SOS: 34.6 },
+  { event: "Ver gráfico de ventas", BASE: 27.2, SOS: 32.3 },
+  { event: "Cuentas por cobrar", BASE: 9.9, SOS: 19.8 },
+  { event: "Crear factura de proveedor", BASE: 3.2, SOS: 2.8 },
+  { event: "Crear remisión", BASE: 3.1, SOS: 5.1 },
 ];
 
 // Engagement BASE - chart no1u7db2 (Mar 2026)
