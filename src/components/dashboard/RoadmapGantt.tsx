@@ -944,6 +944,7 @@ interface RoadmapRowProps {
   row: RowDef;
   items: RoadmapItem[];
   totalWeeks: number;
+  startWeek?: number;
   onItemClick: (item: RoadmapItem) => void;
   getItemColor: (item: RoadmapItem) => string;
   onDragStart: (e: React.DragEvent, item: RoadmapItem, week: number) => void;
@@ -966,6 +967,7 @@ function RoadmapRow({
   row,
   items,
   totalWeeks,
+  startWeek = 1,
   onItemClick,
   getItemColor,
   onDragStart,
