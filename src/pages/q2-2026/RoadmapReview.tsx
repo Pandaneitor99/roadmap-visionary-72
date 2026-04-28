@@ -4138,6 +4138,7 @@ function TrendCombinedCard() {
   const oct = cfg.data[0]?.pct ?? 0;
   const last = cfg.data[cfg.data.length - 1]?.pct ?? 0;
   const delta = last - oct;
+  const deltaPct = oct !== 0 ? (delta / oct) * 100 : 0;
   const positive = delta >= 0;
 
   return (
@@ -4182,7 +4183,7 @@ function TrendCombinedCard() {
         >
           {positive ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
           {positive ? "+" : ""}
-          {delta.toFixed(2)} pp vs Oct
+          {deltaPct.toFixed(2)}% vs Oct
         </span>
       </div>
 
