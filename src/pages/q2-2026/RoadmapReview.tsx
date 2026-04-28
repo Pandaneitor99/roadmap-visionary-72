@@ -5058,83 +5058,78 @@ function Section5() {
         </div>
       </div>
 
-      {/* Funcionalidades que la BASE usa por fuera de App (en %) */}
-      <div>
-        <div className="mb-5 flex items-center gap-2">
-          <div className="h-1 w-10 rounded-full" style={{ backgroundColor: "#FF6B00" }} />
-          <h2 className="text-lg font-bold text-neutral-900">Funcionalidades que más usa la Pyme BASE por fuera de la App</h2>
-        </div>
-
-        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-          <div className="mb-4 flex items-start justify-between gap-4 flex-wrap">
-            <div>
-              <p className="text-sm font-semibold text-neutral-900">
-                Funcionalidades que más utilizan los BASE por fuera de App
-              </p>
-              <p className="mt-0.5 text-xs text-neutral-500">
-                Últimas 4 semanas · Cohort BASE (s8shexr4) · Conteo de eventos en web
-              </p>
+      {/* Funcionalidades fuera de App + Oportunidades (combinado, colapsable) */}
+      <CollapsibleSection
+        title="Funcionalidades fuera de App y Oportunidades"
+        subtitle={`${oportunidades.length} frentes detectados`}
+        color="#FF6B00"
+      >
+        <div className="space-y-6">
+          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+            <div className="mb-4 flex items-start justify-between gap-4 flex-wrap">
+              <div>
+                <p className="text-sm font-semibold text-neutral-900">
+                  Funcionalidades que más utilizan los BASE por fuera de App
+                </p>
+                <p className="mt-0.5 text-xs text-neutral-500">
+                  Últimas 4 semanas · Cohort BASE (s8shexr4) · Conteo de eventos en web
+                </p>
+              </div>
+              <a
+                href="https://app.amplitude.com/analytics/alegra/chart/h6i1m5l2"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+              >
+                Amplitude <ExternalLink className="h-3 w-3" />
+              </a>
             </div>
-            <a
-              href="https://app.amplitude.com/analytics/alegra/chart/h6i1m5l2"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
-            >
-              Amplitude <ExternalLink className="h-3 w-3" />
-            </a>
-          </div>
 
-          <div className="h-[460px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={baseFueraDeApp} layout="vertical" margin={{ top: 8, right: 56, left: 8, bottom: 8 }}>
-                <CartesianGrid horizontal={false} stroke="#f1f5f9" />
-                <XAxis
-                  type="number"
-                  tick={{ fontSize: 11, fill: "#64748b" }}
-                  tickFormatter={(v) => v.toLocaleString("es-CO")}
-                />
-                <YAxis
-                  type="category"
-                  dataKey="feature"
-                  width={220}
-                  tick={{ fontSize: 11, fill: "#0f172a" }}
-                />
-                <Tooltip
-                  cursor={{ fill: "rgba(255,107,0,0.06)" }}
-                  formatter={(v: number) => [v.toLocaleString("es-CO"), "Eventos"]}
-                />
-                <Bar dataKey="uso" fill="#FF6B00" radius={[0, 6, 6, 0]}>
-                  {baseFueraDeApp.map((_, i) => (
-                    <Cell key={i} />
-                  ))}
-                  <LabelList
-                    dataKey="uso"
-                    position="right"
-                    formatter={(v: number) => v.toLocaleString("es-CO")}
-                    style={{ fontSize: 11, fill: "#475569", fontWeight: 600 }}
+            <div className="h-[460px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={baseFueraDeApp} layout="vertical" margin={{ top: 8, right: 56, left: 8, bottom: 8 }}>
+                  <CartesianGrid horizontal={false} stroke="#f1f5f9" />
+                  <XAxis
+                    type="number"
+                    tick={{ fontSize: 11, fill: "#64748b" }}
+                    tickFormatter={(v) => v.toLocaleString("es-CO")}
                   />
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
+                  <YAxis
+                    type="category"
+                    dataKey="feature"
+                    width={220}
+                    tick={{ fontSize: 11, fill: "#0f172a" }}
+                  />
+                  <Tooltip
+                    cursor={{ fill: "rgba(255,107,0,0.06)" }}
+                    formatter={(v: number) => [v.toLocaleString("es-CO"), "Eventos"]}
+                  />
+                  <Bar dataKey="uso" fill="#FF6B00" radius={[0, 6, 6, 0]}>
+                    {baseFueraDeApp.map((_, i) => (
+                      <Cell key={i} />
+                    ))}
+                    <LabelList
+                      dataKey="uso"
+                      position="right"
+                      formatter={(v: number) => v.toLocaleString("es-CO")}
+                      style={{ fontSize: 11, fill: "#475569", fontWeight: 600 }}
+                    />
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          <div>
+            <h3 className="mb-3 text-sm font-bold uppercase tracking-wider text-neutral-600">Oportunidades</h3>
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {oportunidades.map((op) => (
+                <OportunidadCard key={op.id} op={op} />
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* Oportunidades */}
-      <div>
-        <div className="mb-5 flex items-center gap-2">
-          <div className="h-1 w-10 rounded-full" style={{ backgroundColor: ALEGRA_GREEN }} />
-          <h2 className="text-lg font-bold text-neutral-900">Oportunidades</h2>
-          <span className="ml-2 text-xs text-neutral-500">{oportunidades.length} frentes detectados</span>
-        </div>
-
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {oportunidades.map((op) => (
-            <OportunidadCard key={op.id} op={op} />
-          ))}
-        </div>
-      </div>
+      </CollapsibleSection>
 
       {/* Funcionalidades — Contactos & Items (siempre expandidos) */}
       <div>
