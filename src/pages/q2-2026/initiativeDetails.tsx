@@ -505,8 +505,6 @@ const erroresApiWeekly = [
   { sem: "22 Mar", v: 1622 },
   { sem: "29 Mar", v: 1145 },
   { sem: "05 Abr", v: 1808 },
-  { sem: "12 Abr", v: 232 },
-  { sem: "19 Abr", v: 311 },
 ];
 
 const erroresApiPorError = [
@@ -520,8 +518,6 @@ const erroresApiPorError = [
   { sem: "22 Mar", "Usuario/clave inválida": 43, "No se encontraron registros (404)": 941, "Basic header requerido": 22, "Query obligatorio (902)": 597, "Email/password obligatorios": 4 },
   { sem: "29 Mar", "Usuario/clave inválida": 37, "No se encontraron registros (404)": 687, "Basic header requerido": 8, "Query obligatorio (902)": 406, "Email/password obligatorios": 1 },
   { sem: "05 Abr", "Usuario/clave inválida": 60, "No se encontraron registros (404)": 1003, "Basic header requerido": 3, "Query obligatorio (902)": 762, "Email/password obligatorios": 3 },
-  { sem: "12 Abr", "Usuario/clave inválida": 4, "No se encontraron registros (404)": 132, "Basic header requerido": 0, "Query obligatorio (902)": 96, "Email/password obligatorios": 0 },
-  { sem: "19 Abr", "Usuario/clave inválida": 6, "No se encontraron registros (404)": 164, "Basic header requerido": 8, "Query obligatorio (902)": 132, "Email/password obligatorios": 1 },
 ];
 
 export function EstabilizacionDetail() {
