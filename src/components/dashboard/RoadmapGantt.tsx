@@ -534,6 +534,7 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
             resizingItemId={resizingItemId}
             onCellClick={handleCellClick}
             onDeleteItem={setDeletingItem}
+            onDeleteRow={setDeletingRow}
           />
         );
       })}
