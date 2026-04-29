@@ -5667,12 +5667,33 @@ function ContactosFuncDetail() {
   const lastCrea = contactosVisitaACreado[contactosVisitaACreado.length - 1].pct;
   return (
     <div className="space-y-5">
-      {/* Problema destacado — compacto */}
+      {/* Problema destacado + Oportunidad — compacto */}
       <div className="rounded-lg border border-orange-200 bg-orange-50/50 px-3 py-2">
-        <p className="text-[10px] font-bold uppercase tracking-wider text-orange-700">Problema detectado</p>
-        <p className="mt-1 text-xs leading-relaxed text-neutral-800">
-          <strong>Disparidad en algunos campos no obligatorios</strong>, sumado a <strong>poca claridad en la elección de cliente y vendedor</strong>. Esto genera fricción en la creación de contactos desde la app.
-        </p>
+        <div className="flex items-start justify-between gap-3 flex-wrap">
+          <div className="flex-1 min-w-[260px]">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-orange-700">Problema detectado</p>
+            <p className="mt-1 text-xs leading-relaxed text-neutral-800">
+              <strong>Disparidad en algunos campos no obligatorios</strong>, sumado a <strong>poca claridad en la elección de cliente y vendedor</strong>. Esto genera fricción en la creación de contactos desde la app.
+            </p>
+          </div>
+          <div className="flex-1 min-w-[260px] rounded-md border border-emerald-200 bg-emerald-50/60 px-3 py-2">
+            <div className="flex items-start justify-between gap-2 flex-wrap">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Oportunidad</p>
+              <a
+                href="https://claude.ai/design/p/019dc695-1901-7519-a9d7-a74bd0eedfd0"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold transition-colors hover:bg-white"
+                style={{ borderColor: "#10B98133", color: "#047857", backgroundColor: "#10B98110" }}
+              >
+                <Sparkles className="h-3 w-3" /> Ver prototipo <ExternalLink className="h-2.5 w-2.5" />
+              </a>
+            </div>
+            <p className="mt-1 text-xs leading-relaxed text-neutral-800">
+              Simplificación de la creación de contactos + paridad de campos con web.
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Charts lado a lado */}
