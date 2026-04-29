@@ -159,7 +159,7 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
   const [newRowData, setNewRowData] = useState({ label: "", section: "must" as RowDef["section"] });
 
   // Delete row confirmation
-  
+  const [deletingRow, setDeletingRow] = useState<RowDef | null>(null);
 
   // Load data from Supabase on mount
   useEffect(() => {
@@ -336,6 +336,15 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
     setShowAddRow(false);
   }, [newRowData, saveNewRow]);
 
+  // --- Delete Row (and all its items) ---
+  const handleConfirmDeleteRow = useCallback(() => {
+    if (!deletingRow) return;
+    const rowId = deletingRow.id;
+    setRows(prev => prev.filter(r => r.id !== rowId));
+    setItems(prev => prev.filter(i => i.rowId !== rowId));
+    deleteRowFromDb(rowId);
+    setDeletingRow(null);
+  }, [deletingRow, deleteRowFromDb]);
 
   // --- Move Row Up/Down ---
   const moveRow = useCallback((rowId: string, direction: "up" | "down") => {
@@ -525,6 +534,7 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
             resizingItemId={resizingItemId}
             onCellClick={handleCellClick}
             onDeleteItem={setDeletingItem}
+            onDeleteRow={setDeletingRow}
           />
         );
       })}
@@ -934,6 +944,24 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
         </AlertDialogContent>
       </AlertDialog>
 
+      {/* Delete Row Confirmation */}
+      <AlertDialog open={!!deletingRow} onOpenChange={() => setDeletingRow(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Eliminar iniciativa completa?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Se eliminará la fila "{deletingRow?.label}" y todas sus celdas del roadmap. Esta acción no se puede deshacer.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmDeleteRow} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
     </>
   );
 }
@@ -961,6 +989,7 @@ interface RoadmapRowProps {
   resizingItemId: string | null;
   onCellClick: (rowId: string, week: number) => void;
   onDeleteItem: (item: RoadmapItem) => void;
+  onDeleteRow: (row: RowDef) => void;
 }
 
 function RoadmapRow({
@@ -984,6 +1013,7 @@ function RoadmapRow({
   resizingItemId,
   onCellClick,
   onDeleteItem,
+  onDeleteRow,
 }: RoadmapRowProps) {
   return (
     <div
@@ -1013,6 +1043,15 @@ function RoadmapRow({
             <Pencil className="h-2.5 w-2.5 text-muted-foreground" />
           </button>
         )}
+        <button
+          onClick={e => { e.stopPropagation(); onDeleteRow(row); }}
+          className="opacity-0 group-hover/label:opacity-100 transition-opacity hover:bg-destructive/10 rounded p-0.5 flex-shrink-0"
+          title="Eliminar iniciativa completa"
+          draggable={false}
+          onDragStart={e => e.stopPropagation()}
+        >
+          <Trash2 className="h-2.5 w-2.5 text-destructive" />
+        </button>
       </div>
 
       {/* Week cells */}
