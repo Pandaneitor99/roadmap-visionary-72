@@ -5529,6 +5529,35 @@ function ContadoresSection() {
 function ItemsFuncDetail() {
   return (
     <div className="space-y-5">
+      {/* Problema detectado + Oportunidad — compacto */}
+      <div className="rounded-lg border border-orange-200 bg-orange-50/50 px-3 py-2">
+        <div className="flex items-start justify-between gap-3 flex-wrap">
+          <div className="flex-1 min-w-[260px]">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-orange-700">Problema detectado</p>
+            <p className="mt-1 text-xs leading-relaxed text-neutral-800">
+              <strong>Caída en la intención de creación de Items</strong> y <strong>campos faltantes</strong> respecto a la web; UX deficiente en varios campos genera fricción.
+            </p>
+          </div>
+          <div className="flex-1 min-w-[260px] rounded-md border border-emerald-200 bg-emerald-50/60 px-3 py-2">
+            <div className="flex items-start justify-between gap-2 flex-wrap">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Oportunidad</p>
+              <a
+                href="https://www.figma.com/design/VjC6hok9QSdr9Wd8iasWms/Secci%C3%B3n-items-App?node-id=2266-3088&t=Vbquk9q4yag4jbVR-0"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold transition-colors hover:bg-white"
+                style={{ borderColor: "#10B98133", color: "#047857", backgroundColor: "#10B98110" }}
+              >
+                <Sparkles className="h-3 w-3" /> Ver prototipo <ExternalLink className="h-2.5 w-2.5" />
+              </a>
+            </div>
+            <p className="mt-1 text-xs leading-relaxed text-neutral-800">
+              Simplificación de la creación de items + agregar creación de servicios + paridad de campos con web.
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* Charts lado a lado */}
       <div className="grid gap-4 lg:grid-cols-2">
         {/* Funnel Home → New Item (chart w81wjr5i) */}
