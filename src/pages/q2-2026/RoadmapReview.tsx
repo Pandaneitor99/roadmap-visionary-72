@@ -950,7 +950,7 @@ function Section2() {
                   setSelectedCountry(isActive ? null : c.country)
                 }
                 className={cn(
-                  "rounded-2xl border bg-white p-5 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md",
+                  "rounded-2xl border bg-white px-4 py-3 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md",
                   isActive
                     ? "border-neutral-900 ring-2 ring-neutral-900/10"
                     : "border-neutral-200",
@@ -960,26 +960,26 @@ function Section2() {
                 <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
                   {c.country}
                 </p>
-                <p className="mt-2 text-3xl font-bold text-neutral-900">
-                  {c.march.toLocaleString("es-CO")}
-                </p>
-                <p
-                  className={cn(
-                    "mt-1 flex items-center gap-1 text-sm font-bold",
-                    isUp ? "text-emerald-600" : "text-red-600",
-                  )}
-                >
-                  {isUp ? (
-                    <TrendingUp className="h-4 w-4" />
-                  ) : (
-                    <TrendingDown className="h-4 w-4" />
-                  )}
-                  {isUp ? "+" : ""}
-                  {delta.toFixed(1)}%
-                  <span className="ml-1 text-[11px] font-medium text-neutral-500">
-                    vs Oct '25
-                  </span>
-                </p>
+                <div className="mt-1 flex items-baseline justify-between gap-2">
+                  <p className="text-2xl font-bold text-neutral-900">
+                    {c.march.toLocaleString("es-CO")}
+                  </p>
+                  <p
+                    className={cn(
+                      "flex items-center gap-1 text-xs font-bold",
+                      isUp ? "text-emerald-600" : "text-red-600",
+                    )}
+                  >
+                    {isUp ? (
+                      <TrendingUp className="h-3.5 w-3.5" />
+                    ) : (
+                      <TrendingDown className="h-3.5 w-3.5" />
+                    )}
+                    {isUp ? "+" : ""}
+                    {delta.toFixed(1)}%
+                  </p>
+                </div>
+                <p className="mt-0.5 text-[10px] font-medium text-neutral-400">vs Oct '25</p>
               </button>
             );
           })}
