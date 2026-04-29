@@ -57,14 +57,14 @@ const busquedaCotizacionesUniques = [
   { sem: "29 Mar", v: 0 },
   { sem: "05 Abr", v: 0 },
   { sem: "12 Abr", v: 37 },
-  { sem: "19 Abr", v: 182 },
+  { sem: "19 Abr", v: 376 },
 ];
 const busquedaCotizacionesTotales = [
   { sem: "22 Mar", v: 0 },
   { sem: "29 Mar", v: 0 },
   { sem: "05 Abr", v: 0 },
   { sem: "12 Abr", v: 123 },
-  { sem: "19 Abr", v: 1151 },
+  { sem: "19 Abr", v: 2855 },
 ];
 
 // Remisiones
