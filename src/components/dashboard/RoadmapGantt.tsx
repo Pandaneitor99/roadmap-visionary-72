@@ -1043,6 +1043,15 @@ function RoadmapRow({
             <Pencil className="h-2.5 w-2.5 text-muted-foreground" />
           </button>
         )}
+        <button
+          onClick={e => { e.stopPropagation(); onDeleteRow(row); }}
+          className="opacity-0 group-hover/label:opacity-100 transition-opacity hover:bg-destructive/10 rounded p-0.5 flex-shrink-0"
+          title="Eliminar iniciativa completa"
+          draggable={false}
+          onDragStart={e => e.stopPropagation()}
+        >
+          <Trash2 className="h-2.5 w-2.5 text-destructive" />
+        </button>
       </div>
 
       {/* Week cells */}
