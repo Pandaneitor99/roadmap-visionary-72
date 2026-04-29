@@ -30,6 +30,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Calendar, MapPin, Users, Target, Lightbulb, AlertCircle, Pencil, GripVertical, Loader2, Plus, Trash2 } from "lucide-react";
+import { useSidebar } from "@/components/ui/sidebar";
 
 // Base date: Monday Jan 5 2026
 const BASE_DATE = new Date(2026, 0, 5); // Jan 5, 2026
