@@ -49,6 +49,10 @@ export const initiatives: Initiative[] = [
     objectiveText: "Objetivo 2: Impulsar la adopción de la app móvil mejorando el flujo de creación de facturas y de ítems para que los usuarios facturen de forma recurrente desde el móvil.",
     problem: "Con la salida en web de la versión 4.4, la cantidad de facturas aumentó un 20%, sin embargo, en la app se mantuvo constante. Adicionalmente, la tasa de conversión es la menor de las 4 versiones (63% hoy) en comparación a otras versiones (CO 83%, RD 77%). En volumen total, también se encuentra de últimas con 1.600 facturas de venta creadas al mes.",
     hypothesis: "Si rediseñamos la factura de venta, esperamos aumentar el uso y la intención de creación de facturas, promoviendo la adopción cross-platform del producto.",
+    opportunity: {
+      text: "Rediseño de facturación + agregar retenciones + agregar conduces + paridad de campos con web.",
+      prototypes: [{ label: "Ver prototipo", url: "https://www.figma.com/design/G4L7LYtkISB6T4DwLJ4wHS/MOB---Redise%C3%B1o-Facturaci%C3%B3n?node-id=3872-17740&p=f&t=CosijuUBHpbR7JeB-0" }],
+    },
     keyResults: ["KR 2.1", "KR 2.2", "KR 2.3"],
     kpis: ["Facturas de Venta totales en CR", "Conversión de FV en CR", "MAC de Costa Rica", "% Usuarios activos pagos de web que utilizan app"],
     version: "Costa Rica",
