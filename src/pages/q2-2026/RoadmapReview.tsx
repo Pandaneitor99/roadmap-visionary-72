@@ -5392,9 +5392,18 @@ function Section5() {
 
           <div className="mb-5 grid gap-3 md:grid-cols-2">
             <div className="rounded-xl border border-orange-200 bg-orange-50/60 p-4">
+              <p className="text-[11px] font-bold uppercase tracking-wider text-orange-700">
+                Problema detectado
+              </p>
+              <p className="mt-2 text-sm leading-relaxed text-neutral-800">
+                Los usuarios <strong>tienen que iniciar sesión dentro de la app</strong> para ver los planes y pagar, o <strong>ir a web</strong>. Este paso adicional fricciona la conversión a pago.
+              </p>
+            </div>
+
+            <div className="rounded-xl border border-emerald-200 bg-emerald-50/60 p-4">
               <div className="flex items-start justify-between gap-2 flex-wrap">
-                <p className="text-[11px] font-bold uppercase tracking-wider text-orange-700">
-                  Problema detectado
+                <p className="text-[11px] font-bold uppercase tracking-wider text-emerald-700">
+                  Oportunidad
                 </p>
                 <div className="flex flex-wrap items-center gap-2">
                   <a
@@ -5402,7 +5411,7 @@ function Section5() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold transition-colors hover:bg-white"
-                    style={{ borderColor: "#FF6B0033", color: "#FF6B00", backgroundColor: "#FF6B0010" }}
+                    style={{ borderColor: "#10b98133", color: "#059669", backgroundColor: "#10b98110" }}
                   >
                     <Sparkles className="h-3 w-3" /> Prototipo 1 <ExternalLink className="h-2.5 w-2.5" />
                   </a>
@@ -5411,21 +5420,12 @@ function Section5() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold transition-colors hover:bg-white"
-                    style={{ borderColor: "#FF6B0033", color: "#FF6B00", backgroundColor: "#FF6B0010" }}
+                    style={{ borderColor: "#10b98133", color: "#059669", backgroundColor: "#10b98110" }}
                   >
                     <Sparkles className="h-3 w-3" /> Prototipo 2 <ExternalLink className="h-2.5 w-2.5" />
                   </a>
                 </div>
               </div>
-              <p className="mt-2 text-sm leading-relaxed text-neutral-800">
-                Los usuarios <strong>tienen que iniciar sesión dentro de la app</strong> para ver los planes y pagar, o <strong>ir a web</strong>. Este paso adicional fricciona la conversión a pago.
-              </p>
-            </div>
-
-            <div className="rounded-xl border border-emerald-200 bg-emerald-50/60 p-4">
-              <p className="text-[11px] font-bold uppercase tracking-wider text-emerald-700">
-                Oportunidad
-              </p>
               <p className="mt-2 text-sm leading-relaxed text-neutral-800">
                 <strong>Link mágico creado por Identity</strong> para ver planes + <strong>contactabilidad bot ventas</strong>.
               </p>
