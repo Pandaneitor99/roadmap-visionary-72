@@ -336,6 +336,15 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
     setShowAddRow(false);
   }, [newRowData, saveNewRow]);
 
+  // --- Delete Row (and all its items) ---
+  const handleConfirmDeleteRow = useCallback(() => {
+    if (!deletingRow) return;
+    const rowId = deletingRow.id;
+    setRows(prev => prev.filter(r => r.id !== rowId));
+    setItems(prev => prev.filter(i => i.rowId !== rowId));
+    deleteRowFromDb(rowId);
+    setDeletingRow(null);
+  }, [deletingRow, deleteRowFromDb]);
 
   // --- Move Row Up/Down ---
   const moveRow = useCallback((rowId: string, direction: "up" | "down") => {
