@@ -1411,7 +1411,7 @@ const remisionesParticipSeries = [
   { m: "Ene", v: 6.49 },
   { m: "Feb", v: 6.08 },
   { m: "Mar", v: 6.42 },
-  { m: "Abr", v: 8.93 },
+  { m: "Abr", v: 9.04 },
 ];
 
 function MiniSparkline({
@@ -1471,8 +1471,8 @@ function ParticipacionApp() {
     },
     {
       label: "Remisiones",
-      value: 8.96,
-      delta: 6.9,
+      value: 9.04,
+      delta: 32.16,
       color: "#FF6B00",
       desc: "% de remisiones totales (web + app) creadas desde la app móvil",
       series: remisionesParticipSeries,
