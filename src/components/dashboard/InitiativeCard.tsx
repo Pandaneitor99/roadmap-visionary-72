@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Calendar, Target, MapPin, Users, ExternalLink } from "lucide-react";
+import { Calendar, Target, MapPin, Users, ExternalLink, Sparkles, Lightbulb } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -139,6 +139,33 @@ export function InitiativeCard({
             </h4>
             <p className="text-sm text-foreground/80 line-clamp-2">{initiative.problem}</p>
           </div>
+          {initiative.opportunity && (
+            <div className="rounded-lg border border-emerald-200 bg-emerald-50/60 p-3">
+              <div className="flex items-start justify-between gap-2 flex-wrap mb-1">
+                <div className="flex items-center gap-1.5">
+                  <Lightbulb className="h-3.5 w-3.5 text-emerald-700" />
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Oportunidad</p>
+                </div>
+                {initiative.opportunity.prototypes && initiative.opportunity.prototypes.length > 0 && (
+                  <div className="flex flex-wrap gap-1">
+                    {initiative.opportunity.prototypes.map((p, i) => (
+                      <a
+                        key={i}
+                        href={p.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="inline-flex items-center gap-1 rounded-full border border-emerald-300 bg-white/70 px-2 py-0.5 text-[10px] font-semibold text-emerald-700 transition-colors hover:bg-white"
+                      >
+                        <Sparkles className="h-3 w-3" /> {p.label} <ExternalLink className="h-2.5 w-2.5" />
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <p className="text-xs leading-relaxed text-neutral-800">{initiative.opportunity.text}</p>
+            </div>
+          )}
           {initiative.keyResults.length > 0 && (
             <div>
               <h4 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">

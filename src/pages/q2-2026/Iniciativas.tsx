@@ -1,16 +1,12 @@
-import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { InitiativeCard } from "@/components/dashboard/InitiativeCard";
 import { initiativesQ22026, krDetailsQ22026 } from "@/data/q2-2026";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
-type TabFilter = "must-haves" | "should-haves" | "trade-offs";
 type StatusFilter = "todos" | "por-iniciar" | "en-progreso";
-type TradeOffFilter = "todos" | "oportunidades" | "requerimientos";
 
 function getCategoryDisplay(initiative: typeof initiativesQ22026[0]) {
   const categoryTag = initiative.categoryTag;
@@ -31,50 +27,31 @@ function getStatusDisplay(status: string) {
 }
 
 export default function IniciativasQ22026() {
-  const [searchParams] = useSearchParams();
-  const initialTab = (searchParams.get("tab") as TabFilter) || "must-haves";
-  const [activeTab, setActiveTab] = useState<TabFilter>(initialTab);
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("todos");
-  const [tradeOffFilter, setTradeOffFilter] = useState<TradeOffFilter>("todos");
   const [devOpen, setDevOpen] = useState(true);
   const [nonDevOpen, setNonDevOpen] = useState(true);
 
-  useEffect(() => {
-    const tab = searchParams.get("tab") as TabFilter;
-    if (tab) setActiveTab(tab);
-  }, [searchParams]);
-
-  const mustHaveInitiatives = initiativesQ22026.filter(i => i.status !== "backlog" && i.status !== "should-have");
-  const shouldHaveInitiatives = initiativesQ22026.filter(i => i.status === "should-have");
-  const allTradeOffInitiatives = initiativesQ22026.filter(i => i.status === "backlog");
-  const tradeOffInitiatives = tradeOffFilter === "todos" ? allTradeOffInitiatives 
-    : tradeOffFilter === "oportunidades" ? allTradeOffInitiatives.filter(i => i.tradeOffType === "oportunidad")
-    : allTradeOffInitiatives.filter(i => i.tradeOffType === "requerimiento");
+  // All Q2 initiatives (excluding backlog trade-offs to focus on Q2 commitment)
+  const q2Initiatives = initiativesQ22026.filter(i => i.status !== "backlog");
 
   const filterByStatus = (items: typeof initiativesQ22026) => {
     if (statusFilter === "todos") return items;
     if (statusFilter === "en-progreso") return items.filter(i => i.status === "in-progress");
-    if (statusFilter === "por-iniciar") return items.filter(i => i.status === "not-started");
+    if (statusFilter === "por-iniciar") return items.filter(i => i.status === "not-started" || i.status === "should-have");
     return items;
   };
 
-  const devInitiatives = filterByStatus(mustHaveInitiatives.filter(i => i.objectiveTag !== "non-dev"));
-  const nonDevInitiatives = filterByStatus(mustHaveInitiatives.filter(i => i.objectiveTag === "non-dev"));
+  const devInitiatives = filterByStatus(q2Initiatives.filter(i => i.objectiveTag !== "non-dev"));
+  const nonDevInitiatives = filterByStatus(q2Initiatives.filter(i => i.objectiveTag === "non-dev"));
   const devInProgress = devInitiatives.filter(i => i.status === "in-progress");
-  const devNotStarted = devInitiatives.filter(i => i.status === "not-started");
+  const devNotStarted = devInitiatives.filter(i => i.status === "not-started" || i.status === "should-have");
   const nonDevInProgress = nonDevInitiatives.filter(i => i.status === "in-progress");
-  const nonDevNotStarted = nonDevInitiatives.filter(i => i.status === "not-started");
+  const nonDevNotStarted = nonDevInitiatives.filter(i => i.status === "not-started" || i.status === "should-have");
 
   const statusFilters: { value: StatusFilter; label: string }[] = [
     { value: "todos", label: "Todos" },
     { value: "por-iniciar", label: "Por iniciar" },
     { value: "en-progreso", label: "En progreso" },
-  ];
-
-  const tradeOffFilters: { value: TradeOffFilter; label: string }[] = [
-    { value: "todos", label: "Todos" },
-    { value: "oportunidades", label: "Oportunidades" },
-    { value: "requerimientos", label: "Requerimientos" },
   ];
 
   return (
@@ -85,194 +62,119 @@ export default function IniciativasQ22026() {
           <p className="text-muted-foreground">Todas las iniciativas planeadas para TMD Mobile Q2 2026</p>
           <p className="text-xs text-muted-foreground mt-1">Haz clic en una tarjeta para ver los detalles completos</p>
         </div>
-
-        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as TabFilter)} className="w-auto">
-          <TabsList className="bg-transparent p-0 gap-2">
-            <TabsTrigger value="must-haves" className="data-[state=active]:bg-[hsl(var(--sidebar-background))] data-[state=active]:text-white data-[state=inactive]:bg-muted data-[state=inactive]:text-muted-foreground px-4 py-2 rounded-md font-medium transition-all">
-              Must-Haves
-              <Badge variant="secondary" className="ml-2 h-5 px-1.5 text-xs bg-white/20 text-inherit">{mustHaveInitiatives.length}</Badge>
-            </TabsTrigger>
-            <TabsTrigger value="should-haves" className="data-[state=active]:bg-[hsl(var(--sidebar-background))] data-[state=active]:text-white data-[state=inactive]:bg-muted data-[state=inactive]:text-muted-foreground px-4 py-2 rounded-md font-medium transition-all">
-              Q2
-              <Badge variant="secondary" className="ml-2 h-5 px-1.5 text-xs bg-white/20 text-inherit">{shouldHaveInitiatives.length}</Badge>
-            </TabsTrigger>
-            <TabsTrigger value="trade-offs" className="data-[state=active]:bg-[hsl(var(--sidebar-background))] data-[state=active]:text-white data-[state=inactive]:bg-muted data-[state=inactive]:text-muted-foreground px-4 py-2 rounded-md font-medium transition-all">
-              Trade-offs
-              <Badge variant="secondary" className="ml-2 h-5 px-1.5 text-xs bg-white/20 text-inherit">{allTradeOffInitiatives.length}</Badge>
-            </TabsTrigger>
-          </TabsList>
-        </Tabs>
+        <Badge className="bg-[hsl(var(--sidebar-background))] text-white px-4 py-2 text-sm font-medium h-fit">
+          Q2 · {q2Initiatives.length} iniciativas
+        </Badge>
       </div>
 
-      {activeTab === "must-haves" && (
-        <div className="space-y-6">
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground mr-2">Por estado:</span>
-            {statusFilters.map((filter) => (
-              <Button key={filter.value} variant={statusFilter === filter.value ? "default" : "outline"} size="sm"
-                onClick={() => setStatusFilter(filter.value)}
-                className={statusFilter === filter.value ? "bg-[hsl(var(--sidebar-background))] hover:bg-[hsl(var(--sidebar-background))]/90 text-white" : "hover:bg-muted-foreground/20 hover:text-foreground"}>
-                {filter.label}
-              </Button>
-            ))}
-          </div>
+      <div className="space-y-6">
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-sm text-muted-foreground mr-2">Por estado:</span>
+          {statusFilters.map((filter) => (
+            <Button key={filter.value} variant={statusFilter === filter.value ? "default" : "outline"} size="sm"
+              onClick={() => setStatusFilter(filter.value)}
+              className={statusFilter === filter.value ? "bg-[hsl(var(--sidebar-background))] hover:bg-[hsl(var(--sidebar-background))]/90 text-white" : "hover:bg-muted-foreground/20 hover:text-foreground"}>
+              {filter.label}
+            </Button>
+          ))}
+        </div>
 
-          {(devInProgress.length > 0 || devNotStarted.length > 0) && (
-            <Collapsible open={devOpen} onOpenChange={setDevOpen}>
-              <div className="flex items-center gap-3 mb-4">
-                <CollapsibleTrigger asChild>
-                  <Button variant="ghost" size="sm" className="p-0 h-auto hover:bg-transparent">
-                    <Badge className="bg-primary text-primary-foreground px-4 py-1.5 text-sm font-medium cursor-pointer hover:bg-primary/90 transition-colors">
-                      🛠️ Desarrollo
-                      {devOpen ? <ChevronUp className="ml-2 h-4 w-4" /> : <ChevronDown className="ml-2 h-4 w-4" />}
-                    </Badge>
-                  </Button>
-                </CollapsibleTrigger>
-                <div className="flex-1 h-px bg-border" />
-                <span className="text-sm text-muted-foreground">{devInitiatives.length} iniciativas</span>
-              </div>
-              <CollapsibleContent className="space-y-6">
-                {devInProgress.length > 0 && (
-                  <div>
-                    <div className="flex items-center gap-2 mb-4">
-                      <Badge className={getStatusDisplay("in-progress").colorClass}>{getStatusDisplay("in-progress").label}</Badge>
-                      <span className="text-sm text-muted-foreground">({devInProgress.length})</span>
-                    </div>
-                    <div className="grid gap-6 md:grid-cols-2">
-                      {devInProgress.map((initiative) => (
-                        <InitiativeCard key={initiative.id} initiative={initiative} krDetails={krDetailsQ22026} getCategoryDisplay={getCategoryDisplay} getStatusDisplay={getStatusDisplay} />
-                      ))}
-                    </div>
-                  </div>
-                )}
-                {devNotStarted.length > 0 && (
-                  <div>
-                    <div className="flex items-center gap-2 mb-4">
-                      <Badge className={getStatusDisplay("not-started").colorClass}>{getStatusDisplay("not-started").label}</Badge>
-                      <span className="text-sm text-muted-foreground">({devNotStarted.length})</span>
-                    </div>
-                    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-                      {devNotStarted.map((initiative) => (
-                        <InitiativeCard key={initiative.id} initiative={initiative} krDetails={krDetailsQ22026} getCategoryDisplay={getCategoryDisplay} getStatusDisplay={getStatusDisplay} />
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </CollapsibleContent>
-            </Collapsible>
-          )}
-
-          {(nonDevInProgress.length > 0 || nonDevNotStarted.length > 0) && (
-            <Collapsible open={nonDevOpen} onOpenChange={setNonDevOpen}>
-              <div className="flex items-center gap-3 mb-4">
-                <CollapsibleTrigger asChild>
-                  <Button variant="ghost" size="sm" className="p-0 h-auto hover:bg-transparent">
-                    <Badge className="bg-amber-500 text-white px-4 py-1.5 text-sm font-medium cursor-pointer hover:bg-amber-500/90 transition-colors">
-                      📋 No Desarrollo
-                      {nonDevOpen ? <ChevronUp className="ml-2 h-4 w-4" /> : <ChevronDown className="ml-2 h-4 w-4" />}
-                    </Badge>
-                  </Button>
-                </CollapsibleTrigger>
-                <div className="flex-1 h-px bg-border" />
-                <span className="text-sm text-muted-foreground">{nonDevInitiatives.length} iniciativas</span>
-              </div>
-              <CollapsibleContent className="space-y-6">
-                {nonDevInProgress.length > 0 && (
-                  <div>
-                    <div className="flex items-center gap-2 mb-4">
-                      <Badge className={getStatusDisplay("in-progress").colorClass}>{getStatusDisplay("in-progress").label}</Badge>
-                      <span className="text-sm text-muted-foreground">({nonDevInProgress.length})</span>
-                    </div>
-                    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-                      {nonDevInProgress.map((initiative) => (
-                        <InitiativeCard key={initiative.id} initiative={initiative} krDetails={krDetailsQ22026} getCategoryDisplay={getCategoryDisplay} getStatusDisplay={getStatusDisplay} />
-                      ))}
-                    </div>
-                  </div>
-                )}
-                {nonDevNotStarted.length > 0 && (
-                  <div>
-                    <div className="flex items-center gap-2 mb-4">
-                      <Badge className={getStatusDisplay("not-started").colorClass}>{getStatusDisplay("not-started").label}</Badge>
-                      <span className="text-sm text-muted-foreground">({nonDevNotStarted.length})</span>
-                    </div>
-                    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-                      {nonDevNotStarted.map((initiative) => (
-                        <InitiativeCard key={initiative.id} initiative={initiative} krDetails={krDetailsQ22026} getCategoryDisplay={getCategoryDisplay} getStatusDisplay={getStatusDisplay} />
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </CollapsibleContent>
-            </Collapsible>
-          )}
-
-          {devInitiatives.length === 0 && nonDevInitiatives.length === 0 && (
-            <div className="text-center py-12 text-muted-foreground">
-              No hay iniciativas que coincidan con el filtro seleccionado.
+        {(devInProgress.length > 0 || devNotStarted.length > 0) && (
+          <Collapsible open={devOpen} onOpenChange={setDevOpen}>
+            <div className="flex items-center gap-3 mb-4">
+              <CollapsibleTrigger asChild>
+                <Button variant="ghost" size="sm" className="p-0 h-auto hover:bg-transparent">
+                  <Badge className="bg-primary text-primary-foreground px-4 py-1.5 text-sm font-medium cursor-pointer hover:bg-primary/90 transition-colors">
+                    🛠️ Desarrollo
+                    {devOpen ? <ChevronUp className="ml-2 h-4 w-4" /> : <ChevronDown className="ml-2 h-4 w-4" />}
+                  </Badge>
+                </Button>
+              </CollapsibleTrigger>
+              <div className="flex-1 h-px bg-border" />
+              <span className="text-sm text-muted-foreground">{devInitiatives.length} iniciativas</span>
             </div>
-          )}
-        </div>
-      )}
+            <CollapsibleContent className="space-y-6">
+              {devInProgress.length > 0 && (
+                <div>
+                  <div className="flex items-center gap-2 mb-4">
+                    <Badge className={getStatusDisplay("in-progress").colorClass}>{getStatusDisplay("in-progress").label}</Badge>
+                    <span className="text-sm text-muted-foreground">({devInProgress.length})</span>
+                  </div>
+                  <div className="grid gap-6 md:grid-cols-2">
+                    {devInProgress.map((initiative) => (
+                      <InitiativeCard key={initiative.id} initiative={initiative} krDetails={krDetailsQ22026} getCategoryDisplay={getCategoryDisplay} getStatusDisplay={getStatusDisplay} />
+                    ))}
+                  </div>
+                </div>
+              )}
+              {devNotStarted.length > 0 && (
+                <div>
+                  <div className="flex items-center gap-2 mb-4">
+                    <Badge className={getStatusDisplay("not-started").colorClass}>{getStatusDisplay("not-started").label}</Badge>
+                    <span className="text-sm text-muted-foreground">({devNotStarted.length})</span>
+                  </div>
+                  <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+                    {devNotStarted.map((initiative) => (
+                      <InitiativeCard key={initiative.id} initiative={initiative} krDetails={krDetailsQ22026} getCategoryDisplay={getCategoryDisplay} getStatusDisplay={getStatusDisplay} />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </CollapsibleContent>
+          </Collapsible>
+        )}
 
-      {activeTab === "should-haves" && (
-        <div className="space-y-6">
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground mr-2">Por tipo:</span>
-            {tradeOffFilters.map((filter) => (
-              <Button key={filter.value} variant={tradeOffFilter === filter.value ? "default" : "outline"} size="sm"
-                onClick={() => setTradeOffFilter(filter.value)}
-                className={tradeOffFilter === filter.value ? "bg-[hsl(var(--sidebar-background))] hover:bg-[hsl(var(--sidebar-background))]/90 text-white" : "hover:bg-muted-foreground/20 hover:text-foreground"}>
-                {filter.label}
-              </Button>
-            ))}
-          </div>
-          <div className="rounded-lg bg-muted/50 border p-4">
-            <p className="text-sm text-muted-foreground">Iniciativas importantes que se implementarán si hay capacidad adicional durante el semestre.</p>
-          </div>
-          {(() => {
-            const filteredShouldHaves = tradeOffFilter === "todos" ? shouldHaveInitiatives
-              : tradeOffFilter === "oportunidades" ? shouldHaveInitiatives.filter(i => i.tradeOffType === "oportunidad")
-              : shouldHaveInitiatives.filter(i => i.tradeOffType === "requerimiento");
-            return filteredShouldHaves.length > 0 ? (
-              <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-                {filteredShouldHaves.map((initiative) => (
-                  <InitiativeCard key={initiative.id} initiative={initiative} krDetails={krDetailsQ22026} getCategoryDisplay={getCategoryDisplay} getStatusDisplay={getStatusDisplay} />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">No hay iniciativas en Q2 que coincidan con el filtro.</div>
-            );
-          })()}
-        </div>
-      )}
-
-      {activeTab === "trade-offs" && (
-        <div className="space-y-6">
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground mr-2">Por tipo:</span>
-            {tradeOffFilters.map((filter) => (
-              <Button key={filter.value} variant={tradeOffFilter === filter.value ? "default" : "outline"} size="sm"
-                onClick={() => setTradeOffFilter(filter.value)}
-                className={tradeOffFilter === filter.value ? "bg-[hsl(var(--sidebar-background))] hover:bg-[hsl(var(--sidebar-background))]/90 text-white" : "hover:bg-muted-foreground/20 hover:text-foreground"}>
-                {filter.label}
-              </Button>
-            ))}
-          </div>
-          <div className="rounded-lg bg-muted/50 border p-4">
-            <p className="text-sm text-muted-foreground">Iniciativas en backlog que podrían ser consideradas si hay capacidad adicional o si las prioridades cambian.</p>
-          </div>
-          {tradeOffInitiatives.length > 0 ? (
-            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-              {tradeOffInitiatives.map((initiative) => (
-                <InitiativeCard key={initiative.id} initiative={initiative} krDetails={krDetailsQ22026} getCategoryDisplay={getCategoryDisplay} getStatusDisplay={getStatusDisplay} />
-              ))}
+        {(nonDevInProgress.length > 0 || nonDevNotStarted.length > 0) && (
+          <Collapsible open={nonDevOpen} onOpenChange={setNonDevOpen}>
+            <div className="flex items-center gap-3 mb-4">
+              <CollapsibleTrigger asChild>
+                <Button variant="ghost" size="sm" className="p-0 h-auto hover:bg-transparent">
+                  <Badge className="bg-amber-500 text-white px-4 py-1.5 text-sm font-medium cursor-pointer hover:bg-amber-500/90 transition-colors">
+                    📋 No Desarrollo
+                    {nonDevOpen ? <ChevronUp className="ml-2 h-4 w-4" /> : <ChevronDown className="ml-2 h-4 w-4" />}
+                  </Badge>
+                </Button>
+              </CollapsibleTrigger>
+              <div className="flex-1 h-px bg-border" />
+              <span className="text-sm text-muted-foreground">{nonDevInitiatives.length} iniciativas</span>
             </div>
-          ) : (
-            <div className="text-center py-12 text-muted-foreground">No hay iniciativas en Trade-offs que coincidan con el filtro.</div>
-          )}
-        </div>
-      )}
+            <CollapsibleContent className="space-y-6">
+              {nonDevInProgress.length > 0 && (
+                <div>
+                  <div className="flex items-center gap-2 mb-4">
+                    <Badge className={getStatusDisplay("in-progress").colorClass}>{getStatusDisplay("in-progress").label}</Badge>
+                    <span className="text-sm text-muted-foreground">({nonDevInProgress.length})</span>
+                  </div>
+                  <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+                    {nonDevInProgress.map((initiative) => (
+                      <InitiativeCard key={initiative.id} initiative={initiative} krDetails={krDetailsQ22026} getCategoryDisplay={getCategoryDisplay} getStatusDisplay={getStatusDisplay} />
+                    ))}
+                  </div>
+                </div>
+              )}
+              {nonDevNotStarted.length > 0 && (
+                <div>
+                  <div className="flex items-center gap-2 mb-4">
+                    <Badge className={getStatusDisplay("not-started").colorClass}>{getStatusDisplay("not-started").label}</Badge>
+                    <span className="text-sm text-muted-foreground">({nonDevNotStarted.length})</span>
+                  </div>
+                  <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+                    {nonDevNotStarted.map((initiative) => (
+                      <InitiativeCard key={initiative.id} initiative={initiative} krDetails={krDetailsQ22026} getCategoryDisplay={getCategoryDisplay} getStatusDisplay={getStatusDisplay} />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </CollapsibleContent>
+          </Collapsible>
+        )}
+
+        {devInitiatives.length === 0 && nonDevInitiatives.length === 0 && (
+          <div className="text-center py-12 text-muted-foreground">
+            No hay iniciativas que coincidan con el filtro seleccionado.
+          </div>
+        )}
+      </div>
     </div>
   );
 }

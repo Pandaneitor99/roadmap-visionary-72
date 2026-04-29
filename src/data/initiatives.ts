@@ -1,8 +1,13 @@
 // Strategy and North Star Metric
 export const strategyInfo = {
-  strategy: "Convertirse en el complemento portátil del sistema Alegra, extendiendo el poder más allá del escritorio, para facilitar la gestión administrativa y contable para Pymes, de forma simple, ágil e intuitiva, en cualquier momento y desde cualquier lugar.",
-  northStarMetric: "Usuarios activos que realizan acciones de valor dentro de la app (factura de venta, items, contactos, pagos, reportes etc)"
+  strategy: "Ser el complemento portátil e indispensable del sistema Alegra: extender su poder más allá del escritorio para que las Pymes gestionen su contabilidad y operación de forma simple, ágil e intuitiva, en cualquier momento y desde cualquier lugar.",
+  northStarMetric: "Usuarios activos mensuales (MAC) que realizan acciones de valor dentro de la app — factura de venta, items, contactos, pagos, reportes y cotizaciones."
 };
+
+export interface InitiativeOpportunity {
+  text: string;
+  prototypes?: { label: string; url: string }[];
+}
 
 export interface Initiative {
   id: string;
@@ -19,6 +24,8 @@ export interface Initiative {
   objectiveText: string;
   problem: string;
   hypothesis: string;
+  /** Opportunity from diagnóstico — shown on the card */
+  opportunity?: InitiativeOpportunity;
   keyResults: string[];
   kpis: string[];
   version: string;
@@ -42,6 +49,10 @@ export const initiatives: Initiative[] = [
     objectiveText: "Objetivo 2: Impulsar la adopción de la app móvil mejorando el flujo de creación de facturas y de ítems para que los usuarios facturen de forma recurrente desde el móvil.",
     problem: "Con la salida en web de la versión 4.4, la cantidad de facturas aumentó un 20%, sin embargo, en la app se mantuvo constante. Adicionalmente, la tasa de conversión es la menor de las 4 versiones (63% hoy) en comparación a otras versiones (CO 83%, RD 77%). En volumen total, también se encuentra de últimas con 1.600 facturas de venta creadas al mes.",
     hypothesis: "Si rediseñamos la factura de venta, esperamos aumentar el uso y la intención de creación de facturas, promoviendo la adopción cross-platform del producto.",
+    opportunity: {
+      text: "Rediseño de facturación + agregar retenciones + agregar conduces + paridad de campos con web.",
+      prototypes: [{ label: "Ver prototipo", url: "https://www.figma.com/design/G4L7LYtkISB6T4DwLJ4wHS/MOB---Redise%C3%B1o-Facturaci%C3%B3n?node-id=3872-17740&p=f&t=CosijuUBHpbR7JeB-0" }],
+    },
     keyResults: ["KR 2.1", "KR 2.2", "KR 2.3"],
     kpis: ["Facturas de Venta totales en CR", "Conversión de FV en CR", "MAC de Costa Rica", "% Usuarios activos pagos de web que utilizan app"],
     version: "Costa Rica",
@@ -92,6 +103,10 @@ export const initiatives: Initiative[] = [
     objectiveText: "Objetivo 2: Impulsar la adopción de la app móvil mejorando el flujo de creación de facturas y de ítems para que los usuarios facturen de forma recurrente desde el móvil.",
     problem: "Mientras que en Web se crean alrededor de 500k de productos al mes, en app únicamente se crean 15k. Hay una discrepancia del 40% de los campos de creación de factura entre app y web. Adicionalmente, hay una mala UX en algunos campos y datos de precios.",
     hypothesis: "Si lanzamos un nuevo diseño de creación de ítems esperamos un aumento en la creación de ítems y su uso en las facturas de venta.",
+    opportunity: {
+      text: "Simplificación de la creación de items + agregar creación de servicios + paridad de campos con web.",
+      prototypes: [{ label: "Ver prototipo", url: "https://www.figma.com/design/VjC6hok9QSdr9Wd8iasWms/Secci%C3%B3n-items-App?node-id=2266-3088&t=Vbquk9q4yag4jbVR-0" }],
+    },
     keyResults: ["KR 2.1", "KR 2.2", "KR 2.3"],
     kpis: ["Items agregados", "Conversión de factura de venta", "Cantidad de items agregados a la factura de venta"],
     version: "Todos",
@@ -109,6 +124,10 @@ export const initiatives: Initiative[] = [
     objectiveText: "Objetivo 2: Impulsar la adopción de la app móvil mejorando el flujo de creación de facturas y de ítems para que los usuarios facturen de forma recurrente desde el móvil.",
     problem: "Únicamente el 14% de los usuarios pagos en web utilizan la app para realizar una acción de valor, entre ellas factura de venta.",
     hypothesis: "Si rediseñamos la pantalla de facturación esperamos un aumento en el uso de facturación y una mayor conversión, además de realizar cross-selling a la aplicación.",
+    opportunity: {
+      text: "Rediseño de facturación + agregar retenciones + agregar conduces + paridad de campos con web.",
+      prototypes: [{ label: "Ver prototipo", url: "https://www.figma.com/design/G4L7LYtkISB6T4DwLJ4wHS/MOB---Redise%C3%B1o-Facturaci%C3%B3n?node-id=3872-17740&p=f&t=CosijuUBHpbR7JeB-0" }],
+    },
     keyResults: ["KR 2.1", "KR 2.2", "KR 2.3"],
     kpis: ["Facturas de Venta totales en CO", "Conversión de FV en CO", "MAC de Colombia", "% Usuarios activos pagos de web que utilizan app"],
     version: "Colombia",
@@ -219,6 +238,26 @@ export const initiatives: Initiative[] = [
     hypothesis: "Si implementamos estrategias de G&S, aumentaremos las descargas.",
     keyResults: [],
     kpis: [],
+    version: "Todos",
+    dependencies: "-",
+    sprintStart: 0,
+    sprintEnd: 0,
+  },
+  {
+    id: "25",
+    title: "Help Center dentro de la app",
+    status: "not-started",
+    date: "-",
+    objectiveTag: "non-dev",
+    categoryTag: "experiencia",
+    objectiveText: "Iniciativa no de desarrollo",
+    problem: "Los usuarios deben salir de la app e ir a la web para buscar ayuda o consultar la documentación, lo que aumenta la fricción y los tickets de soporte.",
+    hypothesis: "Si integramos un Help Center accesible directamente desde la app, reducimos la fricción, mejoramos la autosuficiencia del usuario y disminuimos los tickets de soporte.",
+    opportunity: {
+      text: "Centro de ayuda contextual dentro de la app, con búsqueda y artículos guiados por flujo.",
+    },
+    keyResults: [],
+    kpis: ["Consultas resueltas en app", "Reducción de tickets de soporte"],
     version: "Todos",
     dependencies: "-",
     sprintStart: 0,
