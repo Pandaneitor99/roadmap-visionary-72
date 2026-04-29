@@ -1166,8 +1166,8 @@ function TasaAdopcion() {
   const tasaReal = 22.1; // MAC APP / MAC WEB
   const tasaAdopcionOct = 30.5;
   const tasaRealOct = 19.8;
-  const deltaAdopcion = tasaAdopcion - tasaAdopcionOct;
-  const deltaReal = tasaReal - tasaRealOct;
+  const deltaAdopcion = ((tasaAdopcion - tasaAdopcionOct) / tasaAdopcionOct) * 100;
+  const deltaReal = ((tasaReal - tasaRealOct) / tasaRealOct) * 100;
   const upAdopcion = deltaAdopcion >= 0;
   const upReal = deltaReal >= 0;
 
@@ -1202,7 +1202,7 @@ function TasaAdopcion() {
               )}
             >
               {upAdopcion ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
-              {upAdopcion ? "+" : ""}{deltaAdopcion.toFixed(1)} pp
+              {upAdopcion ? "+" : ""}{deltaAdopcion.toFixed(1)}%
               <span className="ml-1 text-[10px] font-medium text-neutral-500">vs Oct '25</span>
             </p>
           </div>
@@ -1231,7 +1231,7 @@ function TasaAdopcion() {
               )}
             >
               {upReal ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
-              {upReal ? "+" : ""}{deltaReal.toFixed(1)} pp
+              {upReal ? "+" : ""}{deltaReal.toFixed(1)}%
               <span className="ml-1 text-[10px] font-medium text-neutral-500">vs Oct '25</span>
             </p>
           </div>
