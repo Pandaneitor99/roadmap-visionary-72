@@ -324,7 +324,7 @@ function Section1() {
                 En lugar de
               </div>
               <div className="border-b border-neutral-200 bg-neutral-50 px-5 py-3 text-xs font-bold uppercase tracking-wider text-neutral-600 md:border-b">
-                Porqué
+                Por qué
               </div>
 
               {/* Row 1 */}
