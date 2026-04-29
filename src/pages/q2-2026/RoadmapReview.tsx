@@ -6012,47 +6012,57 @@ function SectionAgenda() {
   ];
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[1.1fr,0.9fr]">
-      {/* Columna izquierda: Agenda + Highlights/Lowlights */}
-      <div className="space-y-8">
-        {/* Agenda */}
-        <div className="rounded-2xl border border-neutral-200 bg-white p-8 shadow-sm">
-          <div className="mb-6 flex items-center gap-3">
-            <div
-              className="flex h-10 w-10 items-center justify-center rounded-xl text-white"
-              style={{ backgroundColor: ALEGRA_GREEN }}
-            >
-              <ClipboardList className="h-5 w-5" />
-            </div>
-            <h2 className="text-2xl font-bold text-neutral-900">Agenda</h2>
+    <div className="space-y-6">
+      {/* Módulo Agenda — contiene el listado y la imagen pequeña */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-8 shadow-sm">
+        <div className="mb-6 flex items-center gap-3">
+          <div
+            className="flex h-10 w-10 items-center justify-center rounded-xl text-white"
+            style={{ backgroundColor: ALEGRA_GREEN }}
+          >
+            <ClipboardList className="h-5 w-5" />
           </div>
-          <ul className="space-y-3">
-            {items.map((it) => (
+          <h2 className="text-2xl font-bold text-neutral-900">Agenda</h2>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-[1fr,auto] md:items-start">
+          <ul className="space-y-2.5">
+            {items.map((it, idx) => (
               <li
                 key={it}
                 className="flex items-center gap-3 rounded-lg border border-neutral-100 bg-neutral-50/60 px-4 py-3"
               >
                 <span
-                  className="h-2 w-2 rounded-full"
+                  className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white"
                   style={{ backgroundColor: ALEGRA_GREEN }}
-                />
+                >
+                  {idx + 1}
+                </span>
                 <span className="text-sm font-medium text-neutral-800">{it}</span>
               </li>
             ))}
           </ul>
-        </div>
 
-        {/* Highlights */}
-        <div className="rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-8 shadow-sm">
-          <div className="mb-5 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500 text-white">
-              <TrendingUp className="h-5 w-5" />
+          <img
+            src={agendaAppMockup}
+            alt="Mockup de la app Alegra Contabilidad Inteligente"
+            className="mx-auto h-auto w-40 rounded-xl md:w-48"
+          />
+        </div>
+      </div>
+
+      {/* Highlights (izq) + Lowlights (der) */}
+      <div className="grid gap-6 md:grid-cols-2">
+        <div className="rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-6 shadow-sm">
+          <div className="mb-4 flex items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500 text-white">
+              <TrendingUp className="h-4 w-4" />
             </div>
             <div>
               <p className="text-[11px] font-bold uppercase tracking-wider text-emerald-600">
                 Highlights
               </p>
-              <h3 className="text-lg font-bold text-neutral-900">Logros del período</h3>
+              <h3 className="text-base font-bold text-neutral-900">Logros del período</h3>
             </div>
           </div>
           <ul className="space-y-2.5">
@@ -6065,17 +6075,16 @@ function SectionAgenda() {
           </ul>
         </div>
 
-        {/* Lowlights */}
-        <div className="rounded-2xl border border-rose-200 bg-gradient-to-br from-rose-50 to-white p-8 shadow-sm">
-          <div className="mb-5 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-rose-500 text-white">
-              <TrendingDown className="h-5 w-5" />
+        <div className="rounded-2xl border border-rose-200 bg-gradient-to-br from-rose-50 to-white p-6 shadow-sm">
+          <div className="mb-4 flex items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-rose-500 text-white">
+              <TrendingDown className="h-4 w-4" />
             </div>
             <div>
               <p className="text-[11px] font-bold uppercase tracking-wider text-rose-600">
                 Lowlights
               </p>
-              <h3 className="text-lg font-bold text-neutral-900">Aspectos a mejorar</h3>
+              <h3 className="text-base font-bold text-neutral-900">Aspectos a mejorar</h3>
             </div>
           </div>
           <ul className="space-y-2.5">
@@ -6086,17 +6095,6 @@ function SectionAgenda() {
               </li>
             ))}
           </ul>
-        </div>
-      </div>
-
-      {/* Columna derecha: Imagen */}
-      <div className="flex items-start justify-center lg:sticky lg:top-32 lg:self-start">
-        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-          <img
-            src={agendaAppMockup}
-            alt="Mockup de la app Alegra Contabilidad Inteligente"
-            className="max-h-[640px] w-auto rounded-xl"
-          />
         </div>
       </div>
     </div>
