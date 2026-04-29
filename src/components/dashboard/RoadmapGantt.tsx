@@ -159,7 +159,7 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
   const [newRowData, setNewRowData] = useState({ label: "", section: "must" as RowDef["section"] });
 
   // Delete row confirmation
-  
+  const [deletingRow, setDeletingRow] = useState<RowDef | null>(null);
 
   // Load data from Supabase on mount
   useEffect(() => {
