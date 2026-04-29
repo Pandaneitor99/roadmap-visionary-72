@@ -497,7 +497,6 @@ export function BusquedaDetail() {
 // Errores API Weakly — datos semanales reales (Amplitude chart cnbbpxr5)
 // Rango: Nov 23, 2025 – Apr 4, 2026 (Weekly, Current Total Events)
 const erroresApiWeekly = [
-  { sem: "23 Nov", v: 9400 },
   { sem: "30 Nov", v: 10600 },
   { sem: "07 Dic", v: 9800 },
   { sem: "14 Dic", v: 10000 },
