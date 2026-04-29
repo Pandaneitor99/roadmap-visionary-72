@@ -3177,7 +3177,7 @@ function FuncionalidadesUniquesShared({
                 >
                   {comparison.liteDelta == null
                     ? "—"
-                    : `${comparison.liteDelta >= 0 ? "+" : ""}${comparison.liteDelta.toFixed(1)} pp`}
+                    : `${comparison.liteDelta >= 0 ? "+" : ""}${comparison.liteDelta.toFixed(1)}%`}
                 </td>
               </tr>
             </tbody>
