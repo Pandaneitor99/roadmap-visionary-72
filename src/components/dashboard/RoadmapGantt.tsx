@@ -539,6 +539,7 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
             onCellClick={handleCellClick}
             onDeleteItem={setDeletingItem}
             onDeleteRow={setDeletingRow}
+            labelWidth={labelWidth}
           />
         );
       })}
