@@ -2510,43 +2510,43 @@ function zip(months: string[], vals: number[]): { month: string; pct: number }[]
 
 // === Comportamiento BASE / SOS — datos reales Amplitude ===
 
-// Adopción funcionalidades BASE vs SOS - chart aq7o241v (Mar 29 - Abr 26 2026)
+// Adopción funcionalidades BASE vs SOS - chart aq7o241v (Mar 2026)
 const adopcionBaseSosData = [
-  { event: "Crear factura", BASE: 79.8, SOS: 49.2 },
-  { event: "Crear contacto", BASE: 43.1, SOS: 21.2 },
-  { event: "Crear ítem", BASE: 36.8, SOS: 13.2 },
-  { event: "Buscar factura", BASE: 30.4, SOS: 40.4 },
-  { event: "Crear cotización", BASE: 29.8, SOS: 34.6 },
-  { event: "Ver gráfico de ventas", BASE: 27.2, SOS: 32.3 },
-  { event: "Cuentas por cobrar", BASE: 9.9, SOS: 19.8 },
-  { event: "Crear factura de proveedor", BASE: 3.2, SOS: 2.8 },
-  { event: "Crear remisión", BASE: 3.1, SOS: 5.1 },
+  { event: "Crear factura", BASE: 76.0, SOS: 44.1 },
+  { event: "Crear contacto", BASE: 41.8, SOS: 18.8 },
+  { event: "Crear ítem", BASE: 35.5, SOS: 14.3 },
+  { event: "Buscar factura", BASE: 34.0, SOS: 40.7 },
+  { event: "Crear cotización", BASE: 28.8, SOS: 27.4 },
+  { event: "Ver gráfico de ventas", BASE: 28.7, SOS: 33.3 },
+  { event: "Cuentas por cobrar", BASE: 11.1, SOS: 18.2 },
+  { event: "Crear remisión", BASE: 3.2, SOS: 4.1 },
+  { event: "Crear factura de proveedor", BASE: 3.1, SOS: 2.4 },
 ];
 
-// Engagement BASE - chart no1u7db2 (Mar 29 - Abr 26 2026)
+// Engagement BASE - chart no1u7db2 (Mar 2026)
 const baseEvents: EngagementEvent[] = [
-  { num: 1, label: "Crear factura", adoption: 71.3, frequency: 35.4 },
-  { num: 3, label: "Crear contacto", adoption: 37.2, frequency: 8.0 },
-  { num: 5, label: "Crear ítem", adoption: 32.1, frequency: 9.3 },
-  { num: 4, label: "Crear cotización", adoption: 26.2, frequency: 15.2 },
-  { num: 2, label: "Buscar factura", adoption: 21.5, frequency: 25.6 },
-  { num: 6, label: "Ver gráfico de ventas", adoption: 20.3, frequency: 13.1 },
-  { num: 9, label: "Crear factura de proveedor", adoption: 2.9, frequency: 16.9 },
-  { num: 8, label: "Crear remisión", adoption: 2.8, frequency: 31.8 },
-  { num: 10, label: "Crear gasto", adoption: 2.1, frequency: 12.3 },
+  { num: 1, label: "Crear factura", adoption: 76.0, frequency: 41.2 },
+  { num: 3, label: "Crear contacto", adoption: 41.8, frequency: 9.0 },
+  { num: 5, label: "Crear ítem", adoption: 35.4, frequency: 10.3 },
+  { num: 4, label: "Crear cotización", adoption: 28.7, frequency: 15.9 },
+  { num: 2, label: "Buscar factura", adoption: 29.1, frequency: 32.4 },
+  { num: 6, label: "Ver gráfico de ventas", adoption: 26.0, frequency: 12.3 },
+  { num: 9, label: "Crear factura de proveedor", adoption: 3.1, frequency: 16.1 },
+  { num: 8, label: "Crear remisión", adoption: 3.2, frequency: 30.4 },
+  { num: 10, label: "Crear gasto", adoption: 2.4, frequency: 12.9 },
 ];
 
 // Engagement SOS - chart ezbhdx9r (Mar 2026)
 const sosEvents: EngagementEvent[] = [
-  { num: 1, label: "Crear factura", adoption: 24.6, frequency: 9.1 },
-  { num: 2, label: "Buscar factura", adoption: 18.5, frequency: 14.0 },
-  { num: 4, label: "Crear cotización", adoption: 18.3, frequency: 16.2 },
-  { num: 6, label: "Ver gráfico de ventas", adoption: 12.8, frequency: 7.6 },
-  { num: 3, label: "Crear contacto", adoption: 10.0, frequency: 3.6 },
-  { num: 5, label: "Crear ítem", adoption: 6.1, frequency: 4.3 },
-  { num: 8, label: "Crear remisión", adoption: 2.4, frequency: 47.8 },
-  { num: 9, label: "Crear factura de proveedor", adoption: 1.3, frequency: 3.6 },
-  { num: 10, label: "Crear gasto", adoption: 1.1, frequency: 5.9 },
+  { num: 1, label: "Crear factura", adoption: 43.9, frequency: 10.5 },
+  { num: 2, label: "Buscar factura", adoption: 36.4, frequency: 14.6 },
+  { num: 4, label: "Crear cotización", adoption: 27.3, frequency: 17.9 },
+  { num: 6, label: "Ver gráfico de ventas", adoption: 29.4, frequency: 6.1 },
+  { num: 3, label: "Crear contacto", adoption: 18.7, frequency: 4.3 },
+  { num: 5, label: "Crear ítem", adoption: 14.2, frequency: 5.5 },
+  { num: 8, label: "Crear remisión", adoption: 4.0, frequency: 26.4 },
+  { num: 9, label: "Crear factura de proveedor", adoption: 2.4, frequency: 4.8 },
+  { num: 10, label: "Crear gasto", adoption: 2.2, frequency: 5.9 },
 ];
 
 function NegocioView() {
