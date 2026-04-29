@@ -5390,35 +5390,46 @@ function Section5() {
             </div>
           </div>
 
-          <div className="mb-5 rounded-xl border border-orange-200 bg-orange-50/60 p-4">
-            <div className="flex items-start justify-between gap-3 flex-wrap">
-              <p className="text-[11px] font-bold uppercase tracking-wider text-orange-700">
-                Problema detectado
-              </p>
-              <div className="flex flex-wrap items-center gap-2">
-                <a
-                  href="https://claude.ai/design/p/019dc058-65c2-700c-ba39-a56f47183a28?file=Alegra+Prototype.html"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold transition-colors hover:bg-white"
-                  style={{ borderColor: "#FF6B0033", color: "#FF6B00", backgroundColor: "#FF6B0010" }}
-                >
-                  <Sparkles className="h-3 w-3" /> Ver prototipo 1 <ExternalLink className="h-2.5 w-2.5" />
-                </a>
-                <a
-                  href="https://www.figma.com/proto/mwZw2uwa23VqYfWeAfM55R/ACT---Test-ABC-invitaci%C3%B3n-a-descargar-app-Alegra-para-usuarios-mobile?node-id=7001-303&viewport=-124%2C-500%2C0.18&t=8Gb8o270oF3s50V7-1&scaling=min-zoom&content-scaling=fixed&page-id=1%3A2"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold transition-colors hover:bg-white"
-                  style={{ borderColor: "#FF6B0033", color: "#FF6B00", backgroundColor: "#FF6B0010" }}
-                >
-                  <Sparkles className="h-3 w-3" /> Ver prototipo 2 <ExternalLink className="h-2.5 w-2.5" />
-                </a>
+          <div className="mb-5 grid gap-3 md:grid-cols-2">
+            <div className="rounded-xl border border-orange-200 bg-orange-50/60 p-4">
+              <div className="flex items-start justify-between gap-2 flex-wrap">
+                <p className="text-[11px] font-bold uppercase tracking-wider text-orange-700">
+                  Problema detectado
+                </p>
+                <div className="flex flex-wrap items-center gap-2">
+                  <a
+                    href="https://claude.ai/design/p/019dc058-65c2-700c-ba39-a56f47183a28?file=Alegra+Prototype.html"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold transition-colors hover:bg-white"
+                    style={{ borderColor: "#FF6B0033", color: "#FF6B00", backgroundColor: "#FF6B0010" }}
+                  >
+                    <Sparkles className="h-3 w-3" /> Prototipo 1 <ExternalLink className="h-2.5 w-2.5" />
+                  </a>
+                  <a
+                    href="https://www.figma.com/proto/mwZw2uwa23VqYfWeAfM55R/ACT---Test-ABC-invitaci%C3%B3n-a-descargar-app-Alegra-para-usuarios-mobile?node-id=7001-303&viewport=-124%2C-500%2C0.18&t=8Gb8o270oF3s50V7-1&scaling=min-zoom&content-scaling=fixed&page-id=1%3A2"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold transition-colors hover:bg-white"
+                    style={{ borderColor: "#FF6B0033", color: "#FF6B00", backgroundColor: "#FF6B0010" }}
+                  >
+                    <Sparkles className="h-3 w-3" /> Prototipo 2 <ExternalLink className="h-2.5 w-2.5" />
+                  </a>
+                </div>
               </div>
+              <p className="mt-2 text-sm leading-relaxed text-neutral-800">
+                Los usuarios <strong>tienen que iniciar sesión dentro de la app</strong> para ver los planes y pagar, o <strong>ir a web</strong>. Este paso adicional fricciona la conversión a pago.
+              </p>
             </div>
-            <p className="mt-2 text-sm leading-relaxed text-neutral-800">
-              Los usuarios <strong>tienen que iniciar sesión dentro de la app</strong> para ver los planes y pagar, o <strong>ir a web</strong>. Este paso adicional fricciona la conversión a pago.
-            </p>
+
+            <div className="rounded-xl border border-emerald-200 bg-emerald-50/60 p-4">
+              <p className="text-[11px] font-bold uppercase tracking-wider text-emerald-700">
+                Oportunidad
+              </p>
+              <p className="mt-2 text-sm leading-relaxed text-neutral-800">
+                <strong>Link mágico creado por Identity</strong> para ver planes + <strong>contactabilidad bot ventas</strong>.
+              </p>
+            </div>
           </div>
 
           <FunnelComboCard
