@@ -3149,7 +3149,7 @@ function FuncionalidadesUniquesShared({
                 >
                   {comparison.coreDelta == null
                     ? "—"
-                    : `${comparison.coreDelta >= 0 ? "+" : ""}${comparison.coreDelta.toFixed(1)} pp`}
+                    : `${comparison.coreDelta >= 0 ? "+" : ""}${comparison.coreDelta.toFixed(1)}%`}
                 </td>
               </tr>
               <tr className="border-t border-neutral-100">
