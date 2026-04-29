@@ -57,14 +57,14 @@ const busquedaCotizacionesUniques = [
   { sem: "29 Mar", v: 0 },
   { sem: "05 Abr", v: 0 },
   { sem: "12 Abr", v: 37 },
-  { sem: "19 Abr", v: 182 },
+  { sem: "19 Abr", v: 376 },
 ];
 const busquedaCotizacionesTotales = [
   { sem: "22 Mar", v: 0 },
   { sem: "29 Mar", v: 0 },
   { sem: "05 Abr", v: 0 },
   { sem: "12 Abr", v: 123 },
-  { sem: "19 Abr", v: 1151 },
+  { sem: "19 Abr", v: 2855 },
 ];
 
 // Remisiones
@@ -77,6 +77,7 @@ const remisionesTotales = [
   { sem: "29 Mar", v: 1362 },
   { sem: "05 Abr", v: 2620 },
   { sem: "12 Abr", v: 2849 },
+  { sem: "19 Abr", v: 3035 },
 ];
 const appVsWebRemisiones = [
   { mes: "Oct 25", pct: 6.91 },
@@ -85,7 +86,7 @@ const appVsWebRemisiones = [
   { mes: "Ene 26", pct: 6.48 },
   { mes: "Feb 26", pct: 6.09 },
   { mes: "Mar 26", pct: 6.45 },
-  { mes: "Abr 26", pct: 8.81 },
+  { mes: "Abr 26", pct: 9.04 },
 ];
 
 // Buscador remisiones — semanal (charts m7e69s6z uniques · l8i09ad1 totals)
@@ -193,7 +194,7 @@ const itemsCreadosSemanal = [
   { sem: "29 Mar", total: 2779 },
   { sem: "05 Abr", total: 4265 },
   { sem: "12 Abr", total: 5295 },
-  { sem: "19 Abr", total: 5370 },
+  { sem: "19 Abr", total: 5453 },
 ];
 
 // Time to convert (segundos) — refrescados desde Amplitude
@@ -397,6 +398,39 @@ export function BusquedaDetail() {
     <div className="space-y-4">
       <div className="grid gap-3 md:grid-cols-2">
         <ChartCard
+          title="Búsqueda cotizaciones — Únicos"
+          subtitle="Lanzamiento reciente"
+          url="https://app.amplitude.com/analytics/alegra/chart/on3tt73l"
+          statLabel="Última sem"
+          statValue={lastVal(busquedaCotizacionesUniques, "v")}
+          statDelta={pctDelta(busquedaCotizacionesUniques, "v")}
+          statBaselineLabel="vs lanzamiento"
+        >
+          <BarChart data={busquedaCotizacionesUniques}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+            <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
+            <YAxis tick={{ fontSize: 10 }} />
+            <Tooltip />
+            <Bar dataKey="v" fill={ALEGRA_GREEN} />
+          </BarChart>
+        </ChartCard>
+        <ChartCard
+          title="Búsqueda cotizaciones — Totales"
+          url="https://app.amplitude.com/analytics/alegra/chart/lj96ul5q"
+          statLabel="Última sem"
+          statValue={lastVal(busquedaCotizacionesTotales, "v")}
+          statDelta={pctDelta(busquedaCotizacionesTotales, "v")}
+          statBaselineLabel="vs lanzamiento"
+        >
+          <BarChart data={busquedaCotizacionesTotales}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+            <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
+            <YAxis tick={{ fontSize: 10 }} />
+            <Tooltip />
+            <Bar dataKey="v" fill={BLUE} />
+          </BarChart>
+        </ChartCard>
+        <ChartCard
           title="Búsqueda de facturas — Totales"
           subtitle="Mensual · últimos 6 meses"
           url="https://app.amplitude.com/analytics/alegra/chart/g3zsws0s"
@@ -447,45 +481,12 @@ export function BusquedaDetail() {
             <Line type="monotone" dataKey="v" stroke={ORANGE} strokeWidth={2} />
           </LineChart>
         </ChartCard>
-        <ChartCard
-          title="Búsqueda cotizaciones — Únicos"
-          subtitle="Lanzamiento reciente"
-          url="https://app.amplitude.com/analytics/alegra/chart/on3tt73l"
-          statLabel="Última sem"
-          statValue={lastVal(busquedaCotizacionesUniques, "v")}
-          statDelta={pctDelta(busquedaCotizacionesUniques, "v")}
-          statBaselineLabel="vs lanzamiento"
-        >
-          <BarChart data={busquedaCotizacionesUniques}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-            <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
-            <YAxis tick={{ fontSize: 10 }} />
-            <Tooltip />
-            <Bar dataKey="v" fill={ALEGRA_GREEN} />
-          </BarChart>
-        </ChartCard>
-        <ChartCard
-          title="Búsqueda cotizaciones — Totales"
-          url="https://app.amplitude.com/analytics/alegra/chart/lj96ul5q"
-          statLabel="Última sem"
-          statValue={lastVal(busquedaCotizacionesTotales, "v")}
-          statDelta={pctDelta(busquedaCotizacionesTotales, "v")}
-          statBaselineLabel="vs lanzamiento"
-        >
-          <BarChart data={busquedaCotizacionesTotales}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-            <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
-            <YAxis tick={{ fontSize: 10 }} />
-            <Tooltip />
-            <Bar dataKey="v" fill={BLUE} />
-          </BarChart>
-        </ChartCard>
       </div>
       <Insights
         items={[
+          "Lanzamiento de búsqueda en cotizaciones muestra adopción rápida: de 0 a 376 usuarios únicos y 2,855 búsquedas en 2 semanas.",
           "Búsqueda de facturas se mantiene como funcionalidad de alto uso: ~3K usuarios únicos/mes y picos de 66K búsquedas en marzo 2026.",
           "Uso del componente del buscador creció +44% entre feb y abril (807 → ~1.1K usuarios/semana).",
-          "Lanzamiento de búsqueda en cotizaciones muestra adopción rápida: de 0 a 182 usuarios únicos y 1,151 búsquedas en 2 semanas.",
           "El feature reduce la fricción de encontrar documentos y soporta directamente el KR de errores críticos / experiencia.",
         ]}
       />
@@ -496,7 +497,6 @@ export function BusquedaDetail() {
 // Errores API Weakly — datos semanales reales (Amplitude chart cnbbpxr5)
 // Rango: Nov 23, 2025 – Apr 4, 2026 (Weekly, Current Total Events)
 const erroresApiWeekly = [
-  { sem: "23 Nov", v: 9400 },
   { sem: "30 Nov", v: 10600 },
   { sem: "07 Dic", v: 9800 },
   { sem: "14 Dic", v: 10000 },
@@ -627,8 +627,8 @@ export function RemisionesDetail() {
       </div>
       <Insights
         items={[
-          "Tras habilitar compartir/descargar remisiones, las remisiones semanales pasaron de ~1.5K a ~2.85K (crecimiento >85%).",
-          "La participación de la app en el total de remisiones subió de 6.1% (feb) a 8.8% (abr), el máximo histórico.",
+          "Tras habilitar compartir/descargar remisiones, las remisiones semanales pasaron de ~1.5K a ~3K (crecimiento >95%).",
+          "La participación de la app en el total de remisiones subió de 6.1% (feb) a 9.04% (abr), el máximo histórico.",
           "El buscador de remisiones se lanzó en abril: pasó de 15 a 74 usuarios únicos (+393%) y de 136 a 975 búsquedas semanales (+617%) entre las semanas del 12 y 19 de abril.",
           "Confirma que cerrar gaps funcionales móviles desplaza uso de web a app (aporta a KR 2.2 — adopción).",
         ]}
