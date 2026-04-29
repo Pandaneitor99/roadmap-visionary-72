@@ -2119,20 +2119,20 @@ function ComportamientoCoreLiteView() {
   return (
     <div className="space-y-6">
       {/* Adopción funcionalidades CORE vs LITE - barras VERTICALES */}
-      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-        <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
+      <div className="rounded-2xl border border-neutral-200 bg-white px-6 pt-5 pb-2 shadow-sm">
+        <div className="mb-2 flex items-start justify-between gap-3 flex-wrap">
           <div>
             <h4 className="text-base font-bold text-neutral-900">
               Adopción funcionalidades — Uniques Mensual CORE vs LITE
             </h4>
-            <p className="mt-1 text-xs text-neutral-500">
+            <p className="mt-0.5 text-xs text-neutral-500">
               % de adopción por funcionalidad · Marzo 2026
             </p>
           </div>
         </div>
-        <div className="h-[340px] w-full">
+        <div className="h-[300px] w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={adopcionCoreLiteData} margin={{ top: 8, right: 16, left: 0, bottom: 60 }}>
+            <BarChart data={adopcionCoreLiteData} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
               <XAxis
                 dataKey="event"
@@ -2141,7 +2141,7 @@ function ComportamientoCoreLiteView() {
                 interval={0}
                 angle={-30}
                 textAnchor="end"
-                height={70}
+                height={60}
               />
               <YAxis
                 stroke="#6b7280"
@@ -2152,7 +2152,7 @@ function ComportamientoCoreLiteView() {
                 contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }}
                 formatter={(v: number) => `${v.toFixed(1)}%`}
               />
-              <Legend iconType="circle" wrapperStyle={{ fontSize: 11, paddingTop: 4 }} />
+              <Legend iconType="circle" wrapperStyle={{ fontSize: 11, paddingTop: 0 }} />
               <Bar dataKey="CORE" fill={ALEGRA_GREEN} radius={[4, 4, 0, 0]} />
               <Bar dataKey="LITE" fill="#FF6B00" radius={[4, 4, 0, 0]} />
             </BarChart>
