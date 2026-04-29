@@ -25,9 +25,11 @@ import {
 
 import { initiativeDetailMap } from "./initiativeDetails";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import agendaAppMockup from "@/assets/agenda-app-mockup.png";
 
 
 const sections = [
+  { id: "agenda" as const, title: "Agenda", short: "Agenda" },
   { id: 1, title: "Visión estratégica", short: "Visión" },
   { id: 2, title: "North Star y métricas clave", short: "North Star" },
   { id: 3, title: "Base de usuarios y MRR", short: "Usuarios & MRR" },
@@ -77,16 +79,18 @@ export default function RoadmapReview() {
               )}
               style={idx === current ? { backgroundColor: ALEGRA_GREEN } : undefined}
             >
-              <span
-                className={cn(
-                  "flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold",
-                  idx === current
-                    ? "bg-white/25 text-white"
-                    : "bg-neutral-200 text-neutral-700",
-                )}
-              >
-                {s.id}
-              </span>
+              {typeof s.id === "number" && (
+                <span
+                  className={cn(
+                    "flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold",
+                    idx === current
+                      ? "bg-white/25 text-white"
+                      : "bg-neutral-200 text-neutral-700",
+                  )}
+                >
+                  {s.id}
+                </span>
+              )}
               <span className="hidden sm:inline">{s.short}</span>
             </button>
           ))}
@@ -98,12 +102,21 @@ export default function RoadmapReview() {
         {/* Section header */}
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <p
-              className="text-xs font-semibold uppercase tracking-[0.2em]"
-              style={{ color: ALEGRA_GREEN }}
-            >
-              Sección {section.id} de {sections.length}
-            </p>
+            {typeof section.id === "number" ? (
+              <p
+                className="text-xs font-semibold uppercase tracking-[0.2em]"
+                style={{ color: ALEGRA_GREEN }}
+              >
+                Sección {section.id} de {sections.length - 1}
+              </p>
+            ) : (
+              <p
+                className="text-xs font-semibold uppercase tracking-[0.2em]"
+                style={{ color: ALEGRA_GREEN }}
+              >
+                Roadmap Review · Q1 2026
+              </p>
+            )}
             <h1 className="mt-2 text-3xl font-bold tracking-tight text-neutral-900 md:text-4xl">
               {section.title}
             </h1>
@@ -113,20 +126,22 @@ export default function RoadmapReview() {
         {/* Slide body */}
         <div className="min-h-[60vh]">
           {current === 0 ? (
-            <Section1 />
+            <SectionAgenda />
           ) : current === 1 ? (
-            <Section2 />
+            <Section1 />
           ) : current === 2 ? (
-            <Section3 />
+            <Section2 />
           ) : current === 3 ? (
-            <SectionComportamiento />
+            <Section3 />
           ) : current === 4 ? (
-            <Section4 />
+            <SectionComportamiento />
           ) : current === 5 ? (
-            <SectionIssues />
+            <Section4 />
           ) : current === 6 ? (
-            <SectionFunnel />
+            <SectionIssues />
           ) : current === 7 ? (
+            <SectionFunnel />
+          ) : current === 8 ? (
             <Section5 />
           ) : (
             <PlaceholderSection title={section.title} />
@@ -5965,6 +5980,124 @@ function OportunidadCard({
           Oportunidad
         </p>
         <p className="mt-1 text-xs leading-relaxed text-neutral-700">{op.oportunidad}</p>
+      </div>
+    </div>
+  );
+}
+
+// === Sección Agenda ===
+function SectionAgenda() {
+  const items = [
+    "Visión",
+    "North star metric",
+    "Segmentación y comportamiento",
+    "Resultados",
+    "Issues",
+    "Funnel",
+    "Diagnóstico",
+  ];
+
+  const highlights = [
+    "Incremento del 66% en el total de remisiones creadas.",
+    "Incremento de 0 a 2.855 búsquedas de cotizaciones.",
+    "Incremento del 13% en la creación de items.",
+    "Disminución del 40% en los bugs reportados de API.",
+    "30% de los contactos llenados con autocompletado.",
+    "Aumento de 3x en los usuarios que se registran.",
+  ];
+
+  const lowlights = [
+    "Disminución de 1,33% en el total de facturas creadas.",
+    "Aumento de issues reportados del 50%.",
+  ];
+
+  return (
+    <div className="grid gap-8 lg:grid-cols-[1.1fr,0.9fr]">
+      {/* Columna izquierda: Agenda + Highlights/Lowlights */}
+      <div className="space-y-8">
+        {/* Agenda */}
+        <div className="rounded-2xl border border-neutral-200 bg-white p-8 shadow-sm">
+          <div className="mb-6 flex items-center gap-3">
+            <div
+              className="flex h-10 w-10 items-center justify-center rounded-xl text-white"
+              style={{ backgroundColor: ALEGRA_GREEN }}
+            >
+              <ClipboardList className="h-5 w-5" />
+            </div>
+            <h2 className="text-2xl font-bold text-neutral-900">Agenda</h2>
+          </div>
+          <ul className="space-y-3">
+            {items.map((it) => (
+              <li
+                key={it}
+                className="flex items-center gap-3 rounded-lg border border-neutral-100 bg-neutral-50/60 px-4 py-3"
+              >
+                <span
+                  className="h-2 w-2 rounded-full"
+                  style={{ backgroundColor: ALEGRA_GREEN }}
+                />
+                <span className="text-sm font-medium text-neutral-800">{it}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Highlights */}
+        <div className="rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-8 shadow-sm">
+          <div className="mb-5 flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500 text-white">
+              <TrendingUp className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-wider text-emerald-600">
+                Highlights
+              </p>
+              <h3 className="text-lg font-bold text-neutral-900">Logros del período</h3>
+            </div>
+          </div>
+          <ul className="space-y-2.5">
+            {highlights.map((h) => (
+              <li key={h} className="flex items-start gap-2.5 text-sm text-neutral-700">
+                <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-emerald-500" />
+                <span>{h}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Lowlights */}
+        <div className="rounded-2xl border border-rose-200 bg-gradient-to-br from-rose-50 to-white p-8 shadow-sm">
+          <div className="mb-5 flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-rose-500 text-white">
+              <TrendingDown className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-wider text-rose-600">
+                Lowlights
+              </p>
+              <h3 className="text-lg font-bold text-neutral-900">Aspectos a mejorar</h3>
+            </div>
+          </div>
+          <ul className="space-y-2.5">
+            {lowlights.map((l) => (
+              <li key={l} className="flex items-start gap-2.5 text-sm text-neutral-700">
+                <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-rose-500" />
+                <span>{l}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      {/* Columna derecha: Imagen */}
+      <div className="flex items-start justify-center lg:sticky lg:top-32 lg:self-start">
+        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+          <img
+            src={agendaAppMockup}
+            alt="Mockup de la app Alegra Contabilidad Inteligente"
+            className="max-h-[640px] w-auto rounded-xl"
+          />
+        </div>
       </div>
     </div>
   );
