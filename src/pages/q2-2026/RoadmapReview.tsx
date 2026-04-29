@@ -79,16 +79,18 @@ export default function RoadmapReview() {
               )}
               style={idx === current ? { backgroundColor: ALEGRA_GREEN } : undefined}
             >
-              <span
-                className={cn(
-                  "flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold",
-                  idx === current
-                    ? "bg-white/25 text-white"
-                    : "bg-neutral-200 text-neutral-700",
-                )}
-              >
-                {s.id}
-              </span>
+              {typeof s.id === "number" && (
+                <span
+                  className={cn(
+                    "flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold",
+                    idx === current
+                      ? "bg-white/25 text-white"
+                      : "bg-neutral-200 text-neutral-700",
+                  )}
+                >
+                  {s.id}
+                </span>
+              )}
               <span className="hidden sm:inline">{s.short}</span>
             </button>
           ))}
