@@ -989,6 +989,7 @@ interface RoadmapRowProps {
   resizingItemId: string | null;
   onCellClick: (rowId: string, week: number) => void;
   onDeleteItem: (item: RoadmapItem) => void;
+  onDeleteRow: (row: RowDef) => void;
 }
 
 function RoadmapRow({
@@ -1012,6 +1013,7 @@ function RoadmapRow({
   resizingItemId,
   onCellClick,
   onDeleteItem,
+  onDeleteRow,
 }: RoadmapRowProps) {
   return (
     <div
