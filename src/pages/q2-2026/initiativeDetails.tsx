@@ -77,6 +77,7 @@ const remisionesTotales = [
   { sem: "29 Mar", v: 1362 },
   { sem: "05 Abr", v: 2620 },
   { sem: "12 Abr", v: 2849 },
+  { sem: "19 Abr", v: 3035 },
 ];
 const appVsWebRemisiones = [
   { mes: "Oct 25", pct: 6.91 },
@@ -85,7 +86,7 @@ const appVsWebRemisiones = [
   { mes: "Ene 26", pct: 6.48 },
   { mes: "Feb 26", pct: 6.09 },
   { mes: "Mar 26", pct: 6.45 },
-  { mes: "Abr 26", pct: 8.81 },
+  { mes: "Abr 26", pct: 9.04 },
 ];
 
 // Buscador remisiones — semanal (charts m7e69s6z uniques · l8i09ad1 totals)
