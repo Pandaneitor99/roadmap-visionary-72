@@ -897,28 +897,6 @@ function Section2() {
               </LineChart>
             </ResponsiveContainer>
           </div>
-
-          <div className="mt-4 flex items-center justify-between border-t border-neutral-100 pt-4">
-            <p className="text-[11px] text-neutral-400">
-              Fuente: Amplitude ·{" "}
-              {trendVariant === "full"
-                ? "Eventos críticos de negocio (incluye búsquedas y gráficos)"
-                : "Eventos críticos sin incluir búsquedas ni gráficos"}
-            </p>
-            <a
-              href={
-                trendVariant === "full"
-                  ? "https://app.amplitude.com/analytics/alegra/chart/wy27awa1"
-                  : "https://app.amplitude.com/analytics/alegra/chart/yhghuf5q"
-              }
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1 text-xs font-medium text-neutral-500 hover:text-neutral-900"
-            >
-              Ver en Amplitude
-              <ExternalLink className="h-3 w-3" />
-            </a>
-          </div>
         </div>
 
         {/* Cards laterales: dinámicas según el toggle */}
