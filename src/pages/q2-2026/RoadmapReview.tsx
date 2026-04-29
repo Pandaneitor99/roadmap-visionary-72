@@ -102,12 +102,21 @@ export default function RoadmapReview() {
         {/* Section header */}
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <p
-              className="text-xs font-semibold uppercase tracking-[0.2em]"
-              style={{ color: ALEGRA_GREEN }}
-            >
-              Sección {section.id} de {sections.length}
-            </p>
+            {typeof section.id === "number" ? (
+              <p
+                className="text-xs font-semibold uppercase tracking-[0.2em]"
+                style={{ color: ALEGRA_GREEN }}
+              >
+                Sección {section.id} de {sections.length - 1}
+              </p>
+            ) : (
+              <p
+                className="text-xs font-semibold uppercase tracking-[0.2em]"
+                style={{ color: ALEGRA_GREEN }}
+              >
+                Roadmap Review · Q1 2026
+              </p>
+            )}
             <h1 className="mt-2 text-3xl font-bold tracking-tight text-neutral-900 md:text-4xl">
               {section.title}
             </h1>
@@ -117,20 +126,22 @@ export default function RoadmapReview() {
         {/* Slide body */}
         <div className="min-h-[60vh]">
           {current === 0 ? (
-            <Section1 />
+            <SectionAgenda />
           ) : current === 1 ? (
-            <Section2 />
+            <Section1 />
           ) : current === 2 ? (
-            <Section3 />
+            <Section2 />
           ) : current === 3 ? (
-            <SectionComportamiento />
+            <Section3 />
           ) : current === 4 ? (
-            <Section4 />
+            <SectionComportamiento />
           ) : current === 5 ? (
-            <SectionIssues />
+            <Section4 />
           ) : current === 6 ? (
-            <SectionFunnel />
+            <SectionIssues />
           ) : current === 7 ? (
+            <SectionFunnel />
+          ) : current === 8 ? (
             <Section5 />
           ) : (
             <PlaceholderSection title={section.title} />
