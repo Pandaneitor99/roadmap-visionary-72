@@ -398,6 +398,39 @@ export function BusquedaDetail() {
     <div className="space-y-4">
       <div className="grid gap-3 md:grid-cols-2">
         <ChartCard
+          title="Búsqueda cotizaciones — Únicos"
+          subtitle="Lanzamiento reciente"
+          url="https://app.amplitude.com/analytics/alegra/chart/on3tt73l"
+          statLabel="Última sem"
+          statValue={lastVal(busquedaCotizacionesUniques, "v")}
+          statDelta={pctDelta(busquedaCotizacionesUniques, "v")}
+          statBaselineLabel="vs lanzamiento"
+        >
+          <BarChart data={busquedaCotizacionesUniques}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+            <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
+            <YAxis tick={{ fontSize: 10 }} />
+            <Tooltip />
+            <Bar dataKey="v" fill={ALEGRA_GREEN} />
+          </BarChart>
+        </ChartCard>
+        <ChartCard
+          title="Búsqueda cotizaciones — Totales"
+          url="https://app.amplitude.com/analytics/alegra/chart/lj96ul5q"
+          statLabel="Última sem"
+          statValue={lastVal(busquedaCotizacionesTotales, "v")}
+          statDelta={pctDelta(busquedaCotizacionesTotales, "v")}
+          statBaselineLabel="vs lanzamiento"
+        >
+          <BarChart data={busquedaCotizacionesTotales}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+            <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
+            <YAxis tick={{ fontSize: 10 }} />
+            <Tooltip />
+            <Bar dataKey="v" fill={BLUE} />
+          </BarChart>
+        </ChartCard>
+        <ChartCard
           title="Búsqueda de facturas — Totales"
           subtitle="Mensual · últimos 6 meses"
           url="https://app.amplitude.com/analytics/alegra/chart/g3zsws0s"
@@ -448,45 +481,12 @@ export function BusquedaDetail() {
             <Line type="monotone" dataKey="v" stroke={ORANGE} strokeWidth={2} />
           </LineChart>
         </ChartCard>
-        <ChartCard
-          title="Búsqueda cotizaciones — Únicos"
-          subtitle="Lanzamiento reciente"
-          url="https://app.amplitude.com/analytics/alegra/chart/on3tt73l"
-          statLabel="Última sem"
-          statValue={lastVal(busquedaCotizacionesUniques, "v")}
-          statDelta={pctDelta(busquedaCotizacionesUniques, "v")}
-          statBaselineLabel="vs lanzamiento"
-        >
-          <BarChart data={busquedaCotizacionesUniques}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-            <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
-            <YAxis tick={{ fontSize: 10 }} />
-            <Tooltip />
-            <Bar dataKey="v" fill={ALEGRA_GREEN} />
-          </BarChart>
-        </ChartCard>
-        <ChartCard
-          title="Búsqueda cotizaciones — Totales"
-          url="https://app.amplitude.com/analytics/alegra/chart/lj96ul5q"
-          statLabel="Última sem"
-          statValue={lastVal(busquedaCotizacionesTotales, "v")}
-          statDelta={pctDelta(busquedaCotizacionesTotales, "v")}
-          statBaselineLabel="vs lanzamiento"
-        >
-          <BarChart data={busquedaCotizacionesTotales}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-            <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
-            <YAxis tick={{ fontSize: 10 }} />
-            <Tooltip />
-            <Bar dataKey="v" fill={BLUE} />
-          </BarChart>
-        </ChartCard>
       </div>
       <Insights
         items={[
+          "Lanzamiento de búsqueda en cotizaciones muestra adopción rápida: de 0 a 376 usuarios únicos y 2,855 búsquedas en 2 semanas.",
           "Búsqueda de facturas se mantiene como funcionalidad de alto uso: ~3K usuarios únicos/mes y picos de 66K búsquedas en marzo 2026.",
           "Uso del componente del buscador creció +44% entre feb y abril (807 → ~1.1K usuarios/semana).",
-          "Lanzamiento de búsqueda en cotizaciones muestra adopción rápida: de 0 a 182 usuarios únicos y 1,151 búsquedas en 2 semanas.",
           "El feature reduce la fricción de encontrar documentos y soporta directamente el KR de errores críticos / experiencia.",
         ]}
       />
