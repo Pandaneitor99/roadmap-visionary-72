@@ -1168,7 +1168,7 @@ function TasaAdopcion() {
       {/* KPIs */}
       <div className="grid gap-4 md:grid-cols-2">
         <div
-          className="rounded-2xl border bg-white p-6 shadow-sm"
+          className="rounded-2xl border bg-white p-4 shadow-sm"
           style={{ borderLeft: `4px solid #0066FF` }}
         >
           <div className="flex items-center gap-2">
@@ -1177,25 +1177,27 @@ function TasaAdopcion() {
               Tasa de Adopción
             </span>
           </div>
-          <p className="mt-2 text-xs text-neutral-500">MAU APP / MAC WEB</p>
-          <p className="mt-3 text-4xl font-bold text-neutral-900">{tasaAdopcion.toFixed(1)}%</p>
-          <p
-            className={cn(
-              "mt-2 flex items-center gap-1 text-sm font-bold",
-              upAdopcion ? "text-emerald-600" : "text-red-600",
-            )}
-          >
-            {upAdopcion ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
-            {upAdopcion ? "+" : ""}{deltaAdopcion.toFixed(1)} pp
-            <span className="ml-1 text-[11px] font-medium text-neutral-500">vs Oct '25</span>
-          </p>
-          <p className="mt-2 text-xs text-neutral-500">
+          <p className="mt-1 text-[11px] text-neutral-500">MAU APP / MAC WEB</p>
+          <div className="mt-2 flex items-baseline justify-between gap-2 flex-wrap">
+            <p className="text-3xl font-bold text-neutral-900">{tasaAdopcion.toFixed(1)}%</p>
+            <p
+              className={cn(
+                "flex items-center gap-1 text-sm font-bold",
+                upAdopcion ? "text-emerald-600" : "text-red-600",
+              )}
+            >
+              {upAdopcion ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
+              {upAdopcion ? "+" : ""}{deltaAdopcion.toFixed(1)} pp
+              <span className="ml-1 text-[10px] font-medium text-neutral-500">vs Oct '25</span>
+            </p>
+          </div>
+          <p className="mt-1.5 text-[11px] text-neutral-500">
             % de <strong>usuarios pagos web activos</strong> que entran a la app cada mes (Marzo 2026).
           </p>
         </div>
 
         <div
-          className="rounded-2xl border bg-white p-6 shadow-sm"
+          className="rounded-2xl border bg-white p-4 shadow-sm"
           style={{ borderLeft: `4px solid ${ALEGRA_GREEN}` }}
         >
           <div className="flex items-center gap-2">
@@ -1204,19 +1206,21 @@ function TasaAdopcion() {
               Tasa de Adopción Real
             </span>
           </div>
-          <p className="mt-2 text-xs text-neutral-500">MAC APP / MAC WEB</p>
-          <p className="mt-3 text-4xl font-bold text-neutral-900">{tasaReal.toFixed(1)}%</p>
-          <p
-            className={cn(
-              "mt-2 flex items-center gap-1 text-sm font-bold",
-              upReal ? "text-emerald-600" : "text-red-600",
-            )}
-          >
-            {upReal ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
-            {upReal ? "+" : ""}{deltaReal.toFixed(1)} pp
-            <span className="ml-1 text-[11px] font-medium text-neutral-500">vs Oct '25</span>
-          </p>
-          <p className="mt-2 text-xs text-neutral-500">
+          <p className="mt-1 text-[11px] text-neutral-500">MAC APP / MAC WEB</p>
+          <div className="mt-2 flex items-baseline justify-between gap-2 flex-wrap">
+            <p className="text-3xl font-bold text-neutral-900">{tasaReal.toFixed(1)}%</p>
+            <p
+              className={cn(
+                "flex items-center gap-1 text-sm font-bold",
+                upReal ? "text-emerald-600" : "text-red-600",
+              )}
+            >
+              {upReal ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
+              {upReal ? "+" : ""}{deltaReal.toFixed(1)} pp
+              <span className="ml-1 text-[10px] font-medium text-neutral-500">vs Oct '25</span>
+            </p>
+          </div>
+          <p className="mt-1.5 text-[11px] text-neutral-500">
             % de <strong>usuarios pagos web activos</strong> que realizan al menos una acción de valor en la app (Marzo 2026).
           </p>
         </div>
