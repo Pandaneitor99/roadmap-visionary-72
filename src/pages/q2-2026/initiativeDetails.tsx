@@ -194,7 +194,7 @@ const itemsCreadosSemanal = [
   { sem: "29 Mar", total: 2779 },
   { sem: "05 Abr", total: 4265 },
   { sem: "12 Abr", total: 5295 },
-  { sem: "19 Abr", total: 5370 },
+  { sem: "19 Abr", total: 5453 },
 ];
 
 // Time to convert (segundos) — refrescados desde Amplitude
