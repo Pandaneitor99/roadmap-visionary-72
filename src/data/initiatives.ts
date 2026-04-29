@@ -1,8 +1,13 @@
 // Strategy and North Star Metric
 export const strategyInfo = {
-  strategy: "Convertirse en el complemento portátil del sistema Alegra, extendiendo el poder más allá del escritorio, para facilitar la gestión administrativa y contable para Pymes, de forma simple, ágil e intuitiva, en cualquier momento y desde cualquier lugar.",
-  northStarMetric: "Usuarios activos que realizan acciones de valor dentro de la app (factura de venta, items, contactos, pagos, reportes etc)"
+  strategy: "Ser el complemento portátil e indispensable del sistema Alegra: extender su poder más allá del escritorio para que las Pymes gestionen su contabilidad y operación de forma simple, ágil e intuitiva, en cualquier momento y desde cualquier lugar.",
+  northStarMetric: "Usuarios activos mensuales (MAC) que realizan acciones de valor dentro de la app — factura de venta, items, contactos, pagos, reportes y cotizaciones."
 };
+
+export interface InitiativeOpportunity {
+  text: string;
+  prototypes?: { label: string; url: string }[];
+}
 
 export interface Initiative {
   id: string;
@@ -19,6 +24,8 @@ export interface Initiative {
   objectiveText: string;
   problem: string;
   hypothesis: string;
+  /** Opportunity from diagnóstico — shown on the card */
+  opportunity?: InitiativeOpportunity;
   keyResults: string[];
   kpis: string[];
   version: string;
