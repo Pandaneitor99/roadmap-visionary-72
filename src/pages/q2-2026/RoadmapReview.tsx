@@ -3038,7 +3038,7 @@ function FuncionalidadesUniquesShared({
         const oct = (s?: MonthlyAdoptionSeries) => s?.series[0]?.pct ?? null;
         const mar = (s?: MonthlyAdoptionSeries) => s?.series[s.series.length - 1]?.pct ?? null;
         const delta = (a: number | null, b: number | null) =>
-          a == null || b == null ? null : a - b;
+          a == null || b == null || b === 0 ? null : ((a - b) / b) * 100;
         return {
           coreOct: oct(c),
           coreMar: mar(c),
