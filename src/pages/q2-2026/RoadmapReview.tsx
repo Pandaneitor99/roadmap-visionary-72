@@ -790,11 +790,11 @@ function Section2() {
 
       {/* MAC Trend Chart + side cards */}
       <div className="grid gap-6 lg:grid-cols-4">
-        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm md:p-8 lg:col-span-3">
-          <div className="mb-4 flex flex-wrap items-end justify-between gap-4">
+        <div className="rounded-2xl border border-neutral-200 bg-white px-6 pt-4 pb-6 shadow-sm md:px-8 md:pt-5 md:pb-7 lg:col-span-3">
+          <div className="mb-3 flex flex-wrap items-end justify-between gap-4">
             <div>
               <h3 className="text-lg font-bold text-neutral-900">MAC — Tendencia</h3>
-              <p className="mt-1 text-xs text-neutral-500">
+              <p className="mt-0.5 text-xs text-neutral-500">
                 Últimos 6 meses · Usuarios Pagos, segmentados por CORE y LITE
               </p>
             </div>
