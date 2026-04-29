@@ -3781,21 +3781,33 @@ function SoporteFuncDetail() {
 
   return (
     <div className="space-y-5">
-      {/* Problema — compacto en una línea */}
-      <div className="flex items-center justify-between gap-3 rounded-lg border border-amber-200 bg-amber-50/50 px-3 py-2 flex-wrap">
-        <p className="text-xs text-neutral-800">
-          <span className="mr-2 text-[10px] font-bold uppercase tracking-wider text-amber-700">Problema:</span>
-          El usuario debe ir a la web para realizar un reclamo de soporte; la app no gestiona tickets.
-        </p>
-        <a
-          href="https://claude.ai/design/p/9a44db74-0c3c-4b5a-9c38-c22c7b9d0ba0"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold transition-colors hover:bg-white"
-          style={{ borderColor: "#F59E0B33", color: "#B45309", backgroundColor: "#F59E0B10" }}
-        >
-          <Sparkles className="h-3 w-3" /> Ver prototipo <ExternalLink className="h-2.5 w-2.5" />
-        </a>
+      {/* Problema detectado + Oportunidad — compacto */}
+      <div className="rounded-lg border border-amber-200 bg-amber-50/50 px-3 py-2">
+        <div className="flex items-start justify-between gap-3 flex-wrap">
+          <div className="flex-1 min-w-[260px]">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-amber-700">Problema detectado</p>
+            <p className="mt-1 text-xs leading-relaxed text-neutral-800">
+              El usuario debe ir a la web para realizar un reclamo de soporte; la app no gestiona tickets.
+            </p>
+          </div>
+          <div className="flex-1 min-w-[260px] rounded-md border border-emerald-200 bg-emerald-50/60 px-3 py-2">
+            <div className="flex items-start justify-between gap-2 flex-wrap">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Oportunidad</p>
+              <a
+                href="https://claude.ai/design/p/9a44db74-0c3c-4b5a-9c38-c22c7b9d0ba0"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold transition-colors hover:bg-white"
+                style={{ borderColor: "#10B98133", color: "#047857", backgroundColor: "#10B98110" }}
+              >
+                <Sparkles className="h-3 w-3" /> Ver prototipo <ExternalLink className="h-2.5 w-2.5" />
+              </a>
+            </div>
+            <p className="mt-1 text-xs leading-relaxed text-neutral-800">
+              Link mágico creado por Identity.
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Charts lado a lado */}
@@ -5267,13 +5279,32 @@ function Section5() {
               </a>
             </div>
 
-            <div className="mt-4 rounded-lg border border-neutral-100 bg-neutral-50/60 p-3">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">
-                Diagnóstico
-              </p>
-              <p className="mt-1 text-xs leading-relaxed text-neutral-700">
-                Los usuarios <strong>no tienen la opción de agregar otros cargos ni CIDUEs</strong> en la factura de venta dentro de la app. Esto bloquea casos fiscales reales y los obliga a volver a la web.
-              </p>
+            <div className="mt-4 grid gap-3 md:grid-cols-2">
+              <div className="rounded-lg border border-orange-200 bg-orange-50/50 p-3">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-orange-700">
+                  Problema detectado
+                </p>
+                <p className="mt-1 text-xs leading-relaxed text-neutral-800">
+                  Los usuarios <strong>no tienen la opción de agregar Retenciones ni Conduces</strong> en la factura de venta dentro de la app. Esto bloquea casos fiscales reales y los obliga a volver a la web.
+                </p>
+              </div>
+              <div className="rounded-lg border border-emerald-200 bg-emerald-50/60 p-3">
+                <div className="flex items-start justify-between gap-2 flex-wrap">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Oportunidad</p>
+                  <a
+                    href="https://www.figma.com/design/G4L7LYtkISB6T4DwLJ4wHS/MOB---Redise%C3%B1o-Facturaci%C3%B3n?node-id=3872-17740&p=f&t=CosijuUBHpbR7JeB-0"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold transition-colors hover:bg-white"
+                    style={{ borderColor: "#10B98133", color: "#047857", backgroundColor: "#10B98110" }}
+                  >
+                    <Sparkles className="h-3 w-3" /> Ver prototipo <ExternalLink className="h-2.5 w-2.5" />
+                  </a>
+                </div>
+                <p className="mt-1 text-xs leading-relaxed text-neutral-800">
+                  Rediseño de facturación + agregar retenciones + agregar conduces.
+                </p>
+              </div>
             </div>
           </div>
 
@@ -5359,35 +5390,46 @@ function Section5() {
             </div>
           </div>
 
-          <div className="mb-5 rounded-xl border border-orange-200 bg-orange-50/60 p-4">
-            <div className="flex items-start justify-between gap-3 flex-wrap">
-              <p className="text-[11px] font-bold uppercase tracking-wider text-orange-700">
-                Problema detectado
-              </p>
-              <div className="flex flex-wrap items-center gap-2">
-                <a
-                  href="https://claude.ai/design/p/019dc058-65c2-700c-ba39-a56f47183a28?file=Alegra+Prototype.html"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold transition-colors hover:bg-white"
-                  style={{ borderColor: "#FF6B0033", color: "#FF6B00", backgroundColor: "#FF6B0010" }}
-                >
-                  <Sparkles className="h-3 w-3" /> Ver prototipo 1 <ExternalLink className="h-2.5 w-2.5" />
-                </a>
-                <a
-                  href="https://www.figma.com/proto/mwZw2uwa23VqYfWeAfM55R/ACT---Test-ABC-invitaci%C3%B3n-a-descargar-app-Alegra-para-usuarios-mobile?node-id=7001-303&viewport=-124%2C-500%2C0.18&t=8Gb8o270oF3s50V7-1&scaling=min-zoom&content-scaling=fixed&page-id=1%3A2"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold transition-colors hover:bg-white"
-                  style={{ borderColor: "#FF6B0033", color: "#FF6B00", backgroundColor: "#FF6B0010" }}
-                >
-                  <Sparkles className="h-3 w-3" /> Ver prototipo 2 <ExternalLink className="h-2.5 w-2.5" />
-                </a>
+          <div className="mb-5 grid gap-3 md:grid-cols-2">
+            <div className="rounded-xl border border-orange-200 bg-orange-50/60 p-4">
+              <div className="flex items-start justify-between gap-2 flex-wrap">
+                <p className="text-[11px] font-bold uppercase tracking-wider text-orange-700">
+                  Problema detectado
+                </p>
+                <div className="flex flex-wrap items-center gap-2">
+                  <a
+                    href="https://claude.ai/design/p/019dc058-65c2-700c-ba39-a56f47183a28?file=Alegra+Prototype.html"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold transition-colors hover:bg-white"
+                    style={{ borderColor: "#FF6B0033", color: "#FF6B00", backgroundColor: "#FF6B0010" }}
+                  >
+                    <Sparkles className="h-3 w-3" /> Prototipo 1 <ExternalLink className="h-2.5 w-2.5" />
+                  </a>
+                  <a
+                    href="https://www.figma.com/proto/mwZw2uwa23VqYfWeAfM55R/ACT---Test-ABC-invitaci%C3%B3n-a-descargar-app-Alegra-para-usuarios-mobile?node-id=7001-303&viewport=-124%2C-500%2C0.18&t=8Gb8o270oF3s50V7-1&scaling=min-zoom&content-scaling=fixed&page-id=1%3A2"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold transition-colors hover:bg-white"
+                    style={{ borderColor: "#FF6B0033", color: "#FF6B00", backgroundColor: "#FF6B0010" }}
+                  >
+                    <Sparkles className="h-3 w-3" /> Prototipo 2 <ExternalLink className="h-2.5 w-2.5" />
+                  </a>
+                </div>
               </div>
+              <p className="mt-2 text-sm leading-relaxed text-neutral-800">
+                Los usuarios <strong>tienen que iniciar sesión dentro de la app</strong> para ver los planes y pagar, o <strong>ir a web</strong>. Este paso adicional fricciona la conversión a pago.
+              </p>
             </div>
-            <p className="mt-2 text-sm leading-relaxed text-neutral-800">
-              Los usuarios <strong>tienen que iniciar sesión dentro de la app</strong> para ver los planes y pagar, o <strong>ir a web</strong>. Este paso adicional fricciona la conversión a pago.
-            </p>
+
+            <div className="rounded-xl border border-emerald-200 bg-emerald-50/60 p-4">
+              <p className="text-[11px] font-bold uppercase tracking-wider text-emerald-700">
+                Oportunidad
+              </p>
+              <p className="mt-2 text-sm leading-relaxed text-neutral-800">
+                <strong>Link mágico creado por Identity</strong> para ver planes + <strong>contactabilidad bot ventas</strong>.
+              </p>
+            </div>
           </div>
 
           <FunnelComboCard
@@ -5529,6 +5571,35 @@ function ContadoresSection() {
 function ItemsFuncDetail() {
   return (
     <div className="space-y-5">
+      {/* Problema detectado + Oportunidad — compacto */}
+      <div className="rounded-lg border border-orange-200 bg-orange-50/50 px-3 py-2">
+        <div className="flex items-start justify-between gap-3 flex-wrap">
+          <div className="flex-1 min-w-[260px]">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-orange-700">Problema detectado</p>
+            <p className="mt-1 text-xs leading-relaxed text-neutral-800">
+              <strong>Caída en la intención de creación de Items</strong> y <strong>campos faltantes</strong> respecto a la web; UX deficiente en varios campos genera fricción.
+            </p>
+          </div>
+          <div className="flex-1 min-w-[260px] rounded-md border border-emerald-200 bg-emerald-50/60 px-3 py-2">
+            <div className="flex items-start justify-between gap-2 flex-wrap">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Oportunidad</p>
+              <a
+                href="https://www.figma.com/design/VjC6hok9QSdr9Wd8iasWms/Secci%C3%B3n-items-App?node-id=2266-3088&t=Vbquk9q4yag4jbVR-0"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold transition-colors hover:bg-white"
+                style={{ borderColor: "#10B98133", color: "#047857", backgroundColor: "#10B98110" }}
+              >
+                <Sparkles className="h-3 w-3" /> Ver prototipo <ExternalLink className="h-2.5 w-2.5" />
+              </a>
+            </div>
+            <p className="mt-1 text-xs leading-relaxed text-neutral-800">
+              Simplificación de la creación de items + agregar creación de servicios + paridad de campos con web.
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* Charts lado a lado */}
       <div className="grid gap-4 lg:grid-cols-2">
         {/* Funnel Home → New Item (chart w81wjr5i) */}
@@ -5667,12 +5738,33 @@ function ContactosFuncDetail() {
   const lastCrea = contactosVisitaACreado[contactosVisitaACreado.length - 1].pct;
   return (
     <div className="space-y-5">
-      {/* Problema destacado — compacto */}
+      {/* Problema destacado + Oportunidad — compacto */}
       <div className="rounded-lg border border-orange-200 bg-orange-50/50 px-3 py-2">
-        <p className="text-[10px] font-bold uppercase tracking-wider text-orange-700">Problema detectado</p>
-        <p className="mt-1 text-xs leading-relaxed text-neutral-800">
-          <strong>Disparidad en algunos campos no obligatorios</strong>, sumado a <strong>poca claridad en la elección de cliente y vendedor</strong>. Esto genera fricción en la creación de contactos desde la app.
-        </p>
+        <div className="flex items-start justify-between gap-3 flex-wrap">
+          <div className="flex-1 min-w-[260px]">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-orange-700">Problema detectado</p>
+            <p className="mt-1 text-xs leading-relaxed text-neutral-800">
+              <strong>Disparidad en algunos campos no obligatorios</strong>, sumado a <strong>poca claridad en la elección de cliente y vendedor</strong>. Esto genera fricción en la creación de contactos desde la app.
+            </p>
+          </div>
+          <div className="flex-1 min-w-[260px] rounded-md border border-emerald-200 bg-emerald-50/60 px-3 py-2">
+            <div className="flex items-start justify-between gap-2 flex-wrap">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Oportunidad</p>
+              <a
+                href="https://claude.ai/design/p/019dc695-1901-7519-a9d7-a74bd0eedfd0"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold transition-colors hover:bg-white"
+                style={{ borderColor: "#10B98133", color: "#047857", backgroundColor: "#10B98110" }}
+              >
+                <Sparkles className="h-3 w-3" /> Ver prototipo <ExternalLink className="h-2.5 w-2.5" />
+              </a>
+            </div>
+            <p className="mt-1 text-xs leading-relaxed text-neutral-800">
+              Simplificación de la creación de contactos + paridad de campos con web.
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Charts lado a lado */}

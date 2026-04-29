@@ -30,6 +30,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Calendar, MapPin, Users, Target, Lightbulb, AlertCircle, Pencil, GripVertical, Loader2, Plus, Trash2 } from "lucide-react";
+import { useSidebar } from "@/components/ui/sidebar";
 
 // Base date: Monday Jan 5 2026
 const BASE_DATE = new Date(2026, 0, 5); // Jan 5, 2026
@@ -142,6 +143,9 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
   const totalWeeks = sprintCount * 2;
   const startWeek = (startSprint - 1) * 2 + 1;
   const [resizingItemId, setResizingItemId] = useState<string | null>(null);
+  // Expand initiative label column when sidebar is collapsed (more horizontal space available)
+  const { state: sidebarState } = useSidebar();
+  const labelWidth = sidebarState === "collapsed" ? 320 : 160;
 
   // New item creation state
   const [creatingItem, setCreatingItem] = useState<{ rowId: string; week: number } | null>(null);
@@ -535,6 +539,7 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
             onCellClick={handleCellClick}
             onDeleteItem={setDeletingItem}
             onDeleteRow={setDeletingRow}
+            labelWidth={labelWidth}
           />
         );
       })}
@@ -559,7 +564,7 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
       <div className="overflow-x-auto rounded-2xl bg-muted/40 border border-border p-4 shadow-sm">
         <div className="min-w-[1200px]">
           {/* Header - Sprints */}
-          <div className="mb-2" style={{ display: "grid", gridTemplateColumns: `160px repeat(${sprintCount}, 1fr)`, gap: "2px" }}>
+          <div className="mb-2" style={{ display: "grid", gridTemplateColumns: `${labelWidth}px repeat(${sprintCount}, 1fr)`, gap: "2px" }}>
             <div className="text-xs font-medium text-muted-foreground">Iniciativa</div>
             {sprints.map((sprint) => (
               <div
@@ -573,7 +578,7 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
           </div>
 
           {/* Sub-header - Weeks */}
-          <div className="mb-3" style={{ display: "grid", gridTemplateColumns: `160px repeat(${totalWeeks}, 1fr)`, gap: "2px" }}>
+          <div className="mb-3" style={{ display: "grid", gridTemplateColumns: `${labelWidth}px repeat(${totalWeeks}, 1fr)`, gap: "2px" }}>
             <div></div>
             {Array.from({ length: totalWeeks }, (_, i) => (
               <div
@@ -990,6 +995,7 @@ interface RoadmapRowProps {
   onCellClick: (rowId: string, week: number) => void;
   onDeleteItem: (item: RoadmapItem) => void;
   onDeleteRow: (row: RowDef) => void;
+  labelWidth?: number;
 }
 
 function RoadmapRow({
@@ -1014,10 +1020,11 @@ function RoadmapRow({
   onCellClick,
   onDeleteItem,
   onDeleteRow,
+  labelWidth = 160,
 }: RoadmapRowProps) {
   return (
     <div
-      style={{ display: "grid", gridTemplateColumns: `160px repeat(${totalWeeks}, 1fr)`, gap: "2px", alignItems: "center" }}
+      style={{ display: "grid", gridTemplateColumns: `${labelWidth}px repeat(${totalWeeks}, 1fr)`, gap: "2px", alignItems: "center" }}
       onDragOver={onRowDragOver}
       onDrop={e => onRowDrop(e, row.id)}
     >
