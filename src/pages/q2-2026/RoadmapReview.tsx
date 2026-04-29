@@ -3763,9 +3763,6 @@ function SectionIssues() {
             </div>
           </div>
 
-          <p className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs leading-relaxed text-amber-900">
-            <span className="font-semibold">Insight:</span> encontramos más bugs en llamadas y visitas con clientes que a través de soporte.
-          </p>
         </div>
       </div>
     </div>
