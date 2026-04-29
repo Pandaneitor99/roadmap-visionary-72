@@ -1019,10 +1019,11 @@ function RoadmapRow({
   onCellClick,
   onDeleteItem,
   onDeleteRow,
+  labelWidth = 160,
 }: RoadmapRowProps) {
   return (
     <div
-      style={{ display: "grid", gridTemplateColumns: `160px repeat(${totalWeeks}, 1fr)`, gap: "2px", alignItems: "center" }}
+      style={{ display: "grid", gridTemplateColumns: `${labelWidth}px repeat(${totalWeeks}, 1fr)`, gap: "2px", alignItems: "center" }}
       onDragOver={onRowDragOver}
       onDrop={e => onRowDrop(e, row.id)}
     >
