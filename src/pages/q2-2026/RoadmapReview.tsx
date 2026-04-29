@@ -3357,8 +3357,8 @@ function ClustersBubbles() {
   const sosPct = 62;
   const basePct = 38;
   // El área del círculo es proporcional al porcentaje => radio ∝ √pct
-  const sosRadius = Math.sqrt(sosPct) * 22; // px
-  const baseRadius = Math.sqrt(basePct) * 22;
+  const sosRadius = Math.sqrt(sosPct) * 13; // px
+  const baseRadius = Math.sqrt(basePct) * 13;
 
   return (
     <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm md:p-8">
@@ -3395,8 +3395,8 @@ function ClustersBubbles() {
             }}
           >
             <div className="text-center">
-              <p className="text-4xl font-bold leading-none md:text-5xl">{sosPct}%</p>
-              <p className="mt-1 text-[11px] font-bold uppercase tracking-widest opacity-90">
+              <p className="text-2xl font-bold leading-none md:text-3xl">{sosPct}%</p>
+              <p className="mt-1 text-[10px] font-bold uppercase tracking-widest opacity-90">
                 SOS
               </p>
             </div>
@@ -3423,8 +3423,8 @@ function ClustersBubbles() {
             }}
           >
             <div className="text-center">
-              <p className="text-3xl font-bold leading-none md:text-4xl">{basePct}%</p>
-              <p className="mt-1 text-[11px] font-bold uppercase tracking-widest opacity-90">
+              <p className="text-xl font-bold leading-none md:text-2xl">{basePct}%</p>
+              <p className="mt-1 text-[10px] font-bold uppercase tracking-widest opacity-90">
                 BASE
               </p>
             </div>
@@ -3437,32 +3437,6 @@ function ClustersBubbles() {
               Facturas · Items · Contactos · Cotizaciones en App
             </p>
           </div>
-        </div>
-      </div>
-
-      {/* Detalle inferior */}
-      <div className="mt-2 grid gap-3 border-t border-neutral-100 pt-5 text-xs text-neutral-600 md:grid-cols-2">
-        <div
-          className="rounded-lg p-3"
-          style={{ backgroundColor: "#FF6B0010" }}
-        >
-          <p className="font-bold" style={{ color: "#FF6B00" }}>
-            Cluster SOS — 62%
-          </p>
-          <p className="mt-1 text-neutral-600">
-            Eventos de web · Reportes en App · Busca factura de venta en app
-          </p>
-        </div>
-        <div
-          className="rounded-lg p-3"
-          style={{ backgroundColor: `${ALEGRA_GREEN}10` }}
-        >
-          <p className="font-bold" style={{ color: ALEGRA_GREEN }}>
-            Cluster BASE — 38%
-          </p>
-          <p className="mt-1 text-neutral-600">
-            Factura de venta App · Item en App · Contactos en App · Cotizaciones App
-          </p>
         </div>
       </div>
     </div>
