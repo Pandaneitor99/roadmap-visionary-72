@@ -577,7 +577,7 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
           </div>
 
           {/* Sub-header - Weeks */}
-          <div className="mb-3" style={{ display: "grid", gridTemplateColumns: `160px repeat(${totalWeeks}, 1fr)`, gap: "2px" }}>
+          <div className="mb-3" style={{ display: "grid", gridTemplateColumns: `${labelWidth}px repeat(${totalWeeks}, 1fr)`, gap: "2px" }}>
             <div></div>
             {Array.from({ length: totalWeeks }, (_, i) => (
               <div
