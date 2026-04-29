@@ -119,7 +119,7 @@ export default function DashboardQ22026() {
 
       {/* North Star Metric */}
       <div
-        className="rounded-2xl border border-neutral-200 bg-white p-8 shadow-sm"
+        className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm"
         style={{ borderLeft: `4px solid ${ALEGRA_GREEN}` }}
       >
         <div className="flex items-start gap-3">
