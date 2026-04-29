@@ -627,8 +627,8 @@ export function RemisionesDetail() {
       </div>
       <Insights
         items={[
-          "Tras habilitar compartir/descargar remisiones, las remisiones semanales pasaron de ~1.5K a ~2.85K (crecimiento >85%).",
-          "La participación de la app en el total de remisiones subió de 6.1% (feb) a 8.8% (abr), el máximo histórico.",
+          "Tras habilitar compartir/descargar remisiones, las remisiones semanales pasaron de ~1.5K a ~3K (crecimiento >95%).",
+          "La participación de la app en el total de remisiones subió de 6.1% (feb) a 9.04% (abr), el máximo histórico.",
           "El buscador de remisiones se lanzó en abril: pasó de 15 a 74 usuarios únicos (+393%) y de 136 a 975 búsquedas semanales (+617%) entre las semanas del 12 y 19 de abril.",
           "Confirma que cerrar gaps funcionales móviles desplaza uso de web a app (aporta a KR 2.2 — adopción).",
         ]}
