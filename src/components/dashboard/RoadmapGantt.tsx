@@ -994,6 +994,7 @@ interface RoadmapRowProps {
   onCellClick: (rowId: string, week: number) => void;
   onDeleteItem: (item: RoadmapItem) => void;
   onDeleteRow: (row: RowDef) => void;
+  labelWidth?: number;
 }
 
 function RoadmapRow({
