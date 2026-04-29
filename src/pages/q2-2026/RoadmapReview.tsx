@@ -1706,23 +1706,25 @@ function MrrKpi({
 }) {
   const positive = (delta ?? 0) >= 0;
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
+    <div className="relative overflow-hidden rounded-2xl border border-neutral-200 bg-white px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
       <div className="absolute inset-x-0 top-0 h-1" style={{ backgroundColor: accent }} />
       <p className="text-[10px] font-bold uppercase tracking-widest text-neutral-500">{label}</p>
-      <p className="mt-3 text-3xl font-bold text-neutral-900">{value}</p>
-      {sub && <p className="mt-1 text-xs text-neutral-500">{sub}</p>}
-      {typeof delta === "number" && (
-        <div
-          className={cn(
-            "mt-3 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-bold",
-            positive ? "bg-[#00C853]/10 text-[#00785A]" : "bg-[#FF6B00]/10 text-[#FF6B00]"
-          )}
-        >
-          {positive ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
-          {positive ? "+" : ""}
-          {delta.toFixed(2)}%
-        </div>
-      )}
+      <div className="mt-1.5 flex items-baseline justify-between gap-2 flex-wrap">
+        <p className="text-2xl font-bold text-neutral-900">{value}</p>
+        {typeof delta === "number" && (
+          <div
+            className={cn(
+              "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold",
+              positive ? "bg-[#00C853]/10 text-[#00785A]" : "bg-[#FF6B00]/10 text-[#FF6B00]"
+            )}
+          >
+            {positive ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+            {positive ? "+" : ""}
+            {delta.toFixed(2)}%
+          </div>
+        )}
+      </div>
+      {sub && <p className="mt-0.5 text-[11px] text-neutral-500">{sub}</p>}
     </div>
   );
 }
