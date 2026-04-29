@@ -1471,8 +1471,8 @@ function ParticipacionApp() {
     },
     {
       label: "Remisiones",
-      value: 8.96,
-      delta: 6.9,
+      value: 9.04,
+      delta: 32.16,
       color: "#FF6B00",
       desc: "% de remisiones totales (web + app) creadas desde la app móvil",
       series: remisionesParticipSeries,
