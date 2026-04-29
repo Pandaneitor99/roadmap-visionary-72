@@ -243,6 +243,26 @@ export const initiatives: Initiative[] = [
     sprintStart: 0,
     sprintEnd: 0,
   },
+  {
+    id: "25",
+    title: "Help Center dentro de la app",
+    status: "not-started",
+    date: "-",
+    objectiveTag: "non-dev",
+    categoryTag: "experiencia",
+    objectiveText: "Iniciativa no de desarrollo",
+    problem: "Los usuarios deben salir de la app e ir a la web para buscar ayuda o consultar la documentación, lo que aumenta la fricción y los tickets de soporte.",
+    hypothesis: "Si integramos un Help Center accesible directamente desde la app, reducimos la fricción, mejoramos la autosuficiencia del usuario y disminuimos los tickets de soporte.",
+    opportunity: {
+      text: "Centro de ayuda contextual dentro de la app, con búsqueda y artículos guiados por flujo.",
+    },
+    keyResults: [],
+    kpis: ["Consultas resueltas en app", "Reducción de tickets de soporte"],
+    version: "Todos",
+    dependencies: "-",
+    sprintStart: 0,
+    sprintEnd: 0,
+  },
   // === Should-Haves ===
   {
     id: "11",
