@@ -144,8 +144,8 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
   const startWeek = (startSprint - 1) * 2 + 1;
   const [resizingItemId, setResizingItemId] = useState<string | null>(null);
   // Expand initiative label column when sidebar is collapsed (more horizontal space available)
-  const sidebar = (() => { try { return useSidebar(); } catch { return null; } })();
-  const labelWidth = sidebar?.state === "collapsed" ? 320 : 160;
+  const { state: sidebarState } = useSidebar();
+  const labelWidth = sidebarState === "collapsed" ? 320 : 160;
 
   // New item creation state
   const [creatingItem, setCreatingItem] = useState<{ rowId: string; week: number } | null>(null);
