@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Calendar, Target, MapPin, Users, ExternalLink } from "lucide-react";
+import { Calendar, Target, MapPin, Users, ExternalLink, Sparkles, Lightbulb } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
