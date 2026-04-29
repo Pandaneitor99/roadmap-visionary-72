@@ -2572,7 +2572,7 @@ function NegocioView() {
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Tendencia */}
         <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm md:p-8 lg:col-span-2">
-          <div className="mb-4 flex items-end justify-between">
+          <div className="mb-4 flex items-end justify-between gap-3">
             <div>
               <h3 className="text-lg font-bold text-neutral-900">
                 MAC — Tendencia CORE y LITE
@@ -2580,6 +2580,24 @@ function NegocioView() {
               <p className="mt-1 text-xs text-neutral-500">
                 Últimos 6 meses · Usuarios pagos activos por tipo de negocio
               </p>
+            </div>
+            <div className="flex items-center gap-3">
+              <a
+                href="https://app.amplitude.com/analytics/alegra/chart/jgmbk3gb"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+              >
+                Amplitude CORE <ExternalLink className="h-3 w-3" />
+              </a>
+              <a
+                href="https://app.amplitude.com/analytics/alegra/chart/af1mxpmw"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+              >
+                Amplitude LITE <ExternalLink className="h-3 w-3" />
+              </a>
             </div>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
@@ -2639,9 +2657,6 @@ function NegocioView() {
             </ResponsiveContainer>
           </div>
 
-          <p className="mt-3 text-[11px] text-neutral-400">
-            Fuente: Amplitude · jgmbk3gb (CORE) · af1mxpmw (LITE)
-          </p>
         </div>
 
         {/* Distribución al lado */}
@@ -2765,7 +2780,23 @@ function NegocioView() {
                 Filtra por segmento y país. Sin selección: agregado total.
               </p>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <a
+                href="https://app.amplitude.com/analytics/alegra/chart/jgmbk3gb"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+              >
+                Amplitude CORE <ExternalLink className="h-3 w-3" />
+              </a>
+              <a
+                href="https://app.amplitude.com/analytics/alegra/chart/af1mxpmw"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+              >
+                Amplitude LITE <ExternalLink className="h-3 w-3" />
+              </a>
               <div className="inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1">
                 {([
                   { id: "both", label: "Core + Lite" },
@@ -2815,9 +2846,6 @@ function NegocioView() {
             </ResponsiveContainer>
           </div>
 
-          <p className="mt-3 text-[11px] text-neutral-400">
-            Fuente: Amplitude · jgmbk3gb (CORE) · af1mxpmw (LITE)
-          </p>
         </div>
       </div>
 
@@ -3329,8 +3357,8 @@ function ClustersBubbles() {
   const sosPct = 62;
   const basePct = 38;
   // El área del círculo es proporcional al porcentaje => radio ∝ √pct
-  const sosRadius = Math.sqrt(sosPct) * 22; // px
-  const baseRadius = Math.sqrt(basePct) * 22;
+  const sosRadius = Math.sqrt(sosPct) * 13; // px
+  const baseRadius = Math.sqrt(basePct) * 13;
 
   return (
     <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm md:p-8">
@@ -3367,8 +3395,8 @@ function ClustersBubbles() {
             }}
           >
             <div className="text-center">
-              <p className="text-4xl font-bold leading-none md:text-5xl">{sosPct}%</p>
-              <p className="mt-1 text-[11px] font-bold uppercase tracking-widest opacity-90">
+              <p className="text-2xl font-bold leading-none md:text-3xl">{sosPct}%</p>
+              <p className="mt-1 text-[10px] font-bold uppercase tracking-widest opacity-90">
                 SOS
               </p>
             </div>
@@ -3395,8 +3423,8 @@ function ClustersBubbles() {
             }}
           >
             <div className="text-center">
-              <p className="text-3xl font-bold leading-none md:text-4xl">{basePct}%</p>
-              <p className="mt-1 text-[11px] font-bold uppercase tracking-widest opacity-90">
+              <p className="text-xl font-bold leading-none md:text-2xl">{basePct}%</p>
+              <p className="mt-1 text-[10px] font-bold uppercase tracking-widest opacity-90">
                 BASE
               </p>
             </div>
@@ -3409,32 +3437,6 @@ function ClustersBubbles() {
               Facturas · Items · Contactos · Cotizaciones en App
             </p>
           </div>
-        </div>
-      </div>
-
-      {/* Detalle inferior */}
-      <div className="mt-2 grid gap-3 border-t border-neutral-100 pt-5 text-xs text-neutral-600 md:grid-cols-2">
-        <div
-          className="rounded-lg p-3"
-          style={{ backgroundColor: "#FF6B0010" }}
-        >
-          <p className="font-bold" style={{ color: "#FF6B00" }}>
-            Cluster SOS — 62%
-          </p>
-          <p className="mt-1 text-neutral-600">
-            Eventos de web · Reportes en App · Busca factura de venta en app
-          </p>
-        </div>
-        <div
-          className="rounded-lg p-3"
-          style={{ backgroundColor: `${ALEGRA_GREEN}10` }}
-        >
-          <p className="font-bold" style={{ color: ALEGRA_GREEN }}>
-            Cluster BASE — 38%
-          </p>
-          <p className="mt-1 text-neutral-600">
-            Factura de venta App · Item en App · Contactos en App · Cotizaciones App
-          </p>
         </div>
       </div>
     </div>
