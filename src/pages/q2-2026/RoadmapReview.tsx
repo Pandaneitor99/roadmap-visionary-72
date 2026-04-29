@@ -2572,7 +2572,7 @@ function NegocioView() {
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Tendencia */}
         <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm md:p-8 lg:col-span-2">
-          <div className="mb-4 flex items-end justify-between">
+          <div className="mb-4 flex items-end justify-between gap-3">
             <div>
               <h3 className="text-lg font-bold text-neutral-900">
                 MAC — Tendencia CORE y LITE
@@ -2580,6 +2580,24 @@ function NegocioView() {
               <p className="mt-1 text-xs text-neutral-500">
                 Últimos 6 meses · Usuarios pagos activos por tipo de negocio
               </p>
+            </div>
+            <div className="flex items-center gap-3">
+              <a
+                href="https://app.amplitude.com/analytics/alegra/chart/jgmbk3gb"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+              >
+                Amplitude CORE <ExternalLink className="h-3 w-3" />
+              </a>
+              <a
+                href="https://app.amplitude.com/analytics/alegra/chart/af1mxpmw"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+              >
+                Amplitude LITE <ExternalLink className="h-3 w-3" />
+              </a>
             </div>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
@@ -2639,9 +2657,6 @@ function NegocioView() {
             </ResponsiveContainer>
           </div>
 
-          <p className="mt-3 text-[11px] text-neutral-400">
-            Fuente: Amplitude · jgmbk3gb (CORE) · af1mxpmw (LITE)
-          </p>
         </div>
 
         {/* Distribución al lado */}
@@ -2815,9 +2830,6 @@ function NegocioView() {
             </ResponsiveContainer>
           </div>
 
-          <p className="mt-3 text-[11px] text-neutral-400">
-            Fuente: Amplitude · jgmbk3gb (CORE) · af1mxpmw (LITE)
-          </p>
         </div>
       </div>
 
