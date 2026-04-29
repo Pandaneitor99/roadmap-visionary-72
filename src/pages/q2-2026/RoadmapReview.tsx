@@ -25,9 +25,11 @@ import {
 
 import { initiativeDetailMap } from "./initiativeDetails";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import agendaAppMockup from "@/assets/agenda-app-mockup.png";
 
 
 const sections = [
+  { id: "agenda" as const, title: "Agenda", short: "Agenda" },
   { id: 1, title: "Visión estratégica", short: "Visión" },
   { id: 2, title: "North Star y métricas clave", short: "North Star" },
   { id: 3, title: "Base de usuarios y MRR", short: "Usuarios & MRR" },
