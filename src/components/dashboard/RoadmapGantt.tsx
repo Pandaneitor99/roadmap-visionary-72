@@ -563,7 +563,7 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
       <div className="overflow-x-auto rounded-2xl bg-muted/40 border border-border p-4 shadow-sm">
         <div className="min-w-[1200px]">
           {/* Header - Sprints */}
-          <div className="mb-2" style={{ display: "grid", gridTemplateColumns: `160px repeat(${sprintCount}, 1fr)`, gap: "2px" }}>
+          <div className="mb-2" style={{ display: "grid", gridTemplateColumns: `${labelWidth}px repeat(${sprintCount}, 1fr)`, gap: "2px" }}>
             <div className="text-xs font-medium text-muted-foreground">Iniciativa</div>
             {sprints.map((sprint) => (
               <div
