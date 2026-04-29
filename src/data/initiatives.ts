@@ -103,6 +103,10 @@ export const initiatives: Initiative[] = [
     objectiveText: "Objetivo 2: Impulsar la adopción de la app móvil mejorando el flujo de creación de facturas y de ítems para que los usuarios facturen de forma recurrente desde el móvil.",
     problem: "Mientras que en Web se crean alrededor de 500k de productos al mes, en app únicamente se crean 15k. Hay una discrepancia del 40% de los campos de creación de factura entre app y web. Adicionalmente, hay una mala UX en algunos campos y datos de precios.",
     hypothesis: "Si lanzamos un nuevo diseño de creación de ítems esperamos un aumento en la creación de ítems y su uso en las facturas de venta.",
+    opportunity: {
+      text: "Simplificación de la creación de items + agregar creación de servicios + paridad de campos con web.",
+      prototypes: [{ label: "Ver prototipo", url: "https://www.figma.com/design/VjC6hok9QSdr9Wd8iasWms/Secci%C3%B3n-items-App?node-id=2266-3088&t=Vbquk9q4yag4jbVR-0" }],
+    },
     keyResults: ["KR 2.1", "KR 2.2", "KR 2.3"],
     kpis: ["Items agregados", "Conversión de factura de venta", "Cantidad de items agregados a la factura de venta"],
     version: "Todos",
