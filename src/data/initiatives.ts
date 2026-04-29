@@ -124,6 +124,10 @@ export const initiatives: Initiative[] = [
     objectiveText: "Objetivo 2: Impulsar la adopción de la app móvil mejorando el flujo de creación de facturas y de ítems para que los usuarios facturen de forma recurrente desde el móvil.",
     problem: "Únicamente el 14% de los usuarios pagos en web utilizan la app para realizar una acción de valor, entre ellas factura de venta.",
     hypothesis: "Si rediseñamos la pantalla de facturación esperamos un aumento en el uso de facturación y una mayor conversión, además de realizar cross-selling a la aplicación.",
+    opportunity: {
+      text: "Rediseño de facturación + agregar retenciones + agregar conduces + paridad de campos con web.",
+      prototypes: [{ label: "Ver prototipo", url: "https://www.figma.com/design/G4L7LYtkISB6T4DwLJ4wHS/MOB---Redise%C3%B1o-Facturaci%C3%B3n?node-id=3872-17740&p=f&t=CosijuUBHpbR7JeB-0" }],
+    },
     keyResults: ["KR 2.1", "KR 2.2", "KR 2.3"],
     kpis: ["Facturas de Venta totales en CO", "Conversión de FV en CO", "MAC de Colombia", "% Usuarios activos pagos de web que utilizan app"],
     version: "Colombia",
