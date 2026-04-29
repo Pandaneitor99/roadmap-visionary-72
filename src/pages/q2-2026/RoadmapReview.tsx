@@ -2705,40 +2705,45 @@ function NegocioView() {
                 key={c.country}
                 onClick={() => setSelectedCountry(isActive ? null : c.country)}
                 className={cn(
-                  "group rounded-2xl border bg-white p-5 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md",
+                  "group rounded-2xl border bg-white px-4 py-3 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md",
                   isActive ? "ring-2 ring-offset-2" : "border-neutral-200",
                 )}
                 style={isActive ? { borderColor: c.color, ["--tw-ring-color" as any]: c.color } : { borderTop: `3px solid ${c.color}` }}
               >
                 <div className="flex items-center justify-between">
-                  <span
-                    className="inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white"
-                    style={{ backgroundColor: c.color }}
-                  >
-                    {c.short}
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">
+                    {segment === "both" ? "Core + Lite" : segment}
                   </span>
                   {isActive && (
                     <span className="text-[10px] font-bold uppercase text-neutral-500">activo</span>
                   )}
                 </div>
-                <p className="mt-2 text-[11px] font-semibold uppercase tracking-wider text-neutral-500">
-                  {c.country}
-                </p>
-                <p className="mt-1 text-2xl font-bold text-neutral-900">
-                  {lastV.toLocaleString("es-CO")}
-                </p>
-                <p
-                  className={cn(
-                    "mt-1 flex items-center gap-1 text-xs font-bold",
-                    up ? "text-emerald-600" : "text-red-600",
-                  )}
-                >
-                  {up ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
-                  {up ? "+" : ""}{delta.toFixed(1)}% vs Oct '25
-                </p>
-                <p className="mt-2 text-[10px] text-neutral-400">
-                  {segment === "both" ? "Core + Lite" : segment}
-                </p>
+                <div className="mt-1.5 flex items-center gap-1.5">
+                  <span
+                    className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white"
+                    style={{ backgroundColor: c.color }}
+                  >
+                    {c.short}
+                  </span>
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-neutral-500 truncate">
+                    {c.country}
+                  </p>
+                </div>
+                <div className="mt-1.5 flex items-baseline justify-between gap-2">
+                  <p className="text-2xl font-bold text-neutral-900">
+                    {lastV.toLocaleString("es-CO")}
+                  </p>
+                  <p
+                    className={cn(
+                      "flex items-center gap-1 text-xs font-bold",
+                      up ? "text-emerald-600" : "text-red-600",
+                    )}
+                  >
+                    {up ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
+                    {up ? "+" : ""}{delta.toFixed(1)}%
+                  </p>
+                </div>
+                <p className="mt-0.5 text-[10px] font-medium text-neutral-400">vs Oct '25</p>
               </button>
             );
           })}
