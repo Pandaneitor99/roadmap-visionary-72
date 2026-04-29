@@ -5279,13 +5279,32 @@ function Section5() {
               </a>
             </div>
 
-            <div className="mt-4 rounded-lg border border-neutral-100 bg-neutral-50/60 p-3">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">
-                Diagnóstico
-              </p>
-              <p className="mt-1 text-xs leading-relaxed text-neutral-700">
-                Los usuarios <strong>no tienen la opción de agregar otros cargos ni CIDUEs</strong> en la factura de venta dentro de la app. Esto bloquea casos fiscales reales y los obliga a volver a la web.
-              </p>
+            <div className="mt-4 grid gap-3 md:grid-cols-2">
+              <div className="rounded-lg border border-orange-200 bg-orange-50/50 p-3">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-orange-700">
+                  Problema detectado
+                </p>
+                <p className="mt-1 text-xs leading-relaxed text-neutral-800">
+                  Los usuarios <strong>no tienen la opción de agregar Retenciones ni Conduces</strong> en la factura de venta dentro de la app. Esto bloquea casos fiscales reales y los obliga a volver a la web.
+                </p>
+              </div>
+              <div className="rounded-lg border border-emerald-200 bg-emerald-50/60 p-3">
+                <div className="flex items-start justify-between gap-2 flex-wrap">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Oportunidad</p>
+                  <a
+                    href="https://www.figma.com/design/G4L7LYtkISB6T4DwLJ4wHS/MOB---Redise%C3%B1o-Facturaci%C3%B3n?node-id=3872-17740&p=f&t=CosijuUBHpbR7JeB-0"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold transition-colors hover:bg-white"
+                    style={{ borderColor: "#10B98133", color: "#047857", backgroundColor: "#10B98110" }}
+                  >
+                    <Sparkles className="h-3 w-3" /> Ver prototipo <ExternalLink className="h-2.5 w-2.5" />
+                  </a>
+                </div>
+                <p className="mt-1 text-xs leading-relaxed text-neutral-800">
+                  Rediseño de facturación + agregar retenciones + agregar conduces.
+                </p>
+              </div>
             </div>
           </div>
 
