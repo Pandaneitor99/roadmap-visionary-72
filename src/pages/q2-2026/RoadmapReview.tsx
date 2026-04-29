@@ -1411,7 +1411,7 @@ const remisionesParticipSeries = [
   { m: "Ene", v: 6.49 },
   { m: "Feb", v: 6.08 },
   { m: "Mar", v: 6.42 },
-  { m: "Abr", v: 8.93 },
+  { m: "Abr", v: 9.04 },
 ];
 
 function MiniSparkline({
