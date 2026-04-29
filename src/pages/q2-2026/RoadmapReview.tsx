@@ -729,7 +729,7 @@ function Section2() {
     <div className="space-y-8">
       {/* North Star definition */}
       <div
-        className="rounded-2xl border border-neutral-200 bg-white p-8 shadow-sm"
+        className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm"
         style={{ borderLeft: `4px solid ${ALEGRA_GREEN}` }}
       >
         <div className="flex items-start gap-3">
@@ -749,10 +749,10 @@ function Section2() {
             <h2 className="mt-1 text-2xl font-bold text-neutral-900">
               Monthly Active Customers (MAC)
             </h2>
-            <p className="mt-2 text-sm leading-relaxed text-neutral-600">
+            <p className="mt-1.5 text-sm leading-relaxed text-neutral-600">
               Usuarios pagos únicos que ejecutan al menos una acción crítica de negocio en la app cada mes.
             </p>
-            <div className="mt-4 flex flex-wrap gap-2">
+            <div className="mt-3 flex flex-wrap gap-1.5">
               {[
                 { label: "Facturas", isNew: false },
                 { label: "Cotizar", isNew: false },
@@ -766,7 +766,7 @@ function Section2() {
               ].map((action) => (
                 <span
                   key={action.label}
-                  className="relative inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium text-neutral-700"
+                  className="relative inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium text-neutral-700"
                   style={{
                     borderColor: `${ALEGRA_GREEN}40`,
                     backgroundColor: `${ALEGRA_GREEN}08`,
@@ -790,40 +790,55 @@ function Section2() {
 
       {/* MAC Trend Chart + side cards */}
       <div className="grid gap-6 lg:grid-cols-4">
-        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm md:p-8 lg:col-span-3">
-          <div className="mb-4 flex flex-wrap items-end justify-between gap-4">
+        <div className="rounded-2xl border border-neutral-200 bg-white px-6 pt-4 pb-6 shadow-sm md:px-8 md:pt-5 md:pb-7 lg:col-span-3">
+          <div className="mb-3 flex flex-wrap items-end justify-between gap-4">
             <div>
               <h3 className="text-lg font-bold text-neutral-900">MAC — Tendencia</h3>
-              <p className="mt-1 text-xs text-neutral-500">
+              <p className="mt-0.5 text-xs text-neutral-500">
                 Últimos 6 meses · Usuarios Pagos, segmentados por CORE y LITE
               </p>
             </div>
           </div>
 
           {/* Toggle entre las dos vistas de MAC */}
-          <div className="mb-5 inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1">
-            <button
-              onClick={() => setTrendVariant("full")}
-              className={cn(
-                "rounded-md px-3 py-1.5 text-xs font-semibold transition-all",
+          <div className="mb-4 flex items-center justify-between gap-3 flex-wrap">
+            <div className="inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1">
+              <button
+                onClick={() => setTrendVariant("full")}
+                className={cn(
+                  "rounded-md px-3 py-1.5 text-xs font-semibold transition-all",
+                  trendVariant === "full"
+                    ? "bg-white text-neutral-900 shadow-sm"
+                    : "text-neutral-500 hover:text-neutral-700",
+                )}
+              >
+                MAC — Tendencia
+              </button>
+              <button
+                onClick={() => setTrendVariant("sinExtras")}
+                className={cn(
+                  "rounded-md px-3 py-1.5 text-xs font-semibold transition-all",
+                  trendVariant === "sinExtras"
+                    ? "bg-white text-neutral-900 shadow-sm"
+                    : "text-neutral-500 hover:text-neutral-700",
+                )}
+              >
+                Sin búsqueda ni gráficos
+              </button>
+            </div>
+            <a
+              href={
                 trendVariant === "full"
-                  ? "bg-white text-neutral-900 shadow-sm"
-                  : "text-neutral-500 hover:text-neutral-700",
-              )}
+                  ? "https://app.amplitude.com/analytics/alegra/chart/wy27awa1"
+                  : "https://app.amplitude.com/analytics/alegra/chart/yhghuf5q"
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-xs font-medium text-neutral-500 hover:text-neutral-900"
             >
-              MAC — Tendencia
-            </button>
-            <button
-              onClick={() => setTrendVariant("sinExtras")}
-              className={cn(
-                "rounded-md px-3 py-1.5 text-xs font-semibold transition-all",
-                trendVariant === "sinExtras"
-                  ? "bg-white text-neutral-900 shadow-sm"
-                  : "text-neutral-500 hover:text-neutral-700",
-              )}
-            >
-              Sin búsqueda ni gráficos
-            </button>
+              Ver en Amplitude
+              <ExternalLink className="h-3 w-3" />
+            </a>
           </div>
 
           <div className="h-[360px] w-full">
@@ -882,28 +897,6 @@ function Section2() {
               </LineChart>
             </ResponsiveContainer>
           </div>
-
-          <div className="mt-4 flex items-center justify-between border-t border-neutral-100 pt-4">
-            <p className="text-[11px] text-neutral-400">
-              Fuente: Amplitude ·{" "}
-              {trendVariant === "full"
-                ? "Eventos críticos de negocio (incluye búsquedas y gráficos)"
-                : "Eventos críticos sin incluir búsquedas ni gráficos"}
-            </p>
-            <a
-              href={
-                trendVariant === "full"
-                  ? "https://app.amplitude.com/analytics/alegra/chart/wy27awa1"
-                  : "https://app.amplitude.com/analytics/alegra/chart/yhghuf5q"
-              }
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1 text-xs font-medium text-neutral-500 hover:text-neutral-900"
-            >
-              Ver en Amplitude
-              <ExternalLink className="h-3 w-3" />
-            </a>
-          </div>
         </div>
 
         {/* Cards laterales: dinámicas según el toggle */}
@@ -957,7 +950,7 @@ function Section2() {
                   setSelectedCountry(isActive ? null : c.country)
                 }
                 className={cn(
-                  "rounded-2xl border bg-white p-5 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md",
+                  "rounded-2xl border bg-white px-4 py-3 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md",
                   isActive
                     ? "border-neutral-900 ring-2 ring-neutral-900/10"
                     : "border-neutral-200",
@@ -967,26 +960,26 @@ function Section2() {
                 <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
                   {c.country}
                 </p>
-                <p className="mt-2 text-3xl font-bold text-neutral-900">
-                  {c.march.toLocaleString("es-CO")}
-                </p>
-                <p
-                  className={cn(
-                    "mt-1 flex items-center gap-1 text-sm font-bold",
-                    isUp ? "text-emerald-600" : "text-red-600",
-                  )}
-                >
-                  {isUp ? (
-                    <TrendingUp className="h-4 w-4" />
-                  ) : (
-                    <TrendingDown className="h-4 w-4" />
-                  )}
-                  {isUp ? "+" : ""}
-                  {delta.toFixed(1)}%
-                  <span className="ml-1 text-[11px] font-medium text-neutral-500">
-                    vs Oct '25
-                  </span>
-                </p>
+                <div className="mt-1 flex items-baseline justify-between gap-2">
+                  <p className="text-2xl font-bold text-neutral-900">
+                    {c.march.toLocaleString("es-CO")}
+                  </p>
+                  <p
+                    className={cn(
+                      "flex items-center gap-1 text-xs font-bold",
+                      isUp ? "text-emerald-600" : "text-red-600",
+                    )}
+                  >
+                    {isUp ? (
+                      <TrendingUp className="h-3.5 w-3.5" />
+                    ) : (
+                      <TrendingDown className="h-3.5 w-3.5" />
+                    )}
+                    {isUp ? "+" : ""}
+                    {delta.toFixed(1)}%
+                  </p>
+                </div>
+                <p className="mt-0.5 text-[10px] font-medium text-neutral-400">vs Oct '25</p>
               </button>
             );
           })}
@@ -1175,7 +1168,7 @@ function TasaAdopcion() {
       {/* KPIs */}
       <div className="grid gap-4 md:grid-cols-2">
         <div
-          className="rounded-2xl border bg-white p-6 shadow-sm"
+          className="rounded-2xl border bg-white p-4 shadow-sm"
           style={{ borderLeft: `4px solid #0066FF` }}
         >
           <div className="flex items-center gap-2">
@@ -1184,25 +1177,27 @@ function TasaAdopcion() {
               Tasa de Adopción
             </span>
           </div>
-          <p className="mt-2 text-xs text-neutral-500">MAU APP / MAC WEB</p>
-          <p className="mt-3 text-4xl font-bold text-neutral-900">{tasaAdopcion.toFixed(1)}%</p>
-          <p
-            className={cn(
-              "mt-2 flex items-center gap-1 text-sm font-bold",
-              upAdopcion ? "text-emerald-600" : "text-red-600",
-            )}
-          >
-            {upAdopcion ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
-            {upAdopcion ? "+" : ""}{deltaAdopcion.toFixed(1)} pp
-            <span className="ml-1 text-[11px] font-medium text-neutral-500">vs Oct '25</span>
-          </p>
-          <p className="mt-2 text-xs text-neutral-500">
+          <p className="mt-1 text-[11px] text-neutral-500">MAU APP / MAC WEB</p>
+          <div className="mt-2 flex items-baseline justify-between gap-2 flex-wrap">
+            <p className="text-3xl font-bold text-neutral-900">{tasaAdopcion.toFixed(1)}%</p>
+            <p
+              className={cn(
+                "flex items-center gap-1 text-sm font-bold",
+                upAdopcion ? "text-emerald-600" : "text-red-600",
+              )}
+            >
+              {upAdopcion ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
+              {upAdopcion ? "+" : ""}{deltaAdopcion.toFixed(1)} pp
+              <span className="ml-1 text-[10px] font-medium text-neutral-500">vs Oct '25</span>
+            </p>
+          </div>
+          <p className="mt-1.5 text-[11px] text-neutral-500">
             % de <strong>usuarios pagos web activos</strong> que entran a la app cada mes (Marzo 2026).
           </p>
         </div>
 
         <div
-          className="rounded-2xl border bg-white p-6 shadow-sm"
+          className="rounded-2xl border bg-white p-4 shadow-sm"
           style={{ borderLeft: `4px solid ${ALEGRA_GREEN}` }}
         >
           <div className="flex items-center gap-2">
@@ -1211,19 +1206,21 @@ function TasaAdopcion() {
               Tasa de Adopción Real
             </span>
           </div>
-          <p className="mt-2 text-xs text-neutral-500">MAC APP / MAC WEB</p>
-          <p className="mt-3 text-4xl font-bold text-neutral-900">{tasaReal.toFixed(1)}%</p>
-          <p
-            className={cn(
-              "mt-2 flex items-center gap-1 text-sm font-bold",
-              upReal ? "text-emerald-600" : "text-red-600",
-            )}
-          >
-            {upReal ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
-            {upReal ? "+" : ""}{deltaReal.toFixed(1)} pp
-            <span className="ml-1 text-[11px] font-medium text-neutral-500">vs Oct '25</span>
-          </p>
-          <p className="mt-2 text-xs text-neutral-500">
+          <p className="mt-1 text-[11px] text-neutral-500">MAC APP / MAC WEB</p>
+          <div className="mt-2 flex items-baseline justify-between gap-2 flex-wrap">
+            <p className="text-3xl font-bold text-neutral-900">{tasaReal.toFixed(1)}%</p>
+            <p
+              className={cn(
+                "flex items-center gap-1 text-sm font-bold",
+                upReal ? "text-emerald-600" : "text-red-600",
+              )}
+            >
+              {upReal ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
+              {upReal ? "+" : ""}{deltaReal.toFixed(1)} pp
+              <span className="ml-1 text-[10px] font-medium text-neutral-500">vs Oct '25</span>
+            </p>
+          </div>
+          <p className="mt-1.5 text-[11px] text-neutral-500">
             % de <strong>usuarios pagos web activos</strong> que realizan al menos una acción de valor en la app (Marzo 2026).
           </p>
         </div>
@@ -1709,23 +1706,25 @@ function MrrKpi({
 }) {
   const positive = (delta ?? 0) >= 0;
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
+    <div className="relative overflow-hidden rounded-2xl border border-neutral-200 bg-white px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
       <div className="absolute inset-x-0 top-0 h-1" style={{ backgroundColor: accent }} />
       <p className="text-[10px] font-bold uppercase tracking-widest text-neutral-500">{label}</p>
-      <p className="mt-3 text-3xl font-bold text-neutral-900">{value}</p>
-      {sub && <p className="mt-1 text-xs text-neutral-500">{sub}</p>}
-      {typeof delta === "number" && (
-        <div
-          className={cn(
-            "mt-3 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-bold",
-            positive ? "bg-[#00C853]/10 text-[#00785A]" : "bg-[#FF6B00]/10 text-[#FF6B00]"
-          )}
-        >
-          {positive ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
-          {positive ? "+" : ""}
-          {delta.toFixed(2)}%
-        </div>
-      )}
+      <div className="mt-1.5 flex items-baseline justify-between gap-2 flex-wrap">
+        <p className="text-2xl font-bold text-neutral-900">{value}</p>
+        {typeof delta === "number" && (
+          <div
+            className={cn(
+              "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold",
+              positive ? "bg-[#00C853]/10 text-[#00785A]" : "bg-[#FF6B00]/10 text-[#FF6B00]"
+            )}
+          >
+            {positive ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+            {positive ? "+" : ""}
+            {delta.toFixed(2)}%
+          </div>
+        )}
+      </div>
+      {sub && <p className="mt-0.5 text-[11px] text-neutral-500">{sub}</p>}
     </div>
   );
 }
@@ -2120,20 +2119,20 @@ function ComportamientoCoreLiteView() {
   return (
     <div className="space-y-6">
       {/* Adopción funcionalidades CORE vs LITE - barras VERTICALES */}
-      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-        <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
+      <div className="rounded-2xl border border-neutral-200 bg-white px-6 pt-5 pb-2 shadow-sm">
+        <div className="mb-2 flex items-start justify-between gap-3 flex-wrap">
           <div>
             <h4 className="text-base font-bold text-neutral-900">
               Adopción funcionalidades — Uniques Mensual CORE vs LITE
             </h4>
-            <p className="mt-1 text-xs text-neutral-500">
+            <p className="mt-0.5 text-xs text-neutral-500">
               % de adopción por funcionalidad · Marzo 2026
             </p>
           </div>
         </div>
-        <div className="h-[340px] w-full">
+        <div className="h-[300px] w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={adopcionCoreLiteData} margin={{ top: 8, right: 16, left: 0, bottom: 60 }}>
+            <BarChart data={adopcionCoreLiteData} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
               <XAxis
                 dataKey="event"
@@ -2142,7 +2141,7 @@ function ComportamientoCoreLiteView() {
                 interval={0}
                 angle={-30}
                 textAnchor="end"
-                height={70}
+                height={60}
               />
               <YAxis
                 stroke="#6b7280"
@@ -2153,7 +2152,7 @@ function ComportamientoCoreLiteView() {
                 contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }}
                 formatter={(v: number) => `${v.toFixed(1)}%`}
               />
-              <Legend iconType="circle" wrapperStyle={{ fontSize: 11, paddingTop: 4 }} />
+              <Legend iconType="circle" wrapperStyle={{ fontSize: 11, paddingTop: 0 }} />
               <Bar dataKey="CORE" fill={ALEGRA_GREEN} radius={[4, 4, 0, 0]} />
               <Bar dataKey="LITE" fill="#FF6B00" radius={[4, 4, 0, 0]} />
             </BarChart>
@@ -2708,40 +2707,45 @@ function NegocioView() {
                 key={c.country}
                 onClick={() => setSelectedCountry(isActive ? null : c.country)}
                 className={cn(
-                  "group rounded-2xl border bg-white p-5 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md",
+                  "group rounded-2xl border bg-white px-4 py-3 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md",
                   isActive ? "ring-2 ring-offset-2" : "border-neutral-200",
                 )}
                 style={isActive ? { borderColor: c.color, ["--tw-ring-color" as any]: c.color } : { borderTop: `3px solid ${c.color}` }}
               >
                 <div className="flex items-center justify-between">
-                  <span
-                    className="inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white"
-                    style={{ backgroundColor: c.color }}
-                  >
-                    {c.short}
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">
+                    {segment === "both" ? "Core + Lite" : segment}
                   </span>
                   {isActive && (
                     <span className="text-[10px] font-bold uppercase text-neutral-500">activo</span>
                   )}
                 </div>
-                <p className="mt-2 text-[11px] font-semibold uppercase tracking-wider text-neutral-500">
-                  {c.country}
-                </p>
-                <p className="mt-1 text-2xl font-bold text-neutral-900">
-                  {lastV.toLocaleString("es-CO")}
-                </p>
-                <p
-                  className={cn(
-                    "mt-1 flex items-center gap-1 text-xs font-bold",
-                    up ? "text-emerald-600" : "text-red-600",
-                  )}
-                >
-                  {up ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
-                  {up ? "+" : ""}{delta.toFixed(1)}% vs Oct '25
-                </p>
-                <p className="mt-2 text-[10px] text-neutral-400">
-                  {segment === "both" ? "Core + Lite" : segment}
-                </p>
+                <div className="mt-1.5 flex items-center gap-1.5">
+                  <span
+                    className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white"
+                    style={{ backgroundColor: c.color }}
+                  >
+                    {c.short}
+                  </span>
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-neutral-500 truncate">
+                    {c.country}
+                  </p>
+                </div>
+                <div className="mt-1.5 flex items-baseline justify-between gap-2">
+                  <p className="text-2xl font-bold text-neutral-900">
+                    {lastV.toLocaleString("es-CO")}
+                  </p>
+                  <p
+                    className={cn(
+                      "flex items-center gap-1 text-xs font-bold",
+                      up ? "text-emerald-600" : "text-red-600",
+                    )}
+                  >
+                    {up ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
+                    {up ? "+" : ""}{delta.toFixed(1)}%
+                  </p>
+                </div>
+                <p className="mt-0.5 text-[10px] font-medium text-neutral-400">vs Oct '25</p>
               </button>
             );
           })}
@@ -3759,9 +3763,6 @@ function SectionIssues() {
             </div>
           </div>
 
-          <p className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs leading-relaxed text-amber-900">
-            <span className="font-semibold">Insight:</span> encontramos más bugs en llamadas y visitas con clientes que a través de soporte.
-          </p>
         </div>
       </div>
     </div>
