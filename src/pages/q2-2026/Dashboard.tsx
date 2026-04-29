@@ -146,7 +146,7 @@ export default function DashboardQ22026() {
               {NSM_ACTIONS.map((action) => (
                 <span
                   key={action.label}
-                  className="relative inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium text-neutral-700"
+                  className="relative inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium text-neutral-700"
                   style={{
                     borderColor: `${ALEGRA_GREEN}40`,
                     backgroundColor: `${ALEGRA_GREEN}08`,
