@@ -2780,7 +2780,23 @@ function NegocioView() {
                 Filtra por segmento y país. Sin selección: agregado total.
               </p>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <a
+                href="https://app.amplitude.com/analytics/alegra/chart/jgmbk3gb"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+              >
+                Amplitude CORE <ExternalLink className="h-3 w-3" />
+              </a>
+              <a
+                href="https://app.amplitude.com/analytics/alegra/chart/af1mxpmw"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+              >
+                Amplitude LITE <ExternalLink className="h-3 w-3" />
+              </a>
               <div className="inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1">
                 {([
                   { id: "both", label: "Core + Lite" },
