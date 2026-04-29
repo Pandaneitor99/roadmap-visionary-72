@@ -729,7 +729,7 @@ function Section2() {
     <div className="space-y-8">
       {/* North Star definition */}
       <div
-        className="rounded-2xl border border-neutral-200 bg-white p-8 shadow-sm"
+        className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm"
         style={{ borderLeft: `4px solid ${ALEGRA_GREEN}` }}
       >
         <div className="flex items-start gap-3">
@@ -749,10 +749,10 @@ function Section2() {
             <h2 className="mt-1 text-2xl font-bold text-neutral-900">
               Monthly Active Customers (MAC)
             </h2>
-            <p className="mt-2 text-sm leading-relaxed text-neutral-600">
+            <p className="mt-1.5 text-sm leading-relaxed text-neutral-600">
               Usuarios pagos únicos que ejecutan al menos una acción crítica de negocio en la app cada mes.
             </p>
-            <div className="mt-4 flex flex-wrap gap-2">
+            <div className="mt-3 flex flex-wrap gap-1.5">
               {[
                 { label: "Facturas", isNew: false },
                 { label: "Cotizar", isNew: false },
