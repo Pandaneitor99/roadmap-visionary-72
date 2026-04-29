@@ -1166,8 +1166,8 @@ function TasaAdopcion() {
   const tasaReal = 22.1; // MAC APP / MAC WEB
   const tasaAdopcionOct = 30.5;
   const tasaRealOct = 19.8;
-  const deltaAdopcion = tasaAdopcion - tasaAdopcionOct;
-  const deltaReal = tasaReal - tasaRealOct;
+  const deltaAdopcion = ((tasaAdopcion - tasaAdopcionOct) / tasaAdopcionOct) * 100;
+  const deltaReal = ((tasaReal - tasaRealOct) / tasaRealOct) * 100;
   const upAdopcion = deltaAdopcion >= 0;
   const upReal = deltaReal >= 0;
 
