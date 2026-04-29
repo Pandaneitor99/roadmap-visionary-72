@@ -801,29 +801,44 @@ function Section2() {
           </div>
 
           {/* Toggle entre las dos vistas de MAC */}
-          <div className="mb-5 inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1">
-            <button
-              onClick={() => setTrendVariant("full")}
-              className={cn(
-                "rounded-md px-3 py-1.5 text-xs font-semibold transition-all",
+          <div className="mb-4 flex items-center justify-between gap-3 flex-wrap">
+            <div className="inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1">
+              <button
+                onClick={() => setTrendVariant("full")}
+                className={cn(
+                  "rounded-md px-3 py-1.5 text-xs font-semibold transition-all",
+                  trendVariant === "full"
+                    ? "bg-white text-neutral-900 shadow-sm"
+                    : "text-neutral-500 hover:text-neutral-700",
+                )}
+              >
+                MAC — Tendencia
+              </button>
+              <button
+                onClick={() => setTrendVariant("sinExtras")}
+                className={cn(
+                  "rounded-md px-3 py-1.5 text-xs font-semibold transition-all",
+                  trendVariant === "sinExtras"
+                    ? "bg-white text-neutral-900 shadow-sm"
+                    : "text-neutral-500 hover:text-neutral-700",
+                )}
+              >
+                Sin búsqueda ni gráficos
+              </button>
+            </div>
+            <a
+              href={
                 trendVariant === "full"
-                  ? "bg-white text-neutral-900 shadow-sm"
-                  : "text-neutral-500 hover:text-neutral-700",
-              )}
+                  ? "https://app.amplitude.com/analytics/alegra/chart/wy27awa1"
+                  : "https://app.amplitude.com/analytics/alegra/chart/yhghuf5q"
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-xs font-medium text-neutral-500 hover:text-neutral-900"
             >
-              MAC — Tendencia
-            </button>
-            <button
-              onClick={() => setTrendVariant("sinExtras")}
-              className={cn(
-                "rounded-md px-3 py-1.5 text-xs font-semibold transition-all",
-                trendVariant === "sinExtras"
-                  ? "bg-white text-neutral-900 shadow-sm"
-                  : "text-neutral-500 hover:text-neutral-700",
-              )}
-            >
-              Sin búsqueda ni gráficos
-            </button>
+              Ver en Amplitude
+              <ExternalLink className="h-3 w-3" />
+            </a>
           </div>
 
           <div className="h-[360px] w-full">
