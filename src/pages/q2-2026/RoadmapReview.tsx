@@ -3477,17 +3477,24 @@ function PlaceholderSection({ title }: { title: string }) {
 
 const devInitiativesS4 = [
   {
-    title: "Rediseño Facturación Costa Rica",
-    tags: ["Engagement", "Adopción"],
+    title: "Home — acciones rápidas",
+    tags: ["Engagement"],
     problem:
-      "Con la salida en web de la versión 4.4, la cantidad de facturas aumentó un 20%, sin embargo, en la app se mantuvo constante. Adicionalmente, la tasa de conversión es la menor de las 4 versiones (63% hoy).",
-    krs: ["KR 2.1", "KR 2.2", "KR 2.3"],
+      "El home actual no facilita el acceso rápido a las acciones más usadas por los usuarios.",
+    krs: ["KR 2.2"],
   },
   {
-    title: "Estabilización",
-    tags: ["Experiencia"],
+    title: "Compartir y descargar remisiones",
+    tags: ["Adopción", "Engagement"],
     problem:
-      "Semanalmente se presentan alrededor de 8k errores que se reportan conjuntamente en Sentry y Amplitude.",
+      "Falta la capacidad de compartir y descargar remisiones desde la app, limitando la operación móvil del usuario.",
+    krs: ["KR 2.2"],
+  },
+  {
+    title: "Búsqueda de documentos e información",
+    tags: ["Engagement"],
+    problem:
+      "Los usuarios no pueden encontrar fácilmente sus documentos e información dentro de la app, generando fricción en la consulta.",
     krs: ["KR 1.3"],
   },
   {
@@ -3498,18 +3505,11 @@ const devInitiativesS4 = [
     krs: ["KR 2.1"],
   },
   {
-    title: "Búsqueda de documentos e información",
-    tags: ["Engagement"],
+    title: "Estabilización",
+    tags: ["Experiencia"],
     problem:
-      "Los usuarios no pueden encontrar fácilmente sus documentos e información dentro de la app, generando fricción en la consulta.",
+      "Semanalmente se presentan alrededor de 8k errores que se reportan conjuntamente en Sentry y Amplitude.",
     krs: ["KR 1.3"],
-  },
-  {
-    title: "Compartir y descargar remisiones",
-    tags: ["Adopción", "Engagement"],
-    problem:
-      "Falta la capacidad de compartir y descargar remisiones desde la app, limitando la operación móvil del usuario.",
-    krs: ["KR 2.2"],
   },
   {
     title: "Llenado automático campos contactos",
@@ -3519,11 +3519,11 @@ const devInitiativesS4 = [
     krs: ["KR 2.1"],
   },
   {
-    title: "Home — acciones rápidas",
-    tags: ["Engagement"],
+    title: "Rediseño Facturación Costa Rica",
+    tags: ["Engagement", "Adopción"],
     problem:
-      "El home actual no facilita el acceso rápido a las acciones más usadas por los usuarios.",
-    krs: ["KR 2.2"],
+      "Con la salida en web de la versión 4.4, la cantidad de facturas aumentó un 20%, sin embargo, en la app se mantuvo constante. Adicionalmente, la tasa de conversión es la menor de las 4 versiones (63% hoy).",
+    krs: ["KR 2.1", "KR 2.2", "KR 2.3"],
   },
 ];
 
