@@ -139,10 +139,10 @@ export default function DashboardQ22026() {
             <h2 className="mt-1 text-2xl font-bold text-neutral-900">
               Monthly Active Customers (MAC)
             </h2>
-            <p className="mt-2 text-sm leading-relaxed text-neutral-600">
+            <p className="mt-1.5 text-sm leading-relaxed text-neutral-600">
               Usuarios pagos únicos que ejecutan al menos una acción crítica de negocio en la app cada mes.
             </p>
-            <div className="mt-4 flex flex-wrap gap-2">
+            <div className="mt-3 flex flex-wrap gap-1.5">
               {NSM_ACTIONS.map((action) => (
                 <span
                   key={action.label}
