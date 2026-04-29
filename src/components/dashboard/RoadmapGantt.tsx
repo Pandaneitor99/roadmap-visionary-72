@@ -944,6 +944,24 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
         </AlertDialogContent>
       </AlertDialog>
 
+      {/* Delete Row Confirmation */}
+      <AlertDialog open={!!deletingRow} onOpenChange={() => setDeletingRow(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Eliminar iniciativa completa?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Se eliminará la fila "{deletingRow?.label}" y todas sus celdas del roadmap. Esta acción no se puede deshacer.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmDeleteRow} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
     </>
   );
 }
