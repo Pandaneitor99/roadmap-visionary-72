@@ -419,6 +419,7 @@ const segmentos: Segmento[] = [
     badge: "Sin app",
     tamano: "70% de usuarios web no usan la app",
     dolor: "Medio",
+    impacto: "Adopción",
     alternativa: "No usan app",
     prioridad: "Media",
     color: "#0066FF",
