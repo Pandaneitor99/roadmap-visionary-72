@@ -373,10 +373,11 @@ type Segmento = {
 const segmentos: Segmento[] = [
   {
     id: "base",
-    nombre: "Pyme BASE",
+    nombre: "Pyme BASE (Pequeña)",
     badge: "Móvil-first",
     tamano: "~40% del MAC (~2,924 usuarios)",
     dolor: "Muy alto",
+    impacto: "Engagement / Adquisición",
     alternativa: "Web Alegra cuando tiene PC",
     prioridad: "Máxima",
     color: ALEGRA_GREEN,
