@@ -361,6 +361,7 @@ type Segmento = {
   badge: string;
   tamano: string;
   dolor: string;
+  impacto: string;
   alternativa: string;
   prioridad: "Máxima" | "Alta" | "Media";
   color: string;
