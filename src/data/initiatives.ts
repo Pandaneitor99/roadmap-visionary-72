@@ -511,7 +511,7 @@ export const okrs: OKR[] = [
     objective: "Reducir los errores críticos en los flujos clave de la app para garantizar una experiencia estable a los usuarios durante este trimestre.",
     type: "experience",
     keyResults: [
-      { id: "kr-1.1", name: "Aumentar la calificación en Google Play de 4.7 a 4.9", baseline: "4.7", target: "4.9", percentage: "0%", currentResult: "4.7", achievedIncrease: "0%" },
+      { id: "kr-1.1", name: "Aumentar la calificación en Google Play de 4.7 a 4.9", baseline: "4.7", target: "4.9", percentage: "2.13%", currentResult: "4.8", achievedIncrease: "2.13%" },
       { id: "kr-1.2", name: "Aumentar la calificación en App Store de 4.3 a 4.7", baseline: "4.3", target: "4.7", percentage: "2.33%", currentResult: "4.4", achievedIncrease: "2.33%" },
       { id: "kr-1.3", name: "Reducir los errores críticos en producción detectados por Sentry y Amplitude de 10k a 1k en los flujos principales durante el trimestre", baseline: "10k", target: "1k", percentage: "-40%", currentResult: "6k", achievedIncrease: "-40%" },
     ],
