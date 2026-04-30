@@ -394,10 +394,11 @@ const segmentos: Segmento[] = [
   },
   {
     id: "sos",
-    nombre: "Pyme SOS",
+    nombre: "Pyme SOS (Mediana)",
     badge: "Web-first",
     tamano: "~60% del MAC (~4,700 usuarios)",
     dolor: "Medio",
+    impacto: "Adopción",
     alternativa: "Vuelve al PC, pierde la venta",
     prioridad: "Alta",
     color: "#FF6B00",
