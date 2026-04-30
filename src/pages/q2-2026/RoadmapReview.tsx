@@ -5993,7 +5993,30 @@ function SectionAgenda() {
   return (
     <div className="space-y-6">
       {/* Módulo Agenda — contiene el listado y la imagen pequeña */}
-      <div className="rounded-2xl border border-neutral-200 bg-white p-8 shadow-sm">
+      <div className="relative rounded-2xl border border-neutral-200 bg-white p-8 shadow-sm">
+        {/* Aviso esquina superior derecha */}
+        <div className="absolute right-4 top-4 z-10">
+          <Popover>
+            <PopoverTrigger asChild>
+              <button
+                type="button"
+                aria-label="Aviso importante"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-amber-300 bg-amber-50 text-amber-600 shadow-sm transition hover:bg-amber-100"
+              >
+                <AlertTriangle className="h-4 w-4" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent align="end" side="bottom" className="w-72 text-sm">
+              <div className="flex items-start gap-2">
+                <Info className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
+                <p className="leading-relaxed text-neutral-700">
+                  <strong>App mobile</strong> es diferente a <strong>web mobile</strong>.
+                </p>
+              </div>
+            </PopoverContent>
+          </Popover>
+        </div>
+
         <div className="mb-6 flex items-center gap-3">
           <div
             className="flex h-10 w-10 items-center justify-center rounded-xl text-white"
