@@ -361,6 +361,7 @@ type Segmento = {
   badge: string;
   tamano: string;
   dolor: string;
+  impacto: string;
   alternativa: string;
   prioridad: "Máxima" | "Alta" | "Media";
   color: string;
@@ -372,10 +373,11 @@ type Segmento = {
 const segmentos: Segmento[] = [
   {
     id: "base",
-    nombre: "Pyme BASE",
+    nombre: "Pyme BASE (Pequeña)",
     badge: "Móvil-first",
     tamano: "~40% del MAC (~2,924 usuarios)",
     dolor: "Muy alto",
+    impacto: "Engagement / Adquisición",
     alternativa: "Web Alegra cuando tiene PC",
     prioridad: "Máxima",
     color: ALEGRA_GREEN,
@@ -392,10 +394,11 @@ const segmentos: Segmento[] = [
   },
   {
     id: "sos",
-    nombre: "Pyme SOS",
+    nombre: "Pyme SOS (Mediana)",
     badge: "Web-first",
     tamano: "~60% del MAC (~4,700 usuarios)",
     dolor: "Medio",
+    impacto: "Adopción",
     alternativa: "Vuelve al PC, pierde la venta",
     prioridad: "Alta",
     color: "#FF6B00",
@@ -416,6 +419,7 @@ const segmentos: Segmento[] = [
     badge: "Sin app",
     tamano: "70% de usuarios web no usan la app",
     dolor: "Medio",
+    impacto: "Adopción",
     alternativa: "No usan app",
     prioridad: "Media",
     color: "#0066FF",
@@ -435,6 +439,7 @@ const segmentos: Segmento[] = [
     badge: "Sub-servido",
     tamano: "Subrepresentado",
     dolor: "Medio",
+    impacto: "Adopción",
     alternativa: "Reportes en web, llamadas al cliente",
     prioridad: "Media",
     color: "#7C3AED",
@@ -464,9 +469,10 @@ function SegmentosObjetivo() {
       {/* Tabla resumen */}
       <div className="mb-6 overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
         <div className="grid grid-cols-12 border-b border-neutral-200 bg-neutral-50 px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-neutral-600">
-          <div className="col-span-4">Segmento</div>
-          <div className="col-span-4">Tamaño</div>
+          <div className="col-span-3">Segmento</div>
+          <div className="col-span-3">Tamaño</div>
           <div className="col-span-2">Nivel de dolor</div>
+          <div className="col-span-2">Impacto</div>
           <div className="col-span-2 text-right">Prioridad</div>
         </div>
         {segmentos.map((s) => {
@@ -491,14 +497,15 @@ function SegmentosObjetivo() {
                   : undefined
               }
             >
-              <div className="col-span-4 font-semibold text-neutral-900">
+              <div className="col-span-3 font-semibold text-neutral-900">
                 {s.nombre}
                 <span className="ml-2 text-[10px] font-medium text-neutral-500">
                   {s.badge}
                 </span>
               </div>
-              <div className="col-span-4 text-neutral-600">{s.tamano}</div>
+              <div className="col-span-3 text-neutral-600">{s.tamano}</div>
               <div className="col-span-2 text-neutral-600">{s.dolor}</div>
+              <div className="col-span-2 text-neutral-600">{s.impacto}</div>
               <div className="col-span-2 text-right">
                 <span
                   className="inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold uppercase text-white"
