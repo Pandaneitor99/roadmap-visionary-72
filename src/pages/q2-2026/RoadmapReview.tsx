@@ -439,6 +439,7 @@ const segmentos: Segmento[] = [
     badge: "Sub-servido",
     tamano: "Subrepresentado",
     dolor: "Medio",
+    impacto: "Adopción",
     alternativa: "Reportes en web, llamadas al cliente",
     prioridad: "Media",
     color: "#7C3AED",
