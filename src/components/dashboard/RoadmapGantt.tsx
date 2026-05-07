@@ -76,7 +76,7 @@ interface RowDef {
   section: "must" | "should" | "stabilization";
 }
 
-const initialRows: RowDef[] = [
+const baseInitialRows: RowDef[] = [
   { id: "onboarding", label: "Onboarding", section: "must" },
   { id: "cr", label: "Rediseño Fact. CR", section: "must" },
   { id: "items", label: "Creación de Items", section: "must" },
@@ -90,7 +90,7 @@ const initialRows: RowDef[] = [
   { id: "mejoras", label: "Estabilización - Mejoras", section: "stabilization" },
 ];
 
-const initialItems: RoadmapItem[] = [
+const baseInitialItems: RoadmapItem[] = [
   { id: "onboarding", title: "Onboarding", type: "feature", objectiveTag: "adoption", weekStart: 3, weekEnd: 3, initiativeId: "onboarding", rowId: "onboarding" },
   { id: "cr-mvp", title: "Rediseño Facturación CR 4.4", type: "feature", objectiveTag: "adoption", weekStart: 4, weekEnd: 6, initiativeId: "1", rowId: "cr" },
   { id: "cr-v2", title: "Rediseño Facturación CR V2", type: "feature", objectiveTag: "adoption", weekStart: 7, weekEnd: 7, initiativeId: "1", rowId: "cr" },
@@ -110,6 +110,26 @@ const initialItems: RoadmapItem[] = [
   { id: "mejoras-3", title: "Mejoras", type: "improvements", objectiveTag: "experience", weekStart: 14, weekEnd: 14, initiativeId: "2", rowId: "mejoras" },
   { id: "mejoras-4", title: "Mejoras", type: "improvements", objectiveTag: "experience", weekStart: 26, weekEnd: 26, initiativeId: "2", rowId: "mejoras" },
 ];
+
+// Known quarter prefixes used to detect "foreign" namespaced ids that don't belong to the current quarter.
+const KNOWN_QUARTER_PREFIXES = ["q1:", "q2:", "q3:", "q4:"];
+
+function withPrefix(id: string, prefix: string) {
+  if (id.startsWith(prefix)) return id;
+  // Strip any other quarter prefix before applying current
+  for (const p of KNOWN_QUARTER_PREFIXES) {
+    if (id.startsWith(p)) return prefix + id.slice(p.length);
+  }
+  return prefix + id;
+}
+
+function buildInitialRows(prefix: string): RowDef[] {
+  return baseInitialRows.map(r => ({ ...r, id: prefix + r.id }));
+}
+
+function buildInitialItems(prefix: string): RoadmapItem[] {
+  return baseInitialItems.map(i => ({ ...i, id: prefix + i.id, rowId: prefix + i.rowId }));
+}
 
 interface DragState {
   item: RoadmapItem;
