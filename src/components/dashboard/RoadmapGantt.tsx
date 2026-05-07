@@ -146,11 +146,14 @@ interface ResizeState {
 interface RoadmapGanttProps {
   startSprint?: number;
   initialSprintCount?: number;
+  /** Quarter namespace for persistence — keeps each quarter's roadmap independent. */
+  quarter?: "q1" | "q2" | "q3" | "q4";
 }
 
-export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPRINT_COUNT }: RoadmapGanttProps = {}) {
-  const [items, setItems] = useState<RoadmapItem[]>(initialItems);
-  const [rows, setRows] = useState<RowDef[]>(initialRows);
+export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPRINT_COUNT, quarter = "q1" }: RoadmapGanttProps = {}) {
+  const prefix = `${quarter}:`;
+  const [items, setItems] = useState<RoadmapItem[]>(() => buildInitialItems(prefix));
+  const [rows, setRows] = useState<RowDef[]>(() => buildInitialRows(prefix));
   const [loading, setLoading] = useState(true);
   const [selectedInitiative, setSelectedInitiative] = useState<typeof initiatives[0] | null>(null);
   const [editingItem, setEditingItem] = useState<RoadmapItem | null>(null);
