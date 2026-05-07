@@ -333,7 +333,7 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
 
   const handleCreateItem = useCallback(() => {
     if (!creatingItem || !newItemData.title?.trim()) return;
-    const newId = `item-${Date.now()}`;
+    const newId = `${prefix}item-${Date.now()}`;
     const newItem: RoadmapItem = {
       id: newId,
       title: newItemData.title!.trim(),
