@@ -197,28 +197,82 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
           supabase.from("roadmap_items").select("*"),
         ]);
 
-        // An id "belongs" to this quarter if it starts with our prefix, OR (legacy q1 only)
-        // it doesn't start with any known quarter prefix at all.
-        const belongsToQuarter = (id: string) => {
-          if (id.startsWith(prefix)) return true;
-          if (quarter === "q1") {
-            return !KNOWN_QUARTER_PREFIXES.some(p => id.startsWith(p));
+        const allRows = rowsRes.data ?? [];
+        const allItems = itemsRes.data ?? [];
+
+        const belongsTo = (id: string, q: string) => {
+          const p = `${q}:`;
+          if (id.startsWith(p)) return true;
+          if (q === "q1") {
+            return !KNOWN_QUARTER_PREFIXES.some(pp => id.startsWith(pp));
           }
           return false;
         };
 
-        const filteredRows = (rowsRes.data ?? []).filter((r: any) => belongsToQuarter(r.id));
-        if (filteredRows.length > 0) {
-          setRows(filteredRows.map((r: any) => ({
+        let myRows = allRows.filter((r: any) => belongsTo(r.id, quarter));
+        let myItems = allItems.filter((i: any) => belongsTo(i.row_id, quarter));
+
+        // Seed Q2 (or other non-q1 quarters) from Q1 the first time, so the roadmap
+        // starts with the same info Q1 has, then evolves independently.
+        if (quarter !== "q1" && myRows.length === 0 && myItems.length === 0) {
+          const q1Rows = allRows.filter((r: any) => belongsTo(r.id, "q1"));
+          const q1Items = allItems.filter((i: any) => belongsTo(i.row_id, "q1"));
+
+          const stripQ1 = (id: string) => id.startsWith("q1:") ? id.slice(3) : id;
+
+          const seededRows = (q1Rows.length > 0 ? q1Rows.map((r: any, idx: number) => ({
+            id: prefix + stripQ1(r.id),
+            label: r.label,
+            section: r.section,
+            sort_order: idx,
+            updated_at: new Date().toISOString(),
+          })) : buildInitialRows(prefix).map((r, idx) => ({
+            id: r.id,
+            label: r.label,
+            section: r.section,
+            sort_order: idx,
+            updated_at: new Date().toISOString(),
+          })));
+
+          const seededItems = (q1Items.length > 0 ? q1Items.map((i: any) => ({
+            id: prefix + stripQ1(i.id),
+            title: i.title,
+            type: i.type,
+            objective_tag: i.objective_tag,
+            week_start: i.week_start,
+            week_end: i.week_end,
+            initiative_id: i.initiative_id,
+            row_id: prefix + stripQ1(i.row_id),
+            updated_at: new Date().toISOString(),
+          })) : buildInitialItems(prefix).map(i => ({
+            id: i.id,
+            title: i.title,
+            type: i.type,
+            objective_tag: i.objectiveTag,
+            week_start: i.weekStart,
+            week_end: i.weekEnd,
+            initiative_id: i.initiativeId || null,
+            row_id: i.rowId,
+            updated_at: new Date().toISOString(),
+          })));
+
+          if (seededRows.length > 0) await supabase.from("roadmap_rows").upsert(seededRows);
+          if (seededItems.length > 0) await supabase.from("roadmap_items").upsert(seededItems);
+
+          myRows = seededRows;
+          myItems = seededItems;
+        }
+
+        if (myRows.length > 0) {
+          setRows(myRows.map((r: any) => ({
             id: r.id,
             label: r.label,
             section: r.section as RowDef["section"],
           })));
         }
 
-        const filteredItems = (itemsRes.data ?? []).filter((i: any) => belongsToQuarter(i.row_id));
-        if (filteredItems.length > 0) {
-          setItems(filteredItems.map((i: any) => ({
+        if (myItems.length > 0) {
+          setItems(myItems.map((i: any) => ({
             id: i.id,
             title: i.title,
             type: i.type as RoadmapItem["type"],
