@@ -76,7 +76,7 @@ interface RowDef {
   section: "must" | "should" | "stabilization";
 }
 
-const initialRows: RowDef[] = [
+const baseInitialRows: RowDef[] = [
   { id: "onboarding", label: "Onboarding", section: "must" },
   { id: "cr", label: "Rediseño Fact. CR", section: "must" },
   { id: "items", label: "Creación de Items", section: "must" },
@@ -90,7 +90,7 @@ const initialRows: RowDef[] = [
   { id: "mejoras", label: "Estabilización - Mejoras", section: "stabilization" },
 ];
 
-const initialItems: RoadmapItem[] = [
+const baseInitialItems: RoadmapItem[] = [
   { id: "onboarding", title: "Onboarding", type: "feature", objectiveTag: "adoption", weekStart: 3, weekEnd: 3, initiativeId: "onboarding", rowId: "onboarding" },
   { id: "cr-mvp", title: "Rediseño Facturación CR 4.4", type: "feature", objectiveTag: "adoption", weekStart: 4, weekEnd: 6, initiativeId: "1", rowId: "cr" },
   { id: "cr-v2", title: "Rediseño Facturación CR V2", type: "feature", objectiveTag: "adoption", weekStart: 7, weekEnd: 7, initiativeId: "1", rowId: "cr" },
@@ -111,6 +111,26 @@ const initialItems: RoadmapItem[] = [
   { id: "mejoras-4", title: "Mejoras", type: "improvements", objectiveTag: "experience", weekStart: 26, weekEnd: 26, initiativeId: "2", rowId: "mejoras" },
 ];
 
+// Known quarter prefixes used to detect "foreign" namespaced ids that don't belong to the current quarter.
+const KNOWN_QUARTER_PREFIXES = ["q1:", "q2:", "q3:", "q4:"];
+
+function withPrefix(id: string, prefix: string) {
+  if (id.startsWith(prefix)) return id;
+  // Strip any other quarter prefix before applying current
+  for (const p of KNOWN_QUARTER_PREFIXES) {
+    if (id.startsWith(p)) return prefix + id.slice(p.length);
+  }
+  return prefix + id;
+}
+
+function buildInitialRows(prefix: string): RowDef[] {
+  return baseInitialRows.map(r => ({ ...r, id: prefix + r.id }));
+}
+
+function buildInitialItems(prefix: string): RoadmapItem[] {
+  return baseInitialItems.map(i => ({ ...i, id: prefix + i.id, rowId: prefix + i.rowId }));
+}
+
 interface DragState {
   item: RoadmapItem;
   offsetWeek: number;
@@ -126,11 +146,14 @@ interface ResizeState {
 interface RoadmapGanttProps {
   startSprint?: number;
   initialSprintCount?: number;
+  /** Quarter namespace for persistence — keeps each quarter's roadmap independent. */
+  quarter?: "q1" | "q2" | "q3" | "q4";
 }
 
-export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPRINT_COUNT }: RoadmapGanttProps = {}) {
-  const [items, setItems] = useState<RoadmapItem[]>(initialItems);
-  const [rows, setRows] = useState<RowDef[]>(initialRows);
+export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPRINT_COUNT, quarter = "q1" }: RoadmapGanttProps = {}) {
+  const prefix = `${quarter}:`;
+  const [items, setItems] = useState<RoadmapItem[]>(() => buildInitialItems(prefix));
+  const [rows, setRows] = useState<RowDef[]>(() => buildInitialRows(prefix));
   const [loading, setLoading] = useState(true);
   const [selectedInitiative, setSelectedInitiative] = useState<typeof initiatives[0] | null>(null);
   const [editingItem, setEditingItem] = useState<RoadmapItem | null>(null);
@@ -165,7 +188,7 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
   // Delete row confirmation
   const [deletingRow, setDeletingRow] = useState<RowDef | null>(null);
 
-  // Load data from Supabase on mount
+  // Load data from Supabase on mount — filter by current quarter prefix.
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -174,16 +197,28 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
           supabase.from("roadmap_items").select("*"),
         ]);
 
-        if (rowsRes.data && rowsRes.data.length > 0) {
-          setRows(rowsRes.data.map((r: any) => ({
+        // An id "belongs" to this quarter if it starts with our prefix, OR (legacy q1 only)
+        // it doesn't start with any known quarter prefix at all.
+        const belongsToQuarter = (id: string) => {
+          if (id.startsWith(prefix)) return true;
+          if (quarter === "q1") {
+            return !KNOWN_QUARTER_PREFIXES.some(p => id.startsWith(p));
+          }
+          return false;
+        };
+
+        const filteredRows = (rowsRes.data ?? []).filter((r: any) => belongsToQuarter(r.id));
+        if (filteredRows.length > 0) {
+          setRows(filteredRows.map((r: any) => ({
             id: r.id,
             label: r.label,
             section: r.section as RowDef["section"],
           })));
         }
 
-        if (itemsRes.data && itemsRes.data.length > 0) {
-          setItems(itemsRes.data.map((i: any) => ({
+        const filteredItems = (itemsRes.data ?? []).filter((i: any) => belongsToQuarter(i.row_id));
+        if (filteredItems.length > 0) {
+          setItems(filteredItems.map((i: any) => ({
             id: i.id,
             title: i.title,
             type: i.type as RoadmapItem["type"],
@@ -201,7 +236,7 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
       }
     };
     loadData();
-  }, []);
+  }, [prefix, quarter]);
 
   // Persist item to Supabase
   const saveItem = useCallback(async (item: RoadmapItem) => {
@@ -298,7 +333,7 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
 
   const handleCreateItem = useCallback(() => {
     if (!creatingItem || !newItemData.title?.trim()) return;
-    const newId = `item-${Date.now()}`;
+    const newId = `${prefix}item-${Date.now()}`;
     const newItem: RoadmapItem = {
       id: newId,
       title: newItemData.title!.trim(),
@@ -325,7 +360,7 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
   // --- Add Row ---
   const handleAddRow = useCallback(() => {
     if (!newRowData.label.trim()) return;
-    const newId = `row-${Date.now()}`;
+    const newId = `${prefix}row-${Date.now()}`;
     const newRow: RowDef = {
       id: newId,
       label: newRowData.label.trim(),
