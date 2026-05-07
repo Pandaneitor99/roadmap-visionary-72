@@ -360,7 +360,7 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
   // --- Add Row ---
   const handleAddRow = useCallback(() => {
     if (!newRowData.label.trim()) return;
-    const newId = `row-${Date.now()}`;
+    const newId = `${prefix}row-${Date.now()}`;
     const newRow: RowDef = {
       id: newId,
       label: newRowData.label.trim(),
