@@ -188,7 +188,7 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
   // Delete row confirmation
   const [deletingRow, setDeletingRow] = useState<RowDef | null>(null);
 
-  // Load data from Supabase on mount
+  // Load data from Supabase on mount — filter by current quarter prefix.
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -197,16 +197,28 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
           supabase.from("roadmap_items").select("*"),
         ]);
 
-        if (rowsRes.data && rowsRes.data.length > 0) {
-          setRows(rowsRes.data.map((r: any) => ({
+        // An id "belongs" to this quarter if it starts with our prefix, OR (legacy q1 only)
+        // it doesn't start with any known quarter prefix at all.
+        const belongsToQuarter = (id: string) => {
+          if (id.startsWith(prefix)) return true;
+          if (quarter === "q1") {
+            return !KNOWN_QUARTER_PREFIXES.some(p => id.startsWith(p));
+          }
+          return false;
+        };
+
+        const filteredRows = (rowsRes.data ?? []).filter((r: any) => belongsToQuarter(r.id));
+        if (filteredRows.length > 0) {
+          setRows(filteredRows.map((r: any) => ({
             id: r.id,
             label: r.label,
             section: r.section as RowDef["section"],
           })));
         }
 
-        if (itemsRes.data && itemsRes.data.length > 0) {
-          setItems(itemsRes.data.map((i: any) => ({
+        const filteredItems = (itemsRes.data ?? []).filter((i: any) => belongsToQuarter(i.row_id));
+        if (filteredItems.length > 0) {
+          setItems(filteredItems.map((i: any) => ({
             id: i.id,
             title: i.title,
             type: i.type as RoadmapItem["type"],
@@ -224,7 +236,7 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
       }
     };
     loadData();
-  }, []);
+  }, [prefix, quarter]);
 
   // Persist item to Supabase
   const saveItem = useCallback(async (item: RoadmapItem) => {
