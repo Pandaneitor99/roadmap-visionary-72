@@ -10,7 +10,7 @@ export default function Roadmap() {
         </p>
       </div>
 
-      <RoadmapGantt />
+      <RoadmapGantt quarter="q1" />
     </div>
   );
 }
