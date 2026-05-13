@@ -16,6 +16,7 @@ export default function DashboardLayout() {
               <Menu className="h-5 w-5" />
             </SidebarTrigger>
             <div className="flex-1" />
+            <span className="text-sm font-medium text-muted-foreground">Equipo Mobile</span>
             <img
               src={alegraLogo}
               alt="Alegra"
