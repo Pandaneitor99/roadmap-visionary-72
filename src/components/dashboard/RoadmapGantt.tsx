@@ -111,6 +111,8 @@ const baseInitialItems: RoadmapItem[] = [
   { id: "mejoras-4", title: "Mejoras", type: "improvements", objectiveTag: "experience", weekStart: 26, weekEnd: 26, initiativeId: "2", rowId: "mejoras" },
 ];
 
+type Quarter = "q1" | "q2" | "q3" | "q4";
+
 // Known quarter prefixes used to detect "foreign" namespaced ids that don't belong to the current quarter.
 const KNOWN_QUARTER_PREFIXES = ["q1:", "q2:", "q3:", "q4:"];
 
@@ -147,10 +149,12 @@ interface RoadmapGanttProps {
   startSprint?: number;
   initialSprintCount?: number;
   /** Quarter namespace for persistence — keeps each quarter's roadmap independent. */
-  quarter?: "q1" | "q2" | "q3" | "q4";
+  quarter?: Quarter;
+  /** Quarter to clone from the first time this one is opened. Only used while empty. */
+  seedFrom?: Quarter;
 }
 
-export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPRINT_COUNT, quarter = "q1" }: RoadmapGanttProps = {}) {
+export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPRINT_COUNT, quarter = "q1", seedFrom = "q1" }: RoadmapGanttProps = {}) {
   const prefix = `${quarter}:`;
   const [items, setItems] = useState<RoadmapItem[]>(() => buildInitialItems(prefix));
   const [rows, setRows] = useState<RowDef[]>(() => buildInitialRows(prefix));
@@ -168,7 +172,8 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
   const [resizingItemId, setResizingItemId] = useState<string | null>(null);
   // Expand initiative label column when sidebar is collapsed (more horizontal space available)
   const { state: sidebarState } = useSidebar();
-  const labelWidth = sidebarState === "collapsed" ? 320 : 160;
+  const sidebarCollapsed = sidebarState === "collapsed";
+  const labelWidth = sidebarCollapsed ? 320 : 160;
 
   // New item creation state
   const [creatingItem, setCreatingItem] = useState<{ rowId: string; week: number } | null>(null);
@@ -212,16 +217,17 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
         let myRows = allRows.filter((r: any) => belongsTo(r.id, quarter));
         let myItems = allItems.filter((i: any) => belongsTo(i.row_id, quarter));
 
-        // Seed Q2 (or other non-q1 quarters) from Q1 the first time, so the roadmap
-        // starts with the same info Q1 has, then evolves independently.
-        if (quarter !== "q1" && myRows.length === 0 && myItems.length === 0) {
-          const q1Rows = allRows.filter((r: any) => belongsTo(r.id, "q1"));
-          const q1Items = allItems.filter((i: any) => belongsTo(i.row_id, "q1"));
+        // Seed a non-q1 quarter from its source quarter the first time it's opened, so the
+        // roadmap starts with the same info that one has, then evolves independently.
+        if (quarter !== "q1" && quarter !== seedFrom && myRows.length === 0 && myItems.length === 0) {
+          const srcPrefix = `${seedFrom}:`;
+          const srcRows = allRows.filter((r: any) => belongsTo(r.id, seedFrom));
+          const srcItems = allItems.filter((i: any) => belongsTo(i.row_id, seedFrom));
 
-          const stripQ1 = (id: string) => id.startsWith("q1:") ? id.slice(3) : id;
+          const stripSrc = (id: string) => id.startsWith(srcPrefix) ? id.slice(srcPrefix.length) : id;
 
-          const seededRows = (q1Rows.length > 0 ? q1Rows.map((r: any, idx: number) => ({
-            id: prefix + stripQ1(r.id),
+          const seededRows = (srcRows.length > 0 ? srcRows.map((r: any, idx: number) => ({
+            id: prefix + stripSrc(r.id),
             label: r.label,
             section: r.section,
             sort_order: idx,
@@ -234,15 +240,15 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
             updated_at: new Date().toISOString(),
           })));
 
-          const seededItems = (q1Items.length > 0 ? q1Items.map((i: any) => ({
-            id: prefix + stripQ1(i.id),
+          const seededItems = (srcItems.length > 0 ? srcItems.map((i: any) => ({
+            id: prefix + stripSrc(i.id),
             title: i.title,
             type: i.type,
             objective_tag: i.objective_tag,
             week_start: i.week_start,
             week_end: i.week_end,
             initiative_id: i.initiative_id,
-            row_id: prefix + stripQ1(i.row_id),
+            row_id: prefix + stripSrc(i.row_id),
             updated_at: new Date().toISOString(),
           })) : buildInitialItems(prefix).map(i => ({
             id: i.id,
@@ -290,7 +296,7 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
       }
     };
     loadData();
-  }, [prefix, quarter]);
+  }, [prefix, quarter, seedFrom]);
 
   // Persist item to Supabase
   const saveItem = useCallback(async (item: RoadmapItem) => {
@@ -629,6 +635,7 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
             onDeleteItem={setDeletingItem}
             onDeleteRow={setDeletingRow}
             labelWidth={labelWidth}
+            expandLabels={sidebarCollapsed}
           />
         );
       })}
@@ -1085,6 +1092,8 @@ interface RoadmapRowProps {
   onDeleteItem: (item: RoadmapItem) => void;
   onDeleteRow: (row: RowDef) => void;
   labelWidth?: number;
+  /** When true (sidebar collapsed), show full initiative titles wrapping instead of truncating. */
+  expandLabels?: boolean;
 }
 
 function RoadmapRow({
@@ -1110,6 +1119,7 @@ function RoadmapRow({
   onDeleteItem,
   onDeleteRow,
   labelWidth = 160,
+  expandLabels = false,
 }: RoadmapRowProps) {
   return (
     <div
@@ -1119,13 +1129,16 @@ function RoadmapRow({
     >
       {/* Row label with grip handle, edit, delete, and move buttons */}
       <div
-        className="group/label flex items-center gap-0.5 truncate text-xs font-medium text-foreground pr-1 cursor-grab active:cursor-grabbing"
+        className={`group/label flex items-center gap-0.5 text-xs font-medium text-foreground pr-1 cursor-grab active:cursor-grabbing ${expandLabels ? "" : "truncate"}`}
         draggable
         onDragStart={e => onRowDragStart(e, row.id)}
         title={row.label}
       >
         <GripVertical className="h-3 w-3 text-muted-foreground flex-shrink-0 opacity-40 hover:opacity-100 transition-opacity" />
-        <span className="overflow-hidden whitespace-nowrap flex-1" style={{ textOverflow: "ellipsis" }}>
+        <span
+          className={`flex-1 ${expandLabels ? "whitespace-normal leading-tight break-words" : "overflow-hidden whitespace-nowrap"}`}
+          style={expandLabels ? undefined : { textOverflow: "ellipsis" }}
+        >
           {row.label}
         </span>
         {items.length > 0 && (
