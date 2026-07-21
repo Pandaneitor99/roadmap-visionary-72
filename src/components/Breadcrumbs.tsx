@@ -6,8 +6,16 @@ const routeLabels: Record<string, string> = {
   "okrs": "OKRs",
   "iniciativas": "Iniciativas",
   "roadmap": "Roadmap",
+  "roadmap-review": "Roadmap Review",
   "q4-2025": "Q4 2025",
   "logros": "Logros",
+};
+
+// Route prefixes that namespace a quarter of their own; anything else falls back to Q1.
+const quarterLabels: Record<string, string> = {
+  "q4-2025": "Q4 2025",
+  "q2-2026": "Q2 2026",
+  "q3-2026": "Q3 2026",
 };
 
 export function Breadcrumbs() {
@@ -25,30 +33,18 @@ export function Breadcrumbs() {
     );
   }
 
-  const isQ4 = pathSegments[0] === "q4-2025";
-  const isQ2 = pathSegments[0] === "q2-2026";
-  const quarterLabel = isQ4 ? "Q4 2025" : isQ2 ? "Q2 2026" : "Q1 2026";
-  
+  const quarterSegment = pathSegments[0];
+  const quarterLabel = quarterLabels[quarterSegment];
+
   const breadcrumbs: { label: string; path: string }[] = [];
-  
-  if (isQ4) {
-    breadcrumbs.push({ label: "Q4 2025", path: "/q4-2025" });
+
+  if (quarterLabel) {
+    breadcrumbs.push({ label: quarterLabel, path: `/${quarterSegment}` });
     if (pathSegments.length > 1) {
       const subPage = pathSegments[1];
-      breadcrumbs.push({ 
-        label: routeLabels[subPage] || subPage, 
-        path: `/${pathSegments.join("/")}` 
-      });
-    } else {
-      breadcrumbs[0].label = "Dashboard";
-    }
-  } else if (isQ2) {
-    breadcrumbs.push({ label: "Q2 2026", path: "/q2-2026" });
-    if (pathSegments.length > 1) {
-      const subPage = pathSegments[1];
-      breadcrumbs.push({ 
-        label: routeLabels[subPage] || subPage, 
-        path: `/${pathSegments.join("/")}` 
+      breadcrumbs.push({
+        label: routeLabels[subPage] || subPage,
+        path: `/${pathSegments.join("/")}`
       });
     } else {
       breadcrumbs[0].label = "Dashboard";
