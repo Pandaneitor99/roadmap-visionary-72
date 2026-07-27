@@ -643,31 +643,22 @@ function TradeoffCell({
 
 // === Sección 2: North Star (MAC - Tendencia) ===
 
-const macTrendDataFull = [
-  { month: "Oct '25", Pagos: 7601, CORE: 4553, LITE: 3030 },
-  { month: "Nov '25", Pagos: 7496, CORE: 4436, LITE: 2945 },
-  { month: "Dic '25", Pagos: 7974, CORE: 4668, LITE: 3254 },
-  { month: "Ene '26", Pagos: 7504, CORE: 4393, LITE: 2997 },
-  { month: "Feb '26", Pagos: 7570, CORE: 4427, LITE: 3048 },
-  { month: "Mar '26", Pagos: 7977, CORE: 4936, LITE: 3412 },
+// Chart rg181rta — MAC (Usuarios Pagos) comparación año contra año, Ene–Jun.
+const macTrendData = [
+  { month: "Ene", y2026: 7186, y2025: 6681 },
+  { month: "Feb", y2026: 7225, y2025: 6544 },
+  { month: "Mar", y2026: 7643, y2025: 6517 },
+  { month: "Abr", y2026: 8241, y2025: 6325 },
+  { month: "May", y2026: 8854, y2025: 6475 },
+  { month: "Jun", y2026: 8785, y2025: 6434 },
 ];
 
-// Sin Búsqueda ni gráficos (chart yhghuf5q)
-const macTrendDataSinExtras = [
-  { month: "Oct '25", Pagos: 7108, CORE: 3972, LITE: 2398 },
-  { month: "Nov '25", Pagos: 7017, CORE: 3798, LITE: 2263 },
-  { month: "Dic '25", Pagos: 7442, CORE: 3953, LITE: 2509 },
-  { month: "Ene '26", Pagos: 7004, CORE: 3688, LITE: 2292 },
-  { month: "Feb '26", Pagos: 7071, CORE: 3721, LITE: 2331 },
-  { month: "Mar '26", Pagos: 7384, CORE: 4117, LITE: 2600 },
-];
-
-// Variación por país: Marzo '26 vs Octubre '25
+// Variación por país: Jun '26 vs Jun '25 (chart gxbjwfwt, comparación año contra año)
 const countryVariation = [
-  { country: "Colombia", march: 5128, october: 4892, color: ALEGRA_GREEN },
-  { country: "República Dominicana", march: 1197, october: 1135, color: "#0066FF" },
-  { country: "México", march: 728, october: 677, color: "#FF6B00" },
-  { country: "Costa Rica", march: 235, october: 232, color: "#06B6D4" },
+  { country: "Colombia", current: 5571, prev: 4210, color: ALEGRA_GREEN },
+  { country: "República Dominicana", current: 1317, prev: 992, color: "#0066FF" },
+  { country: "México", current: 874, prev: 522, color: "#FF6B00" },
+  { country: "Costa Rica", current: 313, prev: 164, color: "#06B6D4" },
 ];
 
 function SideMetricCard({
@@ -676,12 +667,14 @@ function SideMetricCard({
   delta,
   color,
   highlight,
+  compareLabel = "vs Oct '25",
 }: {
   label: string;
   value: number;
   delta: number;
   color: string;
   highlight?: boolean;
+  compareLabel?: string;
 }) {
   const up = delta >= 0;
   return (
@@ -707,24 +700,16 @@ function SideMetricCard({
         {up ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
         {up ? "+" : ""}
         {delta.toFixed(1)}%
-        <span className="ml-1 text-[10px] font-medium text-neutral-500">vs Oct '25</span>
+        <span className="ml-1 text-[10px] font-medium text-neutral-500">{compareLabel}</span>
       </p>
     </div>
   );
 }
 
 function Section2() {
-  const [trendVariant, setTrendVariant] = useState<"full" | "sinExtras">("full");
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
-  const macTrendData = trendVariant === "full" ? macTrendDataFull : macTrendDataSinExtras;
   const last = macTrendData[macTrendData.length - 1];
-  const first = macTrendData[0];
-  const deltaPct = (((last.Pagos - first.Pagos) / first.Pagos) * 100).toFixed(1);
-  const positive = Number(deltaPct) >= 0;
-  const coreDelta = (((last.CORE - first.CORE) / first.CORE) * 100).toFixed(1);
-  const liteDelta = (((last.LITE - first.LITE) / first.LITE) * 100).toFixed(1);
-  const coreUp = Number(coreDelta) >= 0;
-  const liteUp = Number(liteDelta) >= 0;
+  const deltaPct = (((last.y2026 - last.y2025) / last.y2025) * 100).toFixed(1);
 
   return (
     <div className="space-y-8">
@@ -796,43 +781,20 @@ function Section2() {
             <div>
               <h3 className="text-lg font-bold text-neutral-900">MAC — Tendencia</h3>
               <p className="mt-0.5 text-xs text-neutral-500">
-                Últimos 6 meses · Usuarios Pagos, segmentados por CORE y LITE
+                Ene–Jun · Usuarios Pagos · 2026 vs 2025
               </p>
             </div>
           </div>
 
-          {/* Toggle entre las dos vistas de MAC */}
+          {/* Chip de la vista de MAC */}
           <div className="mb-4 flex items-center justify-between gap-3 flex-wrap">
             <div className="inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1">
-              <button
-                onClick={() => setTrendVariant("full")}
-                className={cn(
-                  "rounded-md px-3 py-1.5 text-xs font-semibold transition-all",
-                  trendVariant === "full"
-                    ? "bg-white text-neutral-900 shadow-sm"
-                    : "text-neutral-500 hover:text-neutral-700",
-                )}
-              >
+              <span className="rounded-md bg-white px-3 py-1.5 text-xs font-semibold text-neutral-900 shadow-sm">
                 MAC — Tendencia
-              </button>
-              <button
-                onClick={() => setTrendVariant("sinExtras")}
-                className={cn(
-                  "rounded-md px-3 py-1.5 text-xs font-semibold transition-all",
-                  trendVariant === "sinExtras"
-                    ? "bg-white text-neutral-900 shadow-sm"
-                    : "text-neutral-500 hover:text-neutral-700",
-                )}
-              >
-                Sin búsqueda ni gráficos
-              </button>
+              </span>
             </div>
             <a
-              href={
-                trendVariant === "full"
-                  ? "https://app.amplitude.com/analytics/alegra/chart/wy27awa1"
-                  : "https://app.amplitude.com/analytics/alegra/chart/yhghuf5q"
-              }
+              href="https://app.amplitude.com/analytics/alegra/chart/rg181rta"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1 text-xs font-medium text-neutral-500 hover:text-neutral-900"
@@ -874,8 +836,8 @@ function Section2() {
                 />
                 <Line
                   type="monotone"
-                  dataKey="Pagos"
-                  name="Usuarios Pagos"
+                  dataKey="y2026"
+                  name="2026"
                   stroke={ALEGRA_GREEN}
                   strokeWidth={3}
                   dot={{ r: 4, fill: ALEGRA_GREEN }}
@@ -883,16 +845,11 @@ function Section2() {
                 />
                 <Line
                   type="monotone"
-                  dataKey="CORE"
-                  stroke="#1f2937"
+                  dataKey="y2025"
+                  name="2025"
+                  stroke="#94a3b8"
                   strokeWidth={2}
-                  dot={{ r: 3 }}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="LITE"
-                  stroke="#FF6B00"
-                  strokeWidth={2}
+                  strokeDasharray="5 5"
                   dot={{ r: 3 }}
                 />
               </LineChart>
@@ -900,48 +857,38 @@ function Section2() {
           </div>
         </div>
 
-        {/* Cards laterales: dinámicas según el toggle */}
+        {/* Card lateral: MAC actual (Jun 2026) */}
         <div className="flex flex-col gap-4 lg:col-span-1">
           <SideMetricCard
             label="MAC actual"
-            value={last.Pagos}
+            value={last.y2026}
             delta={Number(deltaPct)}
             color={ALEGRA_GREEN}
             highlight
-          />
-          <SideMetricCard
-            label="MAC Core actual"
-            value={last.CORE}
-            delta={Number(coreDelta)}
-            color="#1f2937"
-          />
-          <SideMetricCard
-            label="MAC Lite actual"
-            value={last.LITE}
-            delta={Number(liteDelta)}
-            color="#FF6B00"
+            compareLabel="vs Jun '25"
           />
         </div>
       </div>
 
-      {/* Variación por país: Marzo vs Octubre — clic para filtrar la línea */}
+      {/* Variación por país: Jun '26 vs Jun '25 — clic para filtrar la línea */}
       <div>
-        <div className="mb-3 flex items-center justify-between">
+        <div className="mb-3 flex items-center justify-between gap-3">
           <h3 className="text-base font-bold text-neutral-900">
-            MAC por país — Marzo '26 vs Octubre '25
+            MAC por país — Jun '26 vs Jun '25
           </h3>
           {selectedCountry && (
             <button
               onClick={() => setSelectedCountry(null)}
-              className="text-xs font-medium text-neutral-500 hover:text-neutral-900"
+              className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-neutral-300 bg-white px-3 py-1.5 text-xs font-semibold text-neutral-700 shadow-sm transition-all hover:border-neutral-400 hover:bg-neutral-50 hover:text-neutral-900"
             >
-              Limpiar filtro ({selectedCountry}) ✕
+              Limpiar filtros
+              <span className="text-neutral-400">✕</span>
             </button>
           )}
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {countryVariation.map((c) => {
-            const delta = ((c.march - c.october) / c.october) * 100;
+            const delta = ((c.current - c.prev) / c.prev) * 100;
             const isUp = delta >= 0;
             const isActive = selectedCountry === c.country;
             return (
@@ -963,7 +910,7 @@ function Section2() {
                 </p>
                 <div className="mt-1 flex items-baseline justify-between gap-2">
                   <p className="text-2xl font-bold text-neutral-900">
-                    {c.march.toLocaleString("es-CO")}
+                    {c.current.toLocaleString("es-CO")}
                   </p>
                   <p
                     className={cn(
@@ -980,7 +927,7 @@ function Section2() {
                     {delta.toFixed(1)}%
                   </p>
                 </div>
-                <p className="mt-0.5 text-[10px] font-medium text-neutral-400">vs Oct '25</p>
+                <p className="mt-0.5 text-[10px] font-medium text-neutral-400">vs Jun '25</p>
               </button>
             );
           })}
@@ -1001,14 +948,24 @@ function Section2() {
 
 // === MAC por país (Line + Pie) ===
 
-const macLinePerCountry = [
-  { month: "Oct '25", Colombia: 4892, "República Dominicana": 1135, México: 677, "Costa Rica": 232 },
-  { month: "Nov '25", Colombia: 4882, "República Dominicana": 1084, México: 667, "Costa Rica": 225 },
-  { month: "Dic '25", Colombia: 5254, "República Dominicana": 1124, México: 729, "Costa Rica": 209 },
-  { month: "Ene '26", Colombia: 4842, "República Dominicana": 1083, México: 659, "Costa Rica": 227 },
-  { month: "Feb '26", Colombia: 4925, "República Dominicana": 1111, México: 657, "Costa Rica": 222 },
-  { month: "Mar '26", Colombia: 5128, "República Dominicana": 1197, México: 728, "Costa Rica": 235 },
-];
+const trendMonths = ["Ene", "Feb", "Mar", "Abr", "May", "Jun"];
+
+// Chart gxbjwfwt — MAC por país, comparación año contra año (2026 vs 2025).
+const countryTrend: Record<string, { "2026": number[]; "2025": number[] }> = {
+  Colombia: { "2026": [4660, 4718, 4926, 5336, 5678, 5571], "2025": [4368, 4318, 4237, 4201, 4265, 4210] },
+  "República Dominicana": { "2026": [1034, 1050, 1140, 1198, 1326, 1317], "2025": [1075, 1022, 1051, 962, 1004, 992] },
+  México: { "2026": [630, 632, 708, 757, 816, 874], "2025": [475, 469, 484, 437, 482, 522] },
+  "Costa Rica": { "2026": [213, 218, 222, 251, 296, 313], "2025": [147, 149, 156, 143, 154, 164] },
+};
+
+// Vista por defecto: los 4 países (serie 2026).
+const macLinePerCountry = trendMonths.map((month, i) => ({
+  month,
+  Colombia: countryTrend.Colombia["2026"][i],
+  "República Dominicana": countryTrend["República Dominicana"]["2026"][i],
+  México: countryTrend.México["2026"][i],
+  "Costa Rica": countryTrend["Costa Rica"]["2026"][i],
+}));
 
 const macPieData = [
   { name: "Colombia", value: 5132, color: ALEGRA_GREEN },
@@ -1031,9 +988,16 @@ function MacPorPais({ selectedCountry }: { selectedCountry?: string | null }) {
     "Costa Rica": "#06B6D4",
   };
   const allCountries = ["Colombia", "República Dominicana", "México", "Costa Rica"];
-  const visible = selectedCountry && allCountries.includes(selectedCountry)
-    ? [selectedCountry]
-    : allCountries;
+  const isCountrySelected = Boolean(selectedCountry && allCountries.includes(selectedCountry));
+
+  // Con país seleccionado, comparamos 2026 vs el mismo periodo del año pasado (2025).
+  const chartData = isCountrySelected
+    ? trendMonths.map((month, i) => ({
+        month,
+        "2026": countryTrend[selectedCountry!]["2026"][i],
+        "2025": countryTrend[selectedCountry!]["2025"][i],
+      }))
+    : macLinePerCountry;
 
   return (
     <div className="grid gap-6 lg:grid-cols-5">
@@ -1043,8 +1007,8 @@ function MacPorPais({ selectedCountry }: { selectedCountry?: string | null }) {
           <div>
             <h3 className="text-base font-bold text-neutral-900">MAC — Tendencia por país</h3>
             <p className="mt-1 text-xs text-neutral-500">
-              Últimos 6 meses ·{" "}
-              {selectedCountry ? `Filtrado: ${selectedCountry}` : "Top 4 países por volumen"}
+              Ene–Jun ·{" "}
+              {isCountrySelected ? `${selectedCountry}: 2026 vs 2025` : "Top 4 países por volumen"}
             </p>
           </div>
           <a
@@ -1058,22 +1022,45 @@ function MacPorPais({ selectedCountry }: { selectedCountry?: string | null }) {
         </div>
         <div className="h-[280px] w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={macLinePerCountry} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+            <LineChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
               <XAxis dataKey="month" stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={{ stroke: "#e5e7eb" }} tickLine={false} />
               <YAxis stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
               <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} />
               <Legend iconType="circle" wrapperStyle={{ fontSize: 11, paddingTop: 8 }} />
-              {visible.map((c) => (
-                <Line
-                  key={c}
-                  type="monotone"
-                  dataKey={c}
-                  stroke={countryColors[c]}
-                  strokeWidth={c === "Colombia" ? 3 : 2}
-                  dot={{ r: 3 }}
-                />
-              ))}
+              {isCountrySelected ? (
+                <>
+                  <Line
+                    type="monotone"
+                    dataKey="2026"
+                    name={`${selectedCountry} 2026`}
+                    stroke={countryColors[selectedCountry!]}
+                    strokeWidth={3}
+                    dot={{ r: 3 }}
+                    activeDot={{ r: 5 }}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="2025"
+                    name={`${selectedCountry} 2025`}
+                    stroke="#94a3b8"
+                    strokeWidth={2}
+                    strokeDasharray="5 5"
+                    dot={{ r: 3 }}
+                  />
+                </>
+              ) : (
+                allCountries.map((c) => (
+                  <Line
+                    key={c}
+                    type="monotone"
+                    dataKey={c}
+                    stroke={countryColors[c]}
+                    strokeWidth={c === "Colombia" ? 3 : 2}
+                    dot={{ r: 3 }}
+                  />
+                ))
+              )}
             </LineChart>
           </ResponsiveContainer>
         </div>
