@@ -1115,13 +1115,14 @@ function MacPorPais({ selectedCountry }: { selectedCountry?: string | null }) {
 
 // === Tasa de Adopción ===
 
-// Por país, Junio 2026. wac (Real, acciones) = chart hqcerbqk · wau (Adopción, entran) = chart 5vlf3f1x.
+// Por país. wau (Adopción, entran) = chart 5vlf3f1x · wac (Real, acciones) = chart hqcerbqk.
+// Valores de Junio 2026 y su base de Enero '26 para calcular la variación en el año.
 const adoptionByCountry = [
-  { country: "Colombia", wac: 14.8, wau: 25.7 },
-  { country: "Rep. Dominicana", wac: 28.9, wau: 48.5 },
-  { country: "México", wac: 16.4, wau: 31.3 },
-  { country: "Panamá", wac: 23.2, wau: 37.9 },
-  { country: "Costa Rica", wac: 22.7, wau: 43.0 },
+  { country: "Colombia", color: ALEGRA_GREEN, wau: 25.7, wauEne: 27.8, wac: 14.8, wacEne: 15.4 },
+  { country: "Rep. Dominicana", color: "#0066FF", wau: 48.5, wauEne: 52.0, wac: 28.9, wacEne: 30.1 },
+  { country: "México", color: "#FF6B00", wau: 31.3, wauEne: 31.3, wac: 16.4, wacEne: 15.9 },
+  { country: "Panamá", color: "#7C3AED", wau: 37.9, wauEne: 48.1, wac: 23.2, wacEne: 28.8 },
+  { country: "Costa Rica", color: "#06B6D4", wau: 43.0, wauEne: 42.4, wac: 22.7, wacEne: 21.6 },
 ];
 
 // Evolución mensual % usuarios pagos activos (Ene → Jun '26) - chart rbp5ch2z
@@ -1134,6 +1135,40 @@ const adopcionMensualSeries = [
   { month: "May", adopcion: 30.3, real: 24.1 },
   { month: "Jun", adopcion: 29.7, real: 23.9 },
 ];
+
+function AdoptionMetricRow({
+  label,
+  labelColor,
+  value,
+  base,
+}: {
+  label: string;
+  labelColor: string;
+  value: number;
+  base: number;
+}) {
+  const delta = ((value - base) / base) * 100;
+  const up = delta >= 0;
+  return (
+    <div>
+      <p className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: labelColor }}>
+        {label}
+      </p>
+      <div className="mt-0.5 flex items-baseline justify-between gap-1">
+        <p className="text-xl font-bold text-neutral-900">{value.toFixed(1)}%</p>
+        <span
+          className={cn(
+            "flex items-center gap-0.5 text-[11px] font-bold",
+            up ? "text-emerald-600" : "text-red-600",
+          )}
+        >
+          {up ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+          {up ? "+" : ""}{delta.toFixed(1)}%
+        </span>
+      </div>
+    </div>
+  );
+}
 
 function TasaAdopcion() {
   // Chart rbp5ch2z (Ene → Jun '26). Valores actuales = Junio; delta = Jun vs Ene.
@@ -1306,6 +1341,28 @@ function TasaAdopcion() {
             </LineChart>
           </ResponsiveContainer>
         </div>
+      </div>
+
+      {/* Cards por país: Adopción y Adopción Real (Junio 2026 vs Enero '26) */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        {adoptionByCountry.map((c) => (
+          <div
+            key={c.country}
+            className="rounded-2xl border border-neutral-200 bg-white px-4 py-3 shadow-sm"
+            style={{ borderTop: `3px solid ${c.color}` }}
+          >
+            <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
+              {c.country}
+            </p>
+            <div className="mt-2">
+              <AdoptionMetricRow label="Adopción" labelColor="#0066FF" value={c.wau} base={c.wauEne} />
+            </div>
+            <div className="mt-2 border-t border-neutral-100 pt-2">
+              <AdoptionMetricRow label="Adopción Real" labelColor={ALEGRA_GREEN} value={c.wac} base={c.wacEne} />
+            </div>
+            <p className="mt-2 text-[9px] font-medium text-neutral-400">vs Ene '26</p>
+          </div>
+        ))}
       </div>
 
       {/* Chart por país */}
