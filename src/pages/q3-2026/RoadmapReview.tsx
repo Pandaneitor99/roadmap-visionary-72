@@ -1118,11 +1118,11 @@ function MacPorPais({ selectedCountry }: { selectedCountry?: string | null }) {
 // Por país. wau (Adopción, entran) = chart 5vlf3f1x · wac (Real, acciones) = chart hqcerbqk.
 // Valores de Junio 2026 y su base de Enero '26 para calcular la variación en el año.
 const adoptionByCountry = [
-  { country: "Colombia", color: ALEGRA_GREEN, wau: 25.7, wauEne: 27.8, wac: 14.8, wacEne: 15.4 },
-  { country: "Rep. Dominicana", color: "#0066FF", wau: 48.5, wauEne: 52.0, wac: 28.9, wacEne: 30.1 },
-  { country: "México", color: "#FF6B00", wau: 31.3, wauEne: 31.3, wac: 16.4, wacEne: 15.9 },
-  { country: "Panamá", color: "#7C3AED", wau: 37.9, wauEne: 48.1, wac: 23.2, wacEne: 28.8 },
-  { country: "Costa Rica", color: "#06B6D4", wau: 43.0, wauEne: 42.4, wac: 22.7, wacEne: 21.6 },
+  { country: "Colombia", color: ALEGRA_GREEN, wau: 25.7, wauEne: 27.8, wac: 20.7, wacEne: 18.9 },
+  { country: "Rep. Dominicana", color: "#0066FF", wau: 48.5, wauEne: 52.0, wac: 39.5, wacEne: 36.2 },
+  { country: "México", color: "#FF6B00", wau: 31.3, wauEne: 31.3, wac: 24.0, wacEne: 19.9 },
+  { country: "Panamá", color: "#7C3AED", wau: 37.9, wauEne: 48.1, wac: 30.4, wacEne: 34.9 },
+  { country: "Costa Rica", color: "#06B6D4", wau: 43.0, wauEne: 42.4, wac: 34.1, wacEne: 27.6 },
 ];
 
 // Evolución mensual % usuarios pagos activos (Ene → Jun '26) - chart rbp5ch2z
