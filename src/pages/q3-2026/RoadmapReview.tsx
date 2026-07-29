@@ -1123,24 +1123,25 @@ const adoptionByCountry = [
   { country: "Costa Rica", wac: 20.0, wau: 38.0 },
 ];
 
-// Evolución mensual % usuarios pagos activos (Oct'25 → Mar'26) - chart rbp5ch2z
+// Evolución mensual % usuarios pagos activos (Ene → Jun '26) - chart rbp5ch2z
+// adopcion = Ingresan a la app (WAU/Pagos) · real = Realizan una acción (WAC/Pagos)
 const adopcionMensualSeries = [
-  { month: "Oct '25", adopcion: 30.5, real: 19.8 },
-  { month: "Nov '25", adopcion: 30.2, real: 19.9 },
-  { month: "Dic '25", adopcion: 31.0, real: 20.7 },
-  { month: "Ene '26", adopcion: 30.8, real: 21.0 },
-  { month: "Feb '26", adopcion: 30.6, real: 21.3 },
-  { month: "Mar '26", adopcion: 31.1, real: 22.1 },
+  { month: "Ene", adopcion: 31.8, real: 21.6 },
+  { month: "Feb", adopcion: 30.1, real: 20.8 },
+  { month: "Mar", adopcion: 30.8, real: 21.6 },
+  { month: "Abr", adopcion: 30.2, real: 22.7 },
+  { month: "May", adopcion: 30.3, real: 24.1 },
+  { month: "Jun", adopcion: 29.7, real: 23.9 },
 ];
 
 function TasaAdopcion() {
-  // Marzo 2026 (chart rbp5ch2z): Ingresan a la app 31.85%, Realizan acción 22.10%
-  const tasaAdopcion = 31.1; // MAU APP / MAC WEB
-  const tasaReal = 22.1; // MAC APP / MAC WEB
-  const tasaAdopcionOct = 30.5;
-  const tasaRealOct = 19.8;
-  const deltaAdopcion = ((tasaAdopcion - tasaAdopcionOct) / tasaAdopcionOct) * 100;
-  const deltaReal = ((tasaReal - tasaRealOct) / tasaRealOct) * 100;
+  // Chart rbp5ch2z (Ene → Jun '26). Valores actuales = Junio; delta = Jun vs Ene.
+  const adopcionLast = adopcionMensualSeries[adopcionMensualSeries.length - 1];
+  const adopcionFirst = adopcionMensualSeries[0];
+  const tasaAdopcion = adopcionLast.adopcion; // MAU APP / MAC WEB (Ingresan)
+  const tasaReal = adopcionLast.real; // MAC APP / MAC WEB (Realizan)
+  const deltaAdopcion = ((adopcionLast.adopcion - adopcionFirst.adopcion) / adopcionFirst.adopcion) * 100;
+  const deltaReal = ((adopcionLast.real - adopcionFirst.real) / adopcionFirst.real) * 100;
   const upAdopcion = deltaAdopcion >= 0;
   const upReal = deltaReal >= 0;
 
@@ -1176,11 +1177,11 @@ function TasaAdopcion() {
             >
               {upAdopcion ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
               {upAdopcion ? "+" : ""}{deltaAdopcion.toFixed(1)}%
-              <span className="ml-1 text-[10px] font-medium text-neutral-500">vs Oct '25</span>
+              <span className="ml-1 text-[10px] font-medium text-neutral-500">vs Ene '26</span>
             </p>
           </div>
           <p className="mt-1.5 text-[11px] text-neutral-500">
-            % de <strong>usuarios pagos web activos</strong> que entran a la app cada mes (Marzo 2026).
+            % de <strong>usuarios pagos web activos</strong> que entran a la app cada mes (Junio 2026).
           </p>
         </div>
 
@@ -1205,11 +1206,11 @@ function TasaAdopcion() {
             >
               {upReal ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
               {upReal ? "+" : ""}{deltaReal.toFixed(1)}%
-              <span className="ml-1 text-[10px] font-medium text-neutral-500">vs Oct '25</span>
+              <span className="ml-1 text-[10px] font-medium text-neutral-500">vs Ene '26</span>
             </p>
           </div>
           <p className="mt-1.5 text-[11px] text-neutral-500">
-            % de <strong>usuarios pagos web activos</strong> que realizan al menos una acción de valor en la app (Marzo 2026).
+            % de <strong>usuarios pagos web activos</strong> que realizan al menos una acción de valor en la app (Junio 2026).
           </p>
         </div>
       </div>
@@ -1219,7 +1220,7 @@ function TasaAdopcion() {
         <div className="mb-4 flex items-center justify-between">
           <div>
             <h4 className="text-sm font-bold text-neutral-900">
-              Tasa de Adopción global — Marzo 2026
+              Tasa de Adopción global — Junio 2026
             </h4>
             <p className="mt-0.5 text-xs text-neutral-500">
               % de usuarios pagos activos que entran a la app o realizan una acción
@@ -1279,7 +1280,7 @@ function TasaAdopcion() {
               % Usuarios pagos activos que entran a la app o realizan una acción
             </h4>
             <p className="mt-0.5 text-xs text-neutral-500">
-              Evolución mensual · Oct '25 → Mar '26
+              Evolución mensual · Ene → Jun '26
             </p>
           </div>
           <a
