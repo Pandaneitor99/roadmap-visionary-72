@@ -1115,12 +1115,13 @@ function MacPorPais({ selectedCountry }: { selectedCountry?: string | null }) {
 
 // === Tasa de Adopción ===
 
+// Por país, Junio 2026. wac (Real, acciones) = chart hqcerbqk · wau (Adopción, entran) = chart 5vlf3f1x.
 const adoptionByCountry = [
-  { country: "Colombia", wac: 15.4, wau: 32.7 },
-  { country: "Rep. Dominicana", wac: 31.1, wau: 56.4 },
-  { country: "México", wac: 17.3, wau: 33.8 },
-  { country: "Panamá", wac: 27.8, wau: 49.5 },
-  { country: "Costa Rica", wac: 20.0, wau: 38.0 },
+  { country: "Colombia", wac: 14.8, wau: 25.7 },
+  { country: "Rep. Dominicana", wac: 28.9, wau: 48.5 },
+  { country: "México", wac: 16.4, wau: 31.3 },
+  { country: "Panamá", wac: 23.2, wau: 37.9 },
+  { country: "Costa Rica", wac: 22.7, wau: 43.0 },
 ];
 
 // Evolución mensual % usuarios pagos activos (Ene → Jun '26) - chart rbp5ch2z
@@ -1315,17 +1316,28 @@ function TasaAdopcion() {
               % Usuarios pagos activos por país
             </h4>
             <p className="mt-0.5 text-xs text-neutral-500">
-              Marzo 2026 · Tasa de Adopción (entran a la app) y Tasa Real (acciones de valor)
+              Junio 2026 · Tasa de Adopción (entran a la app) y Tasa Real (acciones de valor)
             </p>
           </div>
-          <a
-            href="https://app.amplitude.com/analytics/alegra/chart/hqcerbqk"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
-          >
-            Amplitude <ExternalLink className="h-3 w-3" />
-          </a>
+          <div className="flex flex-col items-end gap-1">
+            <a
+              href="https://app.amplitude.com/analytics/alegra/chart/5vlf3f1x"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-[11px] font-medium text-[#0066FF] hover:underline"
+            >
+              Adopción <ExternalLink className="h-3 w-3" />
+            </a>
+            <a
+              href="https://app.amplitude.com/analytics/alegra/chart/hqcerbqk"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-[11px] font-medium hover:underline"
+              style={{ color: ALEGRA_GREEN }}
+            >
+              Real <ExternalLink className="h-3 w-3" />
+            </a>
+          </div>
         </div>
         <div className="space-y-3">
           {adoptionByCountry.map((c) => (
@@ -1361,31 +1373,31 @@ function TasaAdopcion() {
 
 // === % Participación de App ===
 
-// Series reales de Amplitude (Oct '25 → Mar/Abr '26)
+// Series reales de Amplitude (Ene → Jun '26)
+// facturas: hltxo7ij · cotizaciones: ndgvmi3v · remisiones: eosl7cg8
 const facturasParticipSeries = [
-  { m: "Oct", v: 7.85 },
-  { m: "Nov", v: 7.37 },
-  { m: "Dic", v: 7.27 },
-  { m: "Ene", v: 7.33 },
-  { m: "Feb", v: 7.29 },
-  { m: "Mar", v: 7.57 },
+  { m: "Ene", v: 7.25 },
+  { m: "Feb", v: 7.20 },
+  { m: "Mar", v: 7.49 },
+  { m: "Abr", v: 6.93 },
+  { m: "May", v: 6.79 },
+  { m: "Jun", v: 6.75 },
 ];
 const cotizacionesParticipSeries = [
-  { m: "Oct", v: 14.80 },
-  { m: "Nov", v: 14.89 },
-  { m: "Dic", v: 16.14 },
-  { m: "Ene", v: 13.81 },
-  { m: "Feb", v: 14.47 },
-  { m: "Mar", v: 15.38 },
+  { m: "Ene", v: 13.63 },
+  { m: "Feb", v: 14.14 },
+  { m: "Mar", v: 15.10 },
+  { m: "Abr", v: 14.47 },
+  { m: "May", v: 14.61 },
+  { m: "Jun", v: 14.12 },
 ];
 const remisionesParticipSeries = [
-  { m: "Oct", v: 6.84 },
-  { m: "Nov", v: 7.48 },
-  { m: "Dic", v: 6.35 },
-  { m: "Ene", v: 6.49 },
-  { m: "Feb", v: 6.08 },
-  { m: "Mar", v: 6.42 },
-  { m: "Abr", v: 9.04 },
+  { m: "Ene", v: 6.53 },
+  { m: "Feb", v: 6.07 },
+  { m: "Mar", v: 6.45 },
+  { m: "Abr", v: 9.15 },
+  { m: "May", v: 9.51 },
+  { m: "Jun", v: 8.76 },
 ];
 
 function MiniSparkline({
@@ -1427,8 +1439,6 @@ function ParticipacionApp() {
   const items = [
     {
       label: "Facturas de venta",
-      value: 7.57,
-      delta: -3.8,
       color: ALEGRA_GREEN,
       desc: "% de facturas totales (web + app) creadas desde la app móvil",
       series: facturasParticipSeries,
@@ -1436,8 +1446,6 @@ function ParticipacionApp() {
     },
     {
       label: "Cotizaciones",
-      value: 15.4,
-      delta: 3.94,
       color: "#0066FF",
       desc: "% de cotizaciones totales (web + app) creadas desde la app móvil",
       series: cotizacionesParticipSeries,
@@ -1445,8 +1453,6 @@ function ParticipacionApp() {
     },
     {
       label: "Remisiones",
-      value: 9.04,
-      delta: 32.16,
       color: "#FF6B00",
       desc: "% de remisiones totales (web + app) creadas desde la app móvil",
       series: remisionesParticipSeries,
@@ -1464,7 +1470,11 @@ function ParticipacionApp() {
       </p>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((it) => {
-          const isUp = it.delta >= 0;
+          // Valor actual = último mes (Junio); comparación vs enero.
+          const value = it.series[it.series.length - 1].v;
+          const firstValue = it.series[0].v;
+          const delta = ((value - firstValue) / firstValue) * 100;
+          const isUp = delta >= 0;
           return (
             <div
               key={it.label}
@@ -1482,7 +1492,7 @@ function ParticipacionApp() {
               </div>
               <p className="mt-2 text-xs text-neutral-500">{it.desc}</p>
               <p className="mt-3 text-4xl font-bold text-neutral-900">
-                {it.value.toLocaleString("es-CO")}%
+                {value.toLocaleString("es-CO")}%
               </p>
               <p
                 className={cn(
@@ -1491,8 +1501,8 @@ function ParticipacionApp() {
                 )}
               >
                 {isUp ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
-                {isUp ? "+" : ""}{it.delta.toFixed(2)}%
-                <span className="ml-1 text-[11px] font-medium text-neutral-500">vs Oct '25</span>
+                {isUp ? "+" : ""}{delta.toFixed(2)}%
+                <span className="ml-1 text-[11px] font-medium text-neutral-500">vs Ene '26</span>
               </p>
 
               {/* Mini sparkline (solo línea) */}
