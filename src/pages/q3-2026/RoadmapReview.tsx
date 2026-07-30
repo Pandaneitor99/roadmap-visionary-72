@@ -1186,12 +1186,7 @@ function TasaAdopcion() {
   const lastOf = (a: number[]) => a[a.length - 1];
   const selected = countryAdoption.find((c) => c.country === selectedCountry) ?? null;
 
-  // Progress bar: país seleccionado o global (Todos los países).
-  const barAdopcion = selected ? lastOf(selected.adopcion) : tasaAdopcion;
-  const barReal = selected ? lastOf(selected.real) : tasaReal;
-  const barScope = selected ? selected.country : "Todos los países";
-
-  // Gráfico de línea por país, filtrado por métrica (tab) y país (cards).
+  // Filtrado por país (cards): controla las barras por país y el gráfico de evolución.
   const metricCountries = selected ? [selected] : countryAdoption;
   const lineData = adoptionMonths.map((month, i) => {
     const row: Record<string, number | string> = { month };
@@ -1304,6 +1299,62 @@ function TasaAdopcion() {
         </div>
       </div>
 
+      {/* Progress bar general (global) */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+        <div className="mb-4 flex items-center justify-between">
+          <div>
+            <h4 className="text-sm font-bold text-neutral-900">
+              Tasa de Adopción global — Junio 2026
+            </h4>
+            <p className="mt-0.5 text-xs text-neutral-500">
+              % de usuarios pagos activos que entran a la app o realizan una acción
+            </p>
+          </div>
+          <a
+            href="https://app.amplitude.com/analytics/alegra/chart/rbp5ch2z"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+          >
+            Amplitude <ExternalLink className="h-3 w-3" />
+          </a>
+        </div>
+        <div className="relative h-8 w-full overflow-hidden rounded-full bg-neutral-100">
+          <div
+            className="absolute left-0 top-0 h-full rounded-full transition-all"
+            style={{ width: `${tasaAdopcion}%`, backgroundColor: "#0066FF" }}
+          />
+          <div
+            className="absolute left-0 top-0 h-full rounded-full transition-all"
+            style={{ width: `${tasaReal}%`, backgroundColor: ALEGRA_GREEN }}
+          />
+          <span
+            className="absolute top-1/2 -translate-y-1/2 text-[11px] font-bold text-white"
+            style={{ left: `calc(${tasaReal}% - 38px)` }}
+          >
+            {tasaReal.toFixed(1)}%
+          </span>
+          <span
+            className="absolute top-1/2 -translate-y-1/2 text-[11px] font-bold text-white"
+            style={{ left: `calc(${tasaAdopcion}% - 42px)` }}
+          >
+            {tasaAdopcion.toFixed(1)}%
+          </span>
+        </div>
+        <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1.5 text-[11px]">
+          <div className="flex items-center gap-1.5">
+            <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: ALEGRA_GREEN }} />
+            <span className="font-semibold text-neutral-700">Tasa de Adopción Real</span>
+            <span className="text-neutral-500">(MAC APP / MAC WEB)</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: "#0066FF" }} />
+            <span className="font-semibold text-neutral-700">Tasa de Adopción</span>
+            <span className="text-neutral-500">(MAU APP / MAC WEB)</span>
+          </div>
+        </div>
+      </div>
+
       {/* === Tasa de adopción por país === */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h3 className="text-lg font-bold text-neutral-900">Tasa de adopción por país</h3>
@@ -1317,7 +1368,7 @@ function TasaAdopcion() {
         )}
       </div>
       <p className="-mt-3 text-xs text-neutral-500">
-        Clic en un país para filtrar la barra y el gráfico de evolución.
+        Clic en un país para filtrar el gráfico por país y la evolución.
       </p>
 
       {/* Cards por país (filtros) — Junio 2026 vs Enero '26 */}
@@ -1349,59 +1400,67 @@ function TasaAdopcion() {
         })}
       </div>
 
-      {/* Progress bar (filtrado por card) */}
+      {/* Barras por país (filtrado por card) */}
       <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
         <div className="mb-4 flex items-center justify-between">
           <div>
             <h4 className="text-sm font-bold text-neutral-900">
-              Tasa de Adopción — {barScope}
+              % Usuarios pagos activos por país
             </h4>
             <p className="mt-0.5 text-xs text-neutral-500">
-              Junio 2026 · % de usuarios pagos activos que entran a la app o realizan una acción
+              Junio 2026 · Tasa de Adopción (entran a la app) y Tasa Real (acciones de valor){selectedCountry ? ` · ${selectedCountry}` : ""}
             </p>
           </div>
-          <a
-            href="https://app.amplitude.com/analytics/alegra/chart/rbp5ch2z"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
-          >
-            Amplitude <ExternalLink className="h-3 w-3" />
-          </a>
-        </div>
-        <div className="relative h-8 w-full overflow-hidden rounded-full bg-neutral-100">
-          <div
-            className="absolute left-0 top-0 h-full rounded-full transition-all"
-            style={{ width: `${barAdopcion}%`, backgroundColor: "#0066FF" }}
-          />
-          <div
-            className="absolute left-0 top-0 h-full rounded-full transition-all"
-            style={{ width: `${barReal}%`, backgroundColor: ALEGRA_GREEN }}
-          />
-          <span
-            className="absolute top-1/2 -translate-y-1/2 text-[11px] font-bold text-white"
-            style={{ left: `calc(${barReal}% - 38px)` }}
-          >
-            {barReal.toFixed(1)}%
-          </span>
-          <span
-            className="absolute top-1/2 -translate-y-1/2 text-[11px] font-bold text-white"
-            style={{ left: `calc(${barAdopcion}% - 42px)` }}
-          >
-            {barAdopcion.toFixed(1)}%
-          </span>
-        </div>
-        <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1.5 text-[11px]">
-          <div className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: ALEGRA_GREEN }} />
-            <span className="font-semibold text-neutral-700">Tasa de Adopción Real</span>
-            <span className="text-neutral-500">(MAC APP / MAC WEB)</span>
+          <div className="flex flex-col items-end gap-1">
+            <a
+              href="https://app.amplitude.com/analytics/alegra/chart/5vlf3f1x"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-[11px] font-medium text-[#0066FF] hover:underline"
+            >
+              Adopción <ExternalLink className="h-3 w-3" />
+            </a>
+            <a
+              href="https://app.amplitude.com/analytics/alegra/chart/hqcerbqk"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-[11px] font-medium hover:underline"
+              style={{ color: ALEGRA_GREEN }}
+            >
+              Real <ExternalLink className="h-3 w-3" />
+            </a>
           </div>
-          <div className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: "#0066FF" }} />
-            <span className="font-semibold text-neutral-700">Tasa de Adopción</span>
-            <span className="text-neutral-500">(MAU APP / MAC WEB)</span>
-          </div>
+        </div>
+        <div className="space-y-3">
+          {metricCountries.map((c) => {
+            const adop = lastOf(c.adopcion);
+            const real = lastOf(c.real);
+            return (
+              <div key={c.country}>
+                <div className="mb-1 flex items-center justify-between text-xs">
+                  <span className="font-medium text-neutral-700">{c.country}</span>
+                  <div className="flex gap-3">
+                    <span className="text-[#0066FF]">
+                      Adopción <strong>{adop.toFixed(1)}%</strong>
+                    </span>
+                    <span style={{ color: ALEGRA_GREEN }}>
+                      Real <strong>{real.toFixed(1)}%</strong>
+                    </span>
+                  </div>
+                </div>
+                <div className="relative h-5 w-full overflow-hidden rounded-full bg-neutral-100">
+                  <div
+                    className="absolute left-0 top-0 h-full rounded-full"
+                    style={{ width: `${Math.min(adop, 100)}%`, backgroundColor: "#0066FF40" }}
+                  />
+                  <div
+                    className="absolute left-0 top-0 h-full rounded-full"
+                    style={{ width: `${Math.min(real, 100)}%`, backgroundColor: ALEGRA_GREEN }}
+                  />
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -1468,70 +1527,6 @@ function TasaAdopcion() {
               ))}
             </LineChart>
           </ResponsiveContainer>
-        </div>
-      </div>
-
-      {/* Chart por país */}
-      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-        <div className="mb-4 flex items-center justify-between">
-          <div>
-            <h4 className="text-sm font-bold text-neutral-900">
-              % Usuarios pagos activos por país
-            </h4>
-            <p className="mt-0.5 text-xs text-neutral-500">
-              Junio 2026 · Tasa de Adopción (entran a la app) y Tasa Real (acciones de valor)
-            </p>
-          </div>
-          <div className="flex flex-col items-end gap-1">
-            <a
-              href="https://app.amplitude.com/analytics/alegra/chart/5vlf3f1x"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1 text-[11px] font-medium text-[#0066FF] hover:underline"
-            >
-              Adopción <ExternalLink className="h-3 w-3" />
-            </a>
-            <a
-              href="https://app.amplitude.com/analytics/alegra/chart/hqcerbqk"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1 text-[11px] font-medium hover:underline"
-              style={{ color: ALEGRA_GREEN }}
-            >
-              Real <ExternalLink className="h-3 w-3" />
-            </a>
-          </div>
-        </div>
-        <div className="space-y-3">
-          {countryAdoption.map((c) => {
-            const adop = lastOf(c.adopcion);
-            const real = lastOf(c.real);
-            return (
-              <div key={c.country}>
-                <div className="mb-1 flex items-center justify-between text-xs">
-                  <span className="font-medium text-neutral-700">{c.country}</span>
-                  <div className="flex gap-3">
-                    <span className="text-[#0066FF]">
-                      Adopción <strong>{adop.toFixed(1)}%</strong>
-                    </span>
-                    <span style={{ color: ALEGRA_GREEN }}>
-                      Real <strong>{real.toFixed(1)}%</strong>
-                    </span>
-                  </div>
-                </div>
-                <div className="relative h-5 w-full overflow-hidden rounded-full bg-neutral-100">
-                  <div
-                    className="absolute left-0 top-0 h-full rounded-full"
-                    style={{ width: `${Math.min(adop, 100)}%`, backgroundColor: "#0066FF40" }}
-                  />
-                  <div
-                    className="absolute left-0 top-0 h-full rounded-full"
-                    style={{ width: `${Math.min(real, 100)}%`, backgroundColor: ALEGRA_GREEN }}
-                  />
-                </div>
-              </div>
-            );
-          })}
         </div>
       </div>
     </div>
@@ -1697,8 +1692,331 @@ function ParticipacionApp() {
 }
 
 
+// === ICP: Pyme (emprendedor + independiente) / Contador ===
+// Tendencia total = chart tkmdv3fe · Distribución = 8sxb4139 · Por país = zpmj4y3x. Ene → Jun '26.
+const icpTrend = [
+  { month: "Ene", PYME: 6147, CONTADOR: 183 },
+  { month: "Feb", PYME: 6228, CONTADOR: 169 },
+  { month: "Mar", PYME: 6568, CONTADOR: 201 },
+  { month: "Abr", PYME: 7163, CONTADOR: 205 },
+  { month: "May", PYME: 7676, CONTADOR: 245 },
+  { month: "Jun", PYME: 7603, CONTADOR: 266 },
+];
+
+type IcpPerCountry = {
+  country: string;
+  short: string;
+  color: string;
+  PYME: { month: string; v: number }[];
+  CONTADOR: { month: string; v: number }[];
+};
+const icpMonths = ["Ene", "Feb", "Mar", "Abr", "May", "Jun"];
+const toIcpSeries = (vals: number[]) => vals.map((v, i) => ({ month: icpMonths[i], v }));
+const icpPerCountry: IcpPerCountry[] = [
+  {
+    country: "Colombia",
+    short: "CO",
+    color: ALEGRA_GREEN,
+    PYME: toIcpSeries([4057, 4141, 4318, 4715, 5010, 4914]),
+    CONTADOR: toIcpSeries([96, 93, 103, 107, 129, 139]),
+  },
+  {
+    country: "México",
+    short: "MX",
+    color: "#FF6B00",
+    PYME: toIcpSeries([497, 499, 546, 596, 646, 681]),
+    CONTADOR: toIcpSeries([24, 20, 29, 28, 35, 41]),
+  },
+  {
+    country: "Costa Rica",
+    short: "CR",
+    color: "#06B6D4",
+    PYME: toIcpSeries([171, 180, 182, 215, 245, 262]),
+    CONTADOR: toIcpSeries([12, 9, 7, 8, 12, 12]),
+  },
+  {
+    country: "Rep. Dominicana",
+    short: "DOM",
+    color: "#0066FF",
+    PYME: toIcpSeries([853, 871, 936, 1008, 1115, 1103]),
+    CONTADOR: toIcpSeries([43, 44, 55, 52, 57, 65]),
+  },
+];
+
+const icpPieData = [
+  { name: "PYME", value: 7603, color: ALEGRA_GREEN },
+  { name: "CONTADOR", value: 266, color: "#FF6B00" },
+];
+const icpPieTotal = icpPieData.reduce((s, d) => s + d.value, 0);
+
+function IcpView() {
+  // Chips de perfil (controlan cards y gráfico de detalle) + país seleccionado.
+  const [segment, setSegment] = useState<"both" | "PYME" | "CONTADOR">("both");
+  const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
+
+  const last = icpTrend[icpTrend.length - 1];
+  const first = icpTrend[0];
+  const pymeDelta = (((last.PYME - first.PYME) / first.PYME) * 100).toFixed(1);
+  const contadorDelta = (((last.CONTADOR - first.CONTADOR) / first.CONTADOR) * 100).toFixed(1);
+  const pymeUp = Number(pymeDelta) >= 0;
+  const contadorUp = Number(contadorDelta) >= 0;
+
+  const showPyme = segment === "both" || segment === "PYME";
+  const showContador = segment === "both" || segment === "CONTADOR";
+
+  // Gráfico de detalle: agregado total (sin país) o series del país seleccionado.
+  const filteredSeriesData = (() => {
+    if (selectedCountry) {
+      const c = icpPerCountry.find((p) => p.country === selectedCountry);
+      if (!c) return icpTrend;
+      return c.PYME.map((row, i) => ({ month: row.month, PYME: c.PYME[i].v, CONTADOR: c.CONTADOR[i].v }));
+    }
+    return icpTrend;
+  })();
+
+  return (
+    <div className="space-y-10">
+      {/* Tendencia por ICP (principal) + Distribución */}
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm md:p-8 lg:col-span-2">
+          <div className="mb-4 flex items-end justify-between gap-3">
+            <div>
+              <h3 className="text-lg font-bold text-neutral-900">
+                MAC — Tendencia por ICP
+              </h3>
+              <p className="mt-1 text-xs text-neutral-500">
+                Ene → Jun '26 · Pyme (emprendedor + independiente) vs Contador
+              </p>
+            </div>
+            <a
+              href="https://app.amplitude.com/analytics/alegra/chart/tkmdv3fe"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+            >
+              Amplitude <ExternalLink className="h-3 w-3" />
+            </a>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="rounded-xl border bg-white p-4" style={{ borderLeft: `4px solid ${ALEGRA_GREEN}` }}>
+              <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">MAC Pyme</p>
+              <p className="mt-1 text-2xl font-bold text-neutral-900">{last.PYME.toLocaleString("es-CO")}</p>
+              <p className={cn("mt-1 flex items-center gap-1 text-xs font-bold", pymeUp ? "text-emerald-600" : "text-red-600")}>
+                {pymeUp ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
+                {pymeUp ? "+" : ""}{pymeDelta}% vs Ene '26
+              </p>
+            </div>
+            <div className="rounded-xl border bg-white p-4" style={{ borderLeft: `4px solid #FF6B00` }}>
+              <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">MAC Contador</p>
+              <p className="mt-1 text-2xl font-bold text-neutral-900">{last.CONTADOR.toLocaleString("es-CO")}</p>
+              <p className={cn("mt-1 flex items-center gap-1 text-xs font-bold", contadorUp ? "text-emerald-600" : "text-red-600")}>
+                {contadorUp ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
+                {contadorUp ? "+" : ""}{contadorDelta}% vs Ene '26
+              </p>
+            </div>
+          </div>
+          <div className="mt-6 h-[300px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={icpTrend} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                <XAxis dataKey="month" stroke="#6b7280" tick={{ fontSize: 12 }} axisLine={{ stroke: "#e5e7eb" }} tickLine={false} />
+                <YAxis stroke="#6b7280" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} tickFormatter={(v) => v.toLocaleString("es-CO")} />
+                <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => v.toLocaleString("es-CO")} />
+                <Legend iconType="circle" wrapperStyle={{ fontSize: 12, paddingTop: 12 }} />
+                <Line type="monotone" dataKey="PYME" name="Pyme" stroke={ALEGRA_GREEN} strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+                <Line type="monotone" dataKey="CONTADOR" name="Contador" stroke="#FF6B00" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Distribución */}
+        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+          <div className="flex items-start justify-between gap-2">
+            <div>
+              <h3 className="text-base font-bold text-neutral-900">Distribución por ICP</h3>
+              <p className="mt-1 text-xs text-neutral-500">Junio 2026</p>
+            </div>
+            <a
+              href="https://app.amplitude.com/analytics/alegra/chart/8sxb4139"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+            >
+              Amplitude <ExternalLink className="h-3 w-3" />
+            </a>
+          </div>
+          <div className="h-[260px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie data={icpPieData} dataKey="value" nameKey="name" innerRadius={55} outerRadius={95} paddingAngle={3} label={(e: any) => `${e.name}: ${((e.value / icpPieTotal) * 100).toFixed(0)}%`}>
+                  {icpPieData.map((e) => (
+                    <Cell key={e.name} fill={e.color} />
+                  ))}
+                </Pie>
+                <Tooltip
+                  contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }}
+                  formatter={(v: number) => `${v.toLocaleString("es-CO")} (${((v / icpPieTotal) * 100).toFixed(1)}%)`}
+                />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="mt-2 grid grid-cols-2 gap-3 text-xs">
+            {icpPieData.map((d) => (
+              <div key={d.name} className="flex items-center gap-2">
+                <span className="h-3 w-3 rounded-full" style={{ backgroundColor: d.color }} />
+                <span className="font-semibold text-neutral-900">{d.name}</span>
+                <span className="ml-auto text-neutral-600">{d.value.toLocaleString("es-CO")}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Detalle por país */}
+      <div>
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-baseline gap-3">
+            <h3 className="text-lg font-bold text-neutral-900">Detalle por país</h3>
+            <span className="text-xs text-neutral-500">
+              Click en una card para filtrar el gráfico de abajo
+            </span>
+          </div>
+          <div className="inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1">
+            {([
+              { id: "both", label: "Todos" },
+              { id: "PYME", label: "Pyme" },
+              { id: "CONTADOR", label: "Contador" },
+            ] as const).map((opt) => (
+              <button
+                key={opt.id}
+                onClick={() => setSegment(opt.id)}
+                className={cn(
+                  "rounded-md px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider transition-all",
+                  segment === opt.id
+                    ? "bg-white text-neutral-900 shadow-sm"
+                    : "text-neutral-500 hover:text-neutral-700",
+                )}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {icpPerCountry.map((c) => {
+            const seriesForCard = c.PYME.map((row, i) => {
+              if (segment === "PYME") return row.v;
+              if (segment === "CONTADOR") return c.CONTADOR[i].v;
+              return row.v + c.CONTADOR[i].v;
+            });
+            const lastV = seriesForCard[seriesForCard.length - 1];
+            const firstV = seriesForCard[0];
+            const delta = ((lastV - firstV) / firstV) * 100;
+            const up = delta >= 0;
+            const isActive = selectedCountry === c.country;
+            return (
+              <button
+                key={c.country}
+                onClick={() => setSelectedCountry(isActive ? null : c.country)}
+                className={cn(
+                  "group rounded-2xl border bg-white px-4 py-3 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md",
+                  isActive ? "ring-2 ring-offset-2" : "border-neutral-200",
+                )}
+                style={isActive ? { borderColor: c.color, ["--tw-ring-color" as any]: c.color } : { borderTop: `3px solid ${c.color}` }}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">
+                    {segment === "both" ? "Pyme + Contador" : segment === "PYME" ? "Pyme" : "Contador"}
+                  </span>
+                  {isActive && (
+                    <span className="text-[10px] font-bold uppercase text-neutral-500">activo</span>
+                  )}
+                </div>
+                <div className="mt-1.5 flex items-center gap-1.5">
+                  <span
+                    className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white"
+                    style={{ backgroundColor: c.color }}
+                  >
+                    {c.short}
+                  </span>
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-neutral-500 truncate">
+                    {c.country}
+                  </p>
+                </div>
+                <div className="mt-1.5 flex items-baseline justify-between gap-2">
+                  <p className="text-2xl font-bold text-neutral-900">
+                    {lastV.toLocaleString("es-CO")}
+                  </p>
+                  <p className={cn("flex items-center gap-1 text-xs font-bold", up ? "text-emerald-600" : "text-red-600")}>
+                    {up ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
+                    {up ? "+" : ""}{delta.toFixed(1)}%
+                  </p>
+                </div>
+                <p className="mt-0.5 text-[10px] font-medium text-neutral-400">vs Ene '26</p>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Gráfico filtrado por segmento + país */}
+        <div className="mt-6 rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm md:p-8">
+          <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <h3 className="text-base font-bold text-neutral-900">
+                MAC filtrado
+                {selectedCountry && (
+                  <span className="ml-2 text-xs font-medium text-neutral-500">· {selectedCountry}</span>
+                )}
+              </h3>
+              <p className="mt-1 text-xs text-neutral-500">
+                Filtra por perfil y país. Sin selección: agregado total.
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <a
+                href="https://app.amplitude.com/analytics/alegra/chart/zpmj4y3x"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+              >
+                Amplitude <ExternalLink className="h-3 w-3" />
+              </a>
+              {selectedCountry && (
+                <button
+                  onClick={() => setSelectedCountry(null)}
+                  className="text-[11px] font-semibold text-neutral-500 hover:text-neutral-900 underline"
+                >
+                  Limpiar país ✕
+                </button>
+              )}
+            </div>
+          </div>
+          <div className="h-[280px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={filteredSeriesData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                <XAxis dataKey="month" stroke="#6b7280" tick={{ fontSize: 12 }} axisLine={{ stroke: "#e5e7eb" }} tickLine={false} />
+                <YAxis stroke="#6b7280" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} tickFormatter={(v) => v.toLocaleString("es-CO")} />
+                <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => v.toLocaleString("es-CO")} />
+                <Legend iconType="circle" wrapperStyle={{ fontSize: 12, paddingTop: 12 }} />
+                {showPyme && (
+                  <Line type="monotone" dataKey="PYME" name="Pyme" stroke={ALEGRA_GREEN} strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+                )}
+                {showContador && (
+                  <Line type="monotone" dataKey="CONTADOR" name="Contador" stroke="#FF6B00" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+                )}
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Section3() {
-  const [tab, setTab] = useState<"negocio" | "baseSos">("negocio");
+  const [tab, setTab] = useState<"negocio" | "icp" | "baseSos">("negocio");
 
   return (
     <div className="space-y-8">
@@ -1742,6 +2060,17 @@ function Section3() {
           Negocio · Core y Lite
         </button>
         <button
+          onClick={() => setTab("icp")}
+          className={cn(
+            "rounded-md px-4 py-2 text-xs font-semibold transition-all",
+            tab === "icp"
+              ? "bg-white text-neutral-900 shadow-sm"
+              : "text-neutral-500 hover:text-neutral-700",
+          )}
+        >
+          ICP
+        </button>
+        <button
           onClick={() => setTab("baseSos")}
           className={cn(
             "rounded-md px-4 py-2 text-xs font-semibold transition-all",
@@ -1754,7 +2083,7 @@ function Section3() {
         </button>
       </div>
 
-      {tab === "baseSos" ? <BaseSosView /> : <NegocioView />}
+      {tab === "baseSos" ? <BaseSosView /> : tab === "icp" ? <IcpView /> : <NegocioView />}
     </div>
   );
 }
@@ -2160,8 +2489,189 @@ function BaseSosPorPais() {
   );
 }
 
+// === General: Q1 vs Q2 · Adopción y engagement por funcionalidad ===
+const mesesQ = ["Ene", "Feb", "Mar", "Abr", "May", "Jun"];
+
+// Adopción por funcionalidad — Q1 (chart yn056fo0, Marzo) vs Q2 (chart ptw2jzb4, Junio) '26
+const adopcionQ1Q2Data = [
+  { event: "Crear factura", Q1: 57.8, Q2: 58.8 },
+  { event: "Buscar factura", Q1: 39.8, Q2: 39.9 },
+  { event: "Ver gráfico de ventas", Q1: 31.4, Q2: 30.0 },
+  { event: "Crear contacto", Q1: 27.8, Q2: 29.2 },
+  { event: "Crear cotización", Q1: 27.8, Q2: 27.0 },
+  { event: "Crear ítem", Q1: 22.5, Q2: 23.2 },
+  { event: "Cuentas por cobrar", Q1: 15.5, Q2: 14.0 },
+  { event: "Crear remisión", Q1: 3.6, Q2: 3.8 },
+  { event: "Crear factura de proveedor", Q1: 2.7, Q2: 2.8 },
+];
+
+// Evolución mensual % adopción por funcionalidad (chart am4dj5wu, Ene → Jun '26)
+const funcionalidadesMensual: MonthlyAdoptionSeries[] = [
+  { num: 1, label: "Crear factura",              series: zip(mesesQ, [57.4, 57.9, 57.7, 57.3, 57.5, 58.6]) },
+  { num: 2, label: "Buscar factura",             series: zip(mesesQ, [37.8, 37.4, 39.7, 38.1, 40.2, 39.8]) },
+  { num: 6, label: "Ver gráfico de ventas",      series: zip(mesesQ, [31.5, 31.1, 31.3, 30.1, 30.4, 29.8]) },
+  { num: 3, label: "Crear contacto",             series: zip(mesesQ, [28.1, 28.7, 27.7, 28.0, 29.2, 29.1]) },
+  { num: 4, label: "Crear cotización",           series: zip(mesesQ, [27.4, 27.6, 27.7, 27.5, 27.8, 26.9]) },
+  { num: 5, label: "Crear ítem",                 series: zip(mesesQ, [21.9, 22.7, 22.5, 22.4, 22.9, 23.1]) },
+  { num: 7, label: "Cuentas por cobrar",         series: zip(mesesQ, [16.0, 15.2, 15.4, 15.0, 15.3, 13.9]) },
+  { num: 8, label: "Crear remisión",             series: zip(mesesQ, [3.5, 3.6, 3.5, 3.7, 3.9, 3.8]) },
+  { num: 9, label: "Crear factura de proveedor", series: zip(mesesQ, [2.9, 2.6, 2.7, 2.7, 2.8, 2.8]) },
+];
+
+// Engagement por funcionalidad (%MAU vs frecuencia) — Q1 (h7txos8w) y Q2 (q0wts3d9)
+const engagementQ1General: EngagementEvent[] = [
+  { num: 1, label: "Crear factura", adoption: 55.1, frequency: 25.7 },
+  { num: 2, label: "Buscar factura", adoption: 32.4, frequency: 20.6 },
+  { num: 3, label: "Crear contacto", adoption: 26.5, frequency: 7.0 },
+  { num: 4, label: "Crear cotización", adoption: 26.5, frequency: 17.0 },
+  { num: 5, label: "Crear ítem", adoption: 21.5, frequency: 8.0 },
+  { num: 6, label: "Ver gráfico de ventas", adoption: 26.7, frequency: 8.2 },
+  { num: 8, label: "Crear remisión", adoption: 3.4, frequency: 29.4 },
+  { num: 9, label: "Crear factura de proveedor", adoption: 2.5, frequency: 9.7 },
+  { num: 10, label: "Crear gasto", adoption: 2.1, frequency: 8.8 },
+];
+const engagementQ2General: EngagementEvent[] = [
+  { num: 1, label: "Crear factura", adoption: 51.5, frequency: 22.6 },
+  { num: 2, label: "Buscar factura", adoption: 31.2, frequency: 17.4 },
+  { num: 3, label: "Crear contacto", adoption: 25.6, frequency: 5.5 },
+  { num: 4, label: "Crear cotización", adoption: 23.7, frequency: 16.2 },
+  { num: 5, label: "Crear ítem", adoption: 20.3, frequency: 7.4 },
+  { num: 6, label: "Ver gráfico de ventas", adoption: 23.8, frequency: 8.7 },
+  { num: 8, label: "Crear remisión", adoption: 3.3, frequency: 37.8 },
+  { num: 9, label: "Crear factura de proveedor", adoption: 2.5, frequency: 7.6 },
+  { num: 10, label: "Crear gasto", adoption: 2.0, frequency: 8.6 },
+];
+
+const generalFeatures = [
+  "Crear factura",
+  "Buscar factura",
+  "Ver gráfico de ventas",
+  "Crear contacto",
+  "Crear cotización",
+  "Crear ítem",
+  "Cuentas por cobrar",
+  "Crear remisión",
+  "Crear factura de proveedor",
+  "Crear gasto",
+];
+
+function ComportamientoGeneralView() {
+  const [activeFeature, setActiveFeature] = useState<string | null>(null);
+
+  const barData = activeFeature ? adopcionQ1Q2Data.filter((d) => d.event === activeFeature) : adopcionQ1Q2Data;
+  const mensualSeries = activeFeature ? funcionalidadesMensual.filter((s) => s.label === activeFeature) : funcionalidadesMensual;
+  const mensualRows = mesesQ.map((m, i) => {
+    const row: Record<string, string | number> = { month: m };
+    mensualSeries.forEach((s) => { row[s.label] = s.series[i].pct; });
+    return row;
+  });
+  const engQ1 = activeFeature ? engagementQ1General.filter((e) => e.label === activeFeature) : engagementQ1General;
+  const engQ2 = activeFeature ? engagementQ2General.filter((e) => e.label === activeFeature) : engagementQ2General;
+
+  return (
+    <div className="space-y-6">
+      <FeatureTagFilter
+        features={generalFeatures}
+        active={activeFeature}
+        onChange={setActiveFeature}
+        description="Filtra todas las gráficas por funcionalidad."
+      />
+
+      {/* Adopción por funcionalidad — Q1 vs Q2 */}
+      <div className="rounded-2xl border border-neutral-200 bg-white px-6 pt-5 pb-2 shadow-sm">
+        <div className="mb-2 flex items-start justify-between gap-3 flex-wrap">
+          <div>
+            <h4 className="text-base font-bold text-neutral-900">
+              Adopción por funcionalidad — Q1 vs Q2
+            </h4>
+            <p className="mt-0.5 text-xs text-neutral-500">
+              % de adopción por funcionalidad · Q1 (Marzo) vs Q2 (Junio) 2026
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <a href="https://app.amplitude.com/analytics/alegra/chart/yn056fo0" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900">
+              Q1 <ExternalLink className="h-3 w-3" />
+            </a>
+            <a href="https://app.amplitude.com/analytics/alegra/chart/ptw2jzb4" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-[11px] font-medium hover:underline" style={{ color: ALEGRA_GREEN }}>
+              Q2 <ExternalLink className="h-3 w-3" />
+            </a>
+          </div>
+        </div>
+        <div className="h-[320px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={barData} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+              <XAxis dataKey="event" stroke="#6b7280" tick={{ fontSize: 10 }} interval={0} angle={-30} textAnchor="end" height={70} />
+              <YAxis stroke="#6b7280" tick={{ fontSize: 10 }} tickFormatter={(v) => `${v}%`} />
+              <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => `${v.toFixed(1)}%`} />
+              <Legend iconType="circle" wrapperStyle={{ fontSize: 11, paddingTop: 0 }} />
+              <Bar dataKey="Q1" name="Q1 (Mar)" fill="#CBD5E1" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="Q2" name="Q2 (Jun)" fill={ALEGRA_GREEN} radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Evolución mensual por funcionalidad */}
+      <div className="rounded-2xl border border-neutral-200 bg-white px-6 pt-5 pb-2 shadow-sm">
+        <div className="mb-2 flex items-start justify-between gap-3 flex-wrap">
+          <div>
+            <h4 className="text-base font-bold text-neutral-900">
+              Funcionalidades — % adopción mensual
+            </h4>
+            <p className="mt-0.5 text-xs text-neutral-500">
+              % de usuarios activos por funcionalidad · Ene → Jun '26
+            </p>
+          </div>
+          <a href="https://app.amplitude.com/analytics/alegra/chart/am4dj5wu" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900">
+            Amplitude <ExternalLink className="h-3 w-3" />
+          </a>
+        </div>
+        <div className="h-[300px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={mensualRows} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+              <XAxis dataKey="month" stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={{ stroke: "#e5e7eb" }} tickLine={false} />
+              <YAxis stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}%`} />
+              <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => `${v.toFixed(1)}%`} />
+              <Legend iconType="circle" wrapperStyle={{ fontSize: 10, paddingTop: 8 }} />
+              {mensualSeries.map((s) => (
+                <Line
+                  key={s.label}
+                  type="monotone"
+                  dataKey={s.label}
+                  stroke={colorForEvent(s.label)}
+                  strokeWidth={mensualSeries.length === 1 ? 3 : 2}
+                  dot={{ r: mensualSeries.length === 1 ? 4 : 2 }}
+                  activeDot={{ r: 6 }}
+                />
+              ))}
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Engagement por funcionalidad — Q1 vs Q2 */}
+      <div className="grid gap-6 xl:grid-cols-2">
+        <EngagementScatterSegment
+          segment="Q1 · Marzo"
+          events={engQ1}
+          accent="#94A3B8"
+          chartUrl="https://app.amplitude.com/analytics/alegra/chart/h7txos8w"
+        />
+        <EngagementScatterSegment
+          segment="Q2 · Junio"
+          events={engQ2}
+          accent={ALEGRA_GREEN}
+          chartUrl="https://app.amplitude.com/analytics/alegra/chart/q0wts3d9"
+        />
+      </div>
+    </div>
+  );
+}
+
 function SectionComportamiento() {
-  const [tab, setTab] = useState<"coreLite" | "baseSos">("coreLite");
+  const [tab, setTab] = useState<"general" | "coreLite" | "baseSos">("general");
 
   return (
     <div className="space-y-8">
@@ -2194,6 +2704,17 @@ function SectionComportamiento() {
       {/* Sub-tabs */}
       <div className="inline-flex flex-wrap rounded-lg border border-neutral-200 bg-neutral-50 p-1">
         <button
+          onClick={() => setTab("general")}
+          className={cn(
+            "rounded-md px-4 py-2 text-xs font-semibold transition-all",
+            tab === "general"
+              ? "bg-white text-neutral-900 shadow-sm"
+              : "text-neutral-500 hover:text-neutral-700",
+          )}
+        >
+          General
+        </button>
+        <button
           onClick={() => setTab("coreLite")}
           className={cn(
             "rounded-md px-4 py-2 text-xs font-semibold transition-all",
@@ -2217,7 +2738,13 @@ function SectionComportamiento() {
         </button>
       </div>
 
-      {tab === "coreLite" ? <ComportamientoCoreLiteView /> : <ComportamientoBaseSosView />}
+      {tab === "general" ? (
+        <ComportamientoGeneralView />
+      ) : tab === "coreLite" ? (
+        <ComportamientoCoreLiteView />
+      ) : (
+        <ComportamientoBaseSosView />
+      )}
     </div>
   );
 }
@@ -3338,7 +3865,7 @@ function EngagementScatterSegment({
   accent,
   chartUrl,
 }: {
-  segment: "CORE" | "LITE" | "BASE" | "SOS";
+  segment: string;
   events: EngagementEvent[];
   accent: string;
   chartUrl?: string;
