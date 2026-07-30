@@ -2832,7 +2832,7 @@ function ComportamientoCoreLiteView() {
               Adopción funcionalidades — Uniques Mensual CORE vs LITE
             </h4>
             <p className="mt-0.5 text-xs text-neutral-500">
-              % de adopción por funcionalidad · Marzo 2026
+              % de adopción por funcionalidad · Junio 2026
             </p>
           </div>
         </div>
@@ -2914,6 +2914,15 @@ function ComportamientoBaseSosView() {
     ? sosEvents.filter((e) => e.label === activeFeature)
     : sosEvents;
 
+  const visibleBaseMonthly = activeFeature ? baseMonthlyAdoption.filter((s) => s.label === activeFeature) : baseMonthlyAdoption;
+  const visibleSosMonthly = activeFeature ? sosMonthlyAdoption.filter((s) => s.label === activeFeature) : sosMonthlyAdoption;
+  const toMonthlyRows = (series: MonthlyAdoptionSeries[]) =>
+    months6.map((m, i) => {
+      const row: Record<string, string | number> = { month: m };
+      series.forEach((s) => { row[s.label] = s.series[i]?.pct ?? 0; });
+      return row;
+    });
+
   return (
     <div className="space-y-6">
       <FeatureTagFilter
@@ -2931,7 +2940,7 @@ function ComportamientoBaseSosView() {
               Adopción funcionalidades — Uniques Mensual BASE vs SOS
             </h4>
             <p className="mt-1 text-xs text-neutral-500">
-              % de adopción por funcionalidad · Mar 2026 · Cohort BASE vs Cohort SOS
+              % de adopción por funcionalidad · Junio 2026 · Cohort BASE vs Cohort SOS
             </p>
           </div>
           <a
@@ -2955,6 +2964,32 @@ function ComportamientoBaseSosView() {
               <Bar dataKey="SOS" fill="#FF6B00" radius={[0, 4, 4, 0]} />
             </BarChart>
           </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Funcionalidades — Uniques Mensual BASE / SOS */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+        <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
+          <div>
+            <h4 className="text-base font-bold text-neutral-900">
+              Funcionalidades — Uniques Mensual BASE vs SOS
+            </h4>
+            <p className="mt-1 text-xs text-neutral-500">
+              % de adopción mensual por funcionalidad · Ene → Jun '26
+            </p>
+          </div>
+          <a
+            href="https://app.amplitude.com/analytics/alegra/chart/aq7o241v/edit/eeh2hzzt"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+          >
+            Amplitude <ExternalLink className="h-3 w-3" />
+          </a>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2">
+          <UniquesPctChart segment="BASE" accent={ALEGRA_GREEN} data={toMonthlyRows(visibleBaseMonthly)} series={visibleBaseMonthly} />
+          <UniquesPctChart segment="SOS" accent="#FF6B00" data={toMonthlyRows(visibleSosMonthly)} series={visibleSosMonthly} />
         </div>
       </div>
 
@@ -3043,28 +3078,28 @@ type EngagementEvent = {
   adoption: number; // % MAU
   frequency: number; // avg perform
 };
-// Datos reales Amplitude (Mar 2026)
+// Datos reales Amplitude (Junio 2026) — charts 8bsh2x62 (CORE) y jtbzs8ce (LITE)
 const coreEvents: EngagementEvent[] = [
-  { num: 1, label: "Crear factura", adoption: 44.3, frequency: 45.3 },
-  { num: 2, label: "Buscar factura", adoption: 38.2, frequency: 28.0 },
-  { num: 6, label: "Ver gráfico de ventas", adoption: 27.8, frequency: 9.3 },
-  { num: 4, label: "Crear cotización", adoption: 27.0, frequency: 27.1 },
-  { num: 3, label: "Crear contacto", adoption: 20.0, frequency: 10.6 },
-  { num: 5, label: "Crear ítem", adoption: 15.3, frequency: 7.3 },
-  { num: 8, label: "Crear remisión", adoption: 4.4, frequency: 42.4 },
-  { num: 9, label: "Crear factura de proveedor", adoption: 3.0, frequency: 10.4 },
-  { num: 10, label: "Crear gasto", adoption: 1.9, frequency: 9.4 },
+  { num: 1, label: "Crear factura", adoption: 36.5, frequency: 51.1 },
+  { num: 2, label: "Buscar factura", adoption: 32.9, frequency: 29.5 },
+  { num: 4, label: "Crear cotización", adoption: 22.5, frequency: 34.7 },
+  { num: 6, label: "Ver gráfico de ventas", adoption: 18.0, frequency: 11.6 },
+  { num: 3, label: "Crear contacto", adoption: 17.5, frequency: 8.9 },
+  { num: 5, label: "Crear ítem", adoption: 11.5, frequency: 7.4 },
+  { num: 8, label: "Crear remisión", adoption: 3.8, frequency: 74.6 },
+  { num: 9, label: "Crear factura de proveedor", adoption: 2.4, frequency: 9.5 },
+  { num: 10, label: "Crear gasto", adoption: 1.2, frequency: 13.5 },
 ];
 const liteEvents: EngagementEvent[] = [
-  { num: 1, label: "Crear factura", adoption: 56.7, frequency: 13.2 },
-  { num: 3, label: "Crear contacto", adoption: 27.6, frequency: 4.8 },
-  { num: 4, label: "Crear cotización", adoption: 24.2, frequency: 7.6 },
-  { num: 2, label: "Buscar factura", adoption: 24.2, frequency: 10.8 },
-  { num: 5, label: "Crear ítem", adoption: 23.2, frequency: 8.0 },
-  { num: 6, label: "Ver gráfico de ventas", adoption: 21.8, frequency: 7.0 },
-  { num: 8, label: "Crear remisión", adoption: 2.5, frequency: 8.4 },
-  { num: 10, label: "Crear gasto", adoption: 2.0, frequency: 8.0 },
-  { num: 9, label: "Crear factura de proveedor", adoption: 2.0, frequency: 8.2 },
+  { num: 1, label: "Crear factura", adoption: 47.4, frequency: 14.8 },
+  { num: 3, label: "Crear contacto", adoption: 23.5, frequency: 4.5 },
+  { num: 2, label: "Buscar factura", adoption: 20.3, frequency: 11.3 },
+  { num: 5, label: "Crear ítem", adoption: 18.7, frequency: 7.4 },
+  { num: 4, label: "Crear cotización", adoption: 18.6, frequency: 9.2 },
+  { num: 6, label: "Ver gráfico de ventas", adoption: 12.7, frequency: 10.4 },
+  { num: 8, label: "Crear remisión", adoption: 1.8, frequency: 11.4 },
+  { num: 9, label: "Crear factura de proveedor", adoption: 1.5, frequency: 7.7 },
+  { num: 10, label: "Crear gasto", adoption: 1.3, frequency: 10.0 },
 ];
 
 // Paleta compartida por evento (mismo color en CORE/LITE y BASE/SOS para la misma funcionalidad)
@@ -3098,47 +3133,49 @@ const eventNumberMap: Record<string, number> = {
 };
 const numberForEvent = (label: string) => eventNumberMap[label] ?? 0;
 
-// Adopción CORE vs LITE - basado en % adoption Mar 2026
-const adopcionCoreLiteData = Array.from(
-  new Set([...coreEvents.map((e) => e.label), ...liteEvents.map((e) => e.label)]),
-)
-  .map((label) => {
-    const c = coreEvents.find((e) => e.label === label);
-    const l = liteEvents.find((e) => e.label === label);
-    return { event: label, CORE: c ? c.adoption : 0, LITE: l ? l.adoption : 0 };
-  })
-  .sort((a, b) => b.CORE + b.LITE - (a.CORE + a.LITE));
+// Adopción CORE vs LITE — Uniques Mensual (chart g3xjg09o, Junio 2026)
+const adopcionCoreLiteData = [
+  { event: "Crear factura", CORE: 49.2, LITE: 65.8 },
+  { event: "Buscar factura", CORE: 50.4, LITE: 32.3 },
+  { event: "Ver gráfico de ventas", CORE: 33.3, LITE: 27.2 },
+  { event: "Crear contacto", CORE: 23.1, LITE: 33.6 },
+  { event: "Crear cotización", CORE: 29.8, LITE: 24.9 },
+  { event: "Crear ítem", CORE: 16.0, LITE: 28.0 },
+  { event: "Cuentas por cobrar", CORE: 18.1, LITE: 10.8 },
+  { event: "Crear remisión", CORE: 5.3, LITE: 2.7 },
+  { event: "Crear factura de proveedor", CORE: 3.3, LITE: 2.4 },
+];
 
 // Adopción mensual % por evento — Series reales Amplitude (Oct '25 → Mar '26)
 // Formula: % usuarios únicos del evento / MAC del segmento × 100
 type MonthlyAdoptionSeries = { label: string; num: number; series: { month: string; pct: number }[] };
 
-const months6 = ["Oct '25", "Nov '25", "Dic '25", "Ene '26", "Feb '26", "Mar '26"];
+const months6 = ["Ene", "Feb", "Mar", "Abr", "May", "Jun"];
 
-// % MAU mensual CORE (chart 8bsh2x62 con histórico mensual)
+// % Uniques mensual CORE (chart 3jd1mc2p, Ene → Jun '26)
 const coreMonthlyAdoption: MonthlyAdoptionSeries[] = [
-  { num: 1, label: "Crear factura",              series: zip(months6, [42.1, 41.5, 43.8, 41.0, 41.8, 44.3]) },
-  { num: 2, label: "Buscar factura",             series: zip(months6, [33.5, 34.6, 35.9, 35.4, 34.9, 38.2]) },
-  { num: 3, label: "Ver gráfico de ventas",      series: zip(months6, [22.5, 26.8, 28.6, 28.1, 27.9, 27.8]) },
-  { num: 4, label: "Crear cotización",           series: zip(months6, [27.6, 26.7, 25.5, 26.0, 26.4, 27.0]) },
-  { num: 5, label: "Crear contacto",             series: zip(months6, [22.0, 19.7, 20.2, 19.7, 20.3, 20.0]) },
-  { num: 6, label: "Crear ítem",                 series: zip(months6, [15.5, 14.7, 15.3, 12.9, 14.5, 15.3]) },
-  { num: 7, label: "Crear remisión",             series: zip(months6, [3.9, 3.7, 4.0, 3.6, 3.9, 4.4]) },
-  { num: 8, label: "Crear factura de proveedor", series: zip(months6, [2.8, 2.6, 2.7, 2.4, 2.7, 3.0]) },
-  { num: 9, label: "Crear gasto",                series: zip(months6, [1.7, 1.6, 1.7, 1.5, 1.7, 1.9]) },
+  { num: 1, label: "Crear factura",              series: zip(months6, [47.4, 47.1, 48.5, 47.8, 46.9, 49.0]) },
+  { num: 2, label: "Buscar factura",             series: zip(months6, [47.4, 46.4, 47.4, 47.3, 49.5, 50.2]) },
+  { num: 6, label: "Ver gráfico de ventas",      series: zip(months6, [35.4, 34.8, 33.8, 32.9, 33.2, 33.2]) },
+  { num: 4, label: "Crear cotización",           series: zip(months6, [29.4, 30.0, 29.4, 29.5, 30.5, 29.7]) },
+  { num: 3, label: "Crear contacto",             series: zip(months6, [22.2, 22.9, 21.9, 21.3, 23.2, 23.0]) },
+  { num: 5, label: "Crear ítem",                 series: zip(months6, [14.6, 16.2, 16.6, 15.4, 17.3, 15.9]) },
+  { num: 7, label: "Cuentas por cobrar",         series: zip(months6, [21.5, 19.8, 19.1, 18.6, 19.6, 18.0]) },
+  { num: 8, label: "Crear remisión",             series: zip(months6, [5.3, 5.2, 4.6, 5.3, 5.5, 5.3]) },
+  { num: 9, label: "Crear factura de proveedor", series: zip(months6, [3.2, 2.9, 3.3, 3.3, 3.1, 3.3]) },
 ];
 
-// % MAU mensual LITE (chart jtbzs8ce con histórico mensual)
+// % Uniques mensual LITE (chart 3jd1mc2p, Ene → Jun '26)
 const liteMonthlyAdoption: MonthlyAdoptionSeries[] = [
-  { num: 1, label: "Crear factura",              series: zip(months6, [55.0, 55.2, 56.7, 52.3, 53.5, 56.7]) },
-  { num: 2, label: "Crear contacto",             series: zip(months6, [29.4, 28.7, 27.8, 27.4, 28.2, 27.6]) },
-  { num: 3, label: "Crear cotización",           series: zip(months6, [23.2, 22.5, 20.6, 22.2, 22.5, 24.2]) },
-  { num: 4, label: "Buscar factura",             series: zip(months6, [19.8, 20.2, 21.0, 19.8, 19.7, 24.2]) },
-  { num: 5, label: "Crear ítem",                 series: zip(months6, [24.6, 23.6, 23.9, 23.4, 23.3, 23.2]) },
-  { num: 6, label: "Ver gráfico de ventas",      series: zip(months6, [16.7, 20.7, 23.0, 21.5, 21.2, 21.8]) },
-  { num: 7, label: "Crear remisión",             series: zip(months6, [2.2, 2.1, 2.3, 2.1, 2.2, 2.5]) },
-  { num: 8, label: "Crear gasto",                series: zip(months6, [1.8, 1.7, 1.9, 1.7, 1.8, 2.0]) },
-  { num: 9, label: "Crear factura de proveedor", series: zip(months6, [1.7, 1.7, 1.8, 1.6, 1.8, 2.0]) },
+  { num: 1, label: "Crear factura",              series: zip(months6, [64.5, 65.6, 63.6, 64.6, 65.4, 65.5]) },
+  { num: 3, label: "Crear contacto",             series: zip(months6, [31.9, 32.5, 30.4, 32.8, 33.4, 33.5]) },
+  { num: 2, label: "Buscar factura",             series: zip(months6, [31.1, 31.0, 32.8, 30.9, 33.3, 32.2]) },
+  { num: 6, label: "Ver gráfico de ventas",      series: zip(months6, [28.3, 28.0, 27.4, 27.5, 27.8, 27.1]) },
+  { num: 5, label: "Crear ítem",                 series: zip(months6, [26.7, 27.0, 25.4, 27.2, 26.8, 27.9]) },
+  { num: 4, label: "Crear cotización",           series: zip(months6, [25.9, 26.1, 26.6, 25.8, 25.8, 24.8]) },
+  { num: 7, label: "Cuentas por cobrar",         series: zip(months6, [12.1, 11.7, 12.0, 12.1, 11.8, 10.8]) },
+  { num: 8, label: "Crear remisión",             series: zip(months6, [2.3, 2.6, 2.6, 2.5, 2.7, 2.7]) },
+  { num: 9, label: "Crear factura de proveedor", series: zip(months6, [2.7, 2.4, 2.1, 2.3, 2.4, 2.4]) },
 ];
 
 function zip(months: string[], vals: number[]): { month: string; pct: number }[] {
@@ -3147,17 +3184,17 @@ function zip(months: string[], vals: number[]): { month: string; pct: number }[]
 
 // === Comportamiento BASE / SOS — datos reales Amplitude ===
 
-// Adopción funcionalidades BASE vs SOS - chart aq7o241v (Mar 2026)
+// Adopción funcionalidades BASE vs SOS - chart aq7o241v (Junio 2026)
 const adopcionBaseSosData = [
-  { event: "Crear factura", BASE: 76.0, SOS: 44.1 },
-  { event: "Crear contacto", BASE: 41.8, SOS: 18.8 },
-  { event: "Crear ítem", BASE: 35.5, SOS: 14.3 },
-  { event: "Buscar factura", BASE: 34.0, SOS: 40.7 },
-  { event: "Crear cotización", BASE: 28.8, SOS: 27.4 },
-  { event: "Ver gráfico de ventas", BASE: 28.7, SOS: 33.3 },
-  { event: "Cuentas por cobrar", BASE: 11.1, SOS: 18.2 },
-  { event: "Crear remisión", BASE: 3.2, SOS: 4.1 },
-  { event: "Crear factura de proveedor", BASE: 3.1, SOS: 2.4 },
+  { event: "Crear factura", BASE: 91.5, SOS: 43.0 },
+  { event: "Buscar factura", BASE: 32.7, SOS: 41.7 },
+  { event: "Crear contacto", BASE: 50.4, SOS: 19.7 },
+  { event: "Crear ítem", BASE: 39.7, SOS: 15.7 },
+  { event: "Ver gráfico de ventas", BASE: 19.5, SOS: 34.6 },
+  { event: "Crear cotización", BASE: 26.6, SOS: 27.1 },
+  { event: "Cuentas por cobrar", BASE: 7.6, SOS: 16.9 },
+  { event: "Crear remisión", BASE: 2.8, SOS: 4.2 },
+  { event: "Crear factura de proveedor", BASE: 2.9, SOS: 2.7 },
 ];
 
 // Engagement BASE - chart no1u7db2 (Mar 2026)
@@ -3184,6 +3221,30 @@ const sosEvents: EngagementEvent[] = [
   { num: 8, label: "Crear remisión", adoption: 4.0, frequency: 26.4 },
   { num: 9, label: "Crear factura de proveedor", adoption: 2.4, frequency: 4.8 },
   { num: 10, label: "Crear gasto", adoption: 2.2, frequency: 5.9 },
+];
+
+// % Uniques mensual BASE / SOS (chart aq7o241v/edit/eeh2hzzt, Ene → Jun '26)
+const baseMonthlyAdoption: MonthlyAdoptionSeries[] = [
+  { num: 1, label: "Crear factura",              series: zip(months6, [90.9, 90.6, 91.8, 91.2, 91.5, 91.5]) },
+  { num: 3, label: "Crear contacto",             series: zip(months6, [49.7, 48.3, 50.0, 48.5, 51.9, 50.4]) },
+  { num: 5, label: "Crear ítem",                 series: zip(months6, [38.6, 38.5, 38.5, 39.2, 39.0, 39.7]) },
+  { num: 2, label: "Buscar factura",             series: zip(months6, [31.7, 31.7, 33.8, 33.0, 34.5, 32.7]) },
+  { num: 4, label: "Crear cotización",           series: zip(months6, [27.5, 26.9, 28.9, 27.6, 28.5, 26.6]) },
+  { num: 6, label: "Ver gráfico de ventas",      series: zip(months6, [20.2, 21.0, 21.4, 20.7, 19.7, 19.5]) },
+  { num: 7, label: "Cuentas por cobrar",         series: zip(months6, [8.2, 8.0, 8.0, 8.5, 8.4, 7.6]) },
+  { num: 9, label: "Crear factura de proveedor", series: zip(months6, [2.4, 2.3, 2.3, 2.4, 2.5, 2.9]) },
+  { num: 8, label: "Crear remisión",             series: zip(months6, [2.8, 2.7, 3.0, 3.3, 3.5, 2.8]) },
+];
+const sosMonthlyAdoption: MonthlyAdoptionSeries[] = [
+  { num: 1, label: "Crear factura",              series: zip(months6, [49.3, 48.8, 48.0, 46.8, 46.0, 43.0]) },
+  { num: 2, label: "Buscar factura",             series: zip(months6, [45.4, 43.9, 46.4, 45.5, 47.6, 41.7]) },
+  { num: 6, label: "Ver gráfico de ventas",      series: zip(months6, [37.0, 34.8, 34.9, 34.6, 36.1, 34.6]) },
+  { num: 4, label: "Crear cotización",           series: zip(months6, [35.4, 35.5, 34.9, 34.5, 32.8, 27.1]) },
+  { num: 3, label: "Crear contacto",             series: zip(months6, [22.7, 23.6, 22.1, 22.6, 22.0, 19.7]) },
+  { num: 7, label: "Cuentas por cobrar",         series: zip(months6, [20.7, 19.0, 19.2, 19.2, 19.6, 16.9]) },
+  { num: 5, label: "Crear ítem",                 series: zip(months6, [17.6, 18.9, 19.1, 17.8, 19.1, 15.7]) },
+  { num: 8, label: "Crear remisión",             series: zip(months6, [5.3, 5.2, 5.1, 5.3, 5.2, 4.2]) },
+  { num: 9, label: "Crear factura de proveedor", series: zip(months6, [4.0, 3.6, 3.5, 3.5, 3.3, 2.7]) },
 ];
 
 function NegocioView() {
@@ -3732,10 +3793,10 @@ function FuncionalidadesUniquesShared({
                   Segmento
                 </th>
                 <th className="px-4 py-2 text-right font-semibold uppercase tracking-wider">
-                  Oct '25
+                  Ene '26
                 </th>
                 <th className="px-4 py-2 text-right font-semibold uppercase tracking-wider">
-                  Mar '26
+                  Jun '26
                 </th>
                 <th className="px-4 py-2 text-right font-semibold uppercase tracking-wider">
                   Variación
@@ -3817,12 +3878,14 @@ function UniquesPctChart({
   segment,
   data,
   series,
+  accent: accentProp,
 }: {
-  segment: "CORE" | "LITE";
+  segment: string;
   data: Record<string, string | number>[];
   series: MonthlyAdoptionSeries[];
+  accent?: string;
 }) {
-  const accent = segment === "CORE" ? ALEGRA_GREEN : "#FF6B00";
+  const accent = accentProp ?? (segment === "CORE" ? ALEGRA_GREEN : "#FF6B00");
   return (
     <div className="rounded-xl border border-neutral-200 bg-white p-4">
       <div className="mb-2 flex items-center gap-2">
@@ -4275,130 +4338,126 @@ function SectionIssues() {
         </div>
       </div>
 
-      {/* Charts: tendencia + origen */}
-      <div className="grid gap-6 lg:grid-cols-5">
-        {/* Línea: bugs por mes */}
-        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm lg:col-span-3">
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">
-                Tendencia
-              </p>
-              <h3 className="mt-1 text-base font-bold text-neutral-900">
-                Cantidad de bugs por mes
-              </h3>
-              <p className="mt-1 text-xs text-neutral-500">
-                Octubre 2025 – Marzo 2026
-              </p>
-            </div>
-            <Badge variant="outline" className="border-neutral-200 text-[10px] font-semibold text-neutral-600">
-              27 bugs
-            </Badge>
+      {/* Cantidad de bugs por mes según Soporte */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+        <div className="flex items-start justify-between gap-3 flex-wrap">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">
+              Tendencia
+            </p>
+            <h3 className="mt-1 text-base font-bold text-neutral-900">
+              Cantidad de bugs por mes según Soporte
+            </h3>
+            <p className="mt-1 text-xs text-neutral-500">
+              Octubre 2025 – Julio 2026
+            </p>
           </div>
-
-          <div className="mt-5 h-[260px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart
-                data={[
-                  { mes: "Oct", cantidad: 3 },
-                  { mes: "Nov", cantidad: 4 },
-                  { mes: "Dic", cantidad: 3 },
-                  { mes: "Ene", cantidad: 4 },
-                  { mes: "Feb", cantidad: 6 },
-                  { mes: "Mar", cantidad: 5 },
-                  { mes: "Abr", cantidad: 2 },
-                ]}
-                margin={{ top: 10, right: 16, left: 0, bottom: 0 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
-                <XAxis dataKey="mes" tick={{ fontSize: 11, fill: "#6b7280" }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fontSize: 11, fill: "#6b7280" }} axisLine={false} tickLine={false} allowDecimals={false} />
-                <Tooltip
-                  contentStyle={{
-                    borderRadius: 8,
-                    border: "1px solid #e5e7eb",
-                    fontSize: 12,
-                  }}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="cantidad"
-                  stroke="#EF4444"
-                  strokeWidth={2.5}
-                  dot={{ r: 4, fill: "#EF4444" }}
-                  activeDot={{ r: 6 }}
-                >
-                  <LabelList dataKey="cantidad" position="top" style={{ fontSize: 11, fill: "#374151", fontWeight: 600 }} />
-                </Line>
-              </LineChart>
-            </ResponsiveContainer>
+          <div className="flex items-center gap-4">
+            <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-center">
+              <p className="text-lg font-bold text-emerald-700">97%</p>
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-emerald-600">Resolución</p>
+            </div>
+            <a
+              href="https://datastudio.google.com/u/0/reporting/fc5b7d56-a831-48bd-a903-aa01bc1779b0/page/p_659nk7t5gd?s=s8etNsfsP48"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+            >
+              Data Studio <ExternalLink className="h-3 w-3" />
+            </a>
           </div>
         </div>
 
-        {/* Donut: origen Q1 */}
-        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm lg:col-span-2">
+        <div className="mt-5 h-[280px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart
+              data={[
+                { mes: "Oct", cantidad: 3 },
+                { mes: "Nov", cantidad: 4 },
+                { mes: "Dic", cantidad: 3 },
+                { mes: "Ene", cantidad: 4 },
+                { mes: "Feb", cantidad: 6 },
+                { mes: "Mar", cantidad: 5 },
+                { mes: "Abr", cantidad: 5 },
+                { mes: "May", cantidad: 3 },
+                { mes: "Jun", cantidad: 11 },
+                { mes: "Jul", cantidad: 2 },
+              ]}
+              margin={{ top: 10, right: 16, left: 0, bottom: 0 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+              <XAxis dataKey="mes" tick={{ fontSize: 11, fill: "#6b7280" }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fontSize: 11, fill: "#6b7280" }} axisLine={false} tickLine={false} allowDecimals={false} />
+              <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} />
+              <Line
+                type="monotone"
+                dataKey="cantidad"
+                name="Bugs"
+                stroke="#EF4444"
+                strokeWidth={2.5}
+                dot={{ r: 4, fill: "#EF4444" }}
+                activeDot={{ r: 6 }}
+              >
+                <LabelList dataKey="cantidad" position="top" style={{ fontSize: 11, fill: "#374151", fontWeight: 600 }} />
+              </Line>
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Issues atacados — Creados vs Cerrados */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+        <div className="flex items-start justify-between gap-3 flex-wrap">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">
-              Origen Q1
+              Estabilidad
             </p>
             <h3 className="mt-1 text-base font-bold text-neutral-900">
-              Total de bugs encontrados
+              Issues atacados — Creados vs Cerrados
             </h3>
             <p className="mt-1 text-xs text-neutral-500">
-              Detección por canal en Q3 2026
+              Diciembre 2025 – Julio 2026 · *Jul parcial
             </p>
           </div>
+          <a
+            href="https://linear.app/alegra/project/tmd-mobie-app-estabilidad-bc05f75e5e98/issues"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+          >
+            Ver en Linear <ExternalLink className="h-3 w-3" />
+          </a>
+        </div>
 
-          <div className="relative mt-3 h-[200px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={[
-                    { name: "Llamadas y visitas", value: 24, fill: "#EF4444" },
-                    { name: "Soporte (CS)", value: 14, fill: "#FCA5A5" },
-                  ]}
-                  dataKey="value"
-                  nameKey="name"
-                  innerRadius={55}
-                  outerRadius={85}
-                  paddingAngle={2}
-                  stroke="#fff"
-                  strokeWidth={2}
-                />
-                <Tooltip
-                  contentStyle={{
-                    borderRadius: 8,
-                    border: "1px solid #e5e7eb",
-                    fontSize: 12,
-                  }}
-                />
-              </PieChart>
-            </ResponsiveContainer>
-            <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-2xl font-bold text-neutral-900">38</span>
-              <span className="text-[10px] font-semibold uppercase tracking-wider text-neutral-500">
-                bugs Q1
-              </span>
-            </div>
-          </div>
-
-          <div className="mt-4 space-y-2">
-            <div className="flex items-center justify-between rounded-lg bg-neutral-50 px-3 py-2">
-              <div className="flex items-center gap-2">
-                <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: "#EF4444" }} />
-                <span className="text-xs font-medium text-neutral-700">Llamadas y visitas</span>
-              </div>
-              <span className="text-xs font-bold text-neutral-900">24</span>
-            </div>
-            <div className="flex items-center justify-between rounded-lg bg-neutral-50 px-3 py-2">
-              <div className="flex items-center gap-2">
-                <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: "#FCA5A5" }} />
-                <span className="text-xs font-medium text-neutral-700">Soporte (CS)</span>
-              </div>
-              <span className="text-xs font-bold text-neutral-900">14</span>
-            </div>
-          </div>
-
+        <div className="mt-5 h-[300px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              data={[
+                { mes: "Dic-25", creados: 15, cerrados: 2 },
+                { mes: "Ene-26", creados: 4, cerrados: 10 },
+                { mes: "Feb-26", creados: 8, cerrados: 6 },
+                { mes: "Mar-26", creados: 17, cerrados: 13 },
+                { mes: "Abr-26", creados: 16, cerrados: 20 },
+                { mes: "May-26", creados: 9, cerrados: 4 },
+                { mes: "Jun-26", creados: 8, cerrados: 7 },
+                { mes: "Jul-26*", creados: 2, cerrados: 7 },
+              ]}
+              margin={{ top: 16, right: 16, left: 0, bottom: 0 }}
+              barCategoryGap="25%"
+            >
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+              <XAxis dataKey="mes" tick={{ fontSize: 11, fill: "#6b7280" }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fontSize: 11, fill: "#6b7280" }} axisLine={false} tickLine={false} allowDecimals={false} />
+              <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} />
+              <Legend iconType="circle" wrapperStyle={{ fontSize: 12, paddingTop: 8 }} />
+              <Bar dataKey="creados" name="Creados" fill="#EF4444" radius={[4, 4, 0, 0]}>
+                <LabelList dataKey="creados" position="top" style={{ fontSize: 10, fill: "#6b7280" }} />
+              </Bar>
+              <Bar dataKey="cerrados" name="Cerrados" fill={ALEGRA_GREEN} radius={[4, 4, 0, 0]}>
+                <LabelList dataKey="cerrados" position="top" style={{ fontSize: 10, fill: "#6b7280" }} />
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       </div>
     </div>
