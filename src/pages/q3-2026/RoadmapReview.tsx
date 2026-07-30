@@ -2094,21 +2094,34 @@ function PlanDistributionCard({ title, subtitle, total, data }: { title: string;
   );
 }
 
-// Distribución BASE / SOS por país (Mar 2026) - aproximación a partir del mix por país
+// Distribución BASE / SOS por país (Junio 2026) - chart gdz0z6pc
+// BASE = Cohort Mobile App Top Users · SOS = Cohort App Mobile SOS
 const baseSosPorPaisData = [
-  { country: "Colombia", short: "CO", BASE: 39, SOS: 61 },
-  { country: "México", short: "MX", BASE: 33, SOS: 67 },
-  { country: "Costa Rica", short: "CR", BASE: 41, SOS: 59 },
-  { country: "Rep. Dominicana", short: "DOM", BASE: 36, SOS: 64 },
+  { country: "Colombia", short: "CO", BASE: 34, SOS: 66 },
+  { country: "México", short: "MX", BASE: 18, SOS: 82 },
+  { country: "Costa Rica", short: "CR", BASE: 20, SOS: 80 },
+  { country: "Rep. Dominicana", short: "DOM", BASE: 18, SOS: 82 },
 ];
 
 function BaseSosPorPais() {
   return (
     <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-      <h3 className="text-base font-bold text-neutral-900">
-        Distribución por país
-      </h3>
-      <p className="mt-1 text-xs text-neutral-500">% BASE vs SOS · Marzo 2026</p>
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <h3 className="text-base font-bold text-neutral-900">
+            Distribución por país
+          </h3>
+          <p className="mt-1 text-xs text-neutral-500">% BASE vs SOS · Junio 2026</p>
+        </div>
+        <a
+          href="https://app.amplitude.com/analytics/alegra/chart/gdz0z6pc"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+        >
+          Amplitude <ExternalLink className="h-3 w-3" />
+        </a>
+      </div>
       <div className="mt-4 space-y-3">
         {baseSosPorPaisData.map((c) => (
           <div key={c.country}>
@@ -2439,17 +2452,17 @@ function ComportamientoBaseSosView() {
 
 // === Negocio: Core / Lite ===
 
+// Chart wy27awa1 (MAC Tendencia Core y Lite), Ene → Jun '26.
 const macCoreLiteTrend = [
-  { month: "Oct '25", CORE: 4553, LITE: 3030 },
-  { month: "Nov '25", CORE: 4436, LITE: 2945 },
-  { month: "Dic '25", CORE: 4668, LITE: 3254 },
-  { month: "Ene '26", CORE: 4393, LITE: 2997 },
-  { month: "Feb '26", CORE: 4427, LITE: 3048 },
-  { month: "Mar '26", CORE: 4936, LITE: 3412 },
+  { month: "Ene", CORE: 4209, LITE: 2957 },
+  { month: "Feb", CORE: 4242, LITE: 2980 },
+  { month: "Mar", CORE: 4713, LITE: 3324 },
+  { month: "Abr", CORE: 4646, LITE: 3618 },
+  { month: "May", CORE: 5039, LITE: 3820 },
+  { month: "Jun", CORE: 4970, LITE: 3792 },
 ];
 
-// MAC por país (CORE / LITE) — Oct '25 → Mar '26
-// Fuente: Amplitude jgmbk3gb (CORE) y af1mxpmw (LITE), agregado por país
+// MAC por país (CORE / LITE) — Ene → Jun '26. Fuente: chart jgmbk3gb.
 type CoreLitePerCountry = {
   country: string;
   short: string;
@@ -2457,96 +2470,42 @@ type CoreLitePerCountry = {
   CORE: { month: string; v: number }[];
   LITE: { month: string; v: number }[];
 };
+const coreLiteMonths = ["Ene", "Feb", "Mar", "Abr", "May", "Jun"];
+const toSeries = (vals: number[]) => vals.map((v, i) => ({ month: coreLiteMonths[i], v }));
 const macCoreLitePerCountry: CoreLitePerCountry[] = [
   {
     country: "Colombia",
     short: "CO",
     color: ALEGRA_GREEN,
-    CORE: [
-      { month: "Oct '25", v: 2780 },
-      { month: "Nov '25", v: 2705 },
-      { month: "Dic '25", v: 2860 },
-      { month: "Ene '26", v: 2690 },
-      { month: "Feb '26", v: 2710 },
-      { month: "Mar '26", v: 3015 },
-    ],
-    LITE: [
-      { month: "Oct '25", v: 1860 },
-      { month: "Nov '25", v: 1810 },
-      { month: "Dic '25", v: 1990 },
-      { month: "Ene '26", v: 1840 },
-      { month: "Feb '26", v: 1870 },
-      { month: "Mar '26", v: 2095 },
-    ],
+    CORE: toSeries([2672, 2738, 3005, 2978, 3166, 3075]),
+    LITE: toSeries([1931, 1944, 2104, 2312, 2454, 2400]),
   },
   {
     country: "México",
     short: "MX",
     color: "#FF6B00",
-    CORE: [
-      { month: "Oct '25", v: 410 },
-      { month: "Nov '25", v: 405 },
-      { month: "Dic '25", v: 425 },
-      { month: "Ene '26", v: 398 },
-      { month: "Feb '26", v: 401 },
-      { month: "Mar '26", v: 442 },
-    ],
-    LITE: [
-      { month: "Oct '25", v: 270 },
-      { month: "Nov '25", v: 265 },
-      { month: "Dic '25", v: 290 },
-      { month: "Ene '26", v: 269 },
-      { month: "Feb '26", v: 273 },
-      { month: "Mar '26", v: 305 },
-    ],
+    CORE: toSeries([352, 360, 419, 412, 454, 485]),
+    LITE: toSeries([269, 258, 318, 349, 351, 379]),
   },
   {
     country: "Costa Rica",
     short: "CR",
     color: "#06B6D4",
-    CORE: [
-      { month: "Oct '25", v: 142 },
-      { month: "Nov '25", v: 138 },
-      { month: "Dic '25", v: 130 },
-      { month: "Ene '26", v: 139 },
-      { month: "Feb '26", v: 134 },
-      { month: "Mar '26", v: 145 },
-    ],
-    LITE: [
-      { month: "Oct '25", v: 92 },
-      { month: "Nov '25", v: 88 },
-      { month: "Dic '25", v: 79 },
-      { month: "Ene '26", v: 89 },
-      { month: "Feb '26", v: 87 },
-      { month: "Mar '26", v: 93 },
-    ],
+    CORE: toSeries([112, 120, 129, 137, 169, 176]),
+    LITE: toSeries([102, 95, 101, 116, 125, 137]),
   },
   {
     country: "Rep. Dominicana",
     short: "DOM",
     color: "#0066FF",
-    CORE: [
-      { month: "Oct '25", v: 720 },
-      { month: "Nov '25", v: 705 },
-      { month: "Dic '25", v: 745 },
-      { month: "Ene '26", v: 698 },
-      { month: "Feb '26", v: 705 },
-      { month: "Mar '26", v: 785 },
-    ],
-    LITE: [
-      { month: "Oct '25", v: 425 },
-      { month: "Nov '25", v: 415 },
-      { month: "Dic '25", v: 460 },
-      { month: "Ene '26", v: 419 },
-      { month: "Feb '26", v: 425 },
-      { month: "Mar '26", v: 478 },
-    ],
+    CORE: toSeries([620, 619, 711, 687, 773, 757]),
+    LITE: toSeries([394, 420, 489, 498, 535, 546]),
   },
 ];
 
 const corePieData = [
-  { name: "CORE", value: 4936, color: ALEGRA_GREEN },
-  { name: "LITE", value: 3412, color: "#FF6B00" },
+  { name: "CORE", value: 4970, color: ALEGRA_GREEN },
+  { name: "LITE", value: 3792, color: "#FF6B00" },
 ];
 const corePieTotal = corePieData.reduce((s, d) => s + d.value, 0);
 
@@ -2744,27 +2703,17 @@ function NegocioView() {
                 MAC — Tendencia CORE y LITE
               </h3>
               <p className="mt-1 text-xs text-neutral-500">
-                Últimos 6 meses · Usuarios pagos activos por tipo de negocio
+                Ene → Jun '26 · Usuarios pagos activos por tipo de negocio
               </p>
             </div>
-            <div className="flex items-center gap-3">
-              <a
-                href="https://app.amplitude.com/analytics/alegra/chart/jgmbk3gb"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
-              >
-                Amplitude CORE <ExternalLink className="h-3 w-3" />
-              </a>
-              <a
-                href="https://app.amplitude.com/analytics/alegra/chart/af1mxpmw"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
-              >
-                Amplitude LITE <ExternalLink className="h-3 w-3" />
-              </a>
-            </div>
+            <a
+              href="https://app.amplitude.com/analytics/alegra/chart/wy27awa1"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+            >
+              Amplitude <ExternalLink className="h-3 w-3" />
+            </a>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <div
@@ -2784,7 +2733,7 @@ function NegocioView() {
                 )}
               >
                 {coreUp ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
-                {coreUp ? "+" : ""}{coreDelta}% vs Oct '25
+                {coreUp ? "+" : ""}{coreDelta}% vs Ene '26
               </p>
             </div>
             <div
@@ -2804,7 +2753,7 @@ function NegocioView() {
                 )}
               >
                 {liteUp ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
-                {liteUp ? "+" : ""}{liteDelta}% vs Oct '25
+                {liteUp ? "+" : ""}{liteDelta}% vs Ene '26
               </p>
             </div>
           </div>
@@ -2830,7 +2779,7 @@ function NegocioView() {
           <h3 className="text-base font-bold text-neutral-900">
             Distribución CORE vs LITE
           </h3>
-          <p className="mt-1 text-xs text-neutral-500">Marzo 2026</p>
+          <p className="mt-1 text-xs text-neutral-500">Junio 2026</p>
           <div className="h-[260px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -2862,12 +2811,32 @@ function NegocioView() {
 
       {/* === Cards por país: variación vs Oct === */}
       <div>
-        <div className="mb-4 flex flex-wrap items-baseline justify-between gap-3">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-baseline gap-3">
             <h3 className="text-lg font-bold text-neutral-900">Detalle por país</h3>
             <span className="text-xs text-neutral-500">
               Click en una card para filtrar el gráfico de abajo
             </span>
+          </div>
+          <div className="inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1">
+            {([
+              { id: "both", label: "Todos" },
+              { id: "LITE", label: "Lite" },
+              { id: "CORE", label: "Core" },
+            ] as const).map((opt) => (
+              <button
+                key={opt.id}
+                onClick={() => setSegment(opt.id)}
+                className={cn(
+                  "rounded-md px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider transition-all",
+                  segment === opt.id
+                    ? "bg-white text-neutral-900 shadow-sm"
+                    : "text-neutral-500 hover:text-neutral-700",
+                )}
+              >
+                {opt.label}
+              </button>
+            ))}
           </div>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -2926,7 +2895,7 @@ function NegocioView() {
                     {up ? "+" : ""}{delta.toFixed(1)}%
                   </p>
                 </div>
-                <p className="mt-0.5 text-[10px] font-medium text-neutral-400">vs Oct '25</p>
+                <p className="mt-0.5 text-[10px] font-medium text-neutral-400">vs Ene '26</p>
               </button>
             );
           })}
@@ -2946,43 +2915,15 @@ function NegocioView() {
                 Filtra por segmento y país. Sin selección: agregado total.
               </p>
             </div>
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-3">
               <a
                 href="https://app.amplitude.com/analytics/alegra/chart/jgmbk3gb"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
               >
-                Amplitude CORE <ExternalLink className="h-3 w-3" />
+                Amplitude <ExternalLink className="h-3 w-3" />
               </a>
-              <a
-                href="https://app.amplitude.com/analytics/alegra/chart/af1mxpmw"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
-              >
-                Amplitude LITE <ExternalLink className="h-3 w-3" />
-              </a>
-              <div className="inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1">
-                {([
-                  { id: "both", label: "Core + Lite" },
-                  { id: "CORE", label: "Core" },
-                  { id: "LITE", label: "Lite" },
-                ] as const).map((opt) => (
-                  <button
-                    key={opt.id}
-                    onClick={() => setSegment(opt.id)}
-                    className={cn(
-                      "rounded-md px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider transition-all",
-                      segment === opt.id
-                        ? "bg-white text-neutral-900 shadow-sm"
-                        : "text-neutral-500 hover:text-neutral-700",
-                    )}
-                  >
-                    {opt.label}
-                  </button>
-                ))}
-              </div>
               {selectedCountry && (
                 <button
                   onClick={() => setSelectedCountry(null)}
@@ -3519,9 +3460,9 @@ function EngagementScatterSegment({
 // === Clusters BASE / SOS - bubble visualization ===
 
 function ClustersBubbles() {
-  // SOS = 62%, BASE = 38% (proporcional al tamaño del círculo via radio)
-  const sosPct = 62;
-  const basePct = 38;
+  // Chart d2fqi8hm (Junio): SOS = 72% (6.301), BASE = 28% (2.484). Radio ∝ √pct.
+  const sosPct = 72;
+  const basePct = 28;
   // El área del círculo es proporcional al porcentaje => radio ∝ √pct
   const sosRadius = Math.sqrt(sosPct) * 13; // px
   const baseRadius = Math.sqrt(basePct) * 13;
@@ -3538,7 +3479,7 @@ function ClustersBubbles() {
           </p>
         </div>
         <a
-          href="https://app.amplitude.com/analytics/alegra/chart/w4dmwazb"
+          href="https://app.amplitude.com/analytics/alegra/chart/d2fqi8hm"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
