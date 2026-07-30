@@ -1115,14 +1115,13 @@ function MacPorPais({ selectedCountry }: { selectedCountry?: string | null }) {
 
 // === Tasa de Adopción ===
 
-// Por país. wau (Adopción, entran) = chart 5vlf3f1x · wac (Real, acciones) = chart hqcerbqk.
-// Valores de Junio 2026 y su base de Enero '26 para calcular la variación en el año.
-const adoptionByCountry = [
-  { country: "Colombia", color: ALEGRA_GREEN, wau: 25.7, wauEne: 27.8, wac: 20.7, wacEne: 18.9 },
-  { country: "Rep. Dominicana", color: "#0066FF", wau: 48.5, wauEne: 52.0, wac: 39.5, wacEne: 36.2 },
-  { country: "México", color: "#FF6B00", wau: 31.3, wauEne: 31.3, wac: 24.0, wacEne: 19.9 },
-  { country: "Panamá", color: "#7C3AED", wau: 37.9, wauEne: 48.1, wac: 30.4, wacEne: 34.9 },
-  { country: "Costa Rica", color: "#06B6D4", wau: 43.0, wauEne: 42.4, wac: 34.1, wacEne: 27.6 },
+// Adopción (entran) = chart 5vlf3f1x · Real (acciones) = chart hqcerbqk. Series Ene–Jun '26.
+const adoptionMonths = ["Ene", "Feb", "Mar", "Abr", "May", "Jun"];
+const countryAdoption = [
+  { country: "Colombia", color: ALEGRA_GREEN, adopcion: [27.8, 26.3, 27.1, 26.3, 26.4, 25.7], real: [18.9, 18.3, 18.7, 19.8, 21.1, 20.7] },
+  { country: "Rep. Dominicana", color: "#0066FF", adopcion: [52.0, 49.8, 51.0, 51.0, 50.4, 48.5], real: [36.2, 35.4, 37.4, 38.6, 40.3, 39.5] },
+  { country: "México", color: "#FF6B00", adopcion: [31.3, 29.9, 31.1, 31.7, 31.1, 31.3], real: [19.9, 19.4, 21.5, 22.5, 23.3, 24.0] },
+  { country: "Costa Rica", color: "#06B6D4", adopcion: [42.4, 38.8, 37.5, 40.3, 41.6, 43.0], real: [27.6, 26.7, 25.5, 29.5, 32.7, 34.1] },
 ];
 
 // Evolución mensual % usuarios pagos activos (Ene → Jun '26) - chart rbp5ch2z
@@ -1180,6 +1179,25 @@ function TasaAdopcion() {
   const deltaReal = ((adopcionLast.real - adopcionFirst.real) / adopcionFirst.real) * 100;
   const upAdopcion = deltaAdopcion >= 0;
   const upReal = deltaReal >= 0;
+
+  // Filtros del bloque "por país": card seleccionada + tab de métrica del gráfico de línea.
+  const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
+  const [metricTab, setMetricTab] = useState<"adopcion" | "real">("adopcion");
+  const lastOf = (a: number[]) => a[a.length - 1];
+  const selected = countryAdoption.find((c) => c.country === selectedCountry) ?? null;
+
+  // Progress bar: país seleccionado o global (Todos los países).
+  const barAdopcion = selected ? lastOf(selected.adopcion) : tasaAdopcion;
+  const barReal = selected ? lastOf(selected.real) : tasaReal;
+  const barScope = selected ? selected.country : "Todos los países";
+
+  // Gráfico de línea por país, filtrado por métrica (tab) y país (cards).
+  const metricCountries = selected ? [selected] : countryAdoption;
+  const lineData = adoptionMonths.map((month, i) => {
+    const row: Record<string, number | string> = { month };
+    metricCountries.forEach((c) => { row[c.country] = c[metricTab][i]; });
+    return row;
+  });
 
   return (
     <div className="space-y-6">
@@ -1251,63 +1269,6 @@ function TasaAdopcion() {
         </div>
       </div>
 
-      {/* Progreso global unificado: Tasa Real (verde) sobre Tasa de Adopción (azul) */}
-      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-        <div className="mb-4 flex items-center justify-between">
-          <div>
-            <h4 className="text-sm font-bold text-neutral-900">
-              Tasa de Adopción global — Junio 2026
-            </h4>
-            <p className="mt-0.5 text-xs text-neutral-500">
-              % de usuarios pagos activos que entran a la app o realizan una acción
-            </p>
-          </div>
-          <a
-            href="https://app.amplitude.com/analytics/alegra/chart/rbp5ch2z"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
-          >
-            Amplitude <ExternalLink className="h-3 w-3" />
-          </a>
-        </div>
-        {/* Barra unificada: azul = Adopción, verde encima = Real */}
-        <div className="relative h-8 w-full overflow-hidden rounded-full bg-neutral-100">
-          <div
-            className="absolute left-0 top-0 h-full rounded-full transition-all"
-            style={{ width: `${tasaAdopcion}%`, backgroundColor: "#0066FF" }}
-          />
-          <div
-            className="absolute left-0 top-0 h-full rounded-full transition-all"
-            style={{ width: `${tasaReal}%`, backgroundColor: ALEGRA_GREEN }}
-          />
-          <span
-            className="absolute top-1/2 -translate-y-1/2 text-[11px] font-bold text-white"
-            style={{ left: `calc(${tasaReal}% - 38px)` }}
-          >
-            {tasaReal}%
-          </span>
-          <span
-            className="absolute top-1/2 -translate-y-1/2 text-[11px] font-bold text-white"
-            style={{ left: `calc(${tasaAdopcion}% - 42px)` }}
-          >
-            {tasaAdopcion}%
-          </span>
-        </div>
-        <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1.5 text-[11px]">
-          <div className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: ALEGRA_GREEN }} />
-            <span className="font-semibold text-neutral-700">Tasa de Adopción Real</span>
-            <span className="text-neutral-500">(MAC APP / MAC WEB)</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: "#0066FF" }} />
-            <span className="font-semibold text-neutral-700">Tasa de Adopción</span>
-            <span className="text-neutral-500">(MAU APP / MAC WEB)</span>
-          </div>
-        </div>
-      </div>
-
       {/* Evolución mensual */}
       <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
         <div className="mb-4 flex items-center justify-between">
@@ -1343,26 +1304,171 @@ function TasaAdopcion() {
         </div>
       </div>
 
-      {/* Cards por país: Adopción y Adopción Real (Junio 2026 vs Enero '26) */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-        {adoptionByCountry.map((c) => (
-          <div
-            key={c.country}
-            className="rounded-2xl border border-neutral-200 bg-white px-4 py-3 shadow-sm"
-            style={{ borderTop: `3px solid ${c.color}` }}
+      {/* === Tasa de adopción por país === */}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h3 className="text-lg font-bold text-neutral-900">Tasa de adopción por país</h3>
+        {selectedCountry && (
+          <button
+            onClick={() => setSelectedCountry(null)}
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-neutral-300 bg-white px-3 py-1.5 text-xs font-semibold text-neutral-700 shadow-sm transition-all hover:border-neutral-400 hover:bg-neutral-50 hover:text-neutral-900"
           >
-            <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
-              {c.country}
+            Limpiar filtros <span className="text-neutral-400">✕</span>
+          </button>
+        )}
+      </div>
+      <p className="-mt-3 text-xs text-neutral-500">
+        Clic en un país para filtrar la barra y el gráfico de evolución.
+      </p>
+
+      {/* Cards por país (filtros) — Junio 2026 vs Enero '26 */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {countryAdoption.map((c) => {
+          const isActive = selectedCountry === c.country;
+          return (
+            <button
+              key={c.country}
+              onClick={() => setSelectedCountry(isActive ? null : c.country)}
+              className={cn(
+                "rounded-2xl border bg-white px-4 py-3 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md",
+                isActive ? "border-neutral-900 ring-2 ring-neutral-900/10" : "border-neutral-200",
+              )}
+              style={{ borderTop: `3px solid ${c.color}` }}
+            >
+              <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
+                {c.country}
+              </p>
+              <div className="mt-2">
+                <AdoptionMetricRow label="Adopción" labelColor="#0066FF" value={lastOf(c.adopcion)} base={c.adopcion[0]} />
+              </div>
+              <div className="mt-2 border-t border-neutral-100 pt-2">
+                <AdoptionMetricRow label="Adopción Real" labelColor={ALEGRA_GREEN} value={lastOf(c.real)} base={c.real[0]} />
+              </div>
+              <p className="mt-2 text-[9px] font-medium text-neutral-400">vs Ene '26</p>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Progress bar (filtrado por card) */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+        <div className="mb-4 flex items-center justify-between">
+          <div>
+            <h4 className="text-sm font-bold text-neutral-900">
+              Tasa de Adopción — {barScope}
+            </h4>
+            <p className="mt-0.5 text-xs text-neutral-500">
+              Junio 2026 · % de usuarios pagos activos que entran a la app o realizan una acción
             </p>
-            <div className="mt-2">
-              <AdoptionMetricRow label="Adopción" labelColor="#0066FF" value={c.wau} base={c.wauEne} />
-            </div>
-            <div className="mt-2 border-t border-neutral-100 pt-2">
-              <AdoptionMetricRow label="Adopción Real" labelColor={ALEGRA_GREEN} value={c.wac} base={c.wacEne} />
-            </div>
-            <p className="mt-2 text-[9px] font-medium text-neutral-400">vs Ene '26</p>
           </div>
-        ))}
+          <a
+            href="https://app.amplitude.com/analytics/alegra/chart/rbp5ch2z"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+          >
+            Amplitude <ExternalLink className="h-3 w-3" />
+          </a>
+        </div>
+        <div className="relative h-8 w-full overflow-hidden rounded-full bg-neutral-100">
+          <div
+            className="absolute left-0 top-0 h-full rounded-full transition-all"
+            style={{ width: `${barAdopcion}%`, backgroundColor: "#0066FF" }}
+          />
+          <div
+            className="absolute left-0 top-0 h-full rounded-full transition-all"
+            style={{ width: `${barReal}%`, backgroundColor: ALEGRA_GREEN }}
+          />
+          <span
+            className="absolute top-1/2 -translate-y-1/2 text-[11px] font-bold text-white"
+            style={{ left: `calc(${barReal}% - 38px)` }}
+          >
+            {barReal.toFixed(1)}%
+          </span>
+          <span
+            className="absolute top-1/2 -translate-y-1/2 text-[11px] font-bold text-white"
+            style={{ left: `calc(${barAdopcion}% - 42px)` }}
+          >
+            {barAdopcion.toFixed(1)}%
+          </span>
+        </div>
+        <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1.5 text-[11px]">
+          <div className="flex items-center gap-1.5">
+            <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: ALEGRA_GREEN }} />
+            <span className="font-semibold text-neutral-700">Tasa de Adopción Real</span>
+            <span className="text-neutral-500">(MAC APP / MAC WEB)</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: "#0066FF" }} />
+            <span className="font-semibold text-neutral-700">Tasa de Adopción</span>
+            <span className="text-neutral-500">(MAU APP / MAC WEB)</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Gráfico de línea por país con tabs Adopción / Real (filtrado por card) */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h4 className="text-sm font-bold text-neutral-900">
+              Evolución por país — {metricTab === "adopcion" ? "Adopción" : "Adopción Real"}
+            </h4>
+            <p className="mt-0.5 text-xs text-neutral-500">
+              Ene → Jun '26 · {selectedCountry ?? "Todos los países"}
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1">
+              <button
+                onClick={() => setMetricTab("adopcion")}
+                className={cn(
+                  "rounded-md px-3 py-1.5 text-xs font-semibold transition-all",
+                  metricTab === "adopcion" ? "bg-white text-neutral-900 shadow-sm" : "text-neutral-500 hover:text-neutral-700",
+                )}
+              >
+                Adopción
+              </button>
+              <button
+                onClick={() => setMetricTab("real")}
+                className={cn(
+                  "rounded-md px-3 py-1.5 text-xs font-semibold transition-all",
+                  metricTab === "real" ? "bg-white text-neutral-900 shadow-sm" : "text-neutral-500 hover:text-neutral-700",
+                )}
+              >
+                Real
+              </button>
+            </div>
+            <a
+              href={metricTab === "adopcion" ? "https://app.amplitude.com/analytics/alegra/chart/5vlf3f1x" : "https://app.amplitude.com/analytics/alegra/chart/hqcerbqk"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+            >
+              Amplitude <ExternalLink className="h-3 w-3" />
+            </a>
+          </div>
+        </div>
+        <div className="h-[280px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={lineData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+              <XAxis dataKey="month" stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={{ stroke: "#e5e7eb" }} tickLine={false} />
+              <YAxis stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}%`} />
+              <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => `${v.toFixed(1)}%`} />
+              <Legend iconType="circle" wrapperStyle={{ fontSize: 11, paddingTop: 8 }} />
+              {metricCountries.map((c) => (
+                <Line
+                  key={c.country}
+                  type="monotone"
+                  dataKey={c.country}
+                  stroke={c.color}
+                  strokeWidth={c.country === "Colombia" ? 3 : 2}
+                  dot={{ r: 3 }}
+                  activeDot={{ r: 5 }}
+                />
+              ))}
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
       </div>
 
       {/* Chart por país */}
@@ -1397,31 +1503,35 @@ function TasaAdopcion() {
           </div>
         </div>
         <div className="space-y-3">
-          {adoptionByCountry.map((c) => (
-            <div key={c.country}>
-              <div className="mb-1 flex items-center justify-between text-xs">
-                <span className="font-medium text-neutral-700">{c.country}</span>
-                <div className="flex gap-3">
-                  <span className="text-[#0066FF]">
-                    Adopción <strong>{c.wau.toFixed(1)}%</strong>
-                  </span>
-                  <span style={{ color: ALEGRA_GREEN }}>
-                    Real <strong>{c.wac.toFixed(1)}%</strong>
-                  </span>
+          {countryAdoption.map((c) => {
+            const adop = lastOf(c.adopcion);
+            const real = lastOf(c.real);
+            return (
+              <div key={c.country}>
+                <div className="mb-1 flex items-center justify-between text-xs">
+                  <span className="font-medium text-neutral-700">{c.country}</span>
+                  <div className="flex gap-3">
+                    <span className="text-[#0066FF]">
+                      Adopción <strong>{adop.toFixed(1)}%</strong>
+                    </span>
+                    <span style={{ color: ALEGRA_GREEN }}>
+                      Real <strong>{real.toFixed(1)}%</strong>
+                    </span>
+                  </div>
+                </div>
+                <div className="relative h-5 w-full overflow-hidden rounded-full bg-neutral-100">
+                  <div
+                    className="absolute left-0 top-0 h-full rounded-full"
+                    style={{ width: `${Math.min(adop, 100)}%`, backgroundColor: "#0066FF40" }}
+                  />
+                  <div
+                    className="absolute left-0 top-0 h-full rounded-full"
+                    style={{ width: `${Math.min(real, 100)}%`, backgroundColor: ALEGRA_GREEN }}
+                  />
                 </div>
               </div>
-              <div className="relative h-5 w-full overflow-hidden rounded-full bg-neutral-100">
-                <div
-                  className="absolute left-0 top-0 h-full rounded-full"
-                  style={{ width: `${Math.min(c.wau, 100)}%`, backgroundColor: "#0066FF40" }}
-                />
-                <div
-                  className="absolute left-0 top-0 h-full rounded-full"
-                  style={{ width: `${Math.min(c.wac, 100)}%`, backgroundColor: ALEGRA_GREEN }}
-                />
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>
@@ -5043,7 +5153,12 @@ const itemsUxDeficiente = [
 
 // === Olas ===
 // Filtramos % usuarios pagos activos por país solo a Rep. Dominicana
-const adopcionRD = adoptionByCountry.find((c) => c.country === "Rep. Dominicana")!;
+const adopcionRDRaw = countryAdoption.find((c) => c.country === "Rep. Dominicana")!;
+const adopcionRD = {
+  country: adopcionRDRaw.country,
+  wau: adopcionRDRaw.adopcion[adopcionRDRaw.adopcion.length - 1],
+  wac: adopcionRDRaw.real[adopcionRDRaw.real.length - 1],
+};
 
 function Section5() {
   const segBase = segmentos.find((s) => s.id === "base")!;
