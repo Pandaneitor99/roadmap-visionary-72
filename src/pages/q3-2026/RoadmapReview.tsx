@@ -4192,27 +4192,6 @@ const devInitiativesS4 = [
     krs: ["KR 2.2"],
   },
   {
-    title: "Compartir y descargar remisiones",
-    tags: ["Adopción", "Engagement"],
-    problem:
-      "Falta la capacidad de compartir y descargar remisiones desde la app, limitando la operación móvil del usuario.",
-    krs: ["KR 2.2"],
-  },
-  {
-    title: "Búsqueda de documentos e información",
-    tags: ["Engagement"],
-    problem:
-      "Los usuarios no pueden encontrar fácilmente sus documentos e información dentro de la app, generando fricción en la consulta.",
-    krs: ["KR 1.3"],
-  },
-  {
-    title: "Onboarding del Q4",
-    tags: ["Adopción"],
-    problem:
-      "Continuación del trabajo de onboarding iniciado en Q4 para mejorar la activación de nuevos usuarios en la app.",
-    krs: ["KR 2.1"],
-  },
-  {
     title: "Estabilización",
     tags: ["Experiencia"],
     problem:
@@ -4227,11 +4206,25 @@ const devInitiativesS4 = [
     krs: ["KR 2.1"],
   },
   {
+    title: "Rediseño de contactos",
+    tags: ["Adopción", "Engagement"],
+    problem:
+      "Rediseño del flujo de contactos: intención de creación, uso y autocompletado de campos para reducir la fricción al crear un contacto.",
+    krs: ["KR 2.1"],
+  },
+  {
     title: "Rediseño Facturación Costa Rica",
     tags: ["Engagement", "Adopción"],
     problem:
       "Con la salida en web de la versión 4.4, la cantidad de facturas aumentó un 20%, sin embargo, en la app se mantuvo constante. Adicionalmente, la tasa de conversión es la menor de las 4 versiones (63% hoy).",
     krs: ["KR 2.1", "KR 2.2", "KR 2.3"],
+  },
+  {
+    title: "Rediseño Factura de venta Dominicana",
+    tags: ["Engagement", "Adopción"],
+    problem:
+      "Seguimiento del uso de la factura de venta en República Dominicana: facturas creadas vs intención (visitas a nueva factura).",
+    krs: ["KR 2.2"],
   },
 ];
 
@@ -4241,23 +4234,213 @@ const nonDevInitiativesS4 = [
     tags: ["Adopción"],
     problem: "No existe una sección dedicada para la app en la plataforma de Alegra.",
   },
-  {
-    title: "Testeo de push notification dentro de la app",
-    tags: ["Engagement"],
-    problem: "No se han probado las notificaciones push de forma estructurada.",
-  },
-  {
-    title: "G&S para incentivar descarga de usuarios web",
-    tags: ["Adopción"],
-    problem: "Bajo porcentaje de usuarios web que descargan la app.",
-  },
 ];
+
+// === Detalles de iniciativas específicos de Q3 ===
+const facturaMeses7 = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul"];
+
+function AmplitudeLink({ href, label = "Amplitude" }: { href: string; label?: string }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex shrink-0 items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+    >
+      {label} <ExternalLink className="h-3 w-3" />
+    </a>
+  );
+}
+
+function FacturaTotalesChart({ creadas, visitas }: { creadas: number[]; visitas: number[] }) {
+  const data = facturaMeses7.map((m, i) => ({ mes: m, Creadas: creadas[i], Visitas: visitas[i] }));
+  return (
+    <div className="h-[300px] w-full">
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart data={data} margin={{ top: 16, right: 16, left: 0, bottom: 0 }}>
+          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+          <XAxis dataKey="mes" tick={{ fontSize: 11, fill: "#6b7280" }} axisLine={false} tickLine={false} />
+          <YAxis tick={{ fontSize: 11, fill: "#6b7280" }} axisLine={false} tickLine={false} tickFormatter={(v) => v.toLocaleString("es-CO")} />
+          <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => v.toLocaleString("es-CO")} />
+          <Legend iconType="circle" wrapperStyle={{ fontSize: 12, paddingTop: 8 }} />
+          <Line type="monotone" dataKey="Visitas" name="Visitas a nueva factura" stroke="#93BD31" strokeWidth={2.5} dot={{ r: 3 }} activeDot={{ r: 6 }} />
+          <Line type="monotone" dataKey="Creadas" name="Facturas creadas" stroke="#0052F2" strokeWidth={2.5} dot={{ r: 3 }} activeDot={{ r: 6 }} />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+
+function RediseñoCRDetailQ3() {
+  return (
+    <div className="space-y-4">
+      <div className="flex items-start justify-between gap-3 flex-wrap">
+        <div>
+          <h4 className="text-base font-bold text-neutral-900">Factura de venta Costa Rica — Totales por mes</h4>
+          <p className="mt-0.5 text-xs text-neutral-500">Ene → Jul '26 · Facturas creadas vs visitas a nueva factura</p>
+        </div>
+        <AmplitudeLink href="https://app.amplitude.com/analytics/alegra/chart/6tootwru" />
+      </div>
+      <FacturaTotalesChart creadas={[1482, 1549, 1622, 1397, 1766, 2151, 1718]} visitas={[1970, 2037, 2214, 2395, 2797, 3321, 2500]} />
+    </div>
+  );
+}
+
+function RediseñoDominicanaDetailQ3() {
+  return (
+    <div className="space-y-4">
+      <div className="flex items-start justify-between gap-3 flex-wrap">
+        <div>
+          <h4 className="text-base font-bold text-neutral-900">Factura de venta República Dominicana — Totales por mes</h4>
+          <p className="mt-0.5 text-xs text-neutral-500">Ene → Jul '26 · Facturas creadas vs visitas a nueva factura</p>
+        </div>
+        <AmplitudeLink href="https://app.amplitude.com/analytics/alegra/chart/dxfa8lk5" />
+      </div>
+      <FacturaTotalesChart creadas={[6487, 5820, 6342, 6058, 6931, 7015, 7002]} visitas={[7922, 7222, 7906, 8079, 10007, 10002, 9881]} />
+    </div>
+  );
+}
+
+const contactosIntencionData = [
+  { sem: "3 May", pct: 34.3 }, { sem: "10", pct: 37.4 }, { sem: "17", pct: 35.2 }, { sem: "24", pct: 37.5 },
+  { sem: "31", pct: 38.5 }, { sem: "7 Jun", pct: 45.1 }, { sem: "14", pct: 47.3 }, { sem: "21", pct: 47.0 },
+  { sem: "28", pct: 43.0 }, { sem: "5 Jul", pct: 45.2 }, { sem: "12", pct: 44.5 }, { sem: "19", pct: 44.9 },
+];
+const contactosAutocompUso = [0, 0, 0, 1081, 4154, 4746, 5571];
+const contactosAutocompPie = [
+  { name: "Autocompletado", value: 2545, color: "#93BD31" },
+  { name: "Manual", value: 3799, color: "#0052F2" },
+];
+
+function RediseñoContactosDetailQ3() {
+  const autocompTotal = contactosAutocompPie.reduce((s, d) => s + d.value, 0);
+  const autocompPct = ((contactosAutocompPie[0].value / autocompTotal) * 100).toFixed(0);
+  return (
+    <div className="space-y-5">
+      {/* Uso de contactos */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <h4 className="text-sm font-bold text-neutral-900">Uso de contactos</h4>
+            <p className="mt-0.5 text-xs text-neutral-500">Dashboard de uso de contactos en Amplitude.</p>
+          </div>
+          <AmplitudeLink href="https://app.amplitude.com/analytics/alegra/chart/r7zqh9du" />
+        </div>
+      </div>
+
+      {/* Intención de creación */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <h4 className="text-sm font-bold text-neutral-900">Intención de creación de contactos</h4>
+            <p className="mt-0.5 text-xs text-neutral-500">% de conversión visita → creación · semanal</p>
+          </div>
+          <AmplitudeLink href="https://app.amplitude.com/analytics/alegra/chart/45ccva3n/edit/rsstm3hg" />
+        </div>
+        <div className="mt-3 h-[240px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={contactosIntencionData} margin={{ top: 16, right: 16, left: 0, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+              <XAxis dataKey="sem" tick={{ fontSize: 10, fill: "#6b7280" }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fontSize: 10, fill: "#6b7280" }} axisLine={false} tickLine={false} domain={[0, 60]} tickFormatter={(v) => `${v}%`} />
+              <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => `${v.toFixed(1)}%`} />
+              <Line type="monotone" dataKey="pct" name="Conversión" stroke={ALEGRA_GREEN} strokeWidth={2.5} dot={{ r: 3 }} activeDot={{ r: 6 }} />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Autocompletado */}
+      <div className="grid gap-5 md:grid-cols-2">
+        <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <h4 className="text-sm font-bold text-neutral-900">Autocompletado — uso mensual</h4>
+              <p className="mt-0.5 text-xs text-neutral-500">Contactos creados con autocompletado · Ene → Jul '26</p>
+            </div>
+            <AmplitudeLink href="https://app.amplitude.com/analytics/alegra/chart/2wkal2xq" />
+          </div>
+          <div className="mt-3 h-[220px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={facturaMeses7.map((m, i) => ({ mes: m, v: contactosAutocompUso[i] }))} margin={{ top: 16, right: 16, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                <XAxis dataKey="mes" tick={{ fontSize: 10, fill: "#6b7280" }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fontSize: 10, fill: "#6b7280" }} axisLine={false} tickLine={false} tickFormatter={(v) => v.toLocaleString("es-CO")} />
+                <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => v.toLocaleString("es-CO")} />
+                <Line type="monotone" dataKey="v" name="Con autocompletado" stroke="#93BD31" strokeWidth={2.5} dot={{ r: 3 }} activeDot={{ r: 6 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <h4 className="text-sm font-bold text-neutral-900">Autocompletado — % de contactos</h4>
+              <p className="mt-0.5 text-xs text-neutral-500">Contactos con autocompletado vs manual</p>
+            </div>
+            <AmplitudeLink href="https://app.amplitude.com/analytics/alegra/chart/rablks0e" />
+          </div>
+          <div className="relative mt-3 h-[220px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie data={contactosAutocompPie} dataKey="value" nameKey="name" innerRadius={55} outerRadius={85} paddingAngle={2}>
+                  {contactosAutocompPie.map((e) => (
+                    <Cell key={e.name} fill={e.color} />
+                  ))}
+                </Pie>
+                <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => `${v.toLocaleString("es-CO")} (${((v / autocompTotal) * 100).toFixed(1)}%)`} />
+              </PieChart>
+            </ResponsiveContainer>
+            <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center">
+              <span className="text-2xl font-bold text-neutral-900">{autocompPct}%</span>
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-neutral-500">Autocompletado</span>
+            </div>
+          </div>
+          <div className="mt-2 flex items-center justify-center gap-4 text-[11px]">
+            {contactosAutocompPie.map((d) => (
+              <span key={d.name} className="flex items-center gap-1.5">
+                <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: d.color }} />
+                <span className="font-semibold text-neutral-700">{d.name}</span>
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function EstabilizacionDetailQ3() {
+  return (
+    <div className="space-y-4">
+      <div className="flex items-start justify-between gap-3 flex-wrap">
+        <div>
+          <h4 className="text-base font-bold text-neutral-900">Estabilización — Dashboard</h4>
+          <p className="mt-0.5 text-xs text-neutral-500">Seguimiento de errores y estabilidad de la app.</p>
+        </div>
+        <AmplitudeLink href="https://app.amplitude.com/analytics/alegra/chart/r7zqh9du" />
+      </div>
+      <p className="text-sm leading-relaxed text-neutral-600">
+        Consulta el detalle del dashboard de estabilización en Amplitude.
+      </p>
+    </div>
+  );
+}
+
+const q3InitiativeDetailMap = {
+  ...initiativeDetailMap,
+  "Estabilización": EstabilizacionDetailQ3,
+  "Rediseño Facturación Costa Rica": RediseñoCRDetailQ3,
+  "Rediseño de contactos": RediseñoContactosDetailQ3,
+  "Rediseño Factura de venta Dominicana": RediseñoDominicanaDetailQ3,
+};
 
 function Section4() {
   const okr1 = okrs.find((o) => o.id === "obj-1");
   const okr2 = okrs.find((o) => o.id === "obj-2");
   const [openInit, setOpenInit] = useState<string | null>(null);
-  const DetailComp = openInit ? initiativeDetailMap[openInit] : null;
+  const DetailComp = openInit ? q3InitiativeDetailMap[openInit] : null;
 
   return (
     <div className="space-y-12">
@@ -4293,7 +4476,7 @@ function Section4() {
             <SimpleInitiativeCard
               key={idx}
               {...i}
-              onClick={initiativeDetailMap[i.title] ? () => setOpenInit(i.title) : undefined}
+              onClick={q3InitiativeDetailMap[i.title] ? () => setOpenInit(i.title) : undefined}
             />
           ))}
         </div>
@@ -4314,7 +4497,7 @@ function Section4() {
             <SimpleInitiativeCard
               key={idx}
               {...i}
-              onClick={initiativeDetailMap[i.title] ? () => setOpenInit(i.title) : undefined}
+              onClick={q3InitiativeDetailMap[i.title] ? () => setOpenInit(i.title) : undefined}
             />
           ))}
         </div>
