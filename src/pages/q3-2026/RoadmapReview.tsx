@@ -373,9 +373,9 @@ type Segmento = {
 const segmentos: Segmento[] = [
   {
     id: "base",
-    nombre: "Pyme BASE (Pequeña)",
+    nombre: "Pyme Mobile First",
     badge: "Móvil-first",
-    tamano: "~40% del MAC (~2,924 usuarios)",
+    tamano: "~28% del MAC (~2,484 usuarios)",
     dolor: "Muy alto",
     impacto: "Engagement / Adquisición",
     alternativa: "Web Alegra cuando tiene PC",
@@ -393,51 +393,10 @@ const segmentos: Segmento[] = [
       "Facturar en ≤90 segundos, descargarlo y compartirlo con el cliente al frente. Saber de un vistazo que el negocio está al día. Tener un control completo de la venta y del gasto.",
   },
   {
-    id: "sos",
-    nombre: "Pyme SOS (Mediana)",
-    badge: "Web-first",
-    tamano: "~60% del MAC (~4,700 usuarios)",
-    dolor: "Medio",
-    impacto: "Adopción",
-    alternativa: "Vuelve al PC, pierde la venta",
-    prioridad: "Alta",
-    color: "#FF6B00",
-    problema:
-      "No tiene una razón poderosa para cambiar su hábito. La app se percibe como 'más limitada y complicada que la web'. Cuando la necesita (está fuera del computador), la experiencia lo decepciona y refuerza el comportamiento de volver al PC.",
-    costos: [
-      "Pierde la oportunidad de facturar o consultar estado al instante — depende del PC.",
-      "Costos de re-trabajo al tener que ir al PC para registrar lo que no puede hacer en la app.",
-      "Baja percepción de utilidad de la app y pensamiento negativo hacia la marca.",
-      "Baja concentración de riesgo de churn.",
-    ],
-    valor:
-      "Una primera experiencia tan fluida que el usuario quiera volver. Una razón para tener la app instalada que no sea la emergencia, sino la conveniencia cotidiana.",
-  },
-  {
-    id: "nuevos",
-    nombre: "Nuevos usuarios web",
-    badge: "Sin app",
-    tamano: "70% de usuarios web no usan la app",
-    dolor: "Medio",
-    impacto: "Adopción",
-    alternativa: "No usan app",
-    prioridad: "Media",
-    color: "#0066FF",
-    problema:
-      "70% de usuarios web nunca han instalado o probado la app. No la conocen o no la encuentran como una opción real para sus operaciones diarias.",
-    costos: [
-      "Oportunidad de adopción no capturada — base potencial enorme sin activar.",
-      "Pierden la conveniencia móvil para acciones críticas.",
-      "Menor engagement transversal con el ecosistema Alegra.",
-    ],
-    valor:
-      "Visibilidad y descubrimiento de la app dentro del ecosistema Alegra. Una primera experiencia que muestre el valor inmediato de tener la app a la mano.",
-  },
-  {
     id: "contador",
     nombre: "Contador",
     badge: "Sub-servido",
-    tamano: "Subrepresentado",
+    tamano: "~3% del MAC (~266 usuarios)",
     dolor: "Medio",
     impacto: "Adopción",
     alternativa: "Reportes en web, llamadas al cliente",
@@ -452,6 +411,27 @@ const segmentos: Segmento[] = [
     ],
     valor:
       "Panel de control en el bolsillo. Estado de los negocios de sus clientes en segundos. Validaciones y alertas que llegan sin buscarlas.",
+  },
+  {
+    id: "sos",
+    nombre: "Pyme Web First",
+    badge: "Web-first",
+    tamano: "~72% del MAC (~6,301 usuarios)",
+    dolor: "Medio",
+    impacto: "Adopción",
+    alternativa: "Vuelve al PC, pierde la venta",
+    prioridad: "Alta",
+    color: "#FF6B00",
+    problema:
+      "No tiene una razón poderosa para cambiar su hábito. La app se percibe como 'más limitada y complicada que la web'. Cuando la necesita (está fuera del computador), la experiencia lo decepciona y refuerza el comportamiento de volver al PC.",
+    costos: [
+      "Pierde la oportunidad de facturar o consultar estado al instante — depende del PC.",
+      "Costos de re-trabajo al tener que ir al PC para registrar lo que no puede hacer en la app.",
+      "Baja percepción de utilidad de la app y pensamiento negativo hacia la marca.",
+      "Baja concentración de riesgo de churn.",
+    ],
+    valor:
+      "Visibilidad y descubrimiento de la app dentro del ecosistema Alegra. Una primera experiencia que muestre el valor inmediato de tener la app a la mano.",
   },
 ];
 
@@ -527,7 +507,7 @@ function SegmentosObjetivo() {
       </div>
 
       {/* Cards de segmentos clickeables */}
-      <div className="mb-6 grid gap-3 md:grid-cols-4">
+      <div className="mb-6 grid gap-3 md:grid-cols-3">
         {segmentos.map((s) => {
           const active = s.id === selected;
           return (
@@ -786,13 +766,7 @@ function Section2() {
             </div>
           </div>
 
-          {/* Chip de la vista de MAC */}
-          <div className="mb-4 flex items-center justify-between gap-3 flex-wrap">
-            <div className="inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1">
-              <span className="rounded-md bg-white px-3 py-1.5 text-xs font-semibold text-neutral-900 shadow-sm">
-                MAC — Tendencia
-              </span>
-            </div>
+          <div className="mb-4 flex items-center justify-end gap-3 flex-wrap">
             <a
               href="https://app.amplitude.com/analytics/alegra/chart/rg181rta"
               target="_blank"
@@ -1071,7 +1045,9 @@ function MacPorPais({ selectedCountry }: { selectedCountry?: string | null }) {
         <div className="mb-2 flex items-center justify-between">
           <div>
             <h3 className="text-base font-bold text-neutral-900">MAC — Distribución por país</h3>
-            <p className="mt-1 text-xs text-neutral-500">Marzo 2026</p>
+            <p className="mt-1 text-xs text-neutral-500">
+              Marzo 2026{selectedCountry ? ` · ${selectedCountry}` : ""}
+            </p>
           </div>
           <a
             href="https://app.amplitude.com/analytics/alegra/chart/0ixf9ww7"
@@ -1082,12 +1058,18 @@ function MacPorPais({ selectedCountry }: { selectedCountry?: string | null }) {
             Amplitude <ExternalLink className="h-3 w-3" />
           </a>
         </div>
-        <div className="h-[220px] w-full">
+        <div className="relative h-[220px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie data={macPieData} dataKey="value" nameKey="name" innerRadius={45} outerRadius={85} paddingAngle={2}>
                 {macPieData.map((entry) => (
-                  <Cell key={entry.name} fill={entry.color} />
+                  <Cell
+                    key={entry.name}
+                    fill={entry.color}
+                    fillOpacity={selectedCountry && entry.name !== selectedCountry ? 0.2 : 1}
+                    stroke={selectedCountry === entry.name ? "#111827" : "#fff"}
+                    strokeWidth={selectedCountry === entry.name ? 2 : 1}
+                  />
                 ))}
               </Pie>
               <Tooltip
@@ -1096,10 +1078,23 @@ function MacPorPais({ selectedCountry }: { selectedCountry?: string | null }) {
               />
             </PieChart>
           </ResponsiveContainer>
+          {selectedCountry && macPieData.some((d) => d.name === selectedCountry) && (
+            <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center">
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-neutral-400">
+                {selectedCountry}
+              </span>
+              <span className="text-xl font-bold text-neutral-900">
+                {((macPieData.find((x) => x.name === selectedCountry)!.value / macPieTotal) * 100).toFixed(0)}%
+              </span>
+            </div>
+          )}
         </div>
         <div className="mt-3 grid grid-cols-2 gap-x-3 gap-y-1 text-[11px]">
           {macPieData.slice(0, 6).map((d) => (
-            <div key={d.name} className="flex items-center gap-1.5">
+            <div
+              key={d.name}
+              className={cn("flex items-center gap-1.5", selectedCountry && d.name !== selectedCountry && "opacity-40")}
+            >
               <span className="h-2 w-2 rounded-full" style={{ backgroundColor: d.color }} />
               <span className="text-neutral-600">{d.name}</span>
               <span className="ml-auto font-semibold text-neutral-900">
@@ -1753,6 +1748,10 @@ function IcpView() {
   // Chips de perfil (controlan cards y gráfico de detalle) + país seleccionado.
   const [segment, setSegment] = useState<"both" | "PYME" | "CONTADOR">("both");
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
+  // Filtro del gráfico principal por card (Pyme / Contador).
+  const [mainFilter, setMainFilter] = useState<"both" | "PYME" | "CONTADOR">("both");
+  const showMainPyme = mainFilter === "both" || mainFilter === "PYME";
+  const showMainContador = mainFilter === "both" || mainFilter === "CONTADOR";
 
   const last = icpTrend[icpTrend.length - 1];
   const first = icpTrend[0];
@@ -1798,22 +1797,36 @@ function IcpView() {
             </a>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="rounded-xl border bg-white p-4" style={{ borderLeft: `4px solid ${ALEGRA_GREEN}` }}>
+            <button
+              onClick={() => setMainFilter(mainFilter === "PYME" ? "both" : "PYME")}
+              className={cn(
+                "rounded-xl border bg-white p-4 text-left transition-all hover:shadow-sm",
+                mainFilter === "PYME" ? "ring-2 ring-offset-1" : "",
+              )}
+              style={{ borderLeft: `4px solid ${ALEGRA_GREEN}`, ["--tw-ring-color" as any]: ALEGRA_GREEN }}
+            >
               <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">MAC Pyme</p>
               <p className="mt-1 text-2xl font-bold text-neutral-900">{last.PYME.toLocaleString("es-CO")}</p>
               <p className={cn("mt-1 flex items-center gap-1 text-xs font-bold", pymeUp ? "text-emerald-600" : "text-red-600")}>
                 {pymeUp ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
                 {pymeUp ? "+" : ""}{pymeDelta}% vs Ene '26
               </p>
-            </div>
-            <div className="rounded-xl border bg-white p-4" style={{ borderLeft: `4px solid #FF6B00` }}>
+            </button>
+            <button
+              onClick={() => setMainFilter(mainFilter === "CONTADOR" ? "both" : "CONTADOR")}
+              className={cn(
+                "rounded-xl border bg-white p-4 text-left transition-all hover:shadow-sm",
+                mainFilter === "CONTADOR" ? "ring-2 ring-offset-1" : "",
+              )}
+              style={{ borderLeft: `4px solid #FF6B00`, ["--tw-ring-color" as any]: "#FF6B00" }}
+            >
               <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">MAC Contador</p>
               <p className="mt-1 text-2xl font-bold text-neutral-900">{last.CONTADOR.toLocaleString("es-CO")}</p>
               <p className={cn("mt-1 flex items-center gap-1 text-xs font-bold", contadorUp ? "text-emerald-600" : "text-red-600")}>
                 {contadorUp ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
                 {contadorUp ? "+" : ""}{contadorDelta}% vs Ene '26
               </p>
-            </div>
+            </button>
           </div>
           <div className="mt-6 h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
@@ -1823,8 +1836,8 @@ function IcpView() {
                 <YAxis stroke="#6b7280" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} tickFormatter={(v) => v.toLocaleString("es-CO")} />
                 <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => v.toLocaleString("es-CO")} />
                 <Legend iconType="circle" wrapperStyle={{ fontSize: 12, paddingTop: 12 }} />
-                <Line type="monotone" dataKey="PYME" name="Pyme" stroke={ALEGRA_GREEN} strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
-                <Line type="monotone" dataKey="CONTADOR" name="Contador" stroke="#FF6B00" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+                {showMainPyme && <Line type="monotone" dataKey="PYME" name="Pyme" stroke={ALEGRA_GREEN} strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />}
+                {showMainContador && <Line type="monotone" dataKey="CONTADOR" name="Contador" stroke="#FF6B00" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />}
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -2040,7 +2053,7 @@ function Section3() {
               Base de usuarios
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-neutral-600">
-              Analizamos a los usuarios pagos activos en la app desde dos lentes complementarios: por <strong>tipo de negocio</strong> (Core / Lite) y por <strong>comportamiento</strong> (BASE / SOS).
+              Analizamos a los usuarios pagos activos en la app desde dos lentes complementarios: por <strong>tipo de negocio</strong> (Core / Lite) y por <strong>comportamiento</strong> (Mobile First / Web First).
             </p>
           </div>
         </div>
@@ -2057,7 +2070,7 @@ function Section3() {
               : "text-neutral-500 hover:text-neutral-700",
           )}
         >
-          Negocio · Core y Lite
+          CORE y LITE
         </button>
         <button
           onClick={() => setTab("icp")}
@@ -2079,7 +2092,7 @@ function Section3() {
               : "text-neutral-500 hover:text-neutral-700",
           )}
         >
-          BASE y SOS
+          Mobile First · Web First
         </button>
       </div>
 
@@ -2104,7 +2117,7 @@ function BaseSosView() {
                 className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white"
                 style={{ backgroundColor: "#FF6B00" }}
               >
-                <AlertTriangle className="h-3 w-3" /> SOS
+                <AlertTriangle className="h-3 w-3" /> Web First
               </span>
               <h3 className="mt-3 text-xl font-bold text-neutral-900">
                 Utilizan la app para una emergencia
@@ -2112,7 +2125,7 @@ function BaseSosView() {
             </div>
             <div className="text-right">
               <p className="text-3xl font-bold" style={{ color: "#FF6B00" }}>
-                62%
+                72%
               </p>
               <p className="text-[10px] uppercase tracking-wider text-neutral-500">
                 de usuarios
@@ -2135,7 +2148,7 @@ function BaseSosView() {
                 className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white"
                 style={{ backgroundColor: ALEGRA_GREEN }}
               >
-                <Star className="h-3 w-3" /> BASE
+                <Star className="h-3 w-3" /> Mobile First
               </span>
               <h3 className="mt-3 text-xl font-bold text-neutral-900">
                 Utilizan la app como su principal herramienta
@@ -2143,7 +2156,7 @@ function BaseSosView() {
             </div>
             <div className="text-right">
               <p className="text-3xl font-bold" style={{ color: ALEGRA_GREEN }}>
-                38%
+                28%
               </p>
               <p className="text-[10px] uppercase tracking-wider text-neutral-500">
                 de usuarios
@@ -2440,7 +2453,7 @@ function BaseSosPorPais() {
           <h3 className="text-base font-bold text-neutral-900">
             Distribución por país
           </h3>
-          <p className="mt-1 text-xs text-neutral-500">% BASE vs SOS · Junio 2026</p>
+          <p className="mt-1 text-xs text-neutral-500">% Mobile First vs Web First · Junio 2026</p>
         </div>
         <a
           href="https://app.amplitude.com/analytics/alegra/chart/gdz0z6pc"
@@ -2478,11 +2491,11 @@ function BaseSosPorPais() {
       <div className="mt-4 flex items-center justify-center gap-4 text-[11px]">
         <span className="flex items-center gap-1.5">
           <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: ALEGRA_GREEN }} />
-          <span className="font-semibold text-neutral-700">BASE</span>
+          <span className="font-semibold text-neutral-700">Mobile First</span>
         </span>
         <span className="flex items-center gap-1.5">
           <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: "#FF6B00" }} />
-          <span className="font-semibold text-neutral-700">SOS</span>
+          <span className="font-semibold text-neutral-700">Web First</span>
         </span>
       </div>
     </div>
@@ -2695,7 +2708,7 @@ function SectionComportamiento() {
               Comportamiento de usuarios
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-neutral-600">
-              Cómo se relacionan los usuarios con las funcionalidades de la app, segmentado por <strong>Negocio (Core / Lite)</strong> y por <strong>Comportamiento (BASE / SOS)</strong>.
+              Cómo se relacionan los usuarios con las funcionalidades de la app, segmentado por <strong>Negocio (Core / Lite)</strong> y por <strong>Comportamiento (Mobile First / Web First)</strong>.
             </p>
           </div>
         </div>
@@ -2723,7 +2736,7 @@ function SectionComportamiento() {
               : "text-neutral-500 hover:text-neutral-700",
           )}
         >
-          Negocio · Core y Lite
+          CORE y LITE
         </button>
         <button
           onClick={() => setTab("baseSos")}
@@ -2734,7 +2747,7 @@ function SectionComportamiento() {
               : "text-neutral-500 hover:text-neutral-700",
           )}
         >
-          BASE y SOS
+          Mobile First · Web First
         </button>
       </div>
 
@@ -2929,18 +2942,18 @@ function ComportamientoBaseSosView() {
         features={allFeatures}
         active={activeFeature}
         onChange={setActiveFeature}
-        description="Selecciona un tag para filtrar los gráficos de adopción y engagement BASE / SOS"
+        description="Selecciona un tag para filtrar los gráficos de adopción y engagement Mobile First / Web First"
       />
 
-      {/* Adopción funcionalidades BASE vs SOS */}
+      {/* Adopción funcionalidades Mobile First vs Web First */}
       <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
         <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
           <div>
             <h4 className="text-base font-bold text-neutral-900">
-              Adopción funcionalidades — Uniques Mensual BASE vs SOS
+              Adopción funcionalidades — Uniques Mensual Mobile First vs Web First
             </h4>
             <p className="mt-1 text-xs text-neutral-500">
-              % de adopción por funcionalidad · Junio 2026 · Cohort BASE vs Cohort SOS
+              % de adopción por funcionalidad · Junio 2026 · Cohort Mobile First vs Cohort Web First
             </p>
           </div>
           <a
@@ -2960,19 +2973,19 @@ function ComportamientoBaseSosView() {
               <YAxis dataKey="event" type="category" stroke="#6b7280" tick={{ fontSize: 10 }} width={130} />
               <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => `${v.toFixed(1)}%`} />
               <Legend iconType="circle" wrapperStyle={{ fontSize: 11, paddingTop: 4 }} />
-              <Bar dataKey="BASE" fill={ALEGRA_GREEN} radius={[0, 4, 4, 0]} />
-              <Bar dataKey="SOS" fill="#FF6B00" radius={[0, 4, 4, 0]} />
+              <Bar dataKey="BASE" name="Mobile First" fill={ALEGRA_GREEN} radius={[0, 4, 4, 0]} />
+              <Bar dataKey="SOS" name="Web First" fill="#FF6B00" radius={[0, 4, 4, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
       </div>
 
-      {/* Funcionalidades — Uniques Mensual BASE / SOS */}
+      {/* Funcionalidades — Uniques Mensual Mobile First / Web First */}
       <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
         <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
           <div>
             <h4 className="text-base font-bold text-neutral-900">
-              Funcionalidades — Uniques Mensual BASE vs SOS
+              Funcionalidades — Uniques Mensual Mobile First vs Web First
             </h4>
             <p className="mt-1 text-xs text-neutral-500">
               % de adopción mensual por funcionalidad · Ene → Jun '26
@@ -2988,21 +3001,21 @@ function ComportamientoBaseSosView() {
           </a>
         </div>
         <div className="grid gap-4 md:grid-cols-2">
-          <UniquesPctChart segment="BASE" accent={ALEGRA_GREEN} data={toMonthlyRows(visibleBaseMonthly)} series={visibleBaseMonthly} />
-          <UniquesPctChart segment="SOS" accent="#FF6B00" data={toMonthlyRows(visibleSosMonthly)} series={visibleSosMonthly} />
+          <UniquesPctChart segment="Mobile First" accent={ALEGRA_GREEN} data={toMonthlyRows(visibleBaseMonthly)} series={visibleBaseMonthly} />
+          <UniquesPctChart segment="Web First" accent="#FF6B00" data={toMonthlyRows(visibleSosMonthly)} series={visibleSosMonthly} />
         </div>
       </div>
 
       {/* Engagement scatter BASE / SOS */}
       <div className="grid gap-6 xl:grid-cols-2">
         <EngagementScatterSegment
-          segment="BASE"
+          segment="Mobile First"
           events={filteredBase}
           accent={ALEGRA_GREEN}
           chartUrl="https://app.amplitude.com/analytics/alegra/chart/no1u7db2"
         />
         <EngagementScatterSegment
-          segment="SOS"
+          segment="Web First"
           events={filteredSos}
           accent="#FF6B00"
           chartUrl="https://app.amplitude.com/analytics/alegra/chart/ezbhdx9r"
@@ -3263,6 +3276,11 @@ function NegocioView() {
   const showCore = segment === "both" || segment === "CORE";
   const showLite = segment === "both" || segment === "LITE";
 
+  // Filtro del gráfico principal por card (Core / Lite).
+  const [mainFilter, setMainFilter] = useState<"both" | "CORE" | "LITE">("both");
+  const showMainCore = mainFilter === "both" || mainFilter === "CORE";
+  const showMainLite = mainFilter === "both" || mainFilter === "LITE";
+
   // Datos para el gráfico filtrado (debajo de las cards de país)
   // Si no hay país seleccionado: muestra el agregado total CORE/LITE
   // Si hay país: muestra las series de ese país
@@ -3304,9 +3322,13 @@ function NegocioView() {
             </a>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
-            <div
-              className="rounded-xl border bg-white p-4"
-              style={{ borderLeft: `4px solid ${ALEGRA_GREEN}` }}
+            <button
+              onClick={() => setMainFilter(mainFilter === "CORE" ? "both" : "CORE")}
+              className={cn(
+                "rounded-xl border bg-white p-4 text-left transition-all hover:shadow-sm",
+                mainFilter === "CORE" ? "ring-2 ring-offset-1" : "",
+              )}
+              style={{ borderLeft: `4px solid ${ALEGRA_GREEN}`, ["--tw-ring-color" as any]: ALEGRA_GREEN }}
             >
               <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
                 MAC Core
@@ -3323,10 +3345,14 @@ function NegocioView() {
                 {coreUp ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
                 {coreUp ? "+" : ""}{coreDelta}% vs Ene '26
               </p>
-            </div>
-            <div
-              className="rounded-xl border bg-white p-4"
-              style={{ borderLeft: `4px solid #FF6B00` }}
+            </button>
+            <button
+              onClick={() => setMainFilter(mainFilter === "LITE" ? "both" : "LITE")}
+              className={cn(
+                "rounded-xl border bg-white p-4 text-left transition-all hover:shadow-sm",
+                mainFilter === "LITE" ? "ring-2 ring-offset-1" : "",
+              )}
+              style={{ borderLeft: `4px solid #FF6B00`, ["--tw-ring-color" as any]: "#FF6B00" }}
             >
               <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
                 MAC Lite
@@ -3343,7 +3369,7 @@ function NegocioView() {
                 {liteUp ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
                 {liteUp ? "+" : ""}{liteDelta}% vs Ene '26
               </p>
-            </div>
+            </button>
           </div>
 
           <div className="mt-6 h-[300px] w-full">
@@ -3354,8 +3380,8 @@ function NegocioView() {
                 <YAxis stroke="#6b7280" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} tickFormatter={(v) => v.toLocaleString("es-CO")} />
                 <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => v.toLocaleString("es-CO")} />
                 <Legend iconType="circle" wrapperStyle={{ fontSize: 12, paddingTop: 12 }} />
-                <Line type="monotone" dataKey="CORE" stroke={ALEGRA_GREEN} strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
-                <Line type="monotone" dataKey="LITE" stroke="#FF6B00" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+                {showMainCore && <Line type="monotone" dataKey="CORE" name="Core" stroke={ALEGRA_GREEN} strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />}
+                {showMainLite && <Line type="monotone" dataKey="LITE" name="Lite" stroke="#FF6B00" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />}
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -4062,7 +4088,7 @@ function ClustersBubbles() {
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h3 className="text-base font-bold text-neutral-900">
-            Clusters BASE y SOS
+            Clusters Mobile First y Web First
           </h3>
           <p className="mt-1 text-xs text-neutral-500">
             Tamaño relativo de cada cluster · Análisis de comportamiento de usuarios pagos activos
@@ -4094,7 +4120,7 @@ function ClustersBubbles() {
             <div className="text-center">
               <p className="text-2xl font-bold leading-none md:text-3xl">{sosPct}%</p>
               <p className="mt-1 text-[10px] font-bold uppercase tracking-widest opacity-90">
-                SOS
+                Web First
               </p>
             </div>
           </div>
@@ -4122,7 +4148,7 @@ function ClustersBubbles() {
             <div className="text-center">
               <p className="text-xl font-bold leading-none md:text-2xl">{basePct}%</p>
               <p className="mt-1 text-[10px] font-bold uppercase tracking-widest opacity-90">
-                BASE
+                Mobile First
               </p>
             </div>
           </div>
