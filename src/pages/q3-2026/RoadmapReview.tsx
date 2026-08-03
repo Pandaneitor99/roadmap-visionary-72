@@ -336,12 +336,12 @@ function Section1() {
                 móvil crearía una app confusa e imposible de mantener.
               </TradeoffCell>
 
-              {/* Row 3 - Highlighted */}
-              <TradeoffCell highlighted>
+              {/* Row 3 */}
+              <TradeoffCell>
                 Retención y Adopción de usuarios actuales
               </TradeoffCell>
-              <TradeoffCell highlighted>Adquisición de nuevos usuarios</TradeoffCell>
-              <TradeoffCell highlighted last>
+              <TradeoffCell>Adquisición de nuevos usuarios</TradeoffCell>
+              <TradeoffCell last>
                 Solo el 22% del total de usuarios pagos web obtiene valor real de
                 la app.
               </TradeoffCell>
@@ -400,7 +400,7 @@ const segmentos: Segmento[] = [
     dolor: "Medio",
     impacto: "Adopción",
     alternativa: "Reportes en web, llamadas al cliente",
-    prioridad: "Media",
+    prioridad: "Alta",
     color: "#7C3AED",
     problema:
       "No tiene un panel de control móvil real. Para saber el estado de los negocios de sus clientes, necesita el PC. Las alertas, validaciones y aprobaciones no llegan al celular de forma estructurada.",
@@ -416,11 +416,11 @@ const segmentos: Segmento[] = [
     id: "sos",
     nombre: "Pyme Web First",
     badge: "Web-first",
-    tamano: "~72% del MAC (~6,301 usuarios)",
+    tamano: "~69% del MAC (~6,045 usuarios)",
     dolor: "Medio",
     impacto: "Adopción",
     alternativa: "Vuelve al PC, pierde la venta",
-    prioridad: "Alta",
+    prioridad: "Media",
     color: "#FF6B00",
     problema:
       "No tiene una razón poderosa para cambiar su hábito. La app se percibe como 'más limitada y complicada que la web'. Cuando la necesita (está fuera del computador), la experiencia lo decepciona y refuerza el comportamiento de volver al PC.",
@@ -492,10 +492,10 @@ function SegmentosObjetivo() {
                   style={{
                     backgroundColor:
                       s.prioridad === "Máxima"
-                        ? ALEGRA_GREEN
+                        ? "#EF4444"
                         : s.prioridad === "Alta"
                           ? "#FF6B00"
-                          : "#737373",
+                          : "#F59E0B",
                   }}
                 >
                   {s.prioridad}
@@ -727,8 +727,8 @@ function Section2() {
                 { label: "Remisiones", isNew: false },
                 { label: "Pagos", isNew: false },
                 { label: "Reportes", isNew: false },
-                { label: "Búsquedas", isNew: true },
-                { label: "Gráficos", isNew: true },
+                { label: "Búsquedas", isNew: false },
+                { label: "Gráficos", isNew: false },
               ].map((action) => (
                 <span
                   key={action.label}
@@ -1175,6 +1175,11 @@ function TasaAdopcion() {
   const upAdopcion = deltaAdopcion >= 0;
   const upReal = deltaReal >= 0;
 
+  // Filtro por card KPI: controla la evolución mensual y la barra global.
+  const [metricFilter, setMetricFilter] = useState<"both" | "adopcion" | "real">("both");
+  const showAdopcionMetric = metricFilter !== "real";
+  const showRealMetric = metricFilter !== "adopcion";
+
   // Filtros del bloque "por país": card seleccionada + tab de métrica del gráfico de línea.
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
   const [metricTab, setMetricTab] = useState<"adopcion" | "real">("adopcion");
@@ -1198,11 +1203,15 @@ function TasaAdopcion() {
         </p>
       </div>
 
-      {/* KPIs */}
+      {/* KPIs — clic para filtrar la evolución mensual y la barra global */}
       <div className="grid gap-4 md:grid-cols-2">
-        <div
-          className="rounded-2xl border bg-white p-4 shadow-sm"
-          style={{ borderLeft: `4px solid #0066FF` }}
+        <button
+          onClick={() => setMetricFilter(metricFilter === "adopcion" ? "both" : "adopcion")}
+          className={cn(
+            "rounded-2xl border bg-white p-4 text-left shadow-sm transition-all hover:shadow-md",
+            metricFilter === "adopcion" ? "ring-2 ring-offset-1" : "",
+          )}
+          style={{ borderLeft: `4px solid #0066FF`, ["--tw-ring-color" as any]: "#0066FF" }}
         >
           <div className="flex items-center gap-2">
             <Target className="h-4 w-4" style={{ color: "#0066FF" }} />
@@ -1227,11 +1236,15 @@ function TasaAdopcion() {
           <p className="mt-1.5 text-[11px] text-neutral-500">
             % de <strong>usuarios pagos web activos</strong> que entran a la app cada mes (Junio 2026).
           </p>
-        </div>
+        </button>
 
-        <div
-          className="rounded-2xl border bg-white p-4 shadow-sm"
-          style={{ borderLeft: `4px solid ${ALEGRA_GREEN}` }}
+        <button
+          onClick={() => setMetricFilter(metricFilter === "real" ? "both" : "real")}
+          className={cn(
+            "rounded-2xl border bg-white p-4 text-left shadow-sm transition-all hover:shadow-md",
+            metricFilter === "real" ? "ring-2 ring-offset-1" : "",
+          )}
+          style={{ borderLeft: `4px solid ${ALEGRA_GREEN}`, ["--tw-ring-color" as any]: ALEGRA_GREEN }}
         >
           <div className="flex items-center gap-2">
             <Star className="h-4 w-4" style={{ color: ALEGRA_GREEN }} />
@@ -1256,7 +1269,7 @@ function TasaAdopcion() {
           <p className="mt-1.5 text-[11px] text-neutral-500">
             % de <strong>usuarios pagos web activos</strong> que realizan al menos una acción de valor en la app (Junio 2026).
           </p>
-        </div>
+        </button>
       </div>
 
       {/* Evolución mensual */}
@@ -1287,8 +1300,8 @@ function TasaAdopcion() {
               <YAxis stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} domain={[0, 40]} tickFormatter={(v) => `${v}%`} />
               <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => `${v.toFixed(1)}%`} />
               <Legend iconType="circle" wrapperStyle={{ fontSize: 12, paddingTop: 8 }} />
-              <Line type="monotone" dataKey="adopcion" name="Tasa de Adopción (entran)" stroke="#0066FF" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
-              <Line type="monotone" dataKey="real" name="Tasa de Adopción Real (acciones)" stroke={ALEGRA_GREEN} strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+              {showAdopcionMetric && <Line type="monotone" dataKey="adopcion" name="Tasa de Adopción (entran)" stroke="#0066FF" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />}
+              {showRealMetric && <Line type="monotone" dataKey="real" name="Tasa de Adopción Real (acciones)" stroke={ALEGRA_GREEN} strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />}
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -1315,34 +1328,42 @@ function TasaAdopcion() {
           </a>
         </div>
         <div className="relative h-8 w-full overflow-hidden rounded-full bg-neutral-100">
-          <div
-            className="absolute left-0 top-0 h-full rounded-full transition-all"
-            style={{ width: `${tasaAdopcion}%`, backgroundColor: "#0066FF" }}
-          />
-          <div
-            className="absolute left-0 top-0 h-full rounded-full transition-all"
-            style={{ width: `${tasaReal}%`, backgroundColor: ALEGRA_GREEN }}
-          />
-          <span
-            className="absolute top-1/2 -translate-y-1/2 text-[11px] font-bold text-white"
-            style={{ left: `calc(${tasaReal}% - 38px)` }}
-          >
-            {tasaReal.toFixed(1)}%
-          </span>
-          <span
-            className="absolute top-1/2 -translate-y-1/2 text-[11px] font-bold text-white"
-            style={{ left: `calc(${tasaAdopcion}% - 42px)` }}
-          >
-            {tasaAdopcion.toFixed(1)}%
-          </span>
+          {showAdopcionMetric && (
+            <div
+              className="absolute left-0 top-0 h-full rounded-full transition-all"
+              style={{ width: `${tasaAdopcion}%`, backgroundColor: "#0066FF" }}
+            />
+          )}
+          {showRealMetric && (
+            <div
+              className="absolute left-0 top-0 h-full rounded-full transition-all"
+              style={{ width: `${tasaReal}%`, backgroundColor: ALEGRA_GREEN }}
+            />
+          )}
+          {showRealMetric && (
+            <span
+              className="absolute top-1/2 -translate-y-1/2 text-[11px] font-bold text-white"
+              style={{ left: `calc(${tasaReal}% - 38px)` }}
+            >
+              {tasaReal.toFixed(1)}%
+            </span>
+          )}
+          {showAdopcionMetric && (
+            <span
+              className="absolute top-1/2 -translate-y-1/2 text-[11px] font-bold text-white"
+              style={{ left: `calc(${tasaAdopcion}% - 42px)` }}
+            >
+              {tasaAdopcion.toFixed(1)}%
+            </span>
+          )}
         </div>
         <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1.5 text-[11px]">
-          <div className="flex items-center gap-1.5">
+          <div className={cn("flex items-center gap-1.5", !showRealMetric && "opacity-40")}>
             <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: ALEGRA_GREEN }} />
             <span className="font-semibold text-neutral-700">Tasa de Adopción Real</span>
             <span className="text-neutral-500">(MAC APP / MAC WEB)</span>
           </div>
-          <div className="flex items-center gap-1.5">
+          <div className={cn("flex items-center gap-1.5", !showAdopcionMetric && "opacity-40")}>
             <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: "#0066FF" }} />
             <span className="font-semibold text-neutral-700">Tasa de Adopción</span>
             <span className="text-neutral-500">(MAU APP / MAC WEB)</span>
@@ -4428,9 +4449,179 @@ function EstabilizacionDetailQ3() {
   );
 }
 
+// --- Home — acciones rápidas (override Q3: quita los grupos "Funcionalidad" y
+// "Tiempo de conversión"; deja Home → Funcionalidad y Resultados) ---
+const q3HomeFunnelFactura = [
+  { sem: "01 Mar", pct: 42.56 }, { sem: "08 Mar", pct: 43.20 }, { sem: "15 Mar", pct: 43.28 },
+  { sem: "22 Mar", pct: 42.78 }, { sem: "29 Mar", pct: 41.21 }, { sem: "05 Abr", pct: 44.31 },
+  { sem: "12 Abr", pct: 54.33 }, { sem: "19 Abr", pct: 53.83 },
+];
+const q3HomeFunnelContactos = [
+  { sem: "01 Mar", pct: 3.46 }, { sem: "08 Mar", pct: 3.22 }, { sem: "15 Mar", pct: 2.99 },
+  { sem: "22 Mar", pct: 3.09 }, { sem: "29 Mar", pct: 2.65 }, { sem: "05 Abr", pct: 3.20 },
+  { sem: "12 Abr", pct: 6.84 }, { sem: "19 Abr", pct: 10.01 },
+];
+const q3HomeFunnelItem = [
+  { sem: "01 Feb", pct: 3.30 }, { sem: "08 Feb", pct: 3.38 }, { sem: "15 Feb", pct: 3.27 },
+  { sem: "22 Feb", pct: 3.44 }, { sem: "01 Mar", pct: 3.68 }, { sem: "08 Mar", pct: 3.47 },
+  { sem: "15 Mar", pct: 3.15 }, { sem: "22 Mar", pct: 2.64 }, { sem: "29 Mar", pct: 3.55 },
+  { sem: "05 Abr", pct: 8.21 }, { sem: "12 Abr", pct: 7.08 },
+];
+const q3HomeFunnelCotizacion = [
+  { sem: "01 Mar", pct: 19.21 }, { sem: "08 Mar", pct: 18.42 }, { sem: "15 Mar", pct: 18.63 },
+  { sem: "22 Mar", pct: 18.45 }, { sem: "29 Mar", pct: 15.56 }, { sem: "05 Abr", pct: 19.33 },
+  { sem: "12 Abr", pct: 22.98 }, { sem: "19 Abr", pct: 23.99 },
+];
+const q3ItemsCreadosSemanal = [
+  { sem: "25 Ene", total: 4720 }, { sem: "01 Feb", total: 4615 }, { sem: "08 Feb", total: 4840 },
+  { sem: "15 Feb", total: 4552 }, { sem: "22 Feb", total: 4451 }, { sem: "01 Mar", total: 4616 },
+  { sem: "08 Mar", total: 4029 }, { sem: "15 Mar", total: 4050 }, { sem: "22 Mar", total: 4364 },
+  { sem: "29 Mar", total: 2779 }, { sem: "05 Abr", total: 4265 }, { sem: "12 Abr", total: 5295 },
+  { sem: "19 Abr", total: 5453 },
+];
+
+const HOME_TAB_GROUPS_Q3 = [
+  {
+    id: "homefunc", label: "Home — Funcionalidad", color: "#0066FF",
+    tabs: [
+      { id: "fnFactura", label: "Home → Factura" },
+      { id: "fnContactos", label: "Home → Contactos" },
+      { id: "fnCotizacion", label: "Home → Cotización" },
+      { id: "fnItem", label: "Home → Item" },
+    ],
+  },
+  {
+    id: "items", label: "Resultados", color: "#9333EA",
+    tabs: [{ id: "itemsCreados", label: "Ítems creados / sem" }],
+  },
+];
+
+function q3PctDelta(arr: { pct?: number; total?: number }[], key: "pct" | "total") {
+  const first = arr[0]?.[key] ?? 0;
+  const last = arr[arr.length - 1]?.[key] ?? 0;
+  if (!first) return 0;
+  return ((last - first) / first) * 100;
+}
+
+function HomeDetailQ3() {
+  const [tab, setTab] = useState("fnFactura");
+  const activeGroup = HOME_TAB_GROUPS_Q3.find((g) => g.tabs.some((t) => t.id === tab))?.id ?? "homefunc";
+  const group = HOME_TAB_GROUPS_Q3.find((g) => g.id === activeGroup)!;
+
+  const chartUrl: Record<string, string> = {
+    fnFactura: "https://app.amplitude.com/analytics/alegra/chart/24552723",
+    fnContactos: "https://app.amplitude.com/analytics/alegra/chart/up58fj0c",
+    fnCotizacion: "https://app.amplitude.com/analytics/alegra/chart/j5qy0tqd",
+    fnItem: "https://app.amplitude.com/analytics/alegra/chart/w81wjr5i",
+    itemsCreados: "https://app.amplitude.com/analytics/alegra/chart/j6et1f82",
+  };
+
+  const stat = (() => {
+    if (tab === "itemsCreados") {
+      const last = q3ItemsCreadosSemanal[q3ItemsCreadosSemanal.length - 1].total;
+      return { label: "Ítems última sem", value: last.toLocaleString("es-CO"), delta: q3PctDelta(q3ItemsCreadosSemanal, "total") };
+    }
+    const data = { fnFactura: q3HomeFunnelFactura, fnContactos: q3HomeFunnelContactos, fnCotizacion: q3HomeFunnelCotizacion, fnItem: q3HomeFunnelItem }[tab as "fnFactura" | "fnContactos" | "fnCotizacion" | "fnItem"];
+    const last = data[data.length - 1].pct;
+    return { label: "Funnel actual", value: `${last.toFixed(2)}%`, delta: q3PctDelta(data, "pct") };
+  })();
+
+  return (
+    <div className="space-y-4">
+      <div className="space-y-3">
+        <div className="flex flex-wrap gap-2">
+          {HOME_TAB_GROUPS_Q3.map((g) => {
+            const isActive = activeGroup === g.id;
+            return (
+              <button
+                key={g.id}
+                onClick={() => setTab(g.tabs[0].id)}
+                className={cn(
+                  "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-bold uppercase tracking-wider transition-all",
+                  isActive ? "text-white shadow-sm" : "border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300",
+                )}
+                style={isActive ? { backgroundColor: g.color, borderColor: g.color } : undefined}
+              >
+                <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: isActive ? "#fff" : g.color }} />
+                {g.label}
+              </button>
+            );
+          })}
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {group.tabs.map((t) => (
+            <button
+              key={t.id}
+              onClick={() => setTab(t.id)}
+              className={cn(
+                "rounded-full px-3 py-1 text-xs font-semibold transition-all",
+                tab === t.id ? "text-white shadow-sm" : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200",
+              )}
+              style={tab === t.id ? { backgroundColor: ALEGRA_GREEN } : undefined}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm">
+        <div className="mb-3 flex items-start justify-between gap-2">
+          <p className="text-[11px] font-semibold uppercase tracking-wider text-neutral-500">
+            {group.label} · <span className="text-neutral-700">{group.tabs.find((t) => t.id === tab)?.label}</span>
+          </p>
+          {chartUrl[tab] && <AmplitudeLink href={chartUrl[tab]} />}
+        </div>
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-[1fr_auto]">
+          <div className="h-72">
+            <ResponsiveContainer width="100%" height="100%">
+              {tab === "itemsCreados" ? (
+                <LineChart data={q3ItemsCreadosSemanal}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                  <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
+                  <YAxis tick={{ fontSize: 10 }} />
+                  <Tooltip formatter={(v: number) => v.toLocaleString("es-CO")} />
+                  <Line type="monotone" dataKey="total" stroke="#0066FF" strokeWidth={2.5} dot={{ r: 3 }} />
+                </LineChart>
+              ) : (
+                <LineChart
+                  data={{ fnFactura: q3HomeFunnelFactura, fnContactos: q3HomeFunnelContactos, fnCotizacion: q3HomeFunnelCotizacion, fnItem: q3HomeFunnelItem }[tab as "fnFactura" | "fnContactos" | "fnCotizacion" | "fnItem"]}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                  <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
+                  <YAxis tick={{ fontSize: 10 }} unit="%" />
+                  <Tooltip formatter={(v: number) => `${v.toFixed(2)}%`} />
+                  <Line
+                    type="monotone"
+                    dataKey="pct"
+                    stroke={{ fnFactura: ALEGRA_GREEN, fnContactos: "#0066FF", fnCotizacion: "#9333EA", fnItem: "#FF6B00" }[tab as "fnFactura" | "fnContactos" | "fnCotizacion" | "fnItem"]}
+                    strokeWidth={2}
+                  />
+                </LineChart>
+              )}
+            </ResponsiveContainer>
+          </div>
+          {stat && (
+            <div className="flex flex-col justify-center rounded-lg border border-neutral-100 bg-neutral-50/60 p-3 md:min-w-[160px]">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">{stat.label}</p>
+              <p className="mt-1 text-2xl font-bold text-neutral-900">{stat.value}</p>
+              <p className={cn("mt-1 flex items-center gap-1 text-xs font-bold", stat.delta >= 0 ? "text-emerald-600" : "text-red-600")}>
+                {stat.delta >= 0 ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
+                {stat.delta >= 0 ? "+" : ""}{stat.delta.toFixed(1)}%
+                <span className="ml-0.5 text-[10px] font-medium text-neutral-500">vs primera sem</span>
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const q3InitiativeDetailMap = {
   ...initiativeDetailMap,
   "Estabilización": EstabilizacionDetailQ3,
+  "Home — acciones rápidas": HomeDetailQ3,
   "Rediseño Facturación Costa Rica": RediseñoCRDetailQ3,
   "Rediseño de contactos": RediseñoContactosDetailQ3,
   "Rediseño Factura de venta Dominicana": RediseñoDominicanaDetailQ3,
@@ -5723,14 +5914,23 @@ function CollapsibleSection({
 // Funcionalidades que más utilizan los Mobile First por fuera de la App (web).
 // Cohort Mobile App Top Users Q3 · últimas 4 semanas · Fuente: Amplitude chart h6i1m5l2
 const baseFueraDeApp = [
-  { feature: "Creación Factura", uso: 25180 },
-  { feature: "Pago recibido", uso: 19418 },
-  { feature: "Editar fv", uso: 11903 },
-  { feature: "Imprimir fv", uso: 9964 },
-  { feature: "Descargar fv", uso: 4702 },
+  { feature: "Creación Factura", uso: 25115 },
+  { feature: "Pago recibido", uso: 19335 },
+  { feature: "Editar fv", uso: 11891 },
+  { feature: "Generar Reporte", uso: 11707 },
+  { feature: "Imprimir fv", uso: 9941 },
+  { feature: "Descargar fv", uso: 4683 },
+  { feature: "Descargar reportes", uso: 4063 },
+  { feature: "Nota de crédito", uso: 3441 },
+  { feature: "Items", uso: 3388 },
+  { feature: "Factura de compra", uso: 3155 },
   { feature: "Reportes por vendedor", uso: 2961 },
-  { feature: "Clonar", uso: 2071 },
-  { feature: "Editar retenciones", uso: 1696 },
+  { feature: "Pago de gastos", uso: 2560 },
+  { feature: "Contacto", uso: 2253 },
+  { feature: "Clonar fv", uso: 2064 },
+  { feature: "Editar retenciones", uso: 1690 },
+  { feature: "Cotizaciones", uso: 1578 },
+  { feature: "Compartir fv", uso: 1201 },
 ];
 
 const oportunidades = [
