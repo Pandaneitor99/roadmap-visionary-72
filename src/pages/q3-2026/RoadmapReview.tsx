@@ -4677,7 +4677,10 @@ function SectionIssues() {
 const soporteData = [
   { mes: "Feb '26", uniques: 268, totals: 493 },
   { mes: "Mar '26", uniques: 289, totals: 510 },
-  { mes: "Abr '26", uniques: 155, totals: 298 },
+  { mes: "Abr '26", uniques: 213, totals: 381 },
+  { mes: "May '26", uniques: 291, totals: 490 },
+  { mes: "Jun '26", uniques: 258, totals: 428 },
+  { mes: "Jul '26", uniques: 256, totals: 406 },
 ];
 
 function SoporteFuncDetail() {
@@ -4877,33 +4880,14 @@ const perfilPorPaisTotal: { country: string; uniques: number }[] = [
   { country: "Panama", uniques: 89 },
 ];
 
-// --- Eventos Onboarding Semanal (chart j30yk1tu) - últimas 24 semanas ---
-const eventosOnboardingSemanal = [
-  { semana: "02 Nov", perfil: 84, mql: 77, pql: 30 },
-  { semana: "09 Nov", perfil: 99, mql: 89, pql: 31 },
-  { semana: "16 Nov", perfil: 89, mql: 79, pql: 22 },
-  { semana: "23 Nov", perfil: 99, mql: 89, pql: 30 },
-  { semana: "30 Nov", perfil: 87, mql: 78, pql: 28 },
-  { semana: "07 Dic", perfil: 69, mql: 58, pql: 17 },
-  { semana: "14 Dic", perfil: 65, mql: 60, pql: 19 },
-  { semana: "21 Dic", perfil: 54, mql: 45, pql: 17 },
-  { semana: "28 Dic", perfil: 60, mql: 52, pql: 13 },
-  { semana: "04 Ene", perfil: 105, mql: 96, pql: 33 },
-  { semana: "11 Ene", perfil: 117, mql: 96, pql: 35 },
-  { semana: "18 Ene", perfil: 98, mql: 86, pql: 28 },
-  { semana: "25 Ene", perfil: 141, mql: 116, pql: 31 },
-  { semana: "01 Feb", perfil: 217, mql: 182, pql: 38 },
-  { semana: "08 Feb", perfil: 231, mql: 191, pql: 62 },
-  { semana: "15 Feb", perfil: 248, mql: 217, pql: 58 },
-  { semana: "22 Feb", perfil: 188, mql: 148, pql: 60 },
-  { semana: "01 Mar", perfil: 178, mql: 153, pql: 45 },
-  { semana: "08 Mar", perfil: 98, mql: 84, pql: 43 },
-  { semana: "15 Mar", perfil: 222, mql: 190, pql: 51 },
-  { semana: "22 Mar", perfil: 264, mql: 224, pql: 62 },
-  { semana: "29 Mar", perfil: 260, mql: 214, pql: 56 },
-  { semana: "05 Abr", perfil: 322, mql: 289, pql: 63 },
-  { semana: "12 Abr", perfil: 281, mql: 242, pql: 76 },
-  { semana: "19 Abr", perfil: 257, mql: 219, pql: 72 },
+// --- Eventos Onboarding Mensual (chart j30yk1tu/edit/584t53it, Feb → Jul '26) ---
+const eventosOnboardingMensual = [
+  { mes: "Feb '26", perfil: 884, mql: 738, pql: 158 },
+  { mes: "Mar '26", perfil: 877, mql: 751, pql: 153 },
+  { mes: "Abr '26", perfil: 1268, mql: 1089, pql: 222 },
+  { mes: "May '26", perfil: 1284, mql: 1117, pql: 263 },
+  { mes: "Jun '26", perfil: 1246, mql: 1096, pql: 270 },
+  { mes: "Jul '26", perfil: 1296, mql: 1144, pql: 271 },
 ];
 
 type FunnelComboDatum = {
@@ -5404,10 +5388,10 @@ function PerfilPorPaisCard() {
   );
 }
 
-// --- Eventos Onboarding Semanal (chart j30yk1tu) ---
+// --- Eventos Onboarding Mensual (chart j30yk1tu/edit/584t53it) ---
 function EventosOnboardingSemanalCard() {
-  const first = eventosOnboardingSemanal[0];
-  const last = eventosOnboardingSemanal[eventosOnboardingSemanal.length - 1];
+  const first = eventosOnboardingMensual[0];
+  const last = eventosOnboardingMensual[eventosOnboardingMensual.length - 1];
   const perfilDelta = ((last.perfil - first.perfil) / first.perfil) * 100;
   const mqlDelta = ((last.mql - first.mql) / first.mql) * 100;
   const pqlDelta = ((last.pql - first.pql) / first.pql) * 100;
@@ -5427,16 +5411,16 @@ function EventosOnboardingSemanalCard() {
     <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">Volumen semanal</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">Volumen mensual</p>
           <div className="mt-1 flex flex-wrap items-center gap-2">
-            <h3 className="text-base font-bold text-neutral-900">Eventos Onboarding Semanal</h3>
+            <h3 className="text-base font-bold text-neutral-900">Eventos Onboarding Mensual</h3>
             {tag("Perfil", perfilDelta)}
             {tag("MQL", mqlDelta)}
             {tag("PQL", pqlDelta)}
           </div>
         </div>
         <a
-          href="https://app.amplitude.com/analytics/alegra/chart/j30yk1tu"
+          href="https://app.amplitude.com/analytics/alegra/chart/j30yk1tu/edit/584t53it"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-500 hover:text-neutral-800"
@@ -5447,9 +5431,9 @@ function EventosOnboardingSemanalCard() {
 
       <div className="mt-5 h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={eventosOnboardingSemanal} margin={{ top: 16, right: 16, left: 0, bottom: 0 }}>
+          <LineChart data={eventosOnboardingMensual} margin={{ top: 16, right: 16, left: 0, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
-            <XAxis dataKey="semana" tick={{ fontSize: 10, fill: "#6b7280" }} axisLine={false} tickLine={false} />
+            <XAxis dataKey="mes" tick={{ fontSize: 10, fill: "#6b7280" }} axisLine={false} tickLine={false} />
             <YAxis tick={{ fontSize: 11, fill: "#6b7280" }} axisLine={false} tickLine={false} />
             <Tooltip
               contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }}
@@ -5736,29 +5720,17 @@ function CollapsibleSection({
   );
 }
 
-// Funcionalidades que más utilizan los BASE por fuera de la App (web).
-// Conteo de eventos · Cohort MAC Mobile BASE Marzo 2026 · 2026-03-29 → 2026-04-26
-// Fuente: Amplitude chart h6i1m5l2
+// Funcionalidades que más utilizan los Mobile First por fuera de la App (web).
+// Cohort Mobile App Top Users Q3 · últimas 4 semanas · Fuente: Amplitude chart h6i1m5l2
 const baseFueraDeApp = [
-  { feature: "Creación Factura", uso: 34089 },
-  { feature: "Pago recibido", uso: 22989 },
-  { feature: "Reportes", uso: 18519 },
-  { feature: "Imprimir fv", uso: 14717 },
-  { feature: "Editar fv", uso: 13774 },
-  { feature: "Items", uso: 10935 },
-  { feature: "Factura de compra", uso: 7605 },
-  { feature: "Pago de gastos", uso: 6284 },
-  { feature: "Descargar fv", uso: 5927 },
-  { feature: "Descargar reportes", uso: 5710 },
-  { feature: "Reportes por vendedor", uso: 5601 },
-  { feature: "Contacto", uso: 3460 },
-  { feature: "Cotizaciones", uso: 3420 },
-  { feature: "Compartir fv", uso: 2050 },
-  { feature: "Clonar", uso: 2040 },
-  { feature: "Remisiones", uso: 1690 },
-  { feature: "Editar retenciones", uso: 1677 },
-  { feature: "Nota de crédito", uso: 1619 },
-  { feature: "Multicompañía", uso: 1000 },
+  { feature: "Creación Factura", uso: 25180 },
+  { feature: "Pago recibido", uso: 19418 },
+  { feature: "Editar fv", uso: 11903 },
+  { feature: "Imprimir fv", uso: 9964 },
+  { feature: "Descargar fv", uso: 4702 },
+  { feature: "Reportes por vendedor", uso: 2961 },
+  { feature: "Clonar", uso: 2071 },
+  { feature: "Editar retenciones", uso: 1696 },
 ];
 
 const oportunidades = [
@@ -5773,14 +5745,23 @@ const oportunidades = [
     link: "https://claude.ai/design/p/5a2581d3-60c3-4e07-96c9-701c04fbc999?file=Pagos+Recibidos.html&via=share",
   },
   {
-    id: "factura-venta",
-    title: "Funcionalidad factura de venta",
+    id: "detalle-factura",
+    title: "Detalle de la factura",
     tags: ["Experiencia", "Adopción"],
     diagnostico:
-      "La factura de venta en la app no tiene la funcionalidad de imprimir ni de clonar, dos acciones críticas para el día a día de la Pyme BASE que hoy lo obligan a volver al computador.",
+      "La factura de venta en la app no tiene la funcionalidad de imprimir ni de clonar, dos acciones críticas para el día a día de la Pyme Mobile First que hoy lo obligan a volver al computador.",
     oportunidad:
       "Sumar imprimir y clonar dentro del detalle de la factura, cerrando el ciclo de venta sin necesidad del PC.",
     link: "https://claude.ai/design/p/019dbd42-565f-7ccd-958c-6b7206220c86?file=Factura+Detalle.html",
+  },
+  {
+    id: "factura-venta",
+    title: "Factura de venta",
+    tags: ["Adopción", "Experiencia"],
+    diagnostico:
+      "No se tienen retenciones ni remisiones en varias versiones, ni tampoco se puede crear una factura mediante imágenes o fotos.",
+    oportunidad:
+      "Habilitar retenciones y remisiones en todas las versiones y permitir crear facturas a partir de imágenes o fotos.",
   },
   {
     id: "reportes",
@@ -5791,35 +5772,6 @@ const oportunidades = [
     oportunidad:
       "Construir las opciones faltantes, incluyendo las opciones de descarga y compartir.",
     link: "https://claude.ai/design/p/019dc097-2664-7687-9041-1fdc44865b74?file=Reportes.html&via=share",
-  },
-  {
-    id: "busqueda",
-    title: "Búsqueda de documentos",
-    tags: ["Experiencia", "Engagement"],
-    diagnostico:
-      "No hay un buscador en el home ni búsqueda de pagos. La búsqueda de facturas de compra es por numeración.",
-    oportunidad:
-      "Buscador global en el home. Búsqueda por cliente en facturas de venta y pagos.",
-    link: "https://claude.ai/design/p/019dd183-c0d0-72dc-9fbf-65c1d4cfcba0?file=Buscador.html",
-  },
-  {
-    id: "operacion",
-    title: "Reducir operación diaria",
-    tags: ["Experiencia", "Adopción"],
-    diagnostico:
-      "El usuario tiene que loguearse cada 7 días saliendo de la app. Lentitud de carga al cambiar de pestañas. Algunos campos no se llenan con las preferencias.",
-    oportunidad:
-      "Sesión persistente, mejoras de performance al navegar y autocompletado por preferencia del usuario.",
-  },
-  {
-    id: "graficas-info-diaria",
-    title: "Gráficas e información diaria",
-    tags: ["Adopción", "Engagement"],
-    diagnostico:
-      "Hoy en la app no se encuentran gráficas clave para la operación: ventas del día, productos más vendidos, top de clientes, comparativos por período.",
-    oportunidad:
-      "Construir una sección de gráficas por venta, items y contactos.",
-    link: "https://claude.ai/design/p/019dd004-199a-7e2c-963c-4e8f8c157a59?file=Estadisticas.html",
   },
 ];
 
@@ -5927,7 +5879,7 @@ function Section5() {
                 className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white"
                 style={{ backgroundColor: ALEGRA_GREEN }}
               >
-                <Star className="h-3 w-3" /> Pyme BASE
+                <Star className="h-3 w-3" /> Pyme App First
               </span>
               <Badge variant="outline" className="text-[10px]" style={{ borderColor: ALEGRA_GREEN, color: ALEGRA_GREEN }}>
                 {segBase.badge}
@@ -5936,7 +5888,7 @@ function Section5() {
             </div>
 
             <p className="mt-4 text-lg font-semibold leading-snug text-neutral-900 md:text-xl">
-              La Pyme BASE es nuestro mejor usuario: vive con la app en la mano y la usa como su centro operativo móvil real.
+              La Pyme App First es nuestro mejor usuario: vive con la app en la mano y la usa como su centro operativo móvil real.
             </p>
 
             <div className="mt-4 grid gap-3 md:grid-cols-2">
@@ -5991,10 +5943,10 @@ function Section5() {
             <div className="mb-4 flex items-start justify-between gap-4 flex-wrap">
               <div>
                 <p className="text-sm font-semibold text-neutral-900">
-                  Funcionalidades que más utilizan los BASE por fuera de App
+                  Funcionalidades que más utilizan los Mobile First por fuera de App
                 </p>
                 <p className="mt-0.5 text-xs text-neutral-500">
-                  Últimas 4 semanas · Cohort BASE (s8shexr4) · Conteo de eventos en web
+                  Últimas 4 semanas · Cohort Mobile App Top Users Q3 · Conteo de eventos en web
                 </p>
               </div>
               <a
@@ -6053,89 +6005,6 @@ function Section5() {
         </div>
       </CollapsibleSection>
 
-      {/* Funcionalidades — Contactos & Items (colapsable) */}
-      <CollapsibleSection
-        title="Funcionalidades"
-        subtitle="Profundización por módulo"
-        color="#0066FF"
-      >
-        <div className="space-y-6">
-          {/* Contactos */}
-          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-            <div className="mb-5 flex items-start justify-between gap-3 flex-wrap">
-              <div className="flex items-start gap-3">
-                <div
-                  className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
-                  style={{ backgroundColor: "#0066FF15" }}
-                >
-                  <Lightbulb className="h-4 w-4" style={{ color: "#0066FF" }} />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-neutral-900">Contactos</h3>
-                  <p className="mt-0.5 text-xs text-neutral-500">Llenado automático y captura rápida</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <span
-                  className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold"
-                  style={{ borderColor: "#FF6B0033", backgroundColor: "#FF6B0010", color: "#FF6B00" }}
-                >
-                  <span className="text-[9px] uppercase tracking-wider opacity-80">App vs total</span>
-                  <span className="text-[11px] font-bold">{CONTACTOS_APP_PARTICIPACION.toFixed(2)}%</span>
-                </span>
-                <a
-                  href="https://claude.ai/design/p/019dc695-1901-7519-a9d7-a74bd0eedfd0"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold transition-colors hover:bg-neutral-50"
-                  style={{ borderColor: "#FF6B0033", color: "#FF6B00" }}
-                >
-                  <Sparkles className="h-3 w-3" /> Ver prototipo <ExternalLink className="h-2.5 w-2.5" />
-                </a>
-              </div>
-            </div>
-            <ContactosFuncDetail />
-          </div>
-
-          {/* Items */}
-          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-            <div className="mb-5 flex items-start justify-between gap-3 flex-wrap">
-              <div className="flex items-start gap-3">
-                <div
-                  className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
-                  style={{ backgroundColor: "#0066FF15" }}
-                >
-                  <Lightbulb className="h-4 w-4" style={{ color: "#0066FF" }} />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-neutral-900">Items</h3>
-                  <p className="mt-0.5 text-xs text-neutral-500">Participación, intención y campos faltantes</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <span
-                  className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold"
-                  style={{ borderColor: "#0066FF33", backgroundColor: "#0066FF10", color: "#0066FF" }}
-                >
-                  <span className="text-[9px] uppercase tracking-wider opacity-80">App vs total</span>
-                  <span className="text-[11px] font-bold">{ITEMS_APP_PARTICIPACION.toFixed(2)}%</span>
-                </span>
-                <a
-                  href="https://www.figma.com/design/VjC6hok9QSdr9Wd8iasWms/Secci%C3%B3n-items-App?node-id=2266-3088&t=Vbquk9q4yag4jbVR-0"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold transition-colors hover:bg-neutral-50"
-                  style={{ borderColor: "#0066FF33", color: "#0066FF" }}
-                >
-                  <Sparkles className="h-3 w-3" /> Ver prototipo <ExternalLink className="h-2.5 w-2.5" />
-                </a>
-              </div>
-            </div>
-            <ItemsFuncDetail />
-          </div>
-        </div>
-      </CollapsibleSection>
-
       {/* Soporte (sección aparte, colapsable) */}
       <CollapsibleSection
         title="Soporte"
@@ -6159,7 +6028,7 @@ function Section5() {
       </CollapsibleSection>
 
       {/* Olas */}
-      <CollapsibleSection title="Olas" subtitle="Iniciativas por país" color="#7C3AED">
+      <CollapsibleSection title="Obligatoriedad" subtitle="Iniciativas por país" color="#7C3AED">
         <div className="grid gap-4 md:grid-cols-2">
           {/* Card Ola RD */}
           <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
@@ -6174,19 +6043,35 @@ function Section5() {
                 <div>
                   <h3 className="text-base font-bold text-neutral-900">Ola Rep. Dominicana</h3>
                   <p className="mt-0.5 text-xs text-neutral-500">
-                    Localización fiscal pendiente en factura de venta
+                    Habilitación de factura electrónica en la app
                   </p>
                 </div>
               </div>
-              <a
-                href="https://www.figma.com/design/G4L7LYtkISB6T4DwLJ4wHS/MOB---Redise%C3%B1o-Facturaci%C3%B3n?node-id=3872-17740&p=f&t=CosijuUBHpbR7JeB-0"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold transition-colors hover:bg-neutral-50"
-                style={{ borderColor: "#7C3AED33", color: "#7C3AED" }}
+            </div>
+
+            <div className="mt-4">
+              <div className="rounded-lg border border-emerald-200 bg-emerald-50/60 p-3">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Oportunidad</p>
+                <p className="mt-1 text-xs leading-relaxed text-neutral-800">
+                  La facturación ya queda 1:1 en República Dominicana, pero la habilitación de factura electrónica solo se puede hacer por web. La idea es colocarlo en la app.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Card Ola Venezuela */}
+          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+            <div className="flex items-start gap-3">
+              <div
+                className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-lg"
+                style={{ backgroundColor: "#7C3AED15" }}
               >
-                <Sparkles className="h-3 w-3" /> Ver prototipo <ExternalLink className="h-2.5 w-2.5" />
-              </a>
+                🇻🇪
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-neutral-900">Ola Venezuela</h3>
+                <p className="mt-0.5 text-xs text-neutral-500">Nuevo mercado</p>
+              </div>
             </div>
 
             <div className="mt-4 grid gap-3 md:grid-cols-2">
@@ -6195,24 +6080,13 @@ function Section5() {
                   Problema detectado
                 </p>
                 <p className="mt-1 text-xs leading-relaxed text-neutral-800">
-                  Los usuarios <strong>no tienen la opción de agregar Retenciones ni Conduces</strong> en la factura de venta dentro de la app. Esto bloquea casos fiscales reales y los obliga a volver a la web.
+                  Aún <strong>no está Venezuela</strong> disponible en la app.
                 </p>
               </div>
               <div className="rounded-lg border border-emerald-200 bg-emerald-50/60 p-3">
-                <div className="flex items-start justify-between gap-2 flex-wrap">
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Oportunidad</p>
-                  <a
-                    href="https://www.figma.com/design/G4L7LYtkISB6T4DwLJ4wHS/MOB---Redise%C3%B1o-Facturaci%C3%B3n?node-id=3872-17740&p=f&t=CosijuUBHpbR7JeB-0"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold transition-colors hover:bg-white"
-                    style={{ borderColor: "#10B98133", color: "#047857", backgroundColor: "#10B98110" }}
-                  >
-                    <Sparkles className="h-3 w-3" /> Ver prototipo <ExternalLink className="h-2.5 w-2.5" />
-                  </a>
-                </div>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Oportunidad</p>
                 <p className="mt-1 text-xs leading-relaxed text-neutral-800">
-                  Rediseño de facturación + agregar retenciones + agregar conduces.
+                  Habilitar un nuevo mercado.
                 </p>
               </div>
             </div>
