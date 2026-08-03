@@ -4831,31 +4831,30 @@ const funnelComboSinPQL = [
   { step: "Logo · Pago", todosCount: 64, todosPct: 1.92, mobileCount: 289, mobilePct: 2.74 },
 ];
 
-// --- Tendencias mensuales actualizadas (Amplitude refresh) ---
+// --- Tendencias mensuales (charts b6xrlqln / txoefzi7 / kcf69jc1, Feb → Jul '26) ---
 const tendenciaPerfilMQL = [
-  { mes: "Oct '25", pct: 89.22 },
-  { mes: "Nov '25", pct: 92.03 },
-  { mes: "Dic '25", pct: 88.32 },
-  { mes: "Ene '26", pct: 87.04 },
-  { mes: "Feb '26", pct: 84.73 },
-  { mes: "Mar '26", pct: 86.89 },
+  { mes: "Feb '26", pct: 84.7 },
+  { mes: "Mar '26", pct: 86.9 },
+  { mes: "Abr '26", pct: 87.5 },
+  { mes: "May '26", pct: 89.0 },
+  { mes: "Jun '26", pct: 89.9 },
+  { mes: "Jul '26", pct: 89.8 },
 ];
 const tendenciaPerfilPQL = [
-  { mes: "Oct '25", pct: 14.59 },
-  { mes: "Nov '25", pct: 17.99 },
-  { mes: "Dic '25", pct: 17.53 },
-  { mes: "Ene '26", pct: 17.41 },
-  { mes: "Feb '26", pct: 13.80 },
-  { mes: "Mar '26", pct: 12.88 },
-  { mes: "Abr '26", pct: 12.54 },
+  { mes: "Feb '26", pct: 15.7 },
+  { mes: "Mar '26", pct: 14.3 },
+  { mes: "Abr '26", pct: 14.5 },
+  { mes: "May '26", pct: 16.3 },
+  { mes: "Jun '26", pct: 15.8 },
+  { mes: "Jul '26", pct: 15.7 },
 ];
 const tendenciaPerfilLogo = [
-  { mes: "Oct '25", pct: 1.69 },
-  { mes: "Nov '25", pct: 2.06 },
-  { mes: "Dic '25", pct: 2.75 },
-  { mes: "Ene '26", pct: 2.63 },
-  { mes: "Feb '26", pct: 2.49 },
-  { mes: "Mar '26", pct: 2.39 },
+  { mes: "Feb '26", pct: 1.2 },
+  { mes: "Mar '26", pct: 1.5 },
+  { mes: "Abr '26", pct: 0.9 },
+  { mes: "May '26", pct: 1.2 },
+  { mes: "Jun '26", pct: 1.0 },
+  { mes: "Jul '26", pct: 0.9 },
 ];
 
 // --- Funnel App Mobile por país (chart tnh09978) - solo CO, MX, CR, PE ---
@@ -5075,6 +5074,7 @@ function TrendCombinedCard() {
   const [active, setActive] = useState<TrendKey>("mql");
   const cfg = trendsConfig[active];
   const oct = cfg.data[0]?.pct ?? 0;
+  const firstMes = cfg.data[0]?.mes ?? "";
   const last = cfg.data[cfg.data.length - 1]?.pct ?? 0;
   const delta = last - oct;
   const deltaPct = oct !== 0 ? (delta / oct) * 100 : 0;
@@ -5112,7 +5112,7 @@ function TrendCombinedCard() {
           {last.toFixed(2)}%
         </span>
         <span className="text-xs text-neutral-500">
-          Oct: <span className="font-semibold text-neutral-700">{oct.toFixed(2)}%</span>
+          {firstMes}: <span className="font-semibold text-neutral-700">{oct.toFixed(2)}%</span>
         </span>
         <span
           className={cn(
@@ -5122,7 +5122,7 @@ function TrendCombinedCard() {
         >
           {positive ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
           {positive ? "+" : ""}
-          {deltaPct.toFixed(2)}% vs Oct
+          {deltaPct.toFixed(2)}% vs {firstMes}
         </span>
       </div>
 
