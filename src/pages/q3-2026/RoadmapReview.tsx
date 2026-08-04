@@ -5097,11 +5097,14 @@ const q3ItemsCreadosSemanal = [
 ];
 
 // Home → Funcionalidad: cada funcionalidad es una card (chip) con comparación vs Ene '26.
+// Home → Funcionalidad — % conversión mensual (funnel chart 24552723, Ene → Jul '26)
+const homeFuncMeses = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul"];
+const mkHomeSeries = (vals: number[]) => homeFuncMeses.map((sem, i) => ({ sem, pct: vals[i] }));
 const HOME_FUNCS_Q3 = [
-  { id: "fnFactura", label: "Factura", color: ALEGRA_GREEN, data: q3HomeFunnelFactura },
-  { id: "fnContactos", label: "Contactos", color: "#0066FF", data: q3HomeFunnelContactos },
-  { id: "fnCotizacion", label: "Cotización", color: "#9333EA", data: q3HomeFunnelCotizacion },
-  { id: "fnItem", label: "Item", color: "#FF6B00", data: q3HomeFunnelItem },
+  { id: "fnFactura", label: "Factura", color: ALEGRA_GREEN, data: mkHomeSeries([49.38, 50.42, 50.33, 62.54, 65.74, 66.38, 66.61]) },
+  { id: "fnContactos", label: "Contactos", color: "#0066FF", data: mkHomeSeries([6.49, 6.83, 6.83, 14.85, 18.74, 14.18, 14.87]) },
+  { id: "fnCotizacion", label: "Cotización", color: "#9333EA", data: mkHomeSeries([23.15, 24.01, 24.28, 28.05, 29.33, 29.14, 30.82]) },
+  { id: "fnItem", label: "Item", color: "#FF6B00", data: mkHomeSeries([6.62, 6.52, 7.18, 12.97, 14.78, 14.03, 15.26]) },
 ];
 
 function q3PctDelta(arr: { pct?: number; total?: number }[], key: "pct" | "total") {
@@ -5150,6 +5153,34 @@ function HomeDetailQ3() {
             </div>
           );
         })}
+      </div>
+
+      {/* Chart mensual — % conversión Home → Funcionalidad (Ene → Jul '26) */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
+        <p className="text-[11px] font-semibold uppercase tracking-wider text-neutral-500">
+          % conversión mensual · Ene → Jul '26
+        </p>
+        <div className="mt-3 h-72 w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart
+              data={HOME_FUNCS_Q3[0].data.map((d, i) => {
+                const row: Record<string, string | number> = { mes: d.sem };
+                HOME_FUNCS_Q3.forEach((f) => { row[f.label] = f.data[i].pct; });
+                return row;
+              })}
+              margin={{ top: 8, right: 16, left: 0, bottom: 0 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+              <XAxis dataKey="mes" stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={{ stroke: "#e5e7eb" }} tickLine={false} />
+              <YAxis stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}%`} />
+              <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => `${v.toFixed(2)}%`} />
+              <Legend iconType="circle" wrapperStyle={{ fontSize: 11, paddingTop: 8 }} />
+              {HOME_FUNCS_Q3.map((f) => (
+                <Line key={f.id} type="monotone" dataKey={f.label} name={`Home → ${f.label}`} stroke={f.color} strokeWidth={2.5} dot={{ r: 3 }} activeDot={{ r: 6 }} />
+              ))}
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </div>
   );
@@ -5216,9 +5247,31 @@ function InitiativeAccordion({
   );
 }
 
+// OKRs específicos de Q3 (no modifican los compartidos de otros trimestres)
+const q3Okrs: typeof okrs = [
+  {
+    id: "obj-1",
+    objective: "Reducir los errores críticos en los flujos clave de la app para garantizar una experiencia estable a los usuarios durante este trimestre.",
+    type: "experience",
+    keyResults: [
+      { id: "kr-1.3", name: "Reducir los errores críticos en producción detectados por Sentry y Amplitude de 8.2k a 5k en los flujos principales durante el trimestre", baseline: "8.200", target: "5k", percentage: "-6.6%", currentResult: "7.661", achievedIncrease: "-6.6%" },
+    ],
+  },
+  {
+    id: "obj-2",
+    objective: "Impulsar la adopción de la app móvil mejorando el flujo de navegación, creación de facturas y contactos para que los usuarios facturen de forma recurrente desde el móvil.",
+    type: "adoption",
+    keyResults: [
+      { id: "kr-2.1", name: "Lograr que al menos 10000 usuarios pagos que facturan en web instalen la app móvil y realicen una acción de valor desde la app durante el trimestre", baseline: "7601", target: "10000", percentage: "15.6%", currentResult: "8785", achievedIncrease: "15.6%" },
+      { id: "kr-2.2", name: "Alcanzar 6k usuarios que facturen mensualmente desde la app móvil al final del trimestre", baseline: "—", target: "6k", percentage: "—", currentResult: "4,6k", achievedIncrease: "—" },
+      { id: "kr-2.3", name: "Incrementar de 2k usuarios a 3k usuarios creando contactos mensualmente desde la app", baseline: "2k", target: "3k", percentage: "25%", currentResult: "2,5k", achievedIncrease: "25%" },
+    ],
+  },
+];
+
 function Section4() {
-  const okr1 = okrs.find((o) => o.id === "obj-1");
-  const okr2 = okrs.find((o) => o.id === "obj-2");
+  const okr1 = q3Okrs.find((o) => o.id === "obj-1");
+  const okr2 = q3Okrs.find((o) => o.id === "obj-2");
 
   return (
     <div className="space-y-12">
