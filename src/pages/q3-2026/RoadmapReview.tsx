@@ -2658,6 +2658,62 @@ const usoTotalCoreLite: { CORE: Record<string, number[]>; LITE: Record<string, n
   },
 };
 
+// Variación vs el primer dato de una serie
+function deltaVsFirst(first: number, last: number) {
+  if (!first) return 0;
+  return ((last - first) / first) * 100;
+}
+
+// Card compacta de variación (primer dato → último)
+function VariationCard({ label, first, last, fmt, color }: {
+  label: string; first: number; last: number; fmt: (v: number) => string; color?: string;
+}) {
+  const d = deltaVsFirst(first, last);
+  const up = d >= 0;
+  return (
+    <div className="flex items-center gap-2 rounded-lg border border-neutral-200 bg-neutral-50/70 px-3 py-2">
+      {color && <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: color }} />}
+      <div className="min-w-0">
+        <p className="truncate text-[10px] font-bold uppercase tracking-wider text-neutral-500">{label}</p>
+        <p className="text-xs text-neutral-600">{fmt(first)} → <span className="font-bold text-neutral-900">{fmt(last)}</span></p>
+      </div>
+      <span className={cn("ml-auto inline-flex shrink-0 items-center gap-1 text-xs font-bold", up ? "text-emerald-600" : "text-red-600")}>
+        {up ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+        {up ? "+" : ""}{d.toFixed(1)}%
+      </span>
+    </div>
+  );
+}
+
+// Tooltip que además del valor muestra la variación vs el primer dato de cada serie
+function DeltaTooltip({ active, payload, label, firsts, fmt }: {
+  active?: boolean; payload?: any[]; label?: string;
+  firsts: Record<string, number>; fmt: (v: number) => string;
+}) {
+  if (!active || !payload?.length) return null;
+  return (
+    <div className="rounded-lg border border-neutral-200 bg-white px-3 py-2 shadow-sm">
+      <p className="mb-1 text-xs font-semibold text-neutral-700">{label}</p>
+      <div className="space-y-0.5">
+        {payload.map((p) => {
+          const first = firsts[p.dataKey] ?? p.value;
+          const d = deltaVsFirst(first, p.value);
+          return (
+            <div key={p.dataKey} className="flex items-center gap-2 text-xs">
+              <span className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: p.color }} />
+              <span className="text-neutral-600">{p.name ?? p.dataKey}</span>
+              <span className="ml-auto font-bold text-neutral-900">{fmt(p.value)}</span>
+              <span className={cn("shrink-0 font-semibold", d >= 0 ? "text-emerald-600" : "text-red-600")}>
+                {d >= 0 ? "+" : ""}{d.toFixed(1)}%
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 // Chips Adopción / Uso
 function AdopcionUsoChips({ view, onChange }: { view: "adopcion" | "uso"; onChange: (v: "adopcion" | "uso") => void }) {
   return (
@@ -2689,6 +2745,8 @@ function UsoFeatureChart({ title, subtitle, url, dataByFeature, active }: {
     feats.forEach((f) => { row[f] = dataByFeature[f][i]; });
     return row;
   });
+  const firsts: Record<string, number> = {};
+  feats.forEach((f) => { firsts[f] = dataByFeature[f][0]; });
   return (
     <div className="rounded-2xl border border-neutral-200 bg-white px-6 pt-5 pb-2 shadow-sm">
       <div className="mb-2 flex items-start justify-between gap-3 flex-wrap">
@@ -2698,13 +2756,24 @@ function UsoFeatureChart({ title, subtitle, url, dataByFeature, active }: {
         </div>
         <AmplitudeLink href={url} />
       </div>
+      {active && (
+        <div className="mb-3 max-w-xs">
+          <VariationCard
+            label={active}
+            first={dataByFeature[active][0]}
+            last={dataByFeature[active][dataByFeature[active].length - 1]}
+            fmt={usoNumberFmt}
+            color={colorForEvent(active)}
+          />
+        </div>
+      )}
       <div className="h-[300px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={rows} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
             <XAxis dataKey="month" stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={{ stroke: "#e5e7eb" }} tickLine={false} />
             <YAxis stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={usoNumberFmt} width={48} />
-            <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => usoNumberFmt(v)} />
+            <Tooltip content={(p) => <DeltaTooltip {...(p as any)} firsts={firsts} fmt={usoNumberFmt} />} />
             <Legend iconType="circle" wrapperStyle={{ fontSize: 10, paddingTop: 8 }} />
             {feats.map((f) => (
               <Line key={f} type="monotone" dataKey={f} stroke={colorForEvent(f)} strokeWidth={feats.length === 1 ? 3 : 2} dot={{ r: feats.length === 1 ? 4 : 2 }} activeDot={{ r: 6 }} />
@@ -2727,6 +2796,8 @@ function UsoCoreLiteChart({ title, subtitle, url, data, active }: {
     CORE: feats.reduce((s, f) => s + data.CORE[f][i], 0),
     LITE: feats.reduce((s, f) => s + data.LITE[f][i], 0),
   }));
+  const firsts = { CORE: rows[0].CORE, LITE: rows[0].LITE };
+  const lasts = rows[rows.length - 1];
   return (
     <div className="rounded-2xl border border-neutral-200 bg-white px-6 pt-5 pb-2 shadow-sm">
       <div className="mb-2 flex items-start justify-between gap-3 flex-wrap">
@@ -2736,13 +2807,17 @@ function UsoCoreLiteChart({ title, subtitle, url, data, active }: {
         </div>
         <AmplitudeLink href={url} />
       </div>
+      <div className="mb-3 grid gap-2 sm:grid-cols-2">
+        <VariationCard label="Core" first={firsts.CORE} last={lasts.CORE} fmt={usoNumberFmt} color={ALEGRA_GREEN} />
+        <VariationCard label="Lite" first={firsts.LITE} last={lasts.LITE} fmt={usoNumberFmt} color="#FF6B00" />
+      </div>
       <div className="h-[300px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={rows} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
             <XAxis dataKey="month" stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={{ stroke: "#e5e7eb" }} tickLine={false} />
             <YAxis stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={usoNumberFmt} width={48} />
-            <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => usoNumberFmt(v)} />
+            <Tooltip content={(p) => <DeltaTooltip {...(p as any)} firsts={firsts} fmt={usoNumberFmt} />} />
             <Legend iconType="circle" wrapperStyle={{ fontSize: 11, paddingTop: 8 }} />
             <Line type="monotone" dataKey="CORE" name="Core" stroke={ALEGRA_GREEN} strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 6 }} />
             <Line type="monotone" dataKey="LITE" name="Lite" stroke="#FF6B00" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 6 }} />
@@ -2765,6 +2840,9 @@ function ComportamientoGeneralView() {
     mensualSeries.forEach((s) => { row[s.label] = s.series[i].pct; });
     return row;
   });
+  const mensualFirsts: Record<string, number> = {};
+  mensualSeries.forEach((s) => { mensualFirsts[s.label] = s.series[0].pct; });
+  const pctFmt1 = (v: number) => `${Number(v).toFixed(1)}%`;
   const engQ1 = activeFeature ? engagementQ1General.filter((e) => e.label === activeFeature) : engagementQ1General;
   const engQ2 = activeFeature ? engagementQ2General.filter((e) => e.label === activeFeature) : engagementQ2General;
 
@@ -2854,13 +2932,24 @@ function ComportamientoGeneralView() {
             Amplitude <ExternalLink className="h-3 w-3" />
           </a>
         </div>
+        {activeFeature && (
+          <div className="mb-3 max-w-xs">
+            <VariationCard
+              label={activeFeature}
+              first={mensualFirsts[activeFeature]}
+              last={mensualSeries[0].series[mensualSeries[0].series.length - 1].pct}
+              fmt={pctFmt1}
+              color={colorForEvent(activeFeature)}
+            />
+          </div>
+        )}
         <div className="h-[300px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={mensualRows} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
               <XAxis dataKey="month" stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={{ stroke: "#e5e7eb" }} tickLine={false} />
               <YAxis stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}%`} />
-              <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => `${v.toFixed(1)}%`} />
+              <Tooltip content={(p) => <DeltaTooltip {...(p as any)} firsts={mensualFirsts} fmt={pctFmt1} />} />
               <Legend iconType="circle" wrapperStyle={{ fontSize: 10, paddingTop: 8 }} />
               {mensualSeries.map((s) => (
                 <Line
@@ -3251,7 +3340,7 @@ function ComportamientoBaseSosView() {
             </p>
           </div>
           <a
-            href="https://app.amplitude.com/analytics/alegra/chart/aq7o241v/edit/eeh2hzzt"
+            href="https://app.amplitude.com/analytics/alegra/chart/aq7o241v/edit/8b1x1p75"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
@@ -4195,6 +4284,10 @@ function UniquesPctChart({
   accent?: string;
 }) {
   const accent = accentProp ?? (segment === "CORE" ? ALEGRA_GREEN : "#FF6B00");
+  const pctFmt = (v: number) => `${Number(v).toFixed(1)}%`;
+  const firsts: Record<string, number> = {};
+  series.forEach((d) => { firsts[d.label] = Number(data[0]?.[d.label] ?? 0); });
+  const single = series.length === 1 && data.length > 0 ? series[0].label : null;
   return (
     <div className="rounded-xl border border-neutral-200 bg-white p-4">
       <div className="mb-2 flex items-center gap-2">
@@ -4202,16 +4295,24 @@ function UniquesPctChart({
         <h5 className="text-sm font-bold text-neutral-900">{segment}</h5>
         <span className="text-[11px] text-neutral-500">% MAU mensual</span>
       </div>
+      {single && (
+        <div className="mb-2">
+          <VariationCard
+            label={`${segment} · ${single}`}
+            first={Number(data[0][single])}
+            last={Number(data[data.length - 1][single])}
+            fmt={pctFmt}
+            color={accent}
+          />
+        </div>
+      )}
       <div className="h-[260px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
             <XAxis dataKey="month" stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={{ stroke: "#e5e7eb" }} tickLine={false} />
             <YAxis stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}%`} />
-            <Tooltip
-              contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }}
-              formatter={(v: number) => `${v.toFixed(1)}%`}
-            />
+            <Tooltip content={(p) => <DeltaTooltip {...(p as any)} firsts={firsts} fmt={pctFmt} />} />
             {series.map((d) => (
               <Line
                 key={d.label}
@@ -4539,6 +4640,15 @@ function FacturaTotalesChart({ creadas, visitas }: { creadas: number[]; visitas:
   const data = facturaMeses6.map((m, i) => ({ mes: m, Creadas: creadas[i], Visitas: visitas[i] }));
   const lastVisitas = visitas[facturaMeses6.length - 1];
   const lastCreadas = creadas[facturaMeses6.length - 1];
+  const deltaVisitas = deltaVsFirst(visitas[0], lastVisitas);
+  const deltaCreadas = deltaVsFirst(creadas[0], lastCreadas);
+  const firsts = { Visitas: visitas[0], Creadas: creadas[0] };
+  const deltaChip = (d: number) => (
+    <span className={cn("mt-0.5 flex items-center gap-1 text-[11px] font-bold", d >= 0 ? "text-emerald-600" : "text-red-600")}>
+      {d >= 0 ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+      {d >= 0 ? "+" : ""}{d.toFixed(1)}% <span className="font-medium text-neutral-500">vs Ene</span>
+    </span>
+  );
 
   return (
     <div className="space-y-3">
@@ -4554,6 +4664,7 @@ function FacturaTotalesChart({ creadas, visitas }: { creadas: number[]; visitas:
         >
           <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">Visitas a nueva factura</p>
           <p className="mt-0.5 text-lg font-bold text-neutral-900">{lastVisitas?.toLocaleString("es-CO")}</p>
+          {deltaChip(deltaVisitas)}
         </button>
         <button
           onClick={() => setMetric(metric === "creadas" ? "both" : "creadas")}
@@ -4565,6 +4676,7 @@ function FacturaTotalesChart({ creadas, visitas }: { creadas: number[]; visitas:
         >
           <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">Facturas creadas</p>
           <p className="mt-0.5 text-lg font-bold text-neutral-900">{lastCreadas?.toLocaleString("es-CO")}</p>
+          {deltaChip(deltaCreadas)}
         </button>
         {metric !== "both" && (
           <button
@@ -4581,7 +4693,7 @@ function FacturaTotalesChart({ creadas, visitas }: { creadas: number[]; visitas:
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
             <XAxis dataKey="mes" tick={{ fontSize: 11, fill: "#6b7280" }} axisLine={false} tickLine={false} />
             <YAxis tick={{ fontSize: 11, fill: "#6b7280" }} axisLine={false} tickLine={false} tickFormatter={(v) => v.toLocaleString("es-CO")} />
-            <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => v.toLocaleString("es-CO")} />
+            <Tooltip content={(p) => <DeltaTooltip {...(p as any)} firsts={firsts} fmt={(v) => v.toLocaleString("es-CO")} />} />
             <Legend iconType="circle" wrapperStyle={{ fontSize: 12, paddingTop: 8 }} />
             {showVisitas && <Line type="monotone" dataKey="Visitas" name="Visitas a nueva factura" stroke="#93BD31" strokeWidth={2.5} dot={{ r: 3 }} activeDot={{ r: 6 }} />}
             {showCreadas && <Line type="monotone" dataKey="Creadas" name="Facturas creadas" stroke="#0052F2" strokeWidth={2.5} dot={{ r: 3 }} activeDot={{ r: 6 }} />}
@@ -4646,6 +4758,15 @@ function RediseñoContactosDetailQ3() {
             <p className="mt-0.5 text-xs text-neutral-500">% de conversión visita → creación · semanal</p>
           </div>
           <AmplitudeLink href="https://app.amplitude.com/analytics/alegra/chart/45ccva3n/edit/rsstm3hg" />
+        </div>
+        <div className="mt-3 max-w-xs">
+          <VariationCard
+            label="Conversión · vs primer dato"
+            first={contactosIntencionData[0].pct}
+            last={contactosIntencionData[contactosIntencionData.length - 1].pct}
+            fmt={(v) => `${v.toFixed(1)}%`}
+            color={ALEGRA_GREEN}
+          />
         </div>
         <div className="mt-3 h-[240px] w-full">
           <ResponsiveContainer width="100%" height="100%">
@@ -4721,19 +4842,51 @@ function RediseñoContactosDetailQ3() {
   );
 }
 
+// Errores críticos en producción (Sentry + Amplitude) · Ene → Jul '26 · dashboard r7zqh9du
+const estabilizacionErrores = [
+  { mes: "Ene", errores: 19549 },
+  { mes: "Feb", errores: 12985 },
+  { mes: "Mar", errores: 19820 },
+  { mes: "Abr", errores: 8258 },
+  { mes: "May", errores: 9240 },
+  { mes: "Jun", errores: 6828 },
+  { mes: "Jul", errores: 7661 },
+];
+
 function EstabilizacionDetailQ3() {
+  const first = estabilizacionErrores[0].errores;
+  const last = estabilizacionErrores[estabilizacionErrores.length - 1].errores;
   return (
     <div className="space-y-4">
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <div>
-          <h4 className="text-base font-bold text-neutral-900">Estabilización — Dashboard</h4>
-          <p className="mt-0.5 text-xs text-neutral-500">Seguimiento de errores y estabilidad de la app.</p>
+          <h4 className="text-base font-bold text-neutral-900">Estabilización — Errores críticos en producción</h4>
+          <p className="mt-0.5 text-xs text-neutral-500">Sentry + Amplitude · Ene → Jul '26 · Meta KR-1.3: 10k → 1k</p>
         </div>
         <AmplitudeLink href="https://app.amplitude.com/analytics/alegra/chart/r7zqh9du/edit/jmrlug71" />
       </div>
-      <p className="text-sm leading-relaxed text-neutral-600">
-        Consulta el detalle del dashboard de estabilización en Amplitude.
-      </p>
+      <div className="max-w-xs">
+        <VariationCard
+          label="Errores · vs Ene"
+          first={first}
+          last={last}
+          fmt={(v) => v.toLocaleString("es-CO")}
+          color="#EF4444"
+        />
+      </div>
+      <div className="h-[300px] w-full">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={estabilizacionErrores} margin={{ top: 16, right: 16, left: 0, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+            <XAxis dataKey="mes" tick={{ fontSize: 11, fill: "#6b7280" }} axisLine={false} tickLine={false} />
+            <YAxis tick={{ fontSize: 11, fill: "#6b7280" }} axisLine={false} tickLine={false} tickFormatter={(v) => v.toLocaleString("es-CO")} />
+            <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => v.toLocaleString("es-CO")} />
+            <Line type="monotone" dataKey="errores" name="Errores críticos" stroke="#EF4444" strokeWidth={2.5} dot={{ r: 4, fill: "#EF4444" }} activeDot={{ r: 6 }}>
+              <LabelList dataKey="errores" position="top" formatter={(v: number) => v.toLocaleString("es-CO")} style={{ fontSize: 10, fill: "#6b7280", fontWeight: 600 }} />
+            </Line>
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 }
@@ -4785,7 +4938,7 @@ function q3PctDelta(arr: { pct?: number; total?: number }[], key: "pct" | "total
 }
 
 function HomeDetailQ3() {
-  const HOME_CHART_URL = "https://app.amplitude.com/analytics/alegra/chart/24552723";
+  const HOME_CHART_URL = "https://app.amplitude.com/analytics/alegra/chart/24552723?linkingDashboardId=zdi7go6j&sharingId=xobRXIKL";
   const [selected, setSelected] = useState("fnFactura");
   const active = HOME_FUNCS_Q3.find((f) => f.id === selected)!;
 
