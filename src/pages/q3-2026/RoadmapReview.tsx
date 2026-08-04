@@ -4606,11 +4606,11 @@ const devInitiativesS4 = [
     krs: ["KR 2.2"],
   },
   {
-    title: "Estabilización",
-    tags: ["Experiencia"],
+    title: "Multicuenta",
+    tags: ["Engagement"],
     problem:
-      "Semanalmente se presentan alrededor de 8k errores que se reportan conjuntamente en Sentry y Amplitude.",
-    krs: ["KR 1.3"],
+      "Seguimiento del uso del selector de multicuenta en la app: cuántas veces se usa, cuántas personas lo utilizan y qué perfiles lo adoptan.",
+    krs: ["KR 2.1"],
   },
   {
     title: "Rediseño de contactos",
@@ -4632,6 +4632,13 @@ const devInitiativesS4 = [
     problem:
       "Seguimiento del uso de la factura de venta en República Dominicana: facturas creadas vs intención (visitas a nueva factura).",
     krs: ["KR 2.2"],
+  },
+  {
+    title: "Estabilización",
+    tags: ["Experiencia"],
+    problem:
+      "Semanalmente se presentan alrededor de 8k errores que se reportan conjuntamente en Sentry y Amplitude.",
+    krs: ["KR 1.3"],
   },
 ];
 
@@ -4877,6 +4884,107 @@ function RediseñoContactosDetailQ3() {
   );
 }
 
+// Multicuenta — uso del selector (evento app-multicompany-selected) · dashboard zdi7go6j
+const multicuentaMeses = ["Feb", "Mar", "Abr", "May", "Jun", "Jul"];
+const multicuentaTotal = [0, 0, 0, 212, 838, 818]; // byrtf747 · eventos totales
+const multicuentaUniques = [0, 0, 0, 150, 296, 336]; // tn31kzzl · usuarios únicos
+const multicuentaData = multicuentaMeses.map((mes, i) => ({ mes, total: multicuentaTotal[i], uniques: multicuentaUniques[i] }));
+const multicuentaPerfil = [
+  { name: "Emprendedor", value: 287, color: "#0052F2" },
+  { name: "Contador", value: 176, color: "#93BD31" },
+];
+
+function MulticuentaDetailQ3() {
+  const perfilTotal = multicuentaPerfil.reduce((s, d) => s + d.value, 0);
+  return (
+    <div className="space-y-5">
+      <div className="grid gap-5 md:grid-cols-2">
+        {/* Uso del selector — eventos totales */}
+        <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <h4 className="text-sm font-bold text-neutral-900">Uso del selector de multicuenta</h4>
+              <p className="mt-0.5 text-xs text-neutral-500">Eventos totales · mensual · Feb → Jul '26</p>
+            </div>
+            <AmplitudeLink href="https://app.amplitude.com/analytics/alegra/chart/byrtf747?linkingDashboardId=zdi7go6j&source=dashboard" />
+          </div>
+          <div className="mt-3 h-[240px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={multicuentaData} margin={{ top: 16, right: 16, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                <XAxis dataKey="mes" tick={{ fontSize: 11, fill: "#6b7280" }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fontSize: 11, fill: "#6b7280" }} axisLine={false} tickLine={false} tickFormatter={(v) => v.toLocaleString("es-CO")} />
+                <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => v.toLocaleString("es-CO")} />
+                <Line type="monotone" dataKey="total" name="Selecciones" stroke="#0052F2" strokeWidth={2.5} dot={{ r: 3 }} activeDot={{ r: 6 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Personas que lo utilizan — usuarios únicos */}
+        <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <h4 className="text-sm font-bold text-neutral-900">Personas que lo utilizan</h4>
+              <p className="mt-0.5 text-xs text-neutral-500">Usuarios únicos · mensual · Feb → Jul '26</p>
+            </div>
+            <AmplitudeLink href="https://app.amplitude.com/analytics/alegra/chart/tn31kzzl?linkingDashboardId=zdi7go6j&source=dashboard" />
+          </div>
+          <div className="mt-3 h-[240px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={multicuentaData} margin={{ top: 16, right: 16, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                <XAxis dataKey="mes" tick={{ fontSize: 11, fill: "#6b7280" }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fontSize: 11, fill: "#6b7280" }} axisLine={false} tickLine={false} tickFormatter={(v) => v.toLocaleString("es-CO")} />
+                <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => v.toLocaleString("es-CO")} />
+                <Line type="monotone" dataKey="uniques" name="Usuarios" stroke={ALEGRA_GREEN} strokeWidth={2.5} dot={{ r: 3 }} activeDot={{ r: 6 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
+
+      {/* Quién lo utiliza — por perfil */}
+      <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <h4 className="text-sm font-bold text-neutral-900">Quién lo utiliza</h4>
+            <p className="mt-0.5 text-xs text-neutral-500">Usuarios únicos por perfil · últimas 12 semanas</p>
+          </div>
+          <AmplitudeLink href="https://app.amplitude.com/analytics/alegra/chart/hkjfu5yi" />
+        </div>
+        <div className="mt-3 grid items-center gap-4 sm:grid-cols-2">
+          <div className="relative h-[220px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie data={multicuentaPerfil} dataKey="value" nameKey="name" innerRadius={55} outerRadius={85} paddingAngle={2}>
+                  {multicuentaPerfil.map((e) => (
+                    <Cell key={e.name} fill={e.color} />
+                  ))}
+                </Pie>
+                <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => `${v.toLocaleString("es-CO")} (${((v / perfilTotal) * 100).toFixed(1)}%)`} />
+              </PieChart>
+            </ResponsiveContainer>
+            <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center">
+              <span className="text-2xl font-bold text-neutral-900">{perfilTotal.toLocaleString("es-CO")}</span>
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-neutral-500">Usuarios</span>
+            </div>
+          </div>
+          <div className="space-y-2">
+            {multicuentaPerfil.map((d) => (
+              <div key={d.name} className="flex items-center gap-2 rounded-lg border border-neutral-100 px-3 py-2 text-xs">
+                <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: d.color }} />
+                <span className="font-semibold text-neutral-900">{d.name}</span>
+                <span className="ml-auto text-neutral-600">{d.value.toLocaleString("es-CO")} · {((d.value / perfilTotal) * 100).toFixed(0)}%</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // Errores críticos en producción (Sentry + Amplitude) · Ene → Jul '26 · dashboard r7zqh9du
 const estabilizacionErrores = [
   { mes: "Ene", errores: 19549 },
@@ -5050,6 +5158,7 @@ function HomeDetailQ3() {
 const q3InitiativeDetailMap = {
   ...initiativeDetailMap,
   "Estabilización": EstabilizacionDetailQ3,
+  "Multicuenta": MulticuentaDetailQ3,
   "Home — acciones rápidas": HomeDetailQ3,
   "Rediseño Facturación Costa Rica": RediseñoCRDetailQ3,
   "Rediseño de contactos": RediseñoContactosDetailQ3,
