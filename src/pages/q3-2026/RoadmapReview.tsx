@@ -3217,6 +3217,7 @@ function ComportamientoCoreLiteView() {
               % de adopción por funcionalidad · Junio 2026
             </p>
           </div>
+          <AmplitudeLink href="https://app.amplitude.com/analytics/alegra/chart/g3xjg09o?linkingDashboardId=pfrft6zo&source=dashboard" />
         </div>
         <div className="h-[300px] w-full">
           <ResponsiveContainer width="100%" height="100%">
@@ -4164,14 +4165,17 @@ function FuncionalidadesUniquesShared({
             % MAU mensual por funcionalidad · Selecciona un tag para comparar CORE vs LITE
           </p>
         </div>
-        {active && (
-          <button
-            onClick={() => setActive(null)}
-            className="rounded-full border border-neutral-300 px-3 py-1 text-[11px] font-medium text-neutral-600 hover:bg-neutral-50"
-          >
-            Limpiar filtro
-          </button>
-        )}
+        <div className="flex items-center gap-3">
+          {active && (
+            <button
+              onClick={() => setActive(null)}
+              className="rounded-full border border-neutral-300 px-3 py-1 text-[11px] font-medium text-neutral-600 hover:bg-neutral-50"
+            >
+              Limpiar filtro
+            </button>
+          )}
+          <AmplitudeLink href="https://app.amplitude.com/analytics/alegra/chart/3jd1mc2p" />
+        </div>
       </div>
 
       {/* Tags compartidos */}
@@ -5001,8 +5005,6 @@ function q3PctDelta(arr: { pct?: number; total?: number }[], key: "pct" | "total
 
 function HomeDetailQ3() {
   const HOME_CHART_URL = "https://app.amplitude.com/analytics/alegra/chart/24552723?linkingDashboardId=zdi7go6j&sharingId=xobRXIKL";
-  const [selected, setSelected] = useState("fnFactura");
-  const active = HOME_FUNCS_Q3.find((f) => f.id === selected)!;
 
   return (
     <div className="space-y-4">
@@ -5010,27 +5012,22 @@ function HomeDetailQ3() {
         <div>
           <p className="text-sm font-bold text-neutral-900">Home → Funcionalidad</p>
           <p className="mt-0.5 text-xs text-neutral-500">
-            % de sesiones que llegan a la funcionalidad desde el home · semanal
+            % de sesiones que llegan a la funcionalidad desde el home
           </p>
         </div>
         <AmplitudeLink href={HOME_CHART_URL} />
       </div>
 
-      {/* Cards por funcionalidad (chips) — comparación vs Ene '26 (parecido a las cards por país) */}
+      {/* Cards por funcionalidad — comparación vs Ene '26 (el detalle está en Amplitude) */}
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {HOME_FUNCS_Q3.map((f) => {
           const val = f.data[f.data.length - 1].pct;
           const delta = q3PctDelta(f.data, "pct");
           const up = delta >= 0;
-          const isActive = selected === f.id;
           return (
-            <button
+            <div
               key={f.id}
-              onClick={() => setSelected(f.id)}
-              className={cn(
-                "rounded-2xl border bg-white px-4 py-3 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md",
-                isActive ? "border-neutral-900 ring-2 ring-neutral-900/10" : "border-neutral-200",
-              )}
+              className="rounded-2xl border border-neutral-200 bg-white px-4 py-3 shadow-sm"
               style={{ borderTop: `3px solid ${f.color}` }}
             >
               <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
@@ -5042,30 +5039,9 @@ function HomeDetailQ3() {
                 {up ? "+" : ""}{delta.toFixed(1)}%
                 <span className="ml-1 text-[10px] font-medium text-neutral-500">vs Ene '26</span>
               </p>
-            </button>
+            </div>
           );
         })}
-      </div>
-
-      {/* Chart de la funcionalidad seleccionada */}
-      <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm">
-        <div className="mb-3 flex items-start justify-between gap-2">
-          <p className="text-[11px] font-semibold uppercase tracking-wider text-neutral-500">
-            Home → <span className="text-neutral-700">{active.label}</span>
-          </p>
-          <AmplitudeLink href={HOME_CHART_URL} />
-        </div>
-        <div className="h-72">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={active.data}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
-              <YAxis tick={{ fontSize: 10 }} unit="%" />
-              <Tooltip formatter={(v: number) => `${v.toFixed(2)}%`} />
-              <Line type="monotone" dataKey="pct" stroke={active.color} strokeWidth={2.5} dot={{ r: 3 }} />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
       </div>
     </div>
   );
