@@ -2902,13 +2902,37 @@ function ComportamientoGeneralView() {
             </a>
           </div>
         </div>
+        {activeFeature && barData[0] && (
+          <div className="mb-3 max-w-xs">
+            <VariationCard
+              label={`${activeFeature} · Q1 → Q2`}
+              first={barData[0].Q1}
+              last={barData[0].Q2}
+              fmt={pctFmt1}
+              color={ALEGRA_GREEN}
+            />
+          </div>
+        )}
         <div className="h-[320px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={barData} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
               <XAxis dataKey="event" stroke="#6b7280" tick={{ fontSize: 10 }} interval={0} angle={-30} textAnchor="end" height={70} />
               <YAxis stroke="#6b7280" tick={{ fontSize: 10 }} tickFormatter={(v) => `${v}%`} />
-              <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => `${v.toFixed(1)}%`} />
+              <Tooltip content={(p: any) => {
+                if (!p.active || !p.payload?.length) return null;
+                const q1 = p.payload.find((x: any) => x.dataKey === "Q1")?.value;
+                const q2 = p.payload.find((x: any) => x.dataKey === "Q2")?.value;
+                const d = deltaVsFirst(q1, q2);
+                return (
+                  <div className="rounded-lg border border-neutral-200 bg-white px-3 py-2 text-xs shadow-sm">
+                    <p className="mb-1 font-semibold text-neutral-700">{p.label}</p>
+                    <div className="flex items-center gap-2"><span className="h-2 w-2 rounded-full" style={{ backgroundColor: "#CBD5E1" }} /><span className="text-neutral-600">Q1 (Mar)</span><span className="ml-auto font-bold text-neutral-900">{q1?.toFixed(1)}%</span></div>
+                    <div className="flex items-center gap-2"><span className="h-2 w-2 rounded-full" style={{ backgroundColor: ALEGRA_GREEN }} /><span className="text-neutral-600">Q2 (Jun)</span><span className="ml-auto font-bold text-neutral-900">{q2?.toFixed(1)}%</span></div>
+                    <div className={cn("mt-1 font-semibold", d >= 0 ? "text-emerald-600" : "text-red-600")}>{d >= 0 ? "+" : ""}{d.toFixed(1)}% Q2 vs Q1</div>
+                  </div>
+                );
+              }} />
               <Legend iconType="circle" wrapperStyle={{ fontSize: 11, paddingTop: 0 }} />
               <Bar dataKey="Q1" name="Q1 (Mar)" fill="#CBD5E1" radius={[4, 4, 0, 0]} />
               <Bar dataKey="Q2" name="Q2 (Jun)" fill={ALEGRA_GREEN} radius={[4, 4, 0, 0]} />
@@ -3278,7 +3302,7 @@ function ComportamientoBaseSosView() {
   const visibleBaseMonthly = activeFeature ? baseMonthlyAdoption.filter((s) => s.label === activeFeature) : baseMonthlyAdoption;
   const visibleSosMonthly = activeFeature ? sosMonthlyAdoption.filter((s) => s.label === activeFeature) : sosMonthlyAdoption;
   const toMonthlyRows = (series: MonthlyAdoptionSeries[]) =>
-    months6.map((m, i) => {
+    months7.map((m, i) => {
       const row: Record<string, string | number> = { month: m };
       series.forEach((s) => { row[s.label] = s.series[i]?.pct ?? 0; });
       return row;
@@ -3336,7 +3360,7 @@ function ComportamientoBaseSosView() {
               Funcionalidades — Uniques Mensual Mobile First vs Web First
             </h4>
             <p className="mt-1 text-xs text-neutral-500">
-              % de adopción mensual por funcionalidad · Ene → Jun '26
+              % de adopción mensual por funcionalidad · Ene → Jul '26
             </p>
           </div>
           <a
@@ -3512,6 +3536,8 @@ const adopcionCoreLiteData = [
 type MonthlyAdoptionSeries = { label: string; num: number; series: { month: string; pct: number }[] };
 
 const months6 = ["Ene", "Feb", "Mar", "Abr", "May", "Jun"];
+// Mobile First / Web First llegan hasta Julio (chart aq7o241v/edit/8b1x1p75).
+const months7 = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul"];
 
 // % Uniques mensual CORE (chart 3jd1mc2p, Ene → Jun '26)
 const coreMonthlyAdoption: MonthlyAdoptionSeries[] = [
@@ -3584,28 +3610,28 @@ const sosEvents: EngagementEvent[] = [
   { num: 10, label: "Crear gasto", adoption: 2.2, frequency: 5.9 },
 ];
 
-// % Uniques mensual BASE / SOS (chart aq7o241v/edit/eeh2hzzt, Ene → Jun '26)
+// % Uniques mensual BASE / SOS (chart aq7o241v/edit/8b1x1p75, Ene → Jul '26)
 const baseMonthlyAdoption: MonthlyAdoptionSeries[] = [
-  { num: 1, label: "Crear factura",              series: zip(months6, [90.9, 90.6, 91.8, 91.2, 91.5, 91.5]) },
-  { num: 3, label: "Crear contacto",             series: zip(months6, [49.7, 48.3, 50.0, 48.5, 51.9, 50.4]) },
-  { num: 5, label: "Crear ítem",                 series: zip(months6, [38.6, 38.5, 38.5, 39.2, 39.0, 39.7]) },
-  { num: 2, label: "Buscar factura",             series: zip(months6, [31.7, 31.7, 33.8, 33.0, 34.5, 32.7]) },
-  { num: 4, label: "Crear cotización",           series: zip(months6, [27.5, 26.9, 28.9, 27.6, 28.5, 26.6]) },
-  { num: 6, label: "Ver gráfico de ventas",      series: zip(months6, [20.2, 21.0, 21.4, 20.7, 19.7, 19.5]) },
-  { num: 7, label: "Cuentas por cobrar",         series: zip(months6, [8.2, 8.0, 8.0, 8.5, 8.4, 7.6]) },
-  { num: 9, label: "Crear factura de proveedor", series: zip(months6, [2.4, 2.3, 2.3, 2.4, 2.5, 2.9]) },
-  { num: 8, label: "Crear remisión",             series: zip(months6, [2.8, 2.7, 3.0, 3.3, 3.5, 2.8]) },
+  { num: 1, label: "Crear factura",              series: zip(months7, [90.9, 90.6, 91.8, 91.2, 91.5, 91.5, 91.9]) },
+  { num: 3, label: "Crear contacto",             series: zip(months7, [49.7, 48.3, 50.0, 48.5, 51.9, 50.4, 51.1]) },
+  { num: 5, label: "Crear ítem",                 series: zip(months7, [38.6, 38.5, 38.5, 39.2, 39.0, 39.7, 39.0]) },
+  { num: 2, label: "Buscar factura",             series: zip(months7, [31.7, 31.7, 33.8, 33.0, 34.5, 32.7, 33.6]) },
+  { num: 4, label: "Crear cotización",           series: zip(months7, [27.5, 26.9, 28.9, 27.6, 28.5, 26.6, 28.9]) },
+  { num: 6, label: "Ver gráfico de ventas",      series: zip(months7, [20.2, 21.0, 21.4, 20.7, 19.7, 19.5, 23.0]) },
+  { num: 7, label: "Cuentas por cobrar",         series: zip(months7, [8.2, 8.0, 8.0, 8.5, 8.4, 7.6, 7.5]) },
+  { num: 9, label: "Crear factura de proveedor", series: zip(months7, [2.4, 2.3, 2.3, 2.4, 2.5, 2.9, 2.4]) },
+  { num: 8, label: "Crear remisión",             series: zip(months7, [2.8, 2.7, 3.0, 3.3, 3.5, 2.8, 3.1]) },
 ];
 const sosMonthlyAdoption: MonthlyAdoptionSeries[] = [
-  { num: 1, label: "Crear factura",              series: zip(months6, [49.3, 48.8, 48.0, 46.8, 46.0, 43.0]) },
-  { num: 2, label: "Buscar factura",             series: zip(months6, [45.4, 43.9, 46.4, 45.5, 47.6, 41.7]) },
-  { num: 6, label: "Ver gráfico de ventas",      series: zip(months6, [37.0, 34.8, 34.9, 34.6, 36.1, 34.6]) },
-  { num: 4, label: "Crear cotización",           series: zip(months6, [35.4, 35.5, 34.9, 34.5, 32.8, 27.1]) },
-  { num: 3, label: "Crear contacto",             series: zip(months6, [22.7, 23.6, 22.1, 22.6, 22.0, 19.7]) },
-  { num: 7, label: "Cuentas por cobrar",         series: zip(months6, [20.7, 19.0, 19.2, 19.2, 19.6, 16.9]) },
-  { num: 5, label: "Crear ítem",                 series: zip(months6, [17.6, 18.9, 19.1, 17.8, 19.1, 15.7]) },
-  { num: 8, label: "Crear remisión",             series: zip(months6, [5.3, 5.2, 5.1, 5.3, 5.2, 4.2]) },
-  { num: 9, label: "Crear factura de proveedor", series: zip(months6, [4.0, 3.6, 3.5, 3.5, 3.3, 2.7]) },
+  { num: 1, label: "Crear factura",              series: zip(months7, [49.3, 48.8, 48.0, 46.8, 46.0, 43.0, 48.3]) },
+  { num: 2, label: "Buscar factura",             series: zip(months7, [45.4, 43.9, 46.4, 45.5, 47.6, 41.7, 44.7]) },
+  { num: 6, label: "Ver gráfico de ventas",      series: zip(months7, [37.0, 34.8, 34.9, 34.6, 36.1, 34.6, 35.5]) },
+  { num: 4, label: "Crear cotización",           series: zip(months7, [35.4, 35.5, 34.9, 34.5, 32.8, 27.1, 34.4]) },
+  { num: 3, label: "Crear contacto",             series: zip(months7, [22.7, 23.6, 22.1, 22.6, 22.0, 19.7, 23.6]) },
+  { num: 7, label: "Cuentas por cobrar",         series: zip(months7, [20.7, 19.0, 19.2, 19.2, 19.6, 16.9, 17.0]) },
+  { num: 5, label: "Crear ítem",                 series: zip(months7, [17.6, 18.9, 19.1, 17.8, 19.1, 15.7, 17.5]) },
+  { num: 8, label: "Crear remisión",             series: zip(months7, [5.3, 5.2, 5.1, 5.3, 5.2, 4.2, 5.4]) },
+  { num: 9, label: "Crear factura de proveedor", series: zip(months7, [4.0, 3.6, 3.5, 3.5, 3.3, 2.7, 2.7]) },
 ];
 
 function NegocioView() {
@@ -4597,7 +4623,7 @@ const devInitiativesS4 = [
     krs: ["KR 2.1", "KR 2.2", "KR 2.3"],
   },
   {
-    title: "Rediseño Factura de venta Dominicana",
+    title: "Rediseño Facturación Dominicana",
     tags: ["Engagement", "Adopción"],
     problem:
       "Seguimiento del uso de la factura de venta en República Dominicana: facturas creadas vs intención (visitas a nueva factura).",
@@ -4610,6 +4636,11 @@ const nonDevInitiativesS4 = [
     title: "Creación de la sección de App en Alegra",
     tags: ["Adopción"],
     problem: "No existe una sección dedicada para la app en la plataforma de Alegra.",
+  },
+  {
+    title: "App para pruebas de usabilidad",
+    tags: ["Experiencia"],
+    problem: "Necesitamos un entorno para prototipar y validar flujos de la app con usuarios reales antes de desarrollarlos.",
   },
 ];
 
@@ -4891,6 +4922,37 @@ function EstabilizacionDetailQ3() {
   );
 }
 
+function AppPruebasUsabilidadDetailQ3() {
+  const url = "https://app-sim-screen.vercel.app/?tab=";
+  return (
+    <div className="space-y-4">
+      <div className="flex items-start justify-between gap-3 flex-wrap">
+        <div>
+          <h4 className="text-base font-bold text-neutral-900">App para pruebas de usabilidad</h4>
+          <p className="mt-0.5 text-xs text-neutral-500">Simulador de pantallas de la app para validar flujos con usuarios.</p>
+        </div>
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition-all hover:opacity-90"
+          style={{ backgroundColor: ALEGRA_GREEN }}
+        >
+          Abrir simulador <ExternalLink className="h-3.5 w-3.5" />
+        </a>
+      </div>
+      <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50 shadow-sm">
+        <iframe
+          src={url}
+          title="App para pruebas de usabilidad"
+          className="h-[620px] w-full"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  );
+}
+
 // --- Home — acciones rápidas (override Q3: quita los grupos "Funcionalidad" y
 // "Tiempo de conversión"; deja Home → Funcionalidad y Resultados) ---
 const q3HomeFunnelFactura = [
@@ -5015,7 +5077,8 @@ const q3InitiativeDetailMap = {
   "Home — acciones rápidas": HomeDetailQ3,
   "Rediseño Facturación Costa Rica": RediseñoCRDetailQ3,
   "Rediseño de contactos": RediseñoContactosDetailQ3,
-  "Rediseño Factura de venta Dominicana": RediseñoDominicanaDetailQ3,
+  "Rediseño Facturación Dominicana": RediseñoDominicanaDetailQ3,
+  "App para pruebas de usabilidad": AppPruebasUsabilidadDetailQ3,
 };
 
 // Acordeón horizontal para cada iniciativa: al abrir muestra el problema y los charts.
@@ -6367,40 +6430,25 @@ const oportunidades = [
     id: "pagos",
     title: "Pagos recibidos",
     tags: ["Adopción", "Engagement"],
-    diagnostico:
-      "No existe una sección de pagos recibidos en la app. El usuario puede hacer el pago, pero no se visualizan, lo que rompe el flujo móvil de cobro frente al cliente.",
-    oportunidad:
-      "Habilitar el registro y consulta de pagos recibidos desde la app, integrado al flujo de la factura de venta.",
-    link: "https://claude.ai/design/p/5a2581d3-60c3-4e07-96c9-701c04fbc999?file=Pagos+Recibidos.html&via=share",
+    resumen: "No hay sección de pagos recibidos; habilitar registro y consulta desde el flujo de la factura.",
   },
   {
     id: "detalle-factura",
     title: "Detalle de la factura",
     tags: ["Experiencia", "Adopción"],
-    diagnostico:
-      "La factura de venta en la app no tiene la funcionalidad de imprimir ni de clonar, dos acciones críticas para el día a día de la Pyme Mobile First que hoy lo obligan a volver al computador.",
-    oportunidad:
-      "Sumar imprimir y clonar dentro del detalle de la factura, cerrando el ciclo de venta sin necesidad del PC.",
-    link: "https://claude.ai/design/p/019dbd42-565f-7ccd-958c-6b7206220c86?file=Factura+Detalle.html",
+    resumen: "Faltan imprimir y clonar; sumarlas al detalle para cerrar el ciclo sin volver al PC.",
   },
   {
     id: "factura-venta",
     title: "Factura de venta",
     tags: ["Adopción", "Experiencia"],
-    diagnostico:
-      "No se tienen retenciones ni remisiones en varias versiones, ni tampoco se puede crear una factura mediante imágenes o fotos.",
-    oportunidad:
-      "Habilitar retenciones y remisiones en todas las versiones y permitir crear facturas a partir de imágenes o fotos.",
+    resumen: "Faltan retenciones y remisiones en varias versiones y crear factura desde foto.",
   },
   {
     id: "reportes",
     title: "Reportes",
     tags: ["Adopción", "Experiencia"],
-    diagnostico:
-      "El usuario no puede descargar ni compartir los reportes. Faltan reportes clave para la operación: ventas generales, ventas por vendedor, ventas por ítem y reporte de inventario.",
-    oportunidad:
-      "Construir las opciones faltantes, incluyendo las opciones de descarga y compartir.",
-    link: "https://claude.ai/design/p/019dc097-2664-7687-9041-1fdc44865b74?file=Reportes.html&via=share",
+    resumen: "No se pueden descargar ni compartir; faltan reportes clave de ventas e inventario.",
   },
 ];
 
@@ -6625,7 +6673,7 @@ function Section5() {
 
           <div>
             <h3 className="mb-3 text-sm font-bold uppercase tracking-wider text-neutral-600">Oportunidades</h3>
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
               {oportunidades.map((op) => (
                 <OportunidadCard key={op.id} op={op} />
               ))}
@@ -6721,6 +6769,33 @@ function Section5() {
             </div>
           </div>
 
+          {/* Card Ola Argentina */}
+          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm md:col-span-2">
+            <div className="flex items-start gap-3">
+              <div
+                className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-lg"
+                style={{ backgroundColor: "#7C3AED15" }}
+              >
+                🇦🇷
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-neutral-900">Ola Argentina</h3>
+                <p className="mt-0.5 text-xs text-neutral-500">
+                  Nuevo idioma técnico de facturación (v4.4 y v4.5)
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-4 rounded-lg border border-purple-200 bg-purple-50/50 p-3">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-purple-700">
+                Continuidad operativa
+              </p>
+              <p className="mt-1 text-xs leading-relaxed text-neutral-800">
+                Argentina renueva su <strong>"idioma técnico" de facturación (v4.4 y v4.5)</strong>, suma el régimen <strong>RG 5866</strong> de liquidación mensual para alto volumen y exige mostrar <strong>Ingresos Brutos por provincia</strong> en cada factura. Es el frente de mayor continuidad operativa del semestre: toda la base activa que emite comprobantes queda expuesta, sin segmentar por tamaño.
+              </p>
+            </div>
+          </div>
+
           {/* % usuarios pagos activos en Rep. Dominicana únicamente */}
           <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
             <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
@@ -6785,6 +6860,35 @@ function Section5() {
 
       {/* Adquisición */}
       <CollapsibleSection title="Adquisición" subtitle="Login para ver planes y pagar" color="#FF6B00">
+        <div className="mb-5 rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+          <div className="flex items-start justify-between gap-3 flex-wrap">
+            <div className="flex items-start gap-3">
+              <div
+                className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+                style={{ backgroundColor: "#FF6B0015" }}
+              >
+                <Target className="h-4 w-4" style={{ color: "#FF6B00" }} />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-neutral-900">ICP</h3>
+                <p className="mt-0.5 text-xs text-neutral-500">Mercados prioritarios</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-1.5 text-2xl">
+              <span title="México">🇲🇽</span>
+              <span title="Colombia">🇨🇴</span>
+              <span title="Costa Rica">🇨🇷</span>
+              <span title="República Dominicana">🇩🇴</span>
+            </div>
+          </div>
+          <div className="mt-4 rounded-lg border border-orange-200 bg-orange-50/50 p-3">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-orange-700">Estrategia ICP</p>
+            <p className="mt-1 text-xs leading-relaxed text-neutral-800">
+              El <strong>onboarding de la app</strong> tiene que adaptarse al <strong>onboarding de web</strong>.
+            </p>
+          </div>
+        </div>
+
         <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
           <div className="mb-5 flex items-start gap-3">
             <div
@@ -6857,6 +6961,40 @@ function Section5() {
       {/* Contadores */}
       <CollapsibleSection title="Contadores" subtitle="Acciones más importantes · voces de campo" color="rgb(48,171,169)">
         <ContadoresSection />
+      </CollapsibleSection>
+
+      <CollapsibleSection title="Agentes" subtitle="Agente de Alegra en la app" color="#7C3AED">
+        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+          <div className="flex items-start justify-between gap-3 flex-wrap">
+            <div className="flex items-start gap-3">
+              <div
+                className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+                style={{ backgroundColor: "#7C3AED15" }}
+              >
+                <Sparkles className="h-4 w-4" style={{ color: "#7C3AED" }} />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-neutral-900">Agente de Alegra</h3>
+                <p className="mt-0.5 text-xs text-neutral-500">Prototipo del agente en la app</p>
+              </div>
+            </div>
+            <a
+              href="https://play.alegra.design/proto/2613528560/d?view=agent"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition-all hover:opacity-90"
+              style={{ backgroundColor: "#7C3AED" }}
+            >
+              Ver prototipo <ExternalLink className="h-3.5 w-3.5" />
+            </a>
+          </div>
+          <div className="mt-4 rounded-lg border border-purple-200 bg-purple-50/50 p-3">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-purple-700">Iniciativa</p>
+            <p className="mt-1 text-xs leading-relaxed text-neutral-800">
+              El <strong>Agente de Alegra</strong> se lanzará a producción y la <strong>app debe crear el agente</strong>.
+            </p>
+          </div>
+        </div>
       </CollapsibleSection>
 
     </div>
@@ -7314,7 +7452,7 @@ function PrototypeCard({
 function OportunidadCard({
   op,
 }: {
-  op: { id: string; title: string; tags: string[]; diagnostico: string; oportunidad: string; link?: string };
+  op: { id: string; title: string; tags: string[]; resumen: string };
 }) {
   const tagColor = (t: string) => {
     if (t === "Engagement") return "#FF6B00";
@@ -7323,28 +7461,15 @@ function OportunidadCard({
     return "#737373";
   };
   return (
-    <div className="group flex h-full flex-col rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
-      <div className="flex items-start justify-between gap-2">
-        <div className="flex items-start gap-2 min-w-0">
-          <div
-            className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
-            style={{ backgroundColor: `${ALEGRA_GREEN}15` }}
-          >
-            <Lightbulb className="h-4 w-4" style={{ color: ALEGRA_GREEN }} />
-          </div>
-          <h3 className="text-sm font-bold leading-snug text-neutral-900">{op.title}</h3>
+    <div className="flex h-full flex-col rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+      <div className="flex items-center gap-2">
+        <div
+          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg"
+          style={{ backgroundColor: `${ALEGRA_GREEN}15` }}
+        >
+          <Lightbulb className="h-3.5 w-3.5" style={{ color: ALEGRA_GREEN }} />
         </div>
-        {op.link && (
-          <a
-            href={op.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex shrink-0 items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold transition-colors hover:bg-emerald-50"
-            style={{ borderColor: `${ALEGRA_GREEN}55`, color: ALEGRA_GREEN, backgroundColor: `${ALEGRA_GREEN}10` }}
-          >
-            <Sparkles className="h-3 w-3" /> Ver diseño <ExternalLink className="h-2.5 w-2.5" />
-          </a>
-        )}
+        <h3 className="text-sm font-bold leading-snug text-neutral-900">{op.title}</h3>
       </div>
 
       <div className="mt-2 flex flex-wrap gap-1">
@@ -7352,7 +7477,7 @@ function OportunidadCard({
           <Badge
             key={t}
             variant="outline"
-            className="text-[10px] font-semibold"
+            className="text-[9px] font-semibold"
             style={{ borderColor: tagColor(t), color: tagColor(t) }}
           >
             {t}
@@ -7360,22 +7485,7 @@ function OportunidadCard({
         ))}
       </div>
 
-      <div className="mt-3">
-        <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">
-          Diagnóstico
-        </p>
-        <p className="mt-1 text-xs leading-relaxed text-neutral-600">{op.diagnostico}</p>
-      </div>
-
-      <div className="mt-3 rounded-lg border border-emerald-100 bg-emerald-50/40 p-3">
-        <p
-          className="text-[10px] font-bold uppercase tracking-wider"
-          style={{ color: ALEGRA_GREEN }}
-        >
-          Oportunidad
-        </p>
-        <p className="mt-1 text-xs leading-relaxed text-neutral-700">{op.oportunidad}</p>
-      </div>
+      <p className="mt-2 text-xs leading-relaxed text-neutral-600">{op.resumen}</p>
     </div>
   );
 }
