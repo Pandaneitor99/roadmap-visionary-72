@@ -716,7 +716,7 @@ function Section2() {
               Monthly Active Customers (MAC)
             </h2>
             <p className="mt-1.5 text-sm leading-relaxed text-neutral-600">
-              Usuarios pagos únicos que ejecutan al menos una acción crítica de negocio en la app cada mes.
+              Usuarios pagos únicos que ejecutan al menos una acción de valor en la app cada mes.
             </p>
             <div className="mt-3 flex flex-wrap gap-1.5">
               {[
@@ -1196,11 +1196,21 @@ function TasaAdopcion() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h3 className="text-lg font-bold text-neutral-900">Tasa de Adopción</h3>
-        <p className="mt-1 text-sm text-neutral-600">
-          % de <strong>usuarios pagos web activos</strong> que entran a la app y/o realizan acciones de valor.
-        </p>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h3 className="text-lg font-bold text-neutral-900">Tasa de Adopción</h3>
+          <p className="mt-1 text-sm text-neutral-600">
+            % de <strong>usuarios pagos web activos</strong> que entran a la app y/o realizan acciones de valor.
+          </p>
+        </div>
+        {metricFilter !== "both" && (
+          <button
+            onClick={() => setMetricFilter("both")}
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-neutral-300 bg-white px-3 py-1.5 text-xs font-semibold text-neutral-700 shadow-sm transition-all hover:border-neutral-400 hover:bg-neutral-50 hover:text-neutral-900"
+          >
+            Limpiar filtro <span className="text-neutral-400">✕</span>
+          </button>
+        )}
       </div>
 
       {/* KPIs — clic para filtrar la evolución mensual y la barra global */}
@@ -1374,14 +1384,36 @@ function TasaAdopcion() {
       {/* === Tasa de adopción por país === */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h3 className="text-lg font-bold text-neutral-900">Tasa de adopción por país</h3>
-        {selectedCountry && (
-          <button
-            onClick={() => setSelectedCountry(null)}
-            className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-neutral-300 bg-white px-3 py-1.5 text-xs font-semibold text-neutral-700 shadow-sm transition-all hover:border-neutral-400 hover:bg-neutral-50 hover:text-neutral-900"
-          >
-            Limpiar filtros <span className="text-neutral-400">✕</span>
-          </button>
-        )}
+        <div className="flex items-center gap-3">
+          <div className="inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1">
+            <button
+              onClick={() => setMetricTab("adopcion")}
+              className={cn(
+                "rounded-md px-3 py-1.5 text-xs font-semibold transition-all",
+                metricTab === "adopcion" ? "bg-white text-neutral-900 shadow-sm" : "text-neutral-500 hover:text-neutral-700",
+              )}
+            >
+              Adopción
+            </button>
+            <button
+              onClick={() => setMetricTab("real")}
+              className={cn(
+                "rounded-md px-3 py-1.5 text-xs font-semibold transition-all",
+                metricTab === "real" ? "bg-white text-neutral-900 shadow-sm" : "text-neutral-500 hover:text-neutral-700",
+              )}
+            >
+              Real
+            </button>
+          </div>
+          {selectedCountry && (
+            <button
+              onClick={() => setSelectedCountry(null)}
+              className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-neutral-300 bg-white px-3 py-1.5 text-xs font-semibold text-neutral-700 shadow-sm transition-all hover:border-neutral-400 hover:bg-neutral-50 hover:text-neutral-900"
+            >
+              Limpiar filtros <span className="text-neutral-400">✕</span>
+            </button>
+          )}
+        </div>
       </div>
       <p className="-mt-3 text-xs text-neutral-500">
         Clic en un país para filtrar el gráfico por país y la evolución.
@@ -1405,10 +1437,11 @@ function TasaAdopcion() {
                 {c.country}
               </p>
               <div className="mt-2">
-                <AdoptionMetricRow label="Adopción" labelColor="#0066FF" value={lastOf(c.adopcion)} base={c.adopcion[0]} />
-              </div>
-              <div className="mt-2 border-t border-neutral-100 pt-2">
-                <AdoptionMetricRow label="Adopción Real" labelColor={ALEGRA_GREEN} value={lastOf(c.real)} base={c.real[0]} />
+                {metricTab === "adopcion" ? (
+                  <AdoptionMetricRow label="Adopción" labelColor="#0066FF" value={lastOf(c.adopcion)} base={c.adopcion[0]} />
+                ) : (
+                  <AdoptionMetricRow label="Adopción Real" labelColor={ALEGRA_GREEN} value={lastOf(c.real)} base={c.real[0]} />
+                )}
               </div>
               <p className="mt-2 text-[9px] font-medium text-neutral-400">vs Ene '26</p>
             </button>
@@ -1424,54 +1457,36 @@ function TasaAdopcion() {
               % Usuarios pagos activos por país
             </h4>
             <p className="mt-0.5 text-xs text-neutral-500">
-              Junio 2026 · Tasa de Adopción (entran a la app) y Tasa Real (acciones de valor){selectedCountry ? ` · ${selectedCountry}` : ""}
+              Junio 2026 · {metricTab === "adopcion" ? "Tasa de Adopción (entran a la app)" : "Tasa Real (acciones de valor)"}{selectedCountry ? ` · ${selectedCountry}` : ""}
             </p>
           </div>
-          <div className="flex flex-col items-end gap-1">
-            <a
-              href="https://app.amplitude.com/analytics/alegra/chart/5vlf3f1x"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1 text-[11px] font-medium text-[#0066FF] hover:underline"
-            >
-              Adopción <ExternalLink className="h-3 w-3" />
-            </a>
-            <a
-              href="https://app.amplitude.com/analytics/alegra/chart/hqcerbqk"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1 text-[11px] font-medium hover:underline"
-              style={{ color: ALEGRA_GREEN }}
-            >
-              Real <ExternalLink className="h-3 w-3" />
-            </a>
-          </div>
+          <a
+            href={metricTab === "adopcion" ? "https://app.amplitude.com/analytics/alegra/chart/5vlf3f1x" : "https://app.amplitude.com/analytics/alegra/chart/hqcerbqk"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-[11px] font-medium hover:underline"
+            style={{ color: metricTab === "adopcion" ? "#0066FF" : ALEGRA_GREEN }}
+          >
+            {metricTab === "adopcion" ? "Adopción" : "Real"} <ExternalLink className="h-3 w-3" />
+          </a>
         </div>
         <div className="space-y-3">
           {metricCountries.map((c) => {
-            const adop = lastOf(c.adopcion);
-            const real = lastOf(c.real);
+            const val = metricTab === "adopcion" ? lastOf(c.adopcion) : lastOf(c.real);
+            const barColor = metricTab === "adopcion" ? "#0066FF" : ALEGRA_GREEN;
+            const barLabel = metricTab === "adopcion" ? "Adopción" : "Real";
             return (
               <div key={c.country}>
                 <div className="mb-1 flex items-center justify-between text-xs">
                   <span className="font-medium text-neutral-700">{c.country}</span>
-                  <div className="flex gap-3">
-                    <span className="text-[#0066FF]">
-                      Adopción <strong>{adop.toFixed(1)}%</strong>
-                    </span>
-                    <span style={{ color: ALEGRA_GREEN }}>
-                      Real <strong>{real.toFixed(1)}%</strong>
-                    </span>
-                  </div>
+                  <span style={{ color: barColor }}>
+                    {barLabel} <strong>{val.toFixed(1)}%</strong>
+                  </span>
                 </div>
                 <div className="relative h-5 w-full overflow-hidden rounded-full bg-neutral-100">
                   <div
                     className="absolute left-0 top-0 h-full rounded-full"
-                    style={{ width: `${Math.min(adop, 100)}%`, backgroundColor: "#0066FF40" }}
-                  />
-                  <div
-                    className="absolute left-0 top-0 h-full rounded-full"
-                    style={{ width: `${Math.min(real, 100)}%`, backgroundColor: ALEGRA_GREEN }}
+                    style={{ width: `${Math.min(val, 100)}%`, backgroundColor: barColor }}
                   />
                 </div>
               </div>
@@ -1491,36 +1506,14 @@ function TasaAdopcion() {
               Ene → Jun '26 · {selectedCountry ?? "Todos los países"}
             </p>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1">
-              <button
-                onClick={() => setMetricTab("adopcion")}
-                className={cn(
-                  "rounded-md px-3 py-1.5 text-xs font-semibold transition-all",
-                  metricTab === "adopcion" ? "bg-white text-neutral-900 shadow-sm" : "text-neutral-500 hover:text-neutral-700",
-                )}
-              >
-                Adopción
-              </button>
-              <button
-                onClick={() => setMetricTab("real")}
-                className={cn(
-                  "rounded-md px-3 py-1.5 text-xs font-semibold transition-all",
-                  metricTab === "real" ? "bg-white text-neutral-900 shadow-sm" : "text-neutral-500 hover:text-neutral-700",
-                )}
-              >
-                Real
-              </button>
-            </div>
-            <a
-              href={metricTab === "adopcion" ? "https://app.amplitude.com/analytics/alegra/chart/5vlf3f1x" : "https://app.amplitude.com/analytics/alegra/chart/hqcerbqk"}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
-            >
-              Amplitude <ExternalLink className="h-3 w-3" />
-            </a>
-          </div>
+          <a
+            href={metricTab === "adopcion" ? "https://app.amplitude.com/analytics/alegra/chart/5vlf3f1x" : "https://app.amplitude.com/analytics/alegra/chart/hqcerbqk"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+          >
+            Amplitude <ExternalLink className="h-3 w-3" />
+          </a>
         </div>
         <div className="h-[280px] w-full">
           <ResponsiveContainer width="100%" height="100%">
@@ -1808,14 +1801,24 @@ function IcpView() {
                 Ene → Jun '26 · Pyme (emprendedor + independiente) vs Contador
               </p>
             </div>
-            <a
-              href="https://app.amplitude.com/analytics/alegra/chart/tkmdv3fe"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
-            >
-              Amplitude <ExternalLink className="h-3 w-3" />
-            </a>
+            <div className="flex items-center gap-3">
+              {mainFilter !== "both" && (
+                <button
+                  onClick={() => setMainFilter("both")}
+                  className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-neutral-300 bg-white px-3 py-1.5 text-xs font-semibold text-neutral-700 shadow-sm transition-all hover:border-neutral-400 hover:bg-neutral-50 hover:text-neutral-900"
+                >
+                  Limpiar filtro <span className="text-neutral-400">✕</span>
+                </button>
+              )}
+              <a
+                href="https://app.amplitude.com/analytics/alegra/chart/tkmdv3fe"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+              >
+                Amplitude <ExternalLink className="h-3 w-3" />
+              </a>
+            </div>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <button
@@ -1916,25 +1919,35 @@ function IcpView() {
               Click en una card para filtrar el gráfico de abajo
             </span>
           </div>
-          <div className="inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1">
-            {([
-              { id: "both", label: "Todos" },
-              { id: "PYME", label: "Pyme" },
-              { id: "CONTADOR", label: "Contador" },
-            ] as const).map((opt) => (
+          <div className="flex items-center gap-3">
+            {selectedCountry && (
               <button
-                key={opt.id}
-                onClick={() => setSegment(opt.id)}
-                className={cn(
-                  "rounded-md px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider transition-all",
-                  segment === opt.id
-                    ? "bg-white text-neutral-900 shadow-sm"
-                    : "text-neutral-500 hover:text-neutral-700",
-                )}
+                onClick={() => setSelectedCountry(null)}
+                className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-neutral-300 bg-white px-3 py-1.5 text-xs font-semibold text-neutral-700 shadow-sm transition-all hover:border-neutral-400 hover:bg-neutral-50 hover:text-neutral-900"
               >
-                {opt.label}
+                Limpiar filtros <span className="text-neutral-400">✕</span>
               </button>
-            ))}
+            )}
+            <div className="inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1">
+              {([
+                { id: "both", label: "Todos" },
+                { id: "PYME", label: "Pyme" },
+                { id: "CONTADOR", label: "Contador" },
+              ] as const).map((opt) => (
+                <button
+                  key={opt.id}
+                  onClick={() => setSegment(opt.id)}
+                  className={cn(
+                    "rounded-md px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider transition-all",
+                    segment === opt.id
+                      ? "bg-white text-neutral-900 shadow-sm"
+                      : "text-neutral-500 hover:text-neutral-700",
+                  )}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -2589,8 +2602,161 @@ const generalFeatures = [
   "Crear gasto",
 ];
 
+// === Uso (usuario único y eventos totales) por funcionalidad ===
+// Filtros más importantes · datos reales de Amplitude (Ene → Jun '26)
+const usoFeatures = ["Crear factura", "Crear contacto", "Crear cotización", "Crear ítem", "Crear remisión"];
+const usoNumberFmt = (v: number) => v.toLocaleString("es-CO");
+
+// General — Uso por usuario único (chart am4dj5wu)
+const usoUnicoGeneral: Record<string, number[]> = {
+  "Crear factura":    [4059, 4112, 4344, 4367, 4462, 4523],
+  "Crear contacto":   [1984, 2040, 2089, 2135, 2269, 2247],
+  "Crear cotización": [1940, 1962, 2086, 2093, 2155, 2079],
+  "Crear ítem":       [1550, 1614, 1692, 1703, 1777, 1786],
+  "Crear remisión":   [251, 257, 267, 284, 304, 292],
+};
+// General — Uso por eventos totales (chart wm943spe)
+const usoTotalGeneral: Record<string, number[]> = {
+  "Crear factura":    [98440, 101148, 111560, 101693, 104121, 102432],
+  "Crear contacto":   [12204, 13084, 14715, 13417, 13688, 12275],
+  "Crear cotización": [28536, 31704, 35449, 33033, 34260, 33661],
+  "Crear ítem":       [12079, 13182, 13611, 14169, 13637, 13224],
+  "Crear remisión":   [7112, 6987, 7844, 10989, 12128, 11027],
+};
+// Core/Lite — Uso por usuario único (chart p3r1xdm6)
+const usoUnicoCoreLite: { CORE: Record<string, number[]>; LITE: Record<string, number[]> } = {
+  CORE: {
+    "Crear factura":    [1378, 1381, 1585, 1578, 1545, 1594],
+    "Crear contacto":   [644, 670, 715, 703, 766, 749],
+    "Crear cotización": [854, 878, 961, 972, 1004, 966],
+    "Crear ítem":       [423, 475, 542, 508, 570, 519],
+    "Crear remisión":   [154, 152, 152, 175, 181, 171],
+  },
+  LITE: {
+    "Crear factura":    [2671, 2736, 2952, 2801, 2917, 2909],
+    "Crear contacto":   [1322, 1355, 1411, 1423, 1491, 1485],
+    "Crear cotización": [1075, 1087, 1234, 1119, 1151, 1103],
+    "Crear ítem":       [1105, 1125, 1181, 1181, 1198, 1237],
+    "Crear remisión":   [97, 107, 123, 109, 121, 120],
+  },
+};
+// Core/Lite — Uso por eventos totales (chart tzgr6hf6)
+const usoTotalCoreLite: { CORE: Record<string, number[]>; LITE: Record<string, number[]> } = {
+  CORE: {
+    "Crear factura":    [64682, 63030, 72388, 66734, 67713, 66876],
+    "Crear contacto":   [6191, 7152, 7691, 7157, 6851, 6023],
+    "Crear cotización": [19822, 23189, 26097, 24832, 25320, 25174],
+    "Crear ítem":       [3281, 3776, 3997, 3800, 3940, 3822],
+    "Crear remisión":   [6165, 5890, 6720, 9883, 11062, 9952],
+  },
+  LITE: {
+    "Crear factura":    [33289, 36926, 38643, 34626, 36088, 35140],
+    "Crear contacto":   [5906, 5835, 6838, 6214, 6723, 6063],
+    "Crear cotización": [8659, 8478, 9329, 8160, 8847, 8402],
+    "Crear ítem":       [8380, 9116, 9498, 10260, 9395, 9099],
+    "Crear remisión":   [947, 1097, 1120, 1102, 1063, 1071],
+  },
+};
+
+// Chips Adopción / Uso
+function AdopcionUsoChips({ view, onChange }: { view: "adopcion" | "uso"; onChange: (v: "adopcion" | "uso") => void }) {
+  return (
+    <div className="inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1">
+      {(["adopcion", "uso"] as const).map((v) => (
+        <button
+          key={v}
+          onClick={() => onChange(v)}
+          className={cn(
+            "rounded-md px-5 py-2 text-xs font-semibold transition-all",
+            view === v ? "bg-white text-neutral-900 shadow-sm" : "text-neutral-500 hover:text-neutral-700",
+          )}
+        >
+          {v === "adopcion" ? "Adopción" : "Uso"}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+// Chart de uso (General): una línea por funcionalidad
+function UsoFeatureChart({ title, subtitle, url, dataByFeature, active }: {
+  title: string; subtitle: string; url: string;
+  dataByFeature: Record<string, number[]>; active: string | null;
+}) {
+  const feats = active ? usoFeatures.filter((f) => f === active) : usoFeatures;
+  const rows = mesesQ.map((m, i) => {
+    const row: Record<string, string | number> = { month: m };
+    feats.forEach((f) => { row[f] = dataByFeature[f][i]; });
+    return row;
+  });
+  return (
+    <div className="rounded-2xl border border-neutral-200 bg-white px-6 pt-5 pb-2 shadow-sm">
+      <div className="mb-2 flex items-start justify-between gap-3 flex-wrap">
+        <div>
+          <h4 className="text-base font-bold text-neutral-900">{title}</h4>
+          <p className="mt-0.5 text-xs text-neutral-500">{subtitle}</p>
+        </div>
+        <AmplitudeLink href={url} />
+      </div>
+      <div className="h-[300px] w-full">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={rows} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+            <XAxis dataKey="month" stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={{ stroke: "#e5e7eb" }} tickLine={false} />
+            <YAxis stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={usoNumberFmt} width={48} />
+            <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => usoNumberFmt(v)} />
+            <Legend iconType="circle" wrapperStyle={{ fontSize: 10, paddingTop: 8 }} />
+            {feats.map((f) => (
+              <Line key={f} type="monotone" dataKey={f} stroke={colorForEvent(f)} strokeWidth={feats.length === 1 ? 3 : 2} dot={{ r: feats.length === 1 ? 4 : 2 }} activeDot={{ r: 6 }} />
+            ))}
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  );
+}
+
+// Chart de uso (Core/Lite): CORE vs LITE, suma sobre las funcionalidades seleccionadas
+function UsoCoreLiteChart({ title, subtitle, url, data, active }: {
+  title: string; subtitle: string; url: string;
+  data: { CORE: Record<string, number[]>; LITE: Record<string, number[]> }; active: string | null;
+}) {
+  const feats = active ? [active] : usoFeatures;
+  const rows = mesesQ.map((m, i) => ({
+    month: m,
+    CORE: feats.reduce((s, f) => s + data.CORE[f][i], 0),
+    LITE: feats.reduce((s, f) => s + data.LITE[f][i], 0),
+  }));
+  return (
+    <div className="rounded-2xl border border-neutral-200 bg-white px-6 pt-5 pb-2 shadow-sm">
+      <div className="mb-2 flex items-start justify-between gap-3 flex-wrap">
+        <div>
+          <h4 className="text-base font-bold text-neutral-900">{title}</h4>
+          <p className="mt-0.5 text-xs text-neutral-500">{subtitle} · {active ?? "Todas las funcionalidades"}</p>
+        </div>
+        <AmplitudeLink href={url} />
+      </div>
+      <div className="h-[300px] w-full">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={rows} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+            <XAxis dataKey="month" stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={{ stroke: "#e5e7eb" }} tickLine={false} />
+            <YAxis stroke="#6b7280" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={usoNumberFmt} width={48} />
+            <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => usoNumberFmt(v)} />
+            <Legend iconType="circle" wrapperStyle={{ fontSize: 11, paddingTop: 8 }} />
+            <Line type="monotone" dataKey="CORE" name="Core" stroke={ALEGRA_GREEN} strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 6 }} />
+            <Line type="monotone" dataKey="LITE" name="Lite" stroke="#FF6B00" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 6 }} />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  );
+}
+
 function ComportamientoGeneralView() {
+  const [view, setView] = useState<"adopcion" | "uso">("adopcion");
   const [activeFeature, setActiveFeature] = useState<string | null>(null);
+  const [usoFeature, setUsoFeature] = useState<string | null>(null);
 
   const barData = activeFeature ? adopcionQ1Q2Data.filter((d) => d.event === activeFeature) : adopcionQ1Q2Data;
   const mensualSeries = activeFeature ? funcionalidadesMensual.filter((s) => s.label === activeFeature) : funcionalidadesMensual;
@@ -2604,6 +2770,33 @@ function ComportamientoGeneralView() {
 
   return (
     <div className="space-y-6">
+      <AdopcionUsoChips view={view} onChange={setView} />
+
+      {view === "uso" ? (
+        <div className="space-y-6">
+          <FeatureTagFilter
+            features={usoFeatures}
+            active={usoFeature}
+            onChange={setUsoFeature}
+            description="Filtra los charts de uso por funcionalidad."
+          />
+          <UsoFeatureChart
+            title="Uso por usuario único"
+            subtitle="Usuarios únicos por funcionalidad · Ene → Jun '26"
+            url="https://app.amplitude.com/analytics/alegra/chart/am4dj5wu?linkingDashboardId=js3lbrd0&sharingId=rJY0OQs4"
+            dataByFeature={usoUnicoGeneral}
+            active={usoFeature}
+          />
+          <UsoFeatureChart
+            title="Uso por eventos totales"
+            subtitle="Eventos totales por funcionalidad · Ene → Jun '26"
+            url="https://app.amplitude.com/analytics/alegra/chart/wm943spe?linkingDashboardId=js3lbrd0&sharingId=NHVjYnUZ"
+            dataByFeature={usoTotalGeneral}
+            active={usoFeature}
+          />
+        </div>
+      ) : (
+      <div className="space-y-6">
       <FeatureTagFilter
         features={generalFeatures}
         active={activeFeature}
@@ -2700,6 +2893,8 @@ function ComportamientoGeneralView() {
           chartUrl="https://app.amplitude.com/analytics/alegra/chart/q0wts3d9"
         />
       </div>
+      </div>
+      )}
     </div>
   );
 }
@@ -2847,7 +3042,10 @@ function FeatureTagFilter({
 }
 
 function ComportamientoCoreLiteView() {
+  const [view, setView] = useState<"adopcion" | "uso">("adopcion");
   const [activeFeature, setActiveFeature] = useState<string | null>(null);
+  const [usoFeature, setUsoFeature] = useState<string | null>(null);
+  const coreLiteFeatures = adopcionCoreLiteData.map((d) => d.event);
 
   const filteredCoreEvents = activeFeature
     ? coreEvents.filter((e) => e.label === activeFeature)
@@ -2855,9 +3053,46 @@ function ComportamientoCoreLiteView() {
   const filteredLiteEvents = activeFeature
     ? liteEvents.filter((e) => e.label === activeFeature)
     : liteEvents;
+  const barData = activeFeature
+    ? adopcionCoreLiteData.filter((d) => d.event === activeFeature)
+    : adopcionCoreLiteData;
 
   return (
     <div className="space-y-6">
+      <AdopcionUsoChips view={view} onChange={setView} />
+
+      {view === "uso" ? (
+        <div className="space-y-6">
+          <FeatureTagFilter
+            features={usoFeatures}
+            active={usoFeature}
+            onChange={setUsoFeature}
+            description="Filtra los charts de uso por funcionalidad."
+          />
+          <UsoCoreLiteChart
+            title="Uso por usuario único"
+            subtitle="Usuarios únicos · CORE vs LITE · Ene → Jun '26"
+            url="https://app.amplitude.com/analytics/alegra/chart/p3r1xdm6?linkingDashboardId=pfrft6zo&sharingId=IZt_IfX2"
+            data={usoUnicoCoreLite}
+            active={usoFeature}
+          />
+          <UsoCoreLiteChart
+            title="Uso por eventos totales"
+            subtitle="Eventos totales · CORE vs LITE · Ene → Jun '26"
+            url="https://app.amplitude.com/analytics/alegra/chart/tzgr6hf6?linkingDashboardId=pfrft6zo&sharingId=3fOi-vLG"
+            data={usoTotalCoreLite}
+            active={usoFeature}
+          />
+        </div>
+      ) : (
+      <div className="space-y-6">
+      <FeatureTagFilter
+        features={coreLiteFeatures}
+        active={activeFeature}
+        onChange={setActiveFeature}
+        description="Filtra las gráficas de adopción por funcionalidad."
+      />
+
       {/* Adopción funcionalidades CORE vs LITE - barras VERTICALES */}
       <div className="rounded-2xl border border-neutral-200 bg-white px-6 pt-5 pb-2 shadow-sm">
         <div className="mb-2 flex items-start justify-between gap-3 flex-wrap">
@@ -2872,7 +3107,7 @@ function ComportamientoCoreLiteView() {
         </div>
         <div className="h-[300px] w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={adopcionCoreLiteData} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
+            <BarChart data={barData} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
               <XAxis
                 dataKey="event"
@@ -2906,6 +3141,7 @@ function ComportamientoCoreLiteView() {
         lite={liteMonthlyAdoption}
         active={activeFeature}
         onChangeActive={setActiveFeature}
+        hideTags
       />
 
       {/* Engagement scatter CORE / LITE */}
@@ -2923,6 +3159,8 @@ function ComportamientoCoreLiteView() {
           chartUrl="https://app.amplitude.com/analytics/alegra/chart/jtbzs8ce"
         />
       </div>
+      </div>
+      )}
     </div>
   );
 }
@@ -3333,14 +3571,24 @@ function NegocioView() {
                 Ene → Jun '26 · Usuarios pagos activos por tipo de negocio
               </p>
             </div>
-            <a
-              href="https://app.amplitude.com/analytics/alegra/chart/wy27awa1"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
-            >
-              Amplitude <ExternalLink className="h-3 w-3" />
-            </a>
+            <div className="flex items-center gap-3">
+              {mainFilter !== "both" && (
+                <button
+                  onClick={() => setMainFilter("both")}
+                  className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-neutral-300 bg-white px-3 py-1.5 text-xs font-semibold text-neutral-700 shadow-sm transition-all hover:border-neutral-400 hover:bg-neutral-50 hover:text-neutral-900"
+                >
+                  Limpiar filtro <span className="text-neutral-400">✕</span>
+                </button>
+              )}
+              <a
+                href="https://app.amplitude.com/analytics/alegra/chart/wy27awa1"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+              >
+                Amplitude <ExternalLink className="h-3 w-3" />
+              </a>
+            </div>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <button
@@ -3453,25 +3701,35 @@ function NegocioView() {
               Click en una card para filtrar el gráfico de abajo
             </span>
           </div>
-          <div className="inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1">
-            {([
-              { id: "both", label: "Todos" },
-              { id: "LITE", label: "Lite" },
-              { id: "CORE", label: "Core" },
-            ] as const).map((opt) => (
+          <div className="flex items-center gap-3">
+            {selectedCountry && (
               <button
-                key={opt.id}
-                onClick={() => setSegment(opt.id)}
-                className={cn(
-                  "rounded-md px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider transition-all",
-                  segment === opt.id
-                    ? "bg-white text-neutral-900 shadow-sm"
-                    : "text-neutral-500 hover:text-neutral-700",
-                )}
+                onClick={() => setSelectedCountry(null)}
+                className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-neutral-300 bg-white px-3 py-1.5 text-xs font-semibold text-neutral-700 shadow-sm transition-all hover:border-neutral-400 hover:bg-neutral-50 hover:text-neutral-900"
               >
-                {opt.label}
+                Limpiar filtros <span className="text-neutral-400">✕</span>
               </button>
-            ))}
+            )}
+            <div className="inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1">
+              {([
+                { id: "both", label: "Todos" },
+                { id: "LITE", label: "Lite" },
+                { id: "CORE", label: "Core" },
+              ] as const).map((opt) => (
+                <button
+                  key={opt.id}
+                  onClick={() => setSegment(opt.id)}
+                  className={cn(
+                    "rounded-md px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider transition-all",
+                    segment === opt.id
+                      ? "bg-white text-neutral-900 shadow-sm"
+                      : "text-neutral-500 hover:text-neutral-700",
+                  )}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -3731,11 +3989,13 @@ function FuncionalidadesUniquesShared({
   lite,
   active,
   onChangeActive,
+  hideTags = false,
 }: {
   core: MonthlyAdoptionSeries[];
   lite: MonthlyAdoptionSeries[];
   active: string | null;
   onChangeActive: (v: string | null) => void;
+  hideTags?: boolean;
 }) {
   // Lista única de funcionalidades (unión)
   const allLabels = Array.from(
@@ -3800,35 +4060,37 @@ function FuncionalidadesUniquesShared({
       </div>
 
       {/* Tags compartidos */}
-      <div className="mb-5 flex flex-wrap gap-1.5">
-        {allLabels.map((label) => {
-          const isActive = active === label;
-          const c = colorForEvent(label);
-          return (
-            <button
-              key={label}
-              onClick={() => setActive(isActive ? null : label)}
-              className={cn(
-                "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-all",
-                isActive
-                  ? "text-white shadow-sm"
-                  : "border-neutral-200 bg-white text-neutral-700 hover:border-neutral-300",
-              )}
-              style={
-                isActive
-                  ? { backgroundColor: c, borderColor: c }
-                  : { borderLeftColor: c, borderLeftWidth: 3 }
-              }
-            >
-              <span
-                className="h-2 w-2 rounded-full"
-                style={{ backgroundColor: isActive ? "rgba(255,255,255,0.9)" : c }}
-              />
-              {label}
-            </button>
-          );
-        })}
-      </div>
+      {!hideTags && (
+        <div className="mb-5 flex flex-wrap gap-1.5">
+          {allLabels.map((label) => {
+            const isActive = active === label;
+            const c = colorForEvent(label);
+            return (
+              <button
+                key={label}
+                onClick={() => setActive(isActive ? null : label)}
+                className={cn(
+                  "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-all",
+                  isActive
+                    ? "text-white shadow-sm"
+                    : "border-neutral-200 bg-white text-neutral-700 hover:border-neutral-300",
+                )}
+                style={
+                  isActive
+                    ? { backgroundColor: c, borderColor: c }
+                    : { borderLeftColor: c, borderLeftWidth: 3 }
+                }
+              >
+                <span
+                  className="h-2 w-2 rounded-full"
+                  style={{ backgroundColor: isActive ? "rgba(255,255,255,0.9)" : c }}
+                />
+                {label}
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       {/* Tabla de comparación vs Octubre cuando hay evento activo */}
       {active && comparison && (
@@ -4220,13 +4482,6 @@ const devInitiativesS4 = [
     krs: ["KR 1.3"],
   },
   {
-    title: "Llenado automático campos contactos",
-    tags: ["Adopción", "Engagement"],
-    problem:
-      "El llenado manual de campos en contactos es tedioso y aumenta la fricción al crear un nuevo contacto.",
-    krs: ["KR 2.1"],
-  },
-  {
     title: "Rediseño de contactos",
     tags: ["Adopción", "Engagement"],
     problem:
@@ -4259,6 +4514,8 @@ const nonDevInitiativesS4 = [
 
 // === Detalles de iniciativas específicos de Q3 ===
 const facturaMeses7 = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul"];
+// Sin Julio: los totales de factura por país se muestran hasta Junio.
+const facturaMeses6 = ["Ene", "Feb", "Mar", "Abr", "May", "Jun"];
 
 function AmplitudeLink({ href, label = "Amplitude" }: { href: string; label?: string }) {
   return (
@@ -4274,20 +4531,63 @@ function AmplitudeLink({ href, label = "Amplitude" }: { href: string; label?: st
 }
 
 function FacturaTotalesChart({ creadas, visitas }: { creadas: number[]; visitas: number[] }) {
-  const data = facturaMeses7.map((m, i) => ({ mes: m, Creadas: creadas[i], Visitas: visitas[i] }));
+  // Filtro de métrica dentro del chart: ambas, solo visitas o solo creadas.
+  const [metric, setMetric] = useState<"both" | "visitas" | "creadas">("both");
+  const showVisitas = metric !== "creadas";
+  const showCreadas = metric !== "visitas";
+  // Sin Julio: se recorren solo los 6 meses (Ene → Jun).
+  const data = facturaMeses6.map((m, i) => ({ mes: m, Creadas: creadas[i], Visitas: visitas[i] }));
+  const lastVisitas = visitas[facturaMeses6.length - 1];
+  const lastCreadas = creadas[facturaMeses6.length - 1];
+
   return (
-    <div className="h-[300px] w-full">
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={data} margin={{ top: 16, right: 16, left: 0, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
-          <XAxis dataKey="mes" tick={{ fontSize: 11, fill: "#6b7280" }} axisLine={false} tickLine={false} />
-          <YAxis tick={{ fontSize: 11, fill: "#6b7280" }} axisLine={false} tickLine={false} tickFormatter={(v) => v.toLocaleString("es-CO")} />
-          <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => v.toLocaleString("es-CO")} />
-          <Legend iconType="circle" wrapperStyle={{ fontSize: 12, paddingTop: 8 }} />
-          <Line type="monotone" dataKey="Visitas" name="Visitas a nueva factura" stroke="#93BD31" strokeWidth={2.5} dot={{ r: 3 }} activeDot={{ r: 6 }} />
-          <Line type="monotone" dataKey="Creadas" name="Facturas creadas" stroke="#0052F2" strokeWidth={2.5} dot={{ r: 3 }} activeDot={{ r: 6 }} />
-        </LineChart>
-      </ResponsiveContainer>
+    <div className="space-y-3">
+      {/* Cards de selección de métrica dentro del chart */}
+      <div className="flex flex-wrap items-center gap-2">
+        <button
+          onClick={() => setMetric(metric === "visitas" ? "both" : "visitas")}
+          className={cn(
+            "rounded-xl border bg-white px-3 py-2 text-left transition-all hover:shadow-sm",
+            metric === "visitas" ? "ring-2 ring-offset-1" : "",
+          )}
+          style={{ borderLeft: `4px solid #93BD31`, ["--tw-ring-color" as any]: "#93BD31" }}
+        >
+          <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">Visitas a nueva factura</p>
+          <p className="mt-0.5 text-lg font-bold text-neutral-900">{lastVisitas?.toLocaleString("es-CO")}</p>
+        </button>
+        <button
+          onClick={() => setMetric(metric === "creadas" ? "both" : "creadas")}
+          className={cn(
+            "rounded-xl border bg-white px-3 py-2 text-left transition-all hover:shadow-sm",
+            metric === "creadas" ? "ring-2 ring-offset-1" : "",
+          )}
+          style={{ borderLeft: `4px solid #0052F2`, ["--tw-ring-color" as any]: "#0052F2" }}
+        >
+          <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">Facturas creadas</p>
+          <p className="mt-0.5 text-lg font-bold text-neutral-900">{lastCreadas?.toLocaleString("es-CO")}</p>
+        </button>
+        {metric !== "both" && (
+          <button
+            onClick={() => setMetric("both")}
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-neutral-300 bg-white px-3 py-1.5 text-xs font-semibold text-neutral-700 shadow-sm transition-all hover:border-neutral-400 hover:bg-neutral-50 hover:text-neutral-900"
+          >
+            Limpiar <span className="text-neutral-400">✕</span>
+          </button>
+        )}
+      </div>
+      <div className="h-[300px] w-full">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={data} margin={{ top: 16, right: 16, left: 0, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+            <XAxis dataKey="mes" tick={{ fontSize: 11, fill: "#6b7280" }} axisLine={false} tickLine={false} />
+            <YAxis tick={{ fontSize: 11, fill: "#6b7280" }} axisLine={false} tickLine={false} tickFormatter={(v) => v.toLocaleString("es-CO")} />
+            <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }} formatter={(v: number) => v.toLocaleString("es-CO")} />
+            <Legend iconType="circle" wrapperStyle={{ fontSize: 12, paddingTop: 8 }} />
+            {showVisitas && <Line type="monotone" dataKey="Visitas" name="Visitas a nueva factura" stroke="#93BD31" strokeWidth={2.5} dot={{ r: 3 }} activeDot={{ r: 6 }} />}
+            {showCreadas && <Line type="monotone" dataKey="Creadas" name="Facturas creadas" stroke="#0052F2" strokeWidth={2.5} dot={{ r: 3 }} activeDot={{ r: 6 }} />}
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 }
@@ -4298,7 +4598,7 @@ function RediseñoCRDetailQ3() {
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <div>
           <h4 className="text-base font-bold text-neutral-900">Factura de venta Costa Rica — Totales por mes</h4>
-          <p className="mt-0.5 text-xs text-neutral-500">Ene → Jul '26 · Facturas creadas vs visitas a nueva factura</p>
+          <p className="mt-0.5 text-xs text-neutral-500">Ene → Jun '26 · Facturas creadas vs visitas a nueva factura</p>
         </div>
         <AmplitudeLink href="https://app.amplitude.com/analytics/alegra/chart/6tootwru" />
       </div>
@@ -4313,7 +4613,7 @@ function RediseñoDominicanaDetailQ3() {
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <div>
           <h4 className="text-base font-bold text-neutral-900">Factura de venta República Dominicana — Totales por mes</h4>
-          <p className="mt-0.5 text-xs text-neutral-500">Ene → Jul '26 · Facturas creadas vs visitas a nueva factura</p>
+          <p className="mt-0.5 text-xs text-neutral-500">Ene → Jun '26 · Facturas creadas vs visitas a nueva factura</p>
         </div>
         <AmplitudeLink href="https://app.amplitude.com/analytics/alegra/chart/dxfa8lk5" />
       </div>
@@ -4338,17 +4638,6 @@ function RediseñoContactosDetailQ3() {
   const autocompPct = ((contactosAutocompPie[0].value / autocompTotal) * 100).toFixed(0);
   return (
     <div className="space-y-5">
-      {/* Uso de contactos */}
-      <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <h4 className="text-sm font-bold text-neutral-900">Uso de contactos</h4>
-            <p className="mt-0.5 text-xs text-neutral-500">Dashboard de uso de contactos en Amplitude.</p>
-          </div>
-          <AmplitudeLink href="https://app.amplitude.com/analytics/alegra/chart/r7zqh9du" />
-        </div>
-      </div>
-
       {/* Intención de creación */}
       <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
         <div className="flex items-start justify-between gap-3">
@@ -4440,7 +4729,7 @@ function EstabilizacionDetailQ3() {
           <h4 className="text-base font-bold text-neutral-900">Estabilización — Dashboard</h4>
           <p className="mt-0.5 text-xs text-neutral-500">Seguimiento de errores y estabilidad de la app.</p>
         </div>
-        <AmplitudeLink href="https://app.amplitude.com/analytics/alegra/chart/r7zqh9du" />
+        <AmplitudeLink href="https://app.amplitude.com/analytics/alegra/chart/r7zqh9du/edit/jmrlug71" />
       </div>
       <p className="text-sm leading-relaxed text-neutral-600">
         Consulta el detalle del dashboard de estabilización en Amplitude.
@@ -4480,20 +4769,12 @@ const q3ItemsCreadosSemanal = [
   { sem: "19 Abr", total: 5453 },
 ];
 
-const HOME_TAB_GROUPS_Q3 = [
-  {
-    id: "homefunc", label: "Home — Funcionalidad", color: "#0066FF",
-    tabs: [
-      { id: "fnFactura", label: "Home → Factura" },
-      { id: "fnContactos", label: "Home → Contactos" },
-      { id: "fnCotizacion", label: "Home → Cotización" },
-      { id: "fnItem", label: "Home → Item" },
-    ],
-  },
-  {
-    id: "items", label: "Resultados", color: "#9333EA",
-    tabs: [{ id: "itemsCreados", label: "Ítems creados / sem" }],
-  },
+// Home → Funcionalidad: cada funcionalidad es una card (chip) con comparación vs Ene '26.
+const HOME_FUNCS_Q3 = [
+  { id: "fnFactura", label: "Factura", color: ALEGRA_GREEN, data: q3HomeFunnelFactura },
+  { id: "fnContactos", label: "Contactos", color: "#0066FF", data: q3HomeFunnelContactos },
+  { id: "fnCotizacion", label: "Cotización", color: "#9333EA", data: q3HomeFunnelCotizacion },
+  { id: "fnItem", label: "Item", color: "#FF6B00", data: q3HomeFunnelItem },
 ];
 
 function q3PctDelta(arr: { pct?: number; total?: number }[], key: "pct" | "total") {
@@ -4504,114 +4785,71 @@ function q3PctDelta(arr: { pct?: number; total?: number }[], key: "pct" | "total
 }
 
 function HomeDetailQ3() {
-  const [tab, setTab] = useState("fnFactura");
-  const activeGroup = HOME_TAB_GROUPS_Q3.find((g) => g.tabs.some((t) => t.id === tab))?.id ?? "homefunc";
-  const group = HOME_TAB_GROUPS_Q3.find((g) => g.id === activeGroup)!;
-
-  const chartUrl: Record<string, string> = {
-    fnFactura: "https://app.amplitude.com/analytics/alegra/chart/24552723",
-    fnContactos: "https://app.amplitude.com/analytics/alegra/chart/up58fj0c",
-    fnCotizacion: "https://app.amplitude.com/analytics/alegra/chart/j5qy0tqd",
-    fnItem: "https://app.amplitude.com/analytics/alegra/chart/w81wjr5i",
-    itemsCreados: "https://app.amplitude.com/analytics/alegra/chart/j6et1f82",
-  };
-
-  const stat = (() => {
-    if (tab === "itemsCreados") {
-      const last = q3ItemsCreadosSemanal[q3ItemsCreadosSemanal.length - 1].total;
-      return { label: "Ítems última sem", value: last.toLocaleString("es-CO"), delta: q3PctDelta(q3ItemsCreadosSemanal, "total") };
-    }
-    const data = { fnFactura: q3HomeFunnelFactura, fnContactos: q3HomeFunnelContactos, fnCotizacion: q3HomeFunnelCotizacion, fnItem: q3HomeFunnelItem }[tab as "fnFactura" | "fnContactos" | "fnCotizacion" | "fnItem"];
-    const last = data[data.length - 1].pct;
-    return { label: "Funnel actual", value: `${last.toFixed(2)}%`, delta: q3PctDelta(data, "pct") };
-  })();
+  const HOME_CHART_URL = "https://app.amplitude.com/analytics/alegra/chart/24552723";
+  const [selected, setSelected] = useState("fnFactura");
+  const active = HOME_FUNCS_Q3.find((f) => f.id === selected)!;
 
   return (
     <div className="space-y-4">
-      <div className="space-y-3">
-        <div className="flex flex-wrap gap-2">
-          {HOME_TAB_GROUPS_Q3.map((g) => {
-            const isActive = activeGroup === g.id;
-            return (
-              <button
-                key={g.id}
-                onClick={() => setTab(g.tabs[0].id)}
-                className={cn(
-                  "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-bold uppercase tracking-wider transition-all",
-                  isActive ? "text-white shadow-sm" : "border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300",
-                )}
-                style={isActive ? { backgroundColor: g.color, borderColor: g.color } : undefined}
-              >
-                <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: isActive ? "#fff" : g.color }} />
-                {g.label}
-              </button>
-            );
-          })}
+      <div className="flex items-start justify-between gap-3 flex-wrap">
+        <div>
+          <p className="text-sm font-bold text-neutral-900">Home → Funcionalidad</p>
+          <p className="mt-0.5 text-xs text-neutral-500">
+            % de sesiones que llegan a la funcionalidad desde el home · semanal
+          </p>
         </div>
-        <div className="flex flex-wrap gap-2">
-          {group.tabs.map((t) => (
-            <button
-              key={t.id}
-              onClick={() => setTab(t.id)}
-              className={cn(
-                "rounded-full px-3 py-1 text-xs font-semibold transition-all",
-                tab === t.id ? "text-white shadow-sm" : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200",
-              )}
-              style={tab === t.id ? { backgroundColor: ALEGRA_GREEN } : undefined}
-            >
-              {t.label}
-            </button>
-          ))}
-        </div>
+        <AmplitudeLink href={HOME_CHART_URL} />
       </div>
 
+      {/* Cards por funcionalidad (chips) — comparación vs Ene '26 (parecido a las cards por país) */}
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {HOME_FUNCS_Q3.map((f) => {
+          const val = f.data[f.data.length - 1].pct;
+          const delta = q3PctDelta(f.data, "pct");
+          const up = delta >= 0;
+          const isActive = selected === f.id;
+          return (
+            <button
+              key={f.id}
+              onClick={() => setSelected(f.id)}
+              className={cn(
+                "rounded-2xl border bg-white px-4 py-3 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md",
+                isActive ? "border-neutral-900 ring-2 ring-neutral-900/10" : "border-neutral-200",
+              )}
+              style={{ borderTop: `3px solid ${f.color}` }}
+            >
+              <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
+                Home → {f.label}
+              </p>
+              <p className="mt-1 text-2xl font-bold text-neutral-900">{val.toFixed(2)}%</p>
+              <p className={cn("mt-1 flex items-center gap-1 text-xs font-bold", up ? "text-emerald-600" : "text-red-600")}>
+                {up ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
+                {up ? "+" : ""}{delta.toFixed(1)}%
+                <span className="ml-1 text-[10px] font-medium text-neutral-500">vs Ene '26</span>
+              </p>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Chart de la funcionalidad seleccionada */}
       <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm">
         <div className="mb-3 flex items-start justify-between gap-2">
           <p className="text-[11px] font-semibold uppercase tracking-wider text-neutral-500">
-            {group.label} · <span className="text-neutral-700">{group.tabs.find((t) => t.id === tab)?.label}</span>
+            Home → <span className="text-neutral-700">{active.label}</span>
           </p>
-          {chartUrl[tab] && <AmplitudeLink href={chartUrl[tab]} />}
+          <AmplitudeLink href={HOME_CHART_URL} />
         </div>
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-[1fr_auto]">
-          <div className="h-72">
-            <ResponsiveContainer width="100%" height="100%">
-              {tab === "itemsCreados" ? (
-                <LineChart data={q3ItemsCreadosSemanal}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                  <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
-                  <YAxis tick={{ fontSize: 10 }} />
-                  <Tooltip formatter={(v: number) => v.toLocaleString("es-CO")} />
-                  <Line type="monotone" dataKey="total" stroke="#0066FF" strokeWidth={2.5} dot={{ r: 3 }} />
-                </LineChart>
-              ) : (
-                <LineChart
-                  data={{ fnFactura: q3HomeFunnelFactura, fnContactos: q3HomeFunnelContactos, fnCotizacion: q3HomeFunnelCotizacion, fnItem: q3HomeFunnelItem }[tab as "fnFactura" | "fnContactos" | "fnCotizacion" | "fnItem"]}
-                >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                  <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
-                  <YAxis tick={{ fontSize: 10 }} unit="%" />
-                  <Tooltip formatter={(v: number) => `${v.toFixed(2)}%`} />
-                  <Line
-                    type="monotone"
-                    dataKey="pct"
-                    stroke={{ fnFactura: ALEGRA_GREEN, fnContactos: "#0066FF", fnCotizacion: "#9333EA", fnItem: "#FF6B00" }[tab as "fnFactura" | "fnContactos" | "fnCotizacion" | "fnItem"]}
-                    strokeWidth={2}
-                  />
-                </LineChart>
-              )}
-            </ResponsiveContainer>
-          </div>
-          {stat && (
-            <div className="flex flex-col justify-center rounded-lg border border-neutral-100 bg-neutral-50/60 p-3 md:min-w-[160px]">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">{stat.label}</p>
-              <p className="mt-1 text-2xl font-bold text-neutral-900">{stat.value}</p>
-              <p className={cn("mt-1 flex items-center gap-1 text-xs font-bold", stat.delta >= 0 ? "text-emerald-600" : "text-red-600")}>
-                {stat.delta >= 0 ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
-                {stat.delta >= 0 ? "+" : ""}{stat.delta.toFixed(1)}%
-                <span className="ml-0.5 text-[10px] font-medium text-neutral-500">vs primera sem</span>
-              </p>
-            </div>
-          )}
+        <div className="h-72">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={active.data}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+              <XAxis dataKey="sem" tick={{ fontSize: 10 }} />
+              <YAxis tick={{ fontSize: 10 }} unit="%" />
+              <Tooltip formatter={(v: number) => `${v.toFixed(2)}%`} />
+              <Line type="monotone" dataKey="pct" stroke={active.color} strokeWidth={2.5} dot={{ r: 3 }} />
+            </LineChart>
+          </ResponsiveContainer>
         </div>
       </div>
     </div>
@@ -4627,11 +4865,59 @@ const q3InitiativeDetailMap = {
   "Rediseño Factura de venta Dominicana": RediseñoDominicanaDetailQ3,
 };
 
+// Acordeón horizontal para cada iniciativa: al abrir muestra el problema y los charts.
+function InitiativeAccordion({
+  title,
+  tags,
+  problem,
+  Detail,
+}: {
+  title: string;
+  tags: string[];
+  problem: string;
+  krs?: string[];
+  Detail?: React.ComponentType;
+}) {
+  const tagColor = (t: string) => {
+    if (t === "Engagement") return "#FF6B00";
+    if (t === "Adopción") return ALEGRA_GREEN;
+    if (t === "Experiencia") return "#0066FF";
+    return "#737373";
+  };
+  return (
+    <Collapsible className="group/collap">
+      <CollapsibleTrigger className="flex w-full items-center justify-between gap-3 rounded-2xl border border-neutral-200 bg-white px-5 py-4 text-left shadow-sm transition hover:border-emerald-300 hover:bg-neutral-50">
+        <div className="flex flex-wrap items-center gap-2">
+          <h3 className="text-sm font-bold text-neutral-900">{title}</h3>
+          {tags.map((t) => (
+            <Badge
+              key={t}
+              variant="outline"
+              className="text-[10px] font-semibold"
+              style={{ borderColor: tagColor(t), color: tagColor(t) }}
+            >
+              {t}
+            </Badge>
+          ))}
+        </div>
+        <ChevronDown className="h-4 w-4 shrink-0 text-neutral-500 transition-transform group-data-[state=open]/collap:rotate-180" />
+      </CollapsibleTrigger>
+      <CollapsibleContent>
+        <div className="mt-3 space-y-4 rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
+          <div className="rounded-lg border border-orange-200 bg-orange-50/50 px-3 py-2">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-orange-700">Problema</p>
+            <p className="mt-1 text-xs leading-relaxed text-neutral-800">{problem}</p>
+          </div>
+          {Detail && <Detail />}
+        </div>
+      </CollapsibleContent>
+    </Collapsible>
+  );
+}
+
 function Section4() {
   const okr1 = okrs.find((o) => o.id === "obj-1");
   const okr2 = okrs.find((o) => o.id === "obj-2");
-  const [openInit, setOpenInit] = useState<string | null>(null);
-  const DetailComp = openInit ? q3InitiativeDetailMap[openInit] : null;
 
   return (
     <div className="space-y-12">
@@ -4662,12 +4948,12 @@ function Section4() {
           <div className="h-px flex-1 bg-neutral-200" />
           <span className="text-xs text-neutral-500">{devInitiativesS4.length} iniciativas</span>
         </div>
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div className="space-y-3">
           {devInitiativesS4.map((i, idx) => (
-            <SimpleInitiativeCard
+            <InitiativeAccordion
               key={idx}
               {...i}
-              onClick={q3InitiativeDetailMap[i.title] ? () => setOpenInit(i.title) : undefined}
+              Detail={q3InitiativeDetailMap[i.title]}
             />
           ))}
         </div>
@@ -4683,26 +4969,16 @@ function Section4() {
           <div className="h-px flex-1 bg-neutral-200" />
           <span className="text-xs text-neutral-500">{nonDevInitiativesS4.length} iniciativas</span>
         </div>
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div className="space-y-3">
           {nonDevInitiativesS4.map((i, idx) => (
-            <SimpleInitiativeCard
+            <InitiativeAccordion
               key={idx}
               {...i}
-              onClick={q3InitiativeDetailMap[i.title] ? () => setOpenInit(i.title) : undefined}
+              Detail={q3InitiativeDetailMap[i.title]}
             />
           ))}
         </div>
       </div>
-
-      {/* Detail dialog */}
-      <Dialog open={!!openInit} onOpenChange={(o) => !o && setOpenInit(null)}>
-        <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-neutral-900">{openInit}</DialogTitle>
-          </DialogHeader>
-          {DetailComp && <DetailComp />}
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
