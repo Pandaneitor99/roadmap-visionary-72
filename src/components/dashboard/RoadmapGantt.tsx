@@ -29,7 +29,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Calendar, MapPin, Users, Target, Lightbulb, AlertCircle, Pencil, GripVertical, Loader2, Plus, Trash2 } from "lucide-react";
+import { Calendar, MapPin, Users, Target, Lightbulb, AlertCircle, Pencil, GripVertical, Loader2, Plus, Minus, Trash2 } from "lucide-react";
 import { useSidebar } from "@/components/ui/sidebar";
 
 // Base date: Monday Jan 5 2026
@@ -716,6 +716,16 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
             >
               <Plus className="h-3 w-3" />
               Agregar sprint
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              disabled={sprintCount <= 1}
+              className="text-xs text-muted-foreground hover:text-foreground gap-1 disabled:opacity-40"
+              onClick={() => setSprintCount(prev => Math.max(1, prev - 1))}
+            >
+              <Minus className="h-3 w-3" />
+              Eliminar sprint
             </Button>
           </div>
 

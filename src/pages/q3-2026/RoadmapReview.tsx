@@ -6213,29 +6213,22 @@ function PerfilPorPaisCard() {
               </Pie>
               <Tooltip
                 contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }}
-                formatter={(v: number, n: string) => [
-                  `${v.toLocaleString()} (${((v / totalPerfiles) * 100).toFixed(1)}%)`,
-                  n,
-                ]}
+                formatter={(v: number, n: string) => [v.toLocaleString(), n]}
               />
             </PieChart>
           </ResponsiveContainer>
         </div>
         <div className="space-y-1.5">
-          {perfilPorPaisTotal.map((row, i) => {
-            const pct = (row.uniques / totalPerfiles) * 100;
-            return (
-              <div key={row.country} className="flex items-center gap-2 text-xs">
-                <span
-                  className="h-2.5 w-2.5 shrink-0 rounded-sm"
-                  style={{ backgroundColor: PIE_COLORS[i % PIE_COLORS.length] }}
-                />
-                <span className="flex-1 truncate font-medium text-neutral-700">{row.country}</span>
-                <span className="font-semibold text-neutral-900">{row.uniques.toLocaleString()}</span>
-                <span className="w-12 text-right text-neutral-500">{pct.toFixed(1)}%</span>
-              </div>
-            );
-          })}
+          {perfilPorPaisTotal.map((row, i) => (
+            <div key={row.country} className="flex items-center gap-2 text-xs">
+              <span
+                className="h-2.5 w-2.5 shrink-0 rounded-sm"
+                style={{ backgroundColor: PIE_COLORS[i % PIE_COLORS.length] }}
+              />
+              <span className="flex-1 truncate font-medium text-neutral-700">{row.country}</span>
+              <span className="font-semibold text-neutral-900">{row.uniques.toLocaleString()}</span>
+            </div>
+          ))}
         </div>
       </div>
     </div>
