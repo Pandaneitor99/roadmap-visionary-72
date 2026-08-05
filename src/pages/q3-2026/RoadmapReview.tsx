@@ -649,6 +649,8 @@ function SideMetricCard({
   color,
   highlight,
   compareLabel = "vs Oct '25",
+  delta2,
+  compareLabel2,
 }: {
   label: string;
   value: number;
@@ -656,8 +658,26 @@ function SideMetricCard({
   color: string;
   highlight?: boolean;
   compareLabel?: string;
+  delta2?: number;
+  compareLabel2?: string;
 }) {
   const up = delta >= 0;
+  const DeltaRow = ({ d, cmp }: { d: number; cmp: string }) => {
+    const isUp = d >= 0;
+    return (
+      <p
+        className={cn(
+          "flex items-center gap-1 text-xs font-bold",
+          isUp ? "text-emerald-600" : "text-red-600",
+        )}
+      >
+        {isUp ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
+        {isUp ? "+" : ""}
+        {d.toFixed(1)}%
+        <span className="ml-1 text-[10px] font-medium text-neutral-500">{cmp}</span>
+      </p>
+    );
+  };
   return (
     <div
       className={cn(
@@ -672,17 +692,10 @@ function SideMetricCard({
       <p className="mt-1.5 text-2xl font-bold text-neutral-900">
         {value.toLocaleString("es-CO")}
       </p>
-      <p
-        className={cn(
-          "mt-1 flex items-center gap-1 text-xs font-bold",
-          up ? "text-emerald-600" : "text-red-600",
-        )}
-      >
-        {up ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
-        {up ? "+" : ""}
-        {delta.toFixed(1)}%
-        <span className="ml-1 text-[10px] font-medium text-neutral-500">{compareLabel}</span>
-      </p>
+      <div className="mt-1 space-y-0.5">
+        <DeltaRow d={delta} cmp={compareLabel} />
+        {delta2 != null && compareLabel2 && <DeltaRow d={delta2} cmp={compareLabel2} />}
+      </div>
     </div>
   );
 }
@@ -690,7 +703,9 @@ function SideMetricCard({
 function Section2() {
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
   const last = macTrendData[macTrendData.length - 1];
+  const prevMonth = macTrendData[macTrendData.length - 2];
   const deltaPct = (((last.y2026 - last.y2025) / last.y2025) * 100).toFixed(1);
+  const deltaMonthPct = (((last.y2026 - prevMonth.y2026) / prevMonth.y2026) * 100).toFixed(1);
 
   return (
     <div className="space-y-8">
@@ -837,10 +852,12 @@ function Section2() {
           <SideMetricCard
             label="MAC actual"
             value={last.y2026}
-            delta={Number(deltaPct)}
+            delta={Number(deltaMonthPct)}
             color={ALEGRA_GREEN}
             highlight
-            compareLabel="vs Jul '25"
+            compareLabel="vs Jun '26"
+            delta2={Number(deltaPct)}
+            compareLabel2="vs Jul '25"
           />
         </div>
       </div>
@@ -2712,7 +2729,7 @@ function VariationCard({ label, first, last, fmt, color }: {
     <div className="flex items-center gap-2 rounded-lg border border-neutral-200 bg-neutral-50/70 px-3 py-2">
       {color && <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: color }} />}
       <div className="min-w-0">
-        <p className="truncate text-[10px] font-bold uppercase tracking-wider text-neutral-500">{label}</p>
+        <p className="text-[10px] font-bold uppercase leading-tight tracking-wider text-neutral-500">{label}</p>
         <p className="text-xs text-neutral-600">{fmt(first)} → <span className="font-bold text-neutral-900">{fmt(last)}</span></p>
       </div>
       <span className={cn("ml-auto inline-flex shrink-0 items-center gap-1 text-xs font-bold", up ? "text-emerald-600" : "text-red-600")}>
@@ -2789,6 +2806,7 @@ function UsoFeatureChart({ title, subtitle, url, dataByFeature, data2025, active
   });
   const firsts: Record<string, number> = {};
   feats.forEach((f) => { firsts[f] = dataByFeature[f][0]; });
+  if (prev && prev[0] != null) firsts["__2025"] = prev[0] as number;
   return (
     <div className="rounded-2xl border border-neutral-200 bg-white px-6 pt-5 pb-2 shadow-sm">
       <div className="mb-2 flex items-start justify-between gap-3 flex-wrap">
@@ -2890,7 +2908,7 @@ function UsoCoreLiteChart({ title, subtitle, url, data, active }: {
 }
 
 function ComportamientoGeneralView() {
-  const [view, setView] = useState<"adopcion" | "uso">("adopcion");
+  const [view, setView] = useState<"adopcion" | "uso">("uso");
   const [activeFeature, setActiveFeature] = useState<string | null>(null);
   const [usoFeature, setUsoFeature] = useState<string | null>(null);
 
@@ -3221,7 +3239,7 @@ function FeatureTagFilter({
 }
 
 function ComportamientoCoreLiteView() {
-  const [view, setView] = useState<"adopcion" | "uso">("adopcion");
+  const [view, setView] = useState<"adopcion" | "uso">("uso");
   const [activeFeature, setActiveFeature] = useState<string | null>(null);
   const [usoFeature, setUsoFeature] = useState<string | null>(null);
   const coreLiteFeatures = adopcionCoreLiteData.map((d) => d.event);
@@ -6750,13 +6768,6 @@ const itemsUxDeficiente = [
 ];
 
 // === Olas ===
-// Filtramos % usuarios pagos activos por país solo a Rep. Dominicana
-const adopcionRDRaw = countryAdoption.find((c) => c.country === "Rep. Dominicana")!;
-const adopcionRD = {
-  country: adopcionRDRaw.country,
-  wau: adopcionRDRaw.adopcion[adopcionRDRaw.adopcion.length - 1],
-  wac: adopcionRDRaw.real[adopcionRDRaw.real.length - 1],
-};
 
 function Section5() {
   const segBase = segmentos.find((s) => s.id === "base")!;
@@ -7109,7 +7120,7 @@ function Section5() {
                 🇻🇪
               </div>
               <div>
-                <h3 className="text-base font-bold text-neutral-900">Ola Venezuela</h3>
+                <h3 className="text-base font-bold text-neutral-900">Nuevo mercado, Venezuela</h3>
                 <p className="mt-0.5 text-xs text-neutral-500">Nuevo mercado</p>
               </div>
             </div>
@@ -7134,7 +7145,7 @@ function Section5() {
                 🇦🇷
               </div>
               <div>
-                <h3 className="text-base font-bold text-neutral-900">Ola Argentina</h3>
+                <h3 className="text-base font-bold text-neutral-900">Cambio reglamentario Argentina</h3>
                 <p className="mt-0.5 text-xs text-neutral-500">
                   Nuevo idioma técnico de facturación (v4.4 y v4.5)
                 </p>
@@ -7148,66 +7159,6 @@ function Section5() {
               <p className="mt-1 text-xs leading-relaxed text-neutral-800">
                 Argentina renueva su <strong>"idioma técnico" de facturación (v4.4 y v4.5)</strong>, suma el régimen <strong>RG 5866</strong> de liquidación mensual para alto volumen y exige mostrar <strong>Ingresos Brutos por provincia</strong> en cada factura. Es el frente de mayor continuidad operativa del semestre: toda la base activa que emite comprobantes queda expuesta, sin segmentar por tamaño.
               </p>
-            </div>
-          </div>
-
-          {/* % usuarios pagos activos en Rep. Dominicana únicamente */}
-          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-            <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
-              <div>
-                <h3 className="text-sm font-bold text-neutral-900">
-                  % Usuarios pagos activos · Rep. Dominicana
-                </h3>
-                <p className="mt-0.5 text-xs text-neutral-500">
-                  Marzo 2026 · Tasa de Adopción y Tasa Real
-                </p>
-              </div>
-              <a
-                href="https://app.amplitude.com/analytics/alegra/chart/hqcerbqk"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
-              >
-                Amplitude <ExternalLink className="h-3 w-3" />
-              </a>
-            </div>
-
-            <div>
-              <div className="mb-1 flex items-center justify-between text-xs">
-                <span className="font-medium text-neutral-700">{adopcionRD.country}</span>
-                <div className="flex gap-3">
-                  <span className="text-[#0066FF]">
-                    Adopción <strong>{adopcionRD.wau.toFixed(1)}%</strong>
-                  </span>
-                  <span style={{ color: ALEGRA_GREEN }}>
-                    Real <strong>{adopcionRD.wac.toFixed(1)}%</strong>
-                  </span>
-                </div>
-              </div>
-              <div className="relative h-6 w-full overflow-hidden rounded-full bg-neutral-100">
-                <div
-                  className="absolute left-0 top-0 h-full rounded-full"
-                  style={{ width: `${Math.min(adopcionRD.wau, 100)}%`, backgroundColor: "#0066FF40" }}
-                />
-                <div
-                  className="absolute left-0 top-0 h-full rounded-full"
-                  style={{ width: `${Math.min(adopcionRD.wac, 100)}%`, backgroundColor: ALEGRA_GREEN }}
-                />
-              </div>
-              <div className="mt-3 grid grid-cols-2 gap-3 text-[11px]">
-                <div className="rounded-lg bg-blue-50 p-3">
-                  <p className="font-bold uppercase tracking-wider text-blue-700">Adopción</p>
-                  <p className="mt-1 text-2xl font-bold text-neutral-900">{adopcionRD.wau.toFixed(1)}%</p>
-                  <p className="text-[10px] text-neutral-500">MAU APP / MAC WEB</p>
-                </div>
-                <div className="rounded-lg bg-emerald-50 p-3">
-                  <p className="font-bold uppercase tracking-wider" style={{ color: ALEGRA_GREEN }}>
-                    Real
-                  </p>
-                  <p className="mt-1 text-2xl font-bold text-neutral-900">{adopcionRD.wac.toFixed(1)}%</p>
-                  <p className="text-[10px] text-neutral-500">MAC APP / MAC WEB</p>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -7745,17 +7696,21 @@ function SectionAgenda() {
   ];
 
   const highlights = [
-    "Incremento del 66% en el total de remisiones creadas.",
-    "Incremento de 0 a 2.855 búsquedas de cotizaciones.",
-    "Incremento del 13% en la creación de items.",
-    "Disminución del 40% en los bugs reportados de API.",
-    "30% de los contactos llenados con autocompletado.",
-    "Aumento de 3x en los usuarios que se registran.",
+    "Nueva app mobile con nueva arquitectura.",
+    "Nuevo espacio contador.",
+    "Nuevos reportes.",
+    "Nuevas estadísticas.",
+    "Incremento del 26% de MAC vs Q1.",
+    "Incremento del 14% de usuarios que crean factura vs Q1.",
+    "Incremento del 21% de usuarios que crean contactos vs Q1.",
+    "Uso del selector multicuenta: +400 usuarios.",
+    "Incremento del 45% vs Q1 de facturas creadas en CRi.",
   ];
 
   const lowlights = [
-    "Disminución de 1,33% en el total de facturas creadas.",
-    "Aumento de issues reportados del 50%.",
+    "Disminución de 29% del total de remisiones vs Junio.",
+    "Disminución de 7% en la participación total de facturas desde app vs Jun.",
+    "Aumento de 2x en Junio por issues reportados.",
   ];
 
   return (
