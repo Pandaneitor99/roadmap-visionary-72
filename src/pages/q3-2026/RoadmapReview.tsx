@@ -623,7 +623,7 @@ function TradeoffCell({
 
 // === Sección 2: North Star (MAC - Tendencia) ===
 
-// Chart rg181rta — MAC (Usuarios Pagos) comparación año contra año, Ene–Jun.
+// Chart rg181rta — MAC (Usuarios Pagos) comparación año contra año, Ene–Jul.
 const macTrendData = [
   { month: "Ene", y2026: 7186, y2025: 6681 },
   { month: "Feb", y2026: 7225, y2025: 6544 },
@@ -631,14 +631,15 @@ const macTrendData = [
   { month: "Abr", y2026: 8241, y2025: 6325 },
   { month: "May", y2026: 8854, y2025: 6475 },
   { month: "Jun", y2026: 8785, y2025: 6434 },
+  { month: "Jul", y2026: 9066, y2025: 7139 },
 ];
 
-// Variación por país: Jun '26 vs Jun '25 (chart gxbjwfwt, comparación año contra año)
+// Variación por país (chart gxbjwfwt): Jul '26 vs Jun '26 (mes anterior) y vs Jul '25 (año pasado)
 const countryVariation = [
-  { country: "Colombia", current: 5571, prev: 4210, color: ALEGRA_GREEN },
-  { country: "República Dominicana", current: 1317, prev: 992, color: "#0066FF" },
-  { country: "México", current: 874, prev: 522, color: "#FF6B00" },
-  { country: "Costa Rica", current: 313, prev: 164, color: "#06B6D4" },
+  { country: "Colombia", current: 5760, prevMonth: 5571, prevYear: 4608, color: ALEGRA_GREEN },
+  { country: "República Dominicana", current: 1345, prevMonth: 1317, prevYear: 1063, color: "#0066FF" },
+  { country: "México", current: 897, prevMonth: 874, prevYear: 666, color: "#FF6B00" },
+  { country: "Costa Rica", current: 309, prevMonth: 313, prevYear: 201, color: "#06B6D4" },
 ];
 
 function SideMetricCard({
@@ -761,7 +762,7 @@ function Section2() {
             <div>
               <h3 className="text-lg font-bold text-neutral-900">MAC — Tendencia</h3>
               <p className="mt-0.5 text-xs text-neutral-500">
-                Ene–Jun · Usuarios Pagos · 2026 vs 2025
+                Ene–Jul · Usuarios Pagos · 2026 vs 2025
               </p>
             </div>
           </div>
@@ -839,7 +840,7 @@ function Section2() {
             delta={Number(deltaPct)}
             color={ALEGRA_GREEN}
             highlight
-            compareLabel="vs Jun '25"
+            compareLabel="vs Jul '25"
           />
         </div>
       </div>
@@ -848,7 +849,7 @@ function Section2() {
       <div>
         <div className="mb-3 flex items-center justify-between gap-3">
           <h3 className="text-base font-bold text-neutral-900">
-            MAC por país — Jun '26 vs Jun '25
+            MAC por país — Jul '26 · vs Jun '26 y vs Jul '25
           </h3>
           {selectedCountry && (
             <button
@@ -862,9 +863,27 @@ function Section2() {
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {countryVariation.map((c) => {
-            const delta = ((c.current - c.prev) / c.prev) * 100;
-            const isUp = delta >= 0;
+            const deltaMonth = ((c.current - c.prevMonth) / c.prevMonth) * 100;
+            const deltaYear = ((c.current - c.prevYear) / c.prevYear) * 100;
             const isActive = selectedCountry === c.country;
+            const DeltaPill = ({ value, label }: { value: number; label: string }) => {
+              const up = value >= 0;
+              return (
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-[10px] font-medium text-neutral-400">{label}</span>
+                  <span
+                    className={cn(
+                      "flex items-center gap-0.5 text-[11px] font-bold",
+                      up ? "text-emerald-600" : "text-red-600",
+                    )}
+                  >
+                    {up ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+                    {up ? "+" : ""}
+                    {value.toFixed(1)}%
+                  </span>
+                </div>
+              );
+            };
             return (
               <button
                 key={c.country}
@@ -882,26 +901,13 @@ function Section2() {
                 <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
                   {c.country}
                 </p>
-                <div className="mt-1 flex items-baseline justify-between gap-2">
-                  <p className="text-2xl font-bold text-neutral-900">
-                    {c.current.toLocaleString("es-CO")}
-                  </p>
-                  <p
-                    className={cn(
-                      "flex items-center gap-1 text-xs font-bold",
-                      isUp ? "text-emerald-600" : "text-red-600",
-                    )}
-                  >
-                    {isUp ? (
-                      <TrendingUp className="h-3.5 w-3.5" />
-                    ) : (
-                      <TrendingDown className="h-3.5 w-3.5" />
-                    )}
-                    {isUp ? "+" : ""}
-                    {delta.toFixed(1)}%
-                  </p>
+                <p className="mt-1 text-2xl font-bold text-neutral-900">
+                  {c.current.toLocaleString("es-CO")}
+                </p>
+                <div className="mt-1.5 space-y-0.5">
+                  <DeltaPill value={deltaMonth} label="vs Jun '26" />
+                  <DeltaPill value={deltaYear} label="vs Jul '25" />
                 </div>
-                <p className="mt-0.5 text-[10px] font-medium text-neutral-400">vs Jun '25</p>
               </button>
             );
           })}
@@ -922,14 +928,14 @@ function Section2() {
 
 // === MAC por país (Line + Pie) ===
 
-const trendMonths = ["Ene", "Feb", "Mar", "Abr", "May", "Jun"];
+const trendMonths = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul"];
 
 // Chart gxbjwfwt — MAC por país, comparación año contra año (2026 vs 2025).
 const countryTrend: Record<string, { "2026": number[]; "2025": number[] }> = {
-  Colombia: { "2026": [4660, 4718, 4926, 5336, 5678, 5571], "2025": [4368, 4318, 4237, 4201, 4265, 4210] },
-  "República Dominicana": { "2026": [1034, 1050, 1140, 1198, 1326, 1317], "2025": [1075, 1022, 1051, 962, 1004, 992] },
-  México: { "2026": [630, 632, 708, 757, 816, 874], "2025": [475, 469, 484, 437, 482, 522] },
-  "Costa Rica": { "2026": [213, 218, 222, 251, 296, 313], "2025": [147, 149, 156, 143, 154, 164] },
+  Colombia: { "2026": [4660, 4718, 4926, 5336, 5678, 5571, 5760], "2025": [4368, 4318, 4237, 4201, 4265, 4210, 4608] },
+  "República Dominicana": { "2026": [1034, 1050, 1140, 1198, 1326, 1317, 1345], "2025": [1075, 1022, 1051, 962, 1004, 992, 1063] },
+  México: { "2026": [630, 632, 708, 757, 816, 874, 897], "2025": [475, 469, 484, 437, 482, 522, 666] },
+  "Costa Rica": { "2026": [213, 218, 222, 251, 296, 313, 309], "2025": [147, 149, 156, 143, 154, 164, 201] },
 };
 
 // Vista por defecto: los 4 países (serie 2026).
@@ -980,7 +986,7 @@ function MacPorPais({ selectedCountry }: { selectedCountry?: string | null }) {
           <div>
             <h3 className="text-base font-bold text-neutral-900">MAC — Tendencia por país</h3>
             <p className="mt-1 text-xs text-neutral-500">
-              Ene–Jun ·{" "}
+              Ene–Jul ·{" "}
               {isCountrySelected ? `${selectedCountry}: 2026 vs 2025` : "Top 4 países por volumen"}
             </p>
           </div>
@@ -1109,16 +1115,16 @@ function MacPorPais({ selectedCountry }: { selectedCountry?: string | null }) {
 
 // === Tasa de Adopción ===
 
-// Adopción (entran) = chart 5vlf3f1x · Real (acciones) = chart hqcerbqk. Series Ene–Jun '26.
-const adoptionMonths = ["Ene", "Feb", "Mar", "Abr", "May", "Jun"];
+// Adopción (entran) = chart 5vlf3f1x · Real (acciones) = chart hqcerbqk. Series Ene–Jul '26.
+const adoptionMonths = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul"];
 const countryAdoption = [
-  { country: "Colombia", color: ALEGRA_GREEN, adopcion: [27.8, 26.3, 27.1, 26.3, 26.4, 25.7], real: [18.9, 18.3, 18.7, 19.8, 21.1, 20.7] },
-  { country: "Rep. Dominicana", color: "#0066FF", adopcion: [52.0, 49.8, 51.0, 51.0, 50.4, 48.5], real: [36.2, 35.4, 37.4, 38.6, 40.3, 39.5] },
-  { country: "México", color: "#FF6B00", adopcion: [31.3, 29.9, 31.1, 31.7, 31.1, 31.3], real: [19.9, 19.4, 21.5, 22.5, 23.3, 24.0] },
-  { country: "Costa Rica", color: "#06B6D4", adopcion: [42.4, 38.8, 37.5, 40.3, 41.6, 43.0], real: [27.6, 26.7, 25.5, 29.5, 32.7, 34.1] },
+  { country: "Colombia", color: ALEGRA_GREEN, adopcion: [27.8, 26.3, 27.1, 26.3, 26.4, 25.7, 26.0], real: [18.9, 18.3, 18.7, 19.8, 21.1, 20.7, 21.3] },
+  { country: "Rep. Dominicana", color: "#0066FF", adopcion: [52.0, 49.8, 51.0, 51.0, 50.4, 48.5, 47.1], real: [36.2, 35.4, 37.4, 38.6, 40.3, 39.5, 39.8] },
+  { country: "México", color: "#FF6B00", adopcion: [31.3, 29.9, 31.1, 31.7, 31.1, 31.3, 31.9], real: [19.9, 19.4, 21.5, 22.5, 23.3, 24.0, 24.1] },
+  { country: "Costa Rica", color: "#06B6D4", adopcion: [42.4, 38.8, 37.5, 40.3, 41.6, 43.0, 40.4], real: [27.6, 26.7, 25.5, 29.5, 32.7, 34.1, 32.0] },
 ];
 
-// Evolución mensual % usuarios pagos activos (Ene → Jun '26) - chart rbp5ch2z
+// Evolución mensual % usuarios pagos activos (Ene → Jul '26) - chart rbp5ch2z
 // adopcion = Ingresan a la app (WAU/Pagos) · real = Realizan una acción (WAC/Pagos)
 const adopcionMensualSeries = [
   { month: "Ene", adopcion: 31.8, real: 21.6 },
@@ -1127,6 +1133,7 @@ const adopcionMensualSeries = [
   { month: "Abr", adopcion: 30.2, real: 22.7 },
   { month: "May", adopcion: 30.3, real: 24.1 },
   { month: "Jun", adopcion: 29.7, real: 23.9 },
+  { month: "Jul", adopcion: 29.9, real: 24.3 },
 ];
 
 function AdoptionMetricRow({
@@ -1164,7 +1171,7 @@ function AdoptionMetricRow({
 }
 
 function TasaAdopcion() {
-  // Chart rbp5ch2z (Ene → Jun '26). Valores actuales = Junio; delta = Jun vs Ene.
+  // Chart rbp5ch2z (Ene → Jul '26). Valores actuales = Julio; delta = Jul vs Ene.
   const adopcionLast = adopcionMensualSeries[adopcionMensualSeries.length - 1];
   const adopcionFirst = adopcionMensualSeries[0];
   const tasaAdopcion = adopcionLast.adopcion; // MAU APP / MAC WEB (Ingresan)
@@ -1243,7 +1250,7 @@ function TasaAdopcion() {
             </p>
           </div>
           <p className="mt-1.5 text-[11px] text-neutral-500">
-            % de <strong>usuarios pagos web activos</strong> que entran a la app cada mes (Junio 2026).
+            % de <strong>usuarios pagos web activos</strong> que entran a la app cada mes (Julio 2026).
           </p>
         </button>
 
@@ -1276,7 +1283,7 @@ function TasaAdopcion() {
             </p>
           </div>
           <p className="mt-1.5 text-[11px] text-neutral-500">
-            % de <strong>usuarios pagos web activos</strong> que realizan al menos una acción de valor en la app (Junio 2026).
+            % de <strong>usuarios pagos web activos</strong> que realizan al menos una acción de valor en la app (Julio 2026).
           </p>
         </button>
       </div>
@@ -1289,7 +1296,7 @@ function TasaAdopcion() {
               % Usuarios pagos activos que entran a la app o realizan una acción
             </h4>
             <p className="mt-0.5 text-xs text-neutral-500">
-              Evolución mensual · Ene → Jun '26
+              Evolución mensual · Ene → Jul '26
             </p>
           </div>
           <a
@@ -1321,7 +1328,7 @@ function TasaAdopcion() {
         <div className="mb-4 flex items-center justify-between">
           <div>
             <h4 className="text-sm font-bold text-neutral-900">
-              Tasa de Adopción global — Junio 2026
+              Tasa de Adopción global — Julio 2026
             </h4>
             <p className="mt-0.5 text-xs text-neutral-500">
               % de usuarios pagos activos que entran a la app o realizan una acción
@@ -1418,7 +1425,7 @@ function TasaAdopcion() {
         Clic en un país para filtrar el gráfico por país y la evolución.
       </p>
 
-      {/* Cards por país (filtros) — Junio 2026 vs Enero '26 */}
+      {/* Cards por país (filtros) — Julio 2026 vs Enero '26 */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {countryAdoption.map((c) => {
           const isActive = selectedCountry === c.country;
@@ -1456,7 +1463,7 @@ function TasaAdopcion() {
               % Usuarios pagos activos por país
             </h4>
             <p className="mt-0.5 text-xs text-neutral-500">
-              Junio 2026 · {metricTab === "adopcion" ? "Tasa de Adopción (entran a la app)" : "Tasa Real (acciones de valor)"}{selectedCountry ? ` · ${selectedCountry}` : ""}
+              Julio 2026 · {metricTab === "adopcion" ? "Tasa de Adopción (entran a la app)" : "Tasa Real (acciones de valor)"}{selectedCountry ? ` · ${selectedCountry}` : ""}
             </p>
           </div>
           <a
@@ -1502,7 +1509,7 @@ function TasaAdopcion() {
               Evolución por país — {metricTab === "adopcion" ? "Adopción" : "Adopción Real"}
             </h4>
             <p className="mt-0.5 text-xs text-neutral-500">
-              Ene → Jun '26 · {selectedCountry ?? "Todos los países"}
+              Ene → Jul '26 · {selectedCountry ?? "Todos los países"}
             </p>
           </div>
           <a
@@ -1701,7 +1708,7 @@ function ParticipacionApp() {
 
 
 // === ICP: Pyme (emprendedor + independiente) / Contador ===
-// Tendencia total = chart tkmdv3fe · Distribución = 8sxb4139 · Por país = zpmj4y3x. Ene → Jun '26.
+// Tendencia total = chart tkmdv3fe · Distribución = 8sxb4139 · Por país = zpmj4y3x. Ene → Jul '26.
 const icpTrend = [
   { month: "Ene", PYME: 6147, CONTADOR: 183 },
   { month: "Feb", PYME: 6228, CONTADOR: 169 },
@@ -1709,6 +1716,7 @@ const icpTrend = [
   { month: "Abr", PYME: 7163, CONTADOR: 205 },
   { month: "May", PYME: 7676, CONTADOR: 245 },
   { month: "Jun", PYME: 7603, CONTADOR: 266 },
+  { month: "Jul", PYME: 7801, CONTADOR: 297 },
 ];
 
 type IcpPerCountry = {
@@ -1718,42 +1726,42 @@ type IcpPerCountry = {
   PYME: { month: string; v: number }[];
   CONTADOR: { month: string; v: number }[];
 };
-const icpMonths = ["Ene", "Feb", "Mar", "Abr", "May", "Jun"];
+const icpMonths = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul"];
 const toIcpSeries = (vals: number[]) => vals.map((v, i) => ({ month: icpMonths[i], v }));
 const icpPerCountry: IcpPerCountry[] = [
   {
     country: "Colombia",
     short: "CO",
     color: ALEGRA_GREEN,
-    PYME: toIcpSeries([4057, 4141, 4318, 4715, 5010, 4914]),
-    CONTADOR: toIcpSeries([96, 93, 103, 107, 129, 139]),
+    PYME: toIcpSeries([4057, 4141, 4318, 4715, 5010, 4914, 5061]),
+    CONTADOR: toIcpSeries([96, 93, 103, 107, 129, 139, 154]),
   },
   {
     country: "México",
     short: "MX",
     color: "#FF6B00",
-    PYME: toIcpSeries([497, 499, 546, 596, 646, 681]),
-    CONTADOR: toIcpSeries([24, 20, 29, 28, 35, 41]),
+    PYME: toIcpSeries([497, 499, 546, 596, 646, 681, 707]),
+    CONTADOR: toIcpSeries([24, 20, 29, 28, 35, 41, 49]),
   },
   {
     country: "Costa Rica",
     short: "CR",
     color: "#06B6D4",
-    PYME: toIcpSeries([171, 180, 182, 215, 245, 262]),
-    CONTADOR: toIcpSeries([12, 9, 7, 8, 12, 12]),
+    PYME: toIcpSeries([171, 180, 182, 215, 245, 262, 250]),
+    CONTADOR: toIcpSeries([12, 9, 7, 8, 12, 12, 15]),
   },
   {
     country: "Rep. Dominicana",
     short: "DOM",
     color: "#0066FF",
-    PYME: toIcpSeries([853, 871, 936, 1008, 1115, 1103]),
-    CONTADOR: toIcpSeries([43, 44, 55, 52, 57, 65]),
+    PYME: toIcpSeries([853, 871, 936, 1008, 1115, 1103, 1114]),
+    CONTADOR: toIcpSeries([43, 44, 55, 52, 57, 65, 68]),
   },
 ];
 
 const icpPieData = [
-  { name: "PYME", value: 7603, color: ALEGRA_GREEN },
-  { name: "CONTADOR", value: 266, color: "#FF6B00" },
+  { name: "PYME", value: 7801, color: ALEGRA_GREEN },
+  { name: "CONTADOR", value: 297, color: "#FF6B00" },
 ];
 const icpPieTotal = icpPieData.reduce((s, d) => s + d.value, 0);
 
@@ -1797,7 +1805,7 @@ function IcpView() {
                 MAC — Tendencia por ICP
               </h3>
               <p className="mt-1 text-xs text-neutral-500">
-                Ene → Jun '26 · Pyme (emprendedor + independiente) vs Contador
+                Ene → Jul '26 · Pyme (emprendedor + independiente) vs Contador
               </p>
             </div>
             <div className="flex items-center gap-3">
@@ -1871,7 +1879,7 @@ function IcpView() {
           <div className="flex items-start justify-between gap-2">
             <div>
               <h3 className="text-base font-bold text-neutral-900">Distribución por ICP</h3>
-              <p className="mt-1 text-xs text-neutral-500">Junio 2026</p>
+              <p className="mt-1 text-xs text-neutral-500">Julio 2026</p>
             </div>
             <a
               href="https://app.amplitude.com/analytics/alegra/chart/8sxb4139"
@@ -3399,7 +3407,7 @@ function ComportamientoBaseSosView() {
 
 // === Negocio: Core / Lite ===
 
-// Chart wy27awa1 (MAC Tendencia Core y Lite), Ene → Jun '26.
+// Chart wy27awa1 (MAC Tendencia Core y Lite), Ene → Jul '26.
 const macCoreLiteTrend = [
   { month: "Ene", CORE: 4209, LITE: 2957 },
   { month: "Feb", CORE: 4242, LITE: 2980 },
@@ -3407,9 +3415,10 @@ const macCoreLiteTrend = [
   { month: "Abr", CORE: 4646, LITE: 3618 },
   { month: "May", CORE: 5039, LITE: 3820 },
   { month: "Jun", CORE: 4970, LITE: 3792 },
+  { month: "Jul", CORE: 5133, LITE: 3974 },
 ];
 
-// MAC por país (CORE / LITE) — Ene → Jun '26. Fuente: chart jgmbk3gb.
+// MAC por país (CORE / LITE) — Ene → Jul '26. Fuente: chart jgmbk3gb.
 type CoreLitePerCountry = {
   country: string;
   short: string;
@@ -3417,42 +3426,42 @@ type CoreLitePerCountry = {
   CORE: { month: string; v: number }[];
   LITE: { month: string; v: number }[];
 };
-const coreLiteMonths = ["Ene", "Feb", "Mar", "Abr", "May", "Jun"];
+const coreLiteMonths = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul"];
 const toSeries = (vals: number[]) => vals.map((v, i) => ({ month: coreLiteMonths[i], v }));
 const macCoreLitePerCountry: CoreLitePerCountry[] = [
   {
     country: "Colombia",
     short: "CO",
     color: ALEGRA_GREEN,
-    CORE: toSeries([2672, 2738, 3005, 2978, 3166, 3075]),
-    LITE: toSeries([1931, 1944, 2104, 2312, 2454, 2400]),
+    CORE: toSeries([2672, 2738, 3005, 2978, 3166, 3075, 3202]),
+    LITE: toSeries([1931, 1944, 2104, 2312, 2454, 2400, 2536]),
   },
   {
     country: "México",
     short: "MX",
     color: "#FF6B00",
-    CORE: toSeries([352, 360, 419, 412, 454, 485]),
-    LITE: toSeries([269, 258, 318, 349, 351, 379]),
+    CORE: toSeries([352, 360, 419, 412, 454, 485, 498]),
+    LITE: toSeries([269, 258, 318, 349, 351, 379, 395]),
   },
   {
     country: "Costa Rica",
     short: "CR",
     color: "#06B6D4",
-    CORE: toSeries([112, 120, 129, 137, 169, 176]),
-    LITE: toSeries([102, 95, 101, 116, 125, 137]),
+    CORE: toSeries([112, 120, 129, 137, 169, 176, 182]),
+    LITE: toSeries([102, 95, 101, 116, 125, 137, 125]),
   },
   {
     country: "Rep. Dominicana",
     short: "DOM",
     color: "#0066FF",
-    CORE: toSeries([620, 619, 711, 687, 773, 757]),
-    LITE: toSeries([394, 420, 489, 498, 535, 546]),
+    CORE: toSeries([620, 619, 711, 687, 773, 757, 778]),
+    LITE: toSeries([394, 420, 489, 498, 535, 546, 547]),
   },
 ];
 
 const corePieData = [
-  { name: "CORE", value: 4970, color: ALEGRA_GREEN },
-  { name: "LITE", value: 3792, color: "#FF6B00" },
+  { name: "CORE", value: 5133, color: ALEGRA_GREEN },
+  { name: "LITE", value: 3974, color: "#FF6B00" },
 ];
 const corePieTotal = corePieData.reduce((s, d) => s + d.value, 0);
 
@@ -3683,7 +3692,7 @@ function NegocioView() {
                 MAC — Tendencia CORE y LITE
               </h3>
               <p className="mt-1 text-xs text-neutral-500">
-                Ene → Jun '26 · Usuarios pagos activos por tipo de negocio
+                Ene → Jul '26 · Usuarios pagos activos por tipo de negocio
               </p>
             </div>
             <div className="flex items-center gap-3">
@@ -3777,7 +3786,7 @@ function NegocioView() {
           <h3 className="text-base font-bold text-neutral-900">
             Distribución CORE vs LITE
           </h3>
-          <p className="mt-1 text-xs text-neutral-500">Junio 2026</p>
+          <p className="mt-1 text-xs text-neutral-500">Julio 2026</p>
           <div className="h-[260px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
