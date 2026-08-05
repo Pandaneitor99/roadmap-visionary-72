@@ -4010,7 +4010,15 @@ const mrrTotalComparison = [
 
 function MrrTotalSection() {
   const [segment, setSegment] = useState<"Todos" | "Lite" | "Core">("Todos");
-  const chartData = segment === "Todos" ? mrrTotalComparison : mrrTotalComparison.filter((r) => r.plan === segment);
+  const totalQ4 = mrrTotalComparison.reduce((s, r) => s + r.q4, 0);
+  const totalQ1 = mrrTotalComparison.reduce((s, r) => s + r.q1, 0);
+  const totalRow = {
+    plan: "Todos",
+    q4: totalQ4,
+    q1: totalQ1,
+    variation: totalQ4 ? Number((((totalQ1 - totalQ4) / totalQ4) * 100).toFixed(2)) : 0,
+  };
+  const chartData = segment === "Todos" ? [totalRow] : mrrTotalComparison.filter((r) => r.plan === segment);
 
   return (
     <div>
@@ -5287,7 +5295,7 @@ const q3Okrs: typeof okrs = [
     objective: "Impulsar la adopción de la app móvil mejorando el flujo de navegación, creación de facturas y contactos para que los usuarios facturen de forma recurrente desde el móvil.",
     type: "adoption",
     keyResults: [
-      { id: "kr-2.1", name: "Lograr que al menos 10000 usuarios pagos que facturan en web instalen la app móvil y realicen una acción de valor desde la app durante el trimestre", baseline: "7601", target: "10000", percentage: "15.6%", currentResult: "8785", achievedIncrease: "15.6%" },
+      { id: "kr-2.1", name: "Lograr que al menos 10000 usuarios pagos realicen una acción de valor desde la app durante el trimestre", baseline: "4k", target: "10000", percentage: "119.6%", currentResult: "8785", achievedIncrease: "119.6%" },
       { id: "kr-2.2", name: "Alcanzar 6k usuarios que facturen mensualmente desde la app móvil al final del trimestre", baseline: "—", target: "6k", percentage: "—", currentResult: "4,6k", achievedIncrease: "—" },
       { id: "kr-2.3", name: "Incrementar de 2k usuarios a 3k usuarios creando contactos mensualmente desde la app", baseline: "2k", target: "3k", percentage: "25%", currentResult: "2,5k", achievedIncrease: "25%" },
     ],
@@ -6591,25 +6599,34 @@ const baseFueraDeApp = [
 // Color por iniciativa: cada oportunidad tiene un color que se usa también para
 // pintar sus funcionalidades en el gráfico de arriba (juntar iniciativa ↔ features).
 const OTROS_COLOR = "#94A3B8"; // gris neutro para features sin iniciativa asociada
+const DIM_COLOR = "#E5E7EB"; // gris muy claro para features no seleccionadas al filtrar
 const INICIATIVA_COLORS: Record<string, string> = {
   pagos: "#0066FF",
   "detalle-factura": "#7C3AED",
   "factura-venta": ALEGRA_GREEN,
   reportes: "#F59E0B",
+  "nueva-app": "#EC4899",
 };
 
 // Cada feature del gráfico apunta a la iniciativa que la agrupa.
-const featureColor: Record<string, string> = {
-  "Creación Factura": INICIATIVA_COLORS["factura-venta"],
-  "Pago recibido": INICIATIVA_COLORS["pagos"],
-  "Editar fv": INICIATIVA_COLORS["detalle-factura"],
-  "Imprimir fv": INICIATIVA_COLORS["detalle-factura"],
-  "Descargar fv": INICIATIVA_COLORS["detalle-factura"],
-  "Clonar fv": INICIATIVA_COLORS["detalle-factura"],
-  "Compartir fv": INICIATIVA_COLORS["detalle-factura"],
-  "Generar Reporte": INICIATIVA_COLORS["reportes"],
-  "Descargar reportes": INICIATIVA_COLORS["reportes"],
-  "Reportes por vendedor": INICIATIVA_COLORS["reportes"],
+const featureInitiative: Record<string, string> = {
+  "Creación Factura": "factura-venta",
+  "Pago recibido": "pagos",
+  "Editar fv": "detalle-factura",
+  "Imprimir fv": "detalle-factura",
+  "Descargar fv": "detalle-factura",
+  "Clonar fv": "detalle-factura",
+  "Compartir fv": "detalle-factura",
+  "Generar Reporte": "reportes",
+  "Descargar reportes": "reportes",
+  "Reportes por vendedor": "reportes",
+  "Items": "nueva-app",
+  "Contacto": "nueva-app",
+  "Cotizaciones": "nueva-app",
+};
+const featureColorOf = (feature: string) => {
+  const init = featureInitiative[feature];
+  return init ? INICIATIVA_COLORS[init] : OTROS_COLOR;
 };
 
 const oportunidades = [
@@ -6711,7 +6728,14 @@ const itemsUxDeficiente = [
 
 function Section5() {
   const segBase = segmentos.find((s) => s.id === "base")!;
-  
+  // Iniciativa seleccionada en el chart "Funcionalidades fuera de App".
+  const [fueraActive, setFueraActive] = useState<string | null>(null);
+  const toggleFuera = (id: string) => setFueraActive((cur) => (cur === id ? null : id));
+  // Leyenda del chart: oportunidades (con card) + "Nueva App" (solo en el chart).
+  const chartInitiatives = [
+    ...oportunidades.map((o) => ({ id: o.id, title: o.title, color: o.color })),
+    { id: "nueva-app", title: "Nueva App", color: INICIATIVA_COLORS["nueva-app"] },
+  ];
 
   return (
     <div className="space-y-12">
@@ -6820,17 +6844,40 @@ function Section5() {
               </a>
             </div>
 
-            <div className="mb-4 flex flex-wrap items-center gap-x-4 gap-y-2">
-              {oportunidades.map((op) => (
-                <span key={op.id} className="inline-flex items-center gap-1.5 text-[11px] font-medium text-neutral-700">
-                  <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: op.color }} />
-                  {op.title}
-                </span>
-              ))}
-              <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-neutral-500">
+            <div className="mb-4 flex flex-wrap items-center gap-x-2 gap-y-2">
+              {chartInitiatives.map((it) => {
+                const isActive = fueraActive === it.id;
+                const dimmed = fueraActive !== null && !isActive;
+                return (
+                  <button
+                    key={it.id}
+                    onClick={() => toggleFuera(it.id)}
+                    className={cn(
+                      "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-all",
+                      isActive
+                        ? "border-neutral-900 bg-neutral-50 text-neutral-900 shadow-sm"
+                        : dimmed
+                          ? "border-transparent text-neutral-400 hover:text-neutral-600"
+                          : "border-transparent text-neutral-700 hover:bg-neutral-50",
+                    )}
+                  >
+                    <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: it.color, opacity: dimmed ? 0.4 : 1 }} />
+                    {it.title}
+                  </button>
+                );
+              })}
+              <span className="inline-flex items-center gap-1.5 px-1 text-[11px] font-medium text-neutral-500">
                 <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: OTROS_COLOR }} />
                 Otras
               </span>
+              {fueraActive && (
+                <button
+                  onClick={() => setFueraActive(null)}
+                  className="ml-1 inline-flex items-center gap-1 rounded-full border border-neutral-300 bg-white px-2.5 py-1 text-[11px] font-semibold text-neutral-600 transition-colors hover:bg-neutral-50"
+                >
+                  Limpiar <span className="text-neutral-400">✕</span>
+                </button>
+              )}
             </div>
 
             <div className="h-[460px]">
@@ -6852,10 +6899,16 @@ function Section5() {
                     cursor={{ fill: "rgba(255,107,0,0.06)" }}
                     formatter={(v: number) => [v.toLocaleString("es-CO"), "Eventos"]}
                   />
-                  <Bar dataKey="uso" radius={[0, 6, 6, 0]}>
-                    {baseFueraDeApp.map((d, i) => (
-                      <Cell key={i} fill={featureColor[d.feature] ?? OTROS_COLOR} />
-                    ))}
+                  <Bar dataKey="uso" radius={[0, 6, 6, 0]} isAnimationActive={false}>
+                    {baseFueraDeApp.map((d, i) => {
+                      const init = featureInitiative[d.feature];
+                      const fill = fueraActive
+                        ? init === fueraActive
+                          ? featureColorOf(d.feature)
+                          : DIM_COLOR
+                        : featureColorOf(d.feature);
+                      return <Cell key={i} fill={fill} />;
+                    })}
                     <LabelList
                       dataKey="uso"
                       position="right"
@@ -6872,7 +6925,13 @@ function Section5() {
             <h3 className="mb-3 text-sm font-bold uppercase tracking-wider text-neutral-600">Oportunidades</h3>
             <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
               {oportunidades.map((op) => (
-                <OportunidadCard key={op.id} op={op} />
+                <OportunidadCard
+                  key={op.id}
+                  op={op}
+                  active={fueraActive === op.id}
+                  dimmed={fueraActive !== null && fueraActive !== op.id}
+                  onClick={() => toggleFuera(op.id)}
+                />
               ))}
             </div>
           </div>
@@ -7580,8 +7639,14 @@ function PrototypeCard({
 }
 function OportunidadCard({
   op,
+  active,
+  dimmed,
+  onClick,
 }: {
   op: { id: string; title: string; tags: string[]; resumen: string; color?: string };
+  active?: boolean;
+  dimmed?: boolean;
+  onClick?: () => void;
 }) {
   const accent = op.color ?? ALEGRA_GREEN;
   const tagColor = (t: string) => {
@@ -7592,8 +7657,14 @@ function OportunidadCard({
   };
   return (
     <div
-      className="flex h-full flex-col rounded-2xl border border-neutral-200 border-l-4 bg-white p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
-      style={{ borderLeftColor: accent }}
+      onClick={onClick}
+      className={cn(
+        "flex h-full flex-col rounded-2xl border border-neutral-200 border-l-4 bg-white p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md",
+        onClick && "cursor-pointer",
+        active && "ring-2 ring-offset-1",
+        dimmed && "opacity-50",
+      )}
+      style={{ borderLeftColor: accent, ...(active ? { ["--tw-ring-color" as string]: accent } : {}) }}
     >
       <div className="flex items-center gap-2">
         <div
