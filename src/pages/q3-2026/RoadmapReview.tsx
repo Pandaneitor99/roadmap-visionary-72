@@ -5655,30 +5655,30 @@ const funnelComboSinPQL = [
   { step: "Logo · Pago", todosCount: 64, todosPct: 1.92, mobileCount: 289, mobilePct: 2.74 },
 ];
 
-// --- Tendencias mensuales (charts b6xrlqln / txoefzi7 / kcf69jc1, Feb → Jul '26) ---
+// --- Tendencias mensuales (charts b6xrlqln / txoefzi7 / kcf69jc1, Ene → Jun '26) ---
 const tendenciaPerfilMQL = [
+  { mes: "Ene '26", pct: 87.0 },
   { mes: "Feb '26", pct: 84.7 },
   { mes: "Mar '26", pct: 86.9 },
   { mes: "Abr '26", pct: 87.5 },
   { mes: "May '26", pct: 89.0 },
   { mes: "Jun '26", pct: 89.9 },
-  { mes: "Jul '26", pct: 89.8 },
 ];
 const tendenciaPerfilPQL = [
+  { mes: "Ene '26", pct: 19.2 },
   { mes: "Feb '26", pct: 15.7 },
   { mes: "Mar '26", pct: 14.3 },
   { mes: "Abr '26", pct: 14.5 },
   { mes: "May '26", pct: 16.3 },
   { mes: "Jun '26", pct: 15.8 },
-  { mes: "Jul '26", pct: 15.7 },
 ];
 const tendenciaPerfilLogo = [
+  { mes: "Ene '26", pct: 1.4 },
   { mes: "Feb '26", pct: 1.2 },
   { mes: "Mar '26", pct: 1.5 },
   { mes: "Abr '26", pct: 0.9 },
   { mes: "May '26", pct: 1.2 },
   { mes: "Jun '26", pct: 1.0 },
-  { mes: "Jul '26", pct: 0.9 },
 ];
 
 // --- Funnel App Mobile por país (chart tnh09978) - solo CO, MX, CR, PE ---
@@ -5701,14 +5701,14 @@ const perfilPorPaisTotal: { country: string; uniques: number }[] = [
   { country: "Panama", uniques: 89 },
 ];
 
-// --- Eventos Onboarding Mensual (chart j30yk1tu/edit/584t53it, Feb → Jul '26) ---
+// --- Eventos Onboarding Mensual (chart j30yk1tu/edit/584t53it, Ene → Jun '26) ---
 const eventosOnboardingMensual = [
+  { mes: "Ene '26", perfil: 268, mql: 226, pql: 47 },
   { mes: "Feb '26", perfil: 884, mql: 738, pql: 158 },
   { mes: "Mar '26", perfil: 877, mql: 751, pql: 153 },
   { mes: "Abr '26", perfil: 1268, mql: 1089, pql: 222 },
   { mes: "May '26", perfil: 1284, mql: 1117, pql: 263 },
   { mes: "Jun '26", perfil: 1246, mql: 1096, pql: 270 },
-  { mes: "Jul '26", perfil: 1296, mql: 1144, pql: 271 },
 ];
 
 type FunnelComboDatum = {
@@ -6563,29 +6563,57 @@ const baseFueraDeApp = [
   { feature: "Compartir fv", uso: 1201 },
 ];
 
+// Color por iniciativa: cada oportunidad tiene un color que se usa también para
+// pintar sus funcionalidades en el gráfico de arriba (juntar iniciativa ↔ features).
+const OTROS_COLOR = "#94A3B8"; // gris neutro para features sin iniciativa asociada
+const INICIATIVA_COLORS: Record<string, string> = {
+  pagos: "#0066FF",
+  "detalle-factura": "#7C3AED",
+  "factura-venta": ALEGRA_GREEN,
+  reportes: "#F59E0B",
+};
+
+// Cada feature del gráfico apunta a la iniciativa que la agrupa.
+const featureColor: Record<string, string> = {
+  "Creación Factura": INICIATIVA_COLORS["factura-venta"],
+  "Pago recibido": INICIATIVA_COLORS["pagos"],
+  "Editar fv": INICIATIVA_COLORS["detalle-factura"],
+  "Imprimir fv": INICIATIVA_COLORS["detalle-factura"],
+  "Descargar fv": INICIATIVA_COLORS["detalle-factura"],
+  "Clonar fv": INICIATIVA_COLORS["detalle-factura"],
+  "Compartir fv": INICIATIVA_COLORS["detalle-factura"],
+  "Generar Reporte": INICIATIVA_COLORS["reportes"],
+  "Descargar reportes": INICIATIVA_COLORS["reportes"],
+  "Reportes por vendedor": INICIATIVA_COLORS["reportes"],
+};
+
 const oportunidades = [
   {
     id: "pagos",
     title: "Pagos recibidos",
     tags: ["Adopción", "Engagement"],
+    color: INICIATIVA_COLORS["pagos"],
     resumen: "No hay sección de pagos recibidos; habilitar registro y consulta desde el flujo de la factura.",
   },
   {
     id: "detalle-factura",
     title: "Detalle de la factura",
     tags: ["Experiencia", "Adopción"],
+    color: INICIATIVA_COLORS["detalle-factura"],
     resumen: "Faltan imprimir y clonar; sumarlas al detalle para cerrar el ciclo sin volver al PC.",
   },
   {
     id: "factura-venta",
     title: "Factura de venta",
     tags: ["Adopción", "Experiencia"],
+    color: INICIATIVA_COLORS["factura-venta"],
     resumen: "Faltan retenciones y remisiones en varias versiones y crear factura desde foto.",
   },
   {
     id: "reportes",
     title: "Reportes",
     tags: ["Adopción", "Experiencia"],
+    color: INICIATIVA_COLORS["reportes"],
     resumen: "No se pueden descargar ni compartir; faltan reportes clave de ventas e inventario.",
   },
 ];
@@ -6774,6 +6802,19 @@ function Section5() {
               </a>
             </div>
 
+            <div className="mb-4 flex flex-wrap items-center gap-x-4 gap-y-2">
+              {oportunidades.map((op) => (
+                <span key={op.id} className="inline-flex items-center gap-1.5 text-[11px] font-medium text-neutral-700">
+                  <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: op.color }} />
+                  {op.title}
+                </span>
+              ))}
+              <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-neutral-500">
+                <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: OTROS_COLOR }} />
+                Otras
+              </span>
+            </div>
+
             <div className="h-[460px]">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={baseFueraDeApp} layout="vertical" margin={{ top: 8, right: 56, left: 8, bottom: 8 }}>
@@ -6793,9 +6834,9 @@ function Section5() {
                     cursor={{ fill: "rgba(255,107,0,0.06)" }}
                     formatter={(v: number) => [v.toLocaleString("es-CO"), "Eventos"]}
                   />
-                  <Bar dataKey="uso" fill="#FF6B00" radius={[0, 6, 6, 0]}>
-                    {baseFueraDeApp.map((_, i) => (
-                      <Cell key={i} />
+                  <Bar dataKey="uso" radius={[0, 6, 6, 0]}>
+                    {baseFueraDeApp.map((d, i) => (
+                      <Cell key={i} fill={featureColor[d.feature] ?? OTROS_COLOR} />
                     ))}
                     <LabelList
                       dataKey="uso"
@@ -6815,182 +6856,6 @@ function Section5() {
               {oportunidades.map((op) => (
                 <OportunidadCard key={op.id} op={op} />
               ))}
-            </div>
-          </div>
-        </div>
-      </CollapsibleSection>
-
-      {/* Soporte (sección aparte, colapsable) */}
-      <CollapsibleSection
-        title="Soporte"
-        subtitle="Solicitudes de soporte desde la app · totales y únicos"
-        color="#F59E0B"
-      >
-        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-          <div className="mb-5 flex items-start gap-3">
-            <div
-              className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
-              style={{ backgroundColor: "#F59E0B20" }}
-            >
-              <Headphones className="h-4 w-4 text-amber-500" />
-            </div>
-            <div>
-              <h3 className="text-base font-bold text-neutral-900">Soporte</h3>
-            </div>
-          </div>
-          <SoporteFuncDetail />
-        </div>
-      </CollapsibleSection>
-
-      {/* Olas */}
-      <CollapsibleSection title="Obligatoriedad" subtitle="Iniciativas por país" color="#7C3AED">
-        <div className="grid gap-4 md:grid-cols-2">
-          {/* Card Ola RD */}
-          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-            <div className="flex items-start justify-between gap-3 flex-wrap">
-              <div className="flex items-start gap-3">
-                <div
-                  className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-lg"
-                  style={{ backgroundColor: "#7C3AED15" }}
-                >
-                  🇩🇴
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-neutral-900">Ola Rep. Dominicana</h3>
-                  <p className="mt-0.5 text-xs text-neutral-500">
-                    Habilitación de factura electrónica en la app
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-4">
-              <div className="rounded-lg border border-emerald-200 bg-emerald-50/60 p-3">
-                <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Oportunidad</p>
-                <p className="mt-1 text-xs leading-relaxed text-neutral-800">
-                  La facturación ya queda 1:1 en República Dominicana, pero la habilitación de factura electrónica solo se puede hacer por web. La idea es colocarlo en la app.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Card Ola Venezuela */}
-          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-            <div className="flex items-start gap-3">
-              <div
-                className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-lg"
-                style={{ backgroundColor: "#7C3AED15" }}
-              >
-                🇻🇪
-              </div>
-              <div>
-                <h3 className="text-base font-bold text-neutral-900">Ola Venezuela</h3>
-                <p className="mt-0.5 text-xs text-neutral-500">Nuevo mercado</p>
-              </div>
-            </div>
-
-            <div className="mt-4 grid gap-3 md:grid-cols-2">
-              <div className="rounded-lg border border-orange-200 bg-orange-50/50 p-3">
-                <p className="text-[10px] font-bold uppercase tracking-wider text-orange-700">
-                  Problema detectado
-                </p>
-                <p className="mt-1 text-xs leading-relaxed text-neutral-800">
-                  Aún <strong>no está Venezuela</strong> disponible en la app.
-                </p>
-              </div>
-              <div className="rounded-lg border border-emerald-200 bg-emerald-50/60 p-3">
-                <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Oportunidad</p>
-                <p className="mt-1 text-xs leading-relaxed text-neutral-800">
-                  Habilitar un nuevo mercado.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Card Ola Argentina */}
-          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm md:col-span-2">
-            <div className="flex items-start gap-3">
-              <div
-                className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-lg"
-                style={{ backgroundColor: "#7C3AED15" }}
-              >
-                🇦🇷
-              </div>
-              <div>
-                <h3 className="text-base font-bold text-neutral-900">Ola Argentina</h3>
-                <p className="mt-0.5 text-xs text-neutral-500">
-                  Nuevo idioma técnico de facturación (v4.4 y v4.5)
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-4 rounded-lg border border-purple-200 bg-purple-50/50 p-3">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-purple-700">
-                Continuidad operativa
-              </p>
-              <p className="mt-1 text-xs leading-relaxed text-neutral-800">
-                Argentina renueva su <strong>"idioma técnico" de facturación (v4.4 y v4.5)</strong>, suma el régimen <strong>RG 5866</strong> de liquidación mensual para alto volumen y exige mostrar <strong>Ingresos Brutos por provincia</strong> en cada factura. Es el frente de mayor continuidad operativa del semestre: toda la base activa que emite comprobantes queda expuesta, sin segmentar por tamaño.
-              </p>
-            </div>
-          </div>
-
-          {/* % usuarios pagos activos en Rep. Dominicana únicamente */}
-          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-            <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
-              <div>
-                <h3 className="text-sm font-bold text-neutral-900">
-                  % Usuarios pagos activos · Rep. Dominicana
-                </h3>
-                <p className="mt-0.5 text-xs text-neutral-500">
-                  Marzo 2026 · Tasa de Adopción y Tasa Real
-                </p>
-              </div>
-              <a
-                href="https://app.amplitude.com/analytics/alegra/chart/hqcerbqk"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
-              >
-                Amplitude <ExternalLink className="h-3 w-3" />
-              </a>
-            </div>
-
-            <div>
-              <div className="mb-1 flex items-center justify-between text-xs">
-                <span className="font-medium text-neutral-700">{adopcionRD.country}</span>
-                <div className="flex gap-3">
-                  <span className="text-[#0066FF]">
-                    Adopción <strong>{adopcionRD.wau.toFixed(1)}%</strong>
-                  </span>
-                  <span style={{ color: ALEGRA_GREEN }}>
-                    Real <strong>{adopcionRD.wac.toFixed(1)}%</strong>
-                  </span>
-                </div>
-              </div>
-              <div className="relative h-6 w-full overflow-hidden rounded-full bg-neutral-100">
-                <div
-                  className="absolute left-0 top-0 h-full rounded-full"
-                  style={{ width: `${Math.min(adopcionRD.wau, 100)}%`, backgroundColor: "#0066FF40" }}
-                />
-                <div
-                  className="absolute left-0 top-0 h-full rounded-full"
-                  style={{ width: `${Math.min(adopcionRD.wac, 100)}%`, backgroundColor: ALEGRA_GREEN }}
-                />
-              </div>
-              <div className="mt-3 grid grid-cols-2 gap-3 text-[11px]">
-                <div className="rounded-lg bg-blue-50 p-3">
-                  <p className="font-bold uppercase tracking-wider text-blue-700">Adopción</p>
-                  <p className="mt-1 text-2xl font-bold text-neutral-900">{adopcionRD.wau.toFixed(1)}%</p>
-                  <p className="text-[10px] text-neutral-500">MAU APP / MAC WEB</p>
-                </div>
-                <div className="rounded-lg bg-emerald-50 p-3">
-                  <p className="font-bold uppercase tracking-wider" style={{ color: ALEGRA_GREEN }}>
-                    Real
-                  </p>
-                  <p className="mt-1 text-2xl font-bold text-neutral-900">{adopcionRD.wac.toFixed(1)}%</p>
-                  <p className="text-[10px] text-neutral-500">MAC APP / MAC WEB</p>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -7132,6 +6997,174 @@ function Section5() {
               El <strong>Agente de Alegra</strong> se lanzará a producción y la <strong>app debe crear el agente</strong>.
             </p>
           </div>
+        </div>
+      </CollapsibleSection>
+
+      {/* Olas */}
+      <CollapsibleSection title="Obligatoriedad" subtitle="Iniciativas por país" color="#7C3AED">
+        <div className="grid gap-4 md:grid-cols-2">
+          {/* Card Ola RD */}
+          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+            <div className="flex items-start justify-between gap-3 flex-wrap">
+              <div className="flex items-start gap-3">
+                <div
+                  className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-lg"
+                  style={{ backgroundColor: "#7C3AED15" }}
+                >
+                  🇩🇴
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-neutral-900">Ola Rep. Dominicana</h3>
+                  <p className="mt-0.5 text-xs text-neutral-500">
+                    Habilitación de factura electrónica en la app
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-4">
+              <div className="rounded-lg border border-emerald-200 bg-emerald-50/60 p-3">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Oportunidad</p>
+                <p className="mt-1 text-xs leading-relaxed text-neutral-800">
+                  La facturación ya queda 1:1 en República Dominicana, pero la habilitación de factura electrónica solo se puede hacer por web. La idea es colocarlo en la app.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Card Ola Venezuela */}
+          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+            <div className="flex items-start gap-3">
+              <div
+                className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-lg"
+                style={{ backgroundColor: "#7C3AED15" }}
+              >
+                🇻🇪
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-neutral-900">Ola Venezuela</h3>
+                <p className="mt-0.5 text-xs text-neutral-500">Nuevo mercado</p>
+              </div>
+            </div>
+
+            <div className="mt-4">
+              <div className="rounded-lg border border-emerald-200 bg-emerald-50/60 p-3">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Oportunidad</p>
+                <p className="mt-1 text-xs leading-relaxed text-neutral-800">
+                  Habilitar un nuevo mercado.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Card Ola Argentina */}
+          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm md:col-span-2">
+            <div className="flex items-start gap-3">
+              <div
+                className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-lg"
+                style={{ backgroundColor: "#7C3AED15" }}
+              >
+                🇦🇷
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-neutral-900">Ola Argentina</h3>
+                <p className="mt-0.5 text-xs text-neutral-500">
+                  Nuevo idioma técnico de facturación (v4.4 y v4.5)
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-4 rounded-lg border border-purple-200 bg-purple-50/50 p-3">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-purple-700">
+                Continuidad operativa
+              </p>
+              <p className="mt-1 text-xs leading-relaxed text-neutral-800">
+                Argentina renueva su <strong>"idioma técnico" de facturación (v4.4 y v4.5)</strong>, suma el régimen <strong>RG 5866</strong> de liquidación mensual para alto volumen y exige mostrar <strong>Ingresos Brutos por provincia</strong> en cada factura. Es el frente de mayor continuidad operativa del semestre: toda la base activa que emite comprobantes queda expuesta, sin segmentar por tamaño.
+              </p>
+            </div>
+          </div>
+
+          {/* % usuarios pagos activos en Rep. Dominicana únicamente */}
+          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+            <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
+              <div>
+                <h3 className="text-sm font-bold text-neutral-900">
+                  % Usuarios pagos activos · Rep. Dominicana
+                </h3>
+                <p className="mt-0.5 text-xs text-neutral-500">
+                  Marzo 2026 · Tasa de Adopción y Tasa Real
+                </p>
+              </div>
+              <a
+                href="https://app.amplitude.com/analytics/alegra/chart/hqcerbqk"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900"
+              >
+                Amplitude <ExternalLink className="h-3 w-3" />
+              </a>
+            </div>
+
+            <div>
+              <div className="mb-1 flex items-center justify-between text-xs">
+                <span className="font-medium text-neutral-700">{adopcionRD.country}</span>
+                <div className="flex gap-3">
+                  <span className="text-[#0066FF]">
+                    Adopción <strong>{adopcionRD.wau.toFixed(1)}%</strong>
+                  </span>
+                  <span style={{ color: ALEGRA_GREEN }}>
+                    Real <strong>{adopcionRD.wac.toFixed(1)}%</strong>
+                  </span>
+                </div>
+              </div>
+              <div className="relative h-6 w-full overflow-hidden rounded-full bg-neutral-100">
+                <div
+                  className="absolute left-0 top-0 h-full rounded-full"
+                  style={{ width: `${Math.min(adopcionRD.wau, 100)}%`, backgroundColor: "#0066FF40" }}
+                />
+                <div
+                  className="absolute left-0 top-0 h-full rounded-full"
+                  style={{ width: `${Math.min(adopcionRD.wac, 100)}%`, backgroundColor: ALEGRA_GREEN }}
+                />
+              </div>
+              <div className="mt-3 grid grid-cols-2 gap-3 text-[11px]">
+                <div className="rounded-lg bg-blue-50 p-3">
+                  <p className="font-bold uppercase tracking-wider text-blue-700">Adopción</p>
+                  <p className="mt-1 text-2xl font-bold text-neutral-900">{adopcionRD.wau.toFixed(1)}%</p>
+                  <p className="text-[10px] text-neutral-500">MAU APP / MAC WEB</p>
+                </div>
+                <div className="rounded-lg bg-emerald-50 p-3">
+                  <p className="font-bold uppercase tracking-wider" style={{ color: ALEGRA_GREEN }}>
+                    Real
+                  </p>
+                  <p className="mt-1 text-2xl font-bold text-neutral-900">{adopcionRD.wac.toFixed(1)}%</p>
+                  <p className="text-[10px] text-neutral-500">MAC APP / MAC WEB</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </CollapsibleSection>
+
+      {/* Soporte (sección aparte, colapsable) */}
+      <CollapsibleSection
+        title="Soporte"
+        subtitle="Solicitudes de soporte desde la app · totales y únicos"
+        color="#F59E0B"
+      >
+        <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+          <div className="mb-5 flex items-start gap-3">
+            <div
+              className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+              style={{ backgroundColor: "#F59E0B20" }}
+            >
+              <Headphones className="h-4 w-4 text-amber-500" />
+            </div>
+            <div>
+              <h3 className="text-base font-bold text-neutral-900">Soporte</h3>
+            </div>
+          </div>
+          <SoporteFuncDetail />
         </div>
       </CollapsibleSection>
 
@@ -7590,8 +7623,9 @@ function PrototypeCard({
 function OportunidadCard({
   op,
 }: {
-  op: { id: string; title: string; tags: string[]; resumen: string };
+  op: { id: string; title: string; tags: string[]; resumen: string; color?: string };
 }) {
+  const accent = op.color ?? ALEGRA_GREEN;
   const tagColor = (t: string) => {
     if (t === "Engagement") return "#FF6B00";
     if (t === "Adopción") return ALEGRA_GREEN;
@@ -7599,13 +7633,16 @@ function OportunidadCard({
     return "#737373";
   };
   return (
-    <div className="flex h-full flex-col rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+    <div
+      className="flex h-full flex-col rounded-2xl border border-neutral-200 border-l-4 bg-white p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+      style={{ borderLeftColor: accent }}
+    >
       <div className="flex items-center gap-2">
         <div
           className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg"
-          style={{ backgroundColor: `${ALEGRA_GREEN}15` }}
+          style={{ backgroundColor: `${accent}15` }}
         >
-          <Lightbulb className="h-3.5 w-3.5" style={{ color: ALEGRA_GREEN }} />
+          <Lightbulb className="h-3.5 w-3.5" style={{ color: accent }} />
         </div>
         <h3 className="text-sm font-bold leading-snug text-neutral-900">{op.title}</h3>
       </div>
