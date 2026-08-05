@@ -68,7 +68,23 @@ export interface RoadmapItem {
   weekEnd: number;
   initiativeId?: string;
   rowId: string;
+  /** Optional explicit color (Tailwind bg-* class). When set, overrides the color derived from type/objective. */
+  color?: string;
 }
+
+// Palette offered when creating/editing a cell. `value` is the Tailwind bg class
+// stored on the item; leaving it unset falls back to the type/objective color.
+const COLOR_OPTIONS: { label: string; value: string }[] = [
+  { label: "Verde (Adopción)", value: "bg-[hsl(var(--badge-adoption))]" },
+  { label: "Azul (Experiencia)", value: "bg-[hsl(var(--badge-experience))]" },
+  { label: "Ámbar", value: "bg-amber-500" },
+  { label: "Violeta", value: "bg-violet-500" },
+  { label: "Rosa", value: "bg-rose-500" },
+  { label: "Cian", value: "bg-cyan-600" },
+  { label: "Naranja", value: "bg-orange-500" },
+  { label: "Rojo", value: "bg-red-500" },
+  { label: "Pizarra", value: "bg-slate-500" },
+];
 
 interface RowDef {
   id: string;
@@ -253,6 +269,7 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
             week_end: i.week_end,
             initiative_id: i.initiative_id,
             row_id: prefix + stripSrc(i.row_id),
+            color: i.color ?? null,
             updated_at: new Date().toISOString(),
           })) : buildInitialItems(prefix).map(i => ({
             id: i.id,
@@ -263,6 +280,7 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
             week_end: i.weekEnd,
             initiative_id: i.initiativeId || null,
             row_id: i.rowId,
+            color: i.color ?? null,
             updated_at: new Date().toISOString(),
           })));
 
@@ -291,6 +309,7 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
             weekEnd: i.week_end,
             initiativeId: i.initiative_id,
             rowId: i.row_id,
+            color: i.color ?? undefined,
           })));
         }
       } catch (err) {
@@ -314,6 +333,7 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
         week_end: item.weekEnd,
         initiative_id: item.initiativeId || null,
         row_id: item.rowId,
+        color: item.color || null,
         updated_at: new Date().toISOString(),
       });
     } catch (err) {
@@ -373,6 +393,7 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
   const getInitiative = (id?: string) => initiatives.find(i => i.id === id);
 
   const getItemColor = (item: RoadmapItem) => {
+    if (item.color) return item.color;
     if (item.type === "issues") return "bg-amber-500";
     if (item.type === "improvements") return "bg-[hsl(var(--badge-experience))]";
     if (item.objectiveTag === "experience") return "bg-[hsl(var(--badge-experience))]";
@@ -406,6 +427,7 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
       weekStart: creatingItem.week,
       weekEnd: creatingItem.week,
       rowId: creatingItem.rowId,
+      color: newItemData.color,
     };
     setItems(prev => [...prev, newItem]);
     saveItem(newItem);
@@ -966,6 +988,13 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
                     />
                   </div>
                 </div>
+                <div className="space-y-2">
+                  <Label>Color</Label>
+                  <ColorSwatches
+                    value={editingItem.color}
+                    onChange={c => setEditingItem({ ...editingItem, color: c })}
+                  />
+                </div>
                 <div className="flex justify-between pt-2">
                   <Button
                     variant="destructive"
@@ -1035,6 +1064,13 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
                   </SelectContent>
                 </Select>
               </div>
+            </div>
+            <div className="space-y-2">
+              <Label>Color</Label>
+              <ColorSwatches
+                value={newItemData.color}
+                onChange={c => setNewItemData({ ...newItemData, color: c })}
+              />
             </div>
             <div className="flex justify-end gap-2 pt-2">
               <Button variant="outline" onClick={() => setCreatingItem(null)}>Cancelar</Button>
@@ -1120,6 +1156,47 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
       </AlertDialog>
 
     </>
+  );
+}
+
+// --- Color Picker ---
+
+interface ColorSwatchesProps {
+  value?: string;
+  onChange: (value: string | undefined) => void;
+}
+
+function ColorSwatches({ value, onChange }: ColorSwatchesProps) {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      {/* Automatic: color derived from the objective (default behaviour) */}
+      <button
+        type="button"
+        onClick={() => onChange(undefined)}
+        title="Automático (según objetivo)"
+        className={`h-7 rounded-md border px-2 text-xs transition-colors ${
+          !value
+            ? "border-ring bg-muted text-foreground"
+            : "border-border text-muted-foreground hover:bg-muted"
+        }`}
+      >
+        Auto
+      </button>
+      {COLOR_OPTIONS.map(opt => (
+        <button
+          key={opt.value}
+          type="button"
+          onClick={() => onChange(opt.value)}
+          title={opt.label}
+          aria-label={opt.label}
+          className={`h-7 w-7 rounded-full transition-transform ${opt.value} ${
+            value === opt.value
+              ? "ring-2 ring-ring ring-offset-2 ring-offset-background"
+              : "hover:scale-110"
+          }`}
+        />
+      ))}
+    </div>
   );
 }
 
@@ -1274,17 +1351,28 @@ function RoadmapRow({
               isSingle ? "rounded-md" : isStart ? "rounded-l-md" : isEnd ? "rounded-r-md" : ""
             }`}
           >
-            {/* Delete button on hover (only on start cell) */}
+            {/* Edit + delete buttons on hover (only on start cell) */}
             {isStart && (
-              <button
-                onClick={e => { e.stopPropagation(); onDeleteItem(item); }}
-                onMouseDown={e => e.stopPropagation()}
-                draggable={false}
-                className="absolute top-0.5 right-0.5 z-20 opacity-0 group-hover:opacity-100 transition-opacity bg-black/40 hover:bg-destructive rounded p-0.5"
-                title="Eliminar celda"
-              >
-                <Trash2 className="h-2.5 w-2.5 text-white" />
-              </button>
+              <div className="absolute top-0.5 right-0.5 z-20 flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button
+                  onClick={e => { e.stopPropagation(); onEditItem(item); }}
+                  onMouseDown={e => e.stopPropagation()}
+                  draggable={false}
+                  className="bg-black/40 hover:bg-black/70 rounded p-0.5"
+                  title="Editar celda (nombre, color)"
+                >
+                  <Pencil className="h-2.5 w-2.5 text-white" />
+                </button>
+                <button
+                  onClick={e => { e.stopPropagation(); onDeleteItem(item); }}
+                  onMouseDown={e => e.stopPropagation()}
+                  draggable={false}
+                  className="bg-black/40 hover:bg-destructive rounded p-0.5"
+                  title="Eliminar celda"
+                >
+                  <Trash2 className="h-2.5 w-2.5 text-white" />
+                </button>
+              </div>
             )}
             {/* Left resize handle */}
             {isStart && (
