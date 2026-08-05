@@ -2545,6 +2545,8 @@ function BaseSosPorPais() {
 
 // === General: Q1 vs Q2 · Adopción y engagement por funcionalidad ===
 const mesesQ = ["Ene", "Feb", "Mar", "Abr", "May", "Jun"];
+// Meses de las gráficas General (charts am4dj5wu, wm943spe, 990ajtj0) — extendidas a Jul '26.
+const mesesGen = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul"];
 
 // Adopción por funcionalidad — Q1 (chart yn056fo0, Marzo) vs Q2 (chart ptw2jzb4, Junio) '26
 const adopcionQ1Q2Data = [
@@ -2559,18 +2561,31 @@ const adopcionQ1Q2Data = [
   { event: "Crear factura de proveedor", Q1: 2.7, Q2: 2.8 },
 ];
 
-// Evolución mensual % adopción por funcionalidad (chart am4dj5wu, Ene → Jun '26)
+// Evolución mensual % adopción por funcionalidad (chart 990ajtj0, Ene → Jul '26)
 const funcionalidadesMensual: MonthlyAdoptionSeries[] = [
-  { num: 1, label: "Crear factura",              series: zip(mesesQ, [57.4, 57.9, 57.7, 57.3, 57.5, 58.6]) },
-  { num: 2, label: "Buscar factura",             series: zip(mesesQ, [37.8, 37.4, 39.7, 38.1, 40.2, 39.8]) },
-  { num: 6, label: "Ver gráfico de ventas",      series: zip(mesesQ, [31.5, 31.1, 31.3, 30.1, 30.4, 29.8]) },
-  { num: 3, label: "Crear contacto",             series: zip(mesesQ, [28.1, 28.7, 27.7, 28.0, 29.2, 29.1]) },
-  { num: 4, label: "Crear cotización",           series: zip(mesesQ, [27.4, 27.6, 27.7, 27.5, 27.8, 26.9]) },
-  { num: 5, label: "Crear ítem",                 series: zip(mesesQ, [21.9, 22.7, 22.5, 22.4, 22.9, 23.1]) },
-  { num: 7, label: "Cuentas por cobrar",         series: zip(mesesQ, [16.0, 15.2, 15.4, 15.0, 15.3, 13.9]) },
-  { num: 8, label: "Crear remisión",             series: zip(mesesQ, [3.5, 3.6, 3.5, 3.7, 3.9, 3.8]) },
-  { num: 9, label: "Crear factura de proveedor", series: zip(mesesQ, [2.9, 2.6, 2.7, 2.7, 2.8, 2.8]) },
+  { num: 1, label: "Crear factura",              series: zip(mesesGen, [57.4, 57.9, 57.7, 57.3, 57.5, 58.6, 58.8]) },
+  { num: 2, label: "Buscar factura",             series: zip(mesesGen, [37.8, 37.4, 39.7, 38.1, 40.2, 39.8, 37.5]) },
+  { num: 6, label: "Ver gráfico de ventas",      series: zip(mesesGen, [31.5, 31.1, 31.3, 30.1, 30.4, 29.8, 33.8]) },
+  { num: 3, label: "Crear contacto",             series: zip(mesesGen, [28.1, 28.7, 27.7, 28.0, 29.2, 29.1, 30.7]) },
+  { num: 4, label: "Crear cotización",           series: zip(mesesGen, [27.4, 27.6, 27.7, 27.5, 27.8, 26.9, 28.5]) },
+  { num: 5, label: "Crear ítem",                 series: zip(mesesGen, [21.9, 22.7, 22.5, 22.4, 22.9, 23.1, 23.3]) },
+  { num: 7, label: "Cuentas por cobrar",         series: zip(mesesGen, [16.0, 15.2, 15.4, 15.0, 15.3, 13.9, 14.3]) },
+  { num: 8, label: "Crear remisión",             series: zip(mesesGen, [3.5, 3.6, 3.5, 3.7, 3.9, 3.8, 3.9]) },
+  { num: 9, label: "Crear factura de proveedor", series: zip(mesesGen, [2.9, 2.6, 2.7, 2.7, 2.8, 2.8, 2.5]) },
 ];
+// % adopción año pasado (2025) por funcionalidad — chart 990ajtj0 period-over-period.
+// null = el evento aún no se registraba ese mes en 2025 (no dibujar punto).
+const funcionalidadesMensual2025: Record<string, (number | null)[]> = {
+  "Crear factura":              [62.0, 62.4, 63.1, 63.4, 62.9, 61.1, 59.7],
+  "Buscar factura":             [null, null, null, null, 22.4, 36.4, 37.7],
+  "Ver gráfico de ventas":      [37.8, 36.5, 35.6, 32.9, 30.3, 25.3, 25.7],
+  "Crear contacto":             [32.4, 32.9, 32.5, 32.6, 31.9, 30.0, 30.1],
+  "Crear cotización":           [29.3, 29.9, 29.9, 30.0, 29.1, 27.1, 27.1],
+  "Crear ítem":                 [23.7, 24.3, 24.6, 23.7, 23.3, 22.7, 23.8],
+  "Cuentas por cobrar":         [19.1, 17.5, 17.2, 16.5, 16.6, 16.1, 16.1],
+  "Crear remisión":             [4.3, 4.5, 4.5, 4.6, 4.1, 3.6, 3.8],
+  "Crear factura de proveedor": [null, null, 1.4, 2.8, 2.8, 2.6, 2.6],
+};
 
 // Engagement por funcionalidad (%MAU vs frecuencia) — Q1 (h7txos8w) y Q2 (q0wts3d9)
 const engagementQ1General: EngagementEvent[] = [
@@ -2614,21 +2629,37 @@ const generalFeatures = [
 const usoFeatures = ["Crear factura", "Crear contacto", "Crear cotización", "Crear ítem", "Crear remisión"];
 const usoNumberFmt = (v: number) => v.toLocaleString("es-CO");
 
-// General — Uso por usuario único (chart am4dj5wu)
+// General — Uso por usuario único (chart am4dj5wu) · Ene → Jul '26
 const usoUnicoGeneral: Record<string, number[]> = {
-  "Crear factura":    [4059, 4112, 4344, 4367, 4462, 4523],
-  "Crear contacto":   [1984, 2040, 2089, 2135, 2269, 2247],
-  "Crear cotización": [1940, 1962, 2086, 2093, 2155, 2079],
-  "Crear ítem":       [1550, 1614, 1692, 1703, 1777, 1786],
-  "Crear remisión":   [251, 257, 267, 284, 304, 292],
+  "Crear factura":    [4059, 4112, 4344, 4367, 4462, 4523, 4626],
+  "Crear contacto":   [1984, 2040, 2089, 2135, 2269, 2247, 2418],
+  "Crear cotización": [1940, 1962, 2086, 2093, 2155, 2079, 2238],
+  "Crear ítem":       [1550, 1614, 1692, 1703, 1777, 1786, 1829],
+  "Crear remisión":   [251, 257, 267, 284, 304, 292, 307],
 };
-// General — Uso por eventos totales (chart wm943spe)
+// Uso por usuario único año pasado (2025) — chart am4dj5wu period-over-period.
+const usoUnicoGeneral2025: Record<string, (number | null)[]> = {
+  "Crear factura":    [4017, 3969, 4007, 3912, 3996, 3874, 4212],
+  "Crear contacto":   [2100, 2091, 2066, 2012, 2026, 1900, 2120],
+  "Crear cotización": [1899, 1901, 1899, 1848, 1849, 1718, 1911],
+  "Crear ítem":       [1537, 1543, 1563, 1461, 1482, 1440, 1681],
+  "Crear remisión":   [279, 284, 285, 283, 262, 228, 269],
+};
+// General — Uso por eventos totales (chart wm943spe) · Ene → Jul '26
 const usoTotalGeneral: Record<string, number[]> = {
-  "Crear factura":    [98440, 101148, 111560, 101693, 104121, 102432],
-  "Crear contacto":   [12204, 13084, 14715, 13417, 13688, 12275],
-  "Crear cotización": [28536, 31704, 35449, 33033, 34260, 33661],
-  "Crear ítem":       [12079, 13182, 13611, 14169, 13637, 13224],
-  "Crear remisión":   [7112, 6987, 7844, 10989, 12128, 11027],
+  "Crear factura":    [98440, 101148, 111560, 101693, 104121, 102432, 108543],
+  "Crear contacto":   [12204, 13084, 14715, 13417, 13688, 12275, 13309],
+  "Crear cotización": [28536, 31704, 35449, 33033, 34260, 33661, 38110],
+  "Crear ítem":       [12079, 13182, 13611, 14169, 13637, 13224, 14017],
+  "Crear remisión":   [7112, 6987, 7844, 10989, 12128, 11027, 7697],
+};
+// Uso por eventos totales año pasado (2025) — chart wm943spe period-over-period.
+const usoTotalGeneral2025: Record<string, (number | null)[]> = {
+  "Crear factura":    [101060, 99792, 107168, 98068, 105472, 88991, 103490],
+  "Crear contacto":   [13897, 12522, 12458, 11665, 12619, 11228, 13153],
+  "Crear cotización": [24117, 25126, 27303, 25051, 26411, 21588, 25635],
+  "Crear ítem":       [10934, 10767, 10799, 10678, 10574, 9976, 15209],
+  "Crear remisión":   [6048, 6868, 7232, 7723, 7107, 5267, 6065],
 };
 // Core/Lite — Uso por usuario único (chart p3r1xdm6)
 const usoUnicoCoreLite: { CORE: Record<string, number[]>; LITE: Record<string, number[]> } = {
@@ -2742,14 +2773,18 @@ function AdopcionUsoChips({ view, onChange }: { view: "adopcion" | "uso"; onChan
 }
 
 // Chart de uso (General): una línea por funcionalidad
-function UsoFeatureChart({ title, subtitle, url, dataByFeature, active }: {
+// Al seleccionar una funcionalidad se muestra además la línea del año pasado (punteada)
+// y dos chips de variación: vs mismo mes '25 y vs enero '26.
+function UsoFeatureChart({ title, subtitle, url, dataByFeature, data2025, active }: {
   title: string; subtitle: string; url: string;
-  dataByFeature: Record<string, number[]>; active: string | null;
+  dataByFeature: Record<string, number[]>; data2025?: Record<string, (number | null)[]>; active: string | null;
 }) {
   const feats = active ? usoFeatures.filter((f) => f === active) : usoFeatures;
-  const rows = mesesQ.map((m, i) => {
-    const row: Record<string, string | number> = { month: m };
+  const prev = active ? data2025?.[active] : undefined;
+  const rows = mesesGen.map((m, i) => {
+    const row: Record<string, string | number | null> = { month: m };
     feats.forEach((f) => { row[f] = dataByFeature[f][i]; });
+    if (prev) row["__2025"] = prev[i];
     return row;
   });
   const firsts: Record<string, number> = {};
@@ -2764,15 +2799,13 @@ function UsoFeatureChart({ title, subtitle, url, dataByFeature, active }: {
         <AmplitudeLink href={url} />
       </div>
       {active && (
-        <div className="mb-3 max-w-xs">
-          <VariationCard
-            label={active}
-            first={dataByFeature[active][0]}
-            last={dataByFeature[active][dataByFeature[active].length - 1]}
-            fmt={usoNumberFmt}
-            color={colorForEvent(active)}
-          />
-        </div>
+        <YoYVariation
+          label={active}
+          serie2026={dataByFeature[active]}
+          serie2025={prev}
+          fmt={usoNumberFmt}
+          color={colorForEvent(active)}
+        />
       )}
       <div className="h-[300px] w-full">
         <ResponsiveContainer width="100%" height="100%">
@@ -2785,9 +2818,30 @@ function UsoFeatureChart({ title, subtitle, url, dataByFeature, active }: {
             {feats.map((f) => (
               <Line key={f} type="monotone" dataKey={f} stroke={colorForEvent(f)} strokeWidth={feats.length === 1 ? 3 : 2} dot={{ r: feats.length === 1 ? 4 : 2 }} activeDot={{ r: 6 }} />
             ))}
+            {prev && (
+              <Line type="monotone" dataKey="__2025" name={`${active} 2025`} stroke="#94a3b8" strokeWidth={2} strokeDasharray="5 5" dot={{ r: 3 }} connectNulls={false} />
+            )}
           </LineChart>
         </ResponsiveContainer>
       </div>
+    </div>
+  );
+}
+
+// Dos chips de variación al seleccionar una funcionalidad: vs mismo mes '25 y vs enero '26.
+function YoYVariation({ label, serie2026, serie2025, fmt, color }: {
+  label: string; serie2026: number[]; serie2025?: (number | null)[] | null;
+  fmt: (v: number) => string; color?: string;
+}) {
+  const last = serie2026[serie2026.length - 1];
+  const ene = serie2026[0];
+  const prevYear = serie2025 ? serie2025[serie2025.length - 1] : null;
+  return (
+    <div className="mb-3 grid max-w-lg gap-2 sm:grid-cols-2">
+      <VariationCard label={`${label} · vs Ene '26`} first={ene} last={last} fmt={fmt} color={color} />
+      {prevYear != null && (
+        <VariationCard label={`${label} · vs Jul '25`} first={prevYear} last={last} fmt={fmt} color={color} />
+      )}
     </div>
   );
 }
@@ -2842,9 +2896,11 @@ function ComportamientoGeneralView() {
 
   const barData = activeFeature ? adopcionQ1Q2Data.filter((d) => d.event === activeFeature) : adopcionQ1Q2Data;
   const mensualSeries = activeFeature ? funcionalidadesMensual.filter((s) => s.label === activeFeature) : funcionalidadesMensual;
-  const mensualRows = mesesQ.map((m, i) => {
-    const row: Record<string, string | number> = { month: m };
+  const mensualPrev = activeFeature ? funcionalidadesMensual2025[activeFeature] : undefined;
+  const mensualRows = mesesGen.map((m, i) => {
+    const row: Record<string, string | number | null> = { month: m };
     mensualSeries.forEach((s) => { row[s.label] = s.series[i].pct; });
+    if (mensualPrev) row["__2025"] = mensualPrev[i];
     return row;
   });
   const mensualFirsts: Record<string, number> = {};
@@ -2867,16 +2923,18 @@ function ComportamientoGeneralView() {
           />
           <UsoFeatureChart
             title="Uso por usuario único"
-            subtitle="Usuarios únicos por funcionalidad · Ene → Jun '26"
+            subtitle="Usuarios únicos por funcionalidad · Ene → Jul '26"
             url="https://app.amplitude.com/analytics/alegra/chart/am4dj5wu?linkingDashboardId=js3lbrd0&sharingId=rJY0OQs4"
             dataByFeature={usoUnicoGeneral}
+            data2025={usoUnicoGeneral2025}
             active={usoFeature}
           />
           <UsoFeatureChart
             title="Uso por eventos totales"
-            subtitle="Eventos totales por funcionalidad · Ene → Jun '26"
+            subtitle="Eventos totales por funcionalidad · Ene → Jul '26"
             url="https://app.amplitude.com/analytics/alegra/chart/wm943spe?linkingDashboardId=js3lbrd0&sharingId=NHVjYnUZ"
             dataByFeature={usoTotalGeneral}
+            data2025={usoTotalGeneral2025}
             active={usoFeature}
           />
         </div>
@@ -2956,23 +3014,21 @@ function ComportamientoGeneralView() {
               Funcionalidades — % adopción mensual
             </h4>
             <p className="mt-0.5 text-xs text-neutral-500">
-              % de usuarios activos por funcionalidad · Ene → Jun '26
+              % de usuarios activos por funcionalidad · Ene → Jul '26
             </p>
           </div>
-          <a href="https://app.amplitude.com/analytics/alegra/chart/am4dj5wu" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900">
+          <a href="https://app.amplitude.com/analytics/alegra/chart/990ajtj0" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900">
             Amplitude <ExternalLink className="h-3 w-3" />
           </a>
         </div>
-        {activeFeature && (
-          <div className="mb-3 max-w-xs">
-            <VariationCard
-              label={activeFeature}
-              first={mensualFirsts[activeFeature]}
-              last={mensualSeries[0].series[mensualSeries[0].series.length - 1].pct}
-              fmt={pctFmt1}
-              color={colorForEvent(activeFeature)}
-            />
-          </div>
+        {activeFeature && mensualSeries[0] && (
+          <YoYVariation
+            label={activeFeature}
+            serie2026={mensualSeries[0].series.map((p) => p.pct)}
+            serie2025={mensualPrev}
+            fmt={pctFmt1}
+            color={colorForEvent(activeFeature)}
+          />
         )}
         <div className="h-[300px] w-full">
           <ResponsiveContainer width="100%" height="100%">
@@ -2993,6 +3049,9 @@ function ComportamientoGeneralView() {
                   activeDot={{ r: 6 }}
                 />
               ))}
+              {mensualPrev && (
+                <Line type="monotone" dataKey="__2025" name={`${activeFeature} 2025`} stroke="#94a3b8" strokeWidth={2} strokeDasharray="5 5" dot={{ r: 3 }} connectNulls={false} />
+              )}
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -3548,30 +3607,30 @@ const months6 = ["Ene", "Feb", "Mar", "Abr", "May", "Jun"];
 // Mobile First / Web First llegan hasta Julio (chart aq7o241v/edit/8b1x1p75).
 const months7 = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul"];
 
-// % Uniques mensual CORE (chart 3jd1mc2p, Ene → Jun '26)
+// % Uniques mensual CORE (chart 3jd1mc2p, Ene → Jul '26)
 const coreMonthlyAdoption: MonthlyAdoptionSeries[] = [
-  { num: 1, label: "Crear factura",              series: zip(months6, [47.4, 47.1, 48.5, 47.8, 46.9, 49.0]) },
-  { num: 2, label: "Buscar factura",             series: zip(months6, [47.4, 46.4, 47.4, 47.3, 49.5, 50.2]) },
-  { num: 6, label: "Ver gráfico de ventas",      series: zip(months6, [35.4, 34.8, 33.8, 32.9, 33.2, 33.2]) },
-  { num: 4, label: "Crear cotización",           series: zip(months6, [29.4, 30.0, 29.4, 29.5, 30.5, 29.7]) },
-  { num: 3, label: "Crear contacto",             series: zip(months6, [22.2, 22.9, 21.9, 21.3, 23.2, 23.0]) },
-  { num: 5, label: "Crear ítem",                 series: zip(months6, [14.6, 16.2, 16.6, 15.4, 17.3, 15.9]) },
-  { num: 7, label: "Cuentas por cobrar",         series: zip(months6, [21.5, 19.8, 19.1, 18.6, 19.6, 18.0]) },
-  { num: 8, label: "Crear remisión",             series: zip(months6, [5.3, 5.2, 4.6, 5.3, 5.5, 5.3]) },
-  { num: 9, label: "Crear factura de proveedor", series: zip(months6, [3.2, 2.9, 3.3, 3.3, 3.1, 3.3]) },
+  { num: 1, label: "Crear factura",              series: zip(months7, [47.4, 47.1, 48.5, 47.8, 46.9, 49.0, 49.5]) },
+  { num: 2, label: "Buscar factura",             series: zip(months7, [47.4, 46.4, 47.4, 47.3, 49.5, 50.2, 46.6]) },
+  { num: 6, label: "Ver gráfico de ventas",      series: zip(months7, [35.4, 34.8, 33.8, 32.9, 33.2, 33.2, 36.7]) },
+  { num: 4, label: "Crear cotización",           series: zip(months7, [29.4, 30.0, 29.4, 29.5, 30.5, 29.7, 30.4]) },
+  { num: 3, label: "Crear contacto",             series: zip(months7, [22.2, 22.9, 21.9, 21.3, 23.2, 23.0, 24.4]) },
+  { num: 5, label: "Crear ítem",                 series: zip(months7, [14.6, 16.2, 16.6, 15.4, 17.3, 15.9, 16.4]) },
+  { num: 7, label: "Cuentas por cobrar",         series: zip(months7, [21.5, 19.8, 19.1, 18.6, 19.6, 18.0, 17.7]) },
+  { num: 8, label: "Crear remisión",             series: zip(months7, [5.3, 5.2, 4.6, 5.3, 5.5, 5.3, 5.2]) },
+  { num: 9, label: "Crear factura de proveedor", series: zip(months7, [3.2, 2.9, 3.3, 3.3, 3.1, 3.3, 2.8]) },
 ];
 
-// % Uniques mensual LITE (chart 3jd1mc2p, Ene → Jun '26)
+// % Uniques mensual LITE (chart 3jd1mc2p, Ene → Jul '26)
 const liteMonthlyAdoption: MonthlyAdoptionSeries[] = [
-  { num: 1, label: "Crear factura",              series: zip(months6, [64.5, 65.6, 63.6, 64.6, 65.4, 65.5]) },
-  { num: 3, label: "Crear contacto",             series: zip(months6, [31.9, 32.5, 30.4, 32.8, 33.4, 33.5]) },
-  { num: 2, label: "Buscar factura",             series: zip(months6, [31.1, 31.0, 32.8, 30.9, 33.3, 32.2]) },
-  { num: 6, label: "Ver gráfico de ventas",      series: zip(months6, [28.3, 28.0, 27.4, 27.5, 27.8, 27.1]) },
-  { num: 5, label: "Crear ítem",                 series: zip(months6, [26.7, 27.0, 25.4, 27.2, 26.8, 27.9]) },
-  { num: 4, label: "Crear cotización",           series: zip(months6, [25.9, 26.1, 26.6, 25.8, 25.8, 24.8]) },
-  { num: 7, label: "Cuentas por cobrar",         series: zip(months6, [12.1, 11.7, 12.0, 12.1, 11.8, 10.8]) },
-  { num: 8, label: "Crear remisión",             series: zip(months6, [2.3, 2.6, 2.6, 2.5, 2.7, 2.7]) },
-  { num: 9, label: "Crear factura de proveedor", series: zip(months6, [2.7, 2.4, 2.1, 2.3, 2.4, 2.4]) },
+  { num: 1, label: "Crear factura",              series: zip(months7, [64.5, 65.6, 63.6, 64.6, 65.4, 65.5, 65.6]) },
+  { num: 3, label: "Crear contacto",             series: zip(months7, [31.9, 32.5, 30.4, 32.8, 33.4, 33.5, 35.2]) },
+  { num: 2, label: "Buscar factura",             series: zip(months7, [31.1, 31.0, 32.8, 30.9, 33.3, 32.2, 30.7]) },
+  { num: 6, label: "Ver gráfico de ventas",      series: zip(months7, [28.3, 28.0, 27.4, 27.5, 27.8, 27.1, 31.2]) },
+  { num: 5, label: "Crear ítem",                 series: zip(months7, [26.7, 27.0, 25.4, 27.2, 26.8, 27.9, 28.1]) },
+  { num: 4, label: "Crear cotización",           series: zip(months7, [25.9, 26.1, 26.6, 25.8, 25.8, 24.8, 27.1]) },
+  { num: 7, label: "Cuentas por cobrar",         series: zip(months7, [12.1, 11.7, 12.0, 12.1, 11.8, 10.8, 11.4]) },
+  { num: 8, label: "Crear remisión",             series: zip(months7, [2.3, 2.6, 2.6, 2.5, 2.7, 2.7, 3.0]) },
+  { num: 9, label: "Crear factura de proveedor", series: zip(months7, [2.7, 2.4, 2.1, 2.3, 2.4, 2.4, 2.2]) },
 ];
 
 function zip(months: string[], vals: number[]): { month: string; pct: number }[] {
