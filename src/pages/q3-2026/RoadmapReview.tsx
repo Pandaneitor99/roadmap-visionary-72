@@ -942,14 +942,13 @@ const macLinePerCountry = trendMonths.map((month, i) => ({
 }));
 
 const macPieData = [
-  { name: "Colombia", value: 5132, color: ALEGRA_GREEN },
-  { name: "República Dominicana", value: 1199, color: "#0066FF" },
-  { name: "México", value: 728, color: "#FF6B00" },
-  { name: "Panamá", value: 278, color: "#7C3AED" },
-  { name: "Costa Rica", value: 235, color: "#06B6D4" },
-  { name: "Argentina", value: 189, color: "#F59E0B" },
-  { name: "Perú", value: 90, color: "#EC4899" },
-  { name: "Otros", value: 152, color: "#9CA3AF" },
+  { name: "Colombia", value: 7704, color: ALEGRA_GREEN },
+  { name: "República Dominicana", value: 1675, color: "#0066FF" },
+  { name: "México", value: 1112, color: "#FF6B00" },
+  { name: "Costa Rica", value: 378, color: "#06B6D4" },
+  { name: "Panamá", value: 368, color: "#7C3AED" },
+  { name: "Argentina", value: 256, color: "#F59E0B" },
+  { name: "Perú", value: 140, color: "#EC4899" },
 ];
 
 const macPieTotal = macPieData.reduce((s, d) => s + d.value, 0);
@@ -2718,7 +2717,7 @@ function DeltaTooltip({ active, payload, label, firsts, fmt }: {
 function AdopcionUsoChips({ view, onChange }: { view: "adopcion" | "uso"; onChange: (v: "adopcion" | "uso") => void }) {
   return (
     <div className="inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1">
-      {(["adopcion", "uso"] as const).map((v) => (
+      {(["uso", "adopcion"] as const).map((v) => (
         <button
           key={v}
           onClick={() => onChange(v)}
