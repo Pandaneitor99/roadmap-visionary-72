@@ -161,14 +161,18 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
   const [loading, setLoading] = useState(true);
   const [selectedInitiative, setSelectedInitiative] = useState<typeof initiatives[0] | null>(null);
   const [editingItem, setEditingItem] = useState<RoadmapItem | null>(null);
+  // Name of the initiative (row) being edited — shown in the left "Iniciativa" column.
+  const [editingRowLabel, setEditingRowLabel] = useState("");
   const [dropTarget, setDropTarget] = useState<{ rowId: string; week: number } | null>(null);
   const dragRef = useRef<DragState | null>(null);
   const resizeRef = useRef<ResizeState | null>(null);
   const [dragRowId, setDragRowId] = useState<string | null>(null);
   const [sprintCount, setSprintCount] = useState(initialSprintCount);
-  const sprints = generateSprints(sprintCount, startSprint);
+  // Number of the first visible sprint. Stateful so the first sprint can also be removed.
+  const [firstSprint, setFirstSprint] = useState(startSprint);
+  const sprints = generateSprints(sprintCount, firstSprint);
   const totalWeeks = sprintCount * 2;
-  const startWeek = (startSprint - 1) * 2 + 1;
+  const startWeek = (firstSprint - 1) * 2 + 1;
   const [resizingItemId, setResizingItemId] = useState<string | null>(null);
   // Expand initiative label column when sidebar is collapsed (more horizontal space available)
   const { state: sidebarState } = useSidebar();
@@ -596,12 +600,32 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
   }, [dragRowId, saveRows]);
 
   // --- Edit item ---
+  // Open the editor for an initiative, pre-filling both the block fields and the
+  // initiative (row) name shown in the left column.
+  const handleStartEdit = useCallback((item: RoadmapItem) => {
+    setEditingItem(item);
+    const row = rows.find(r => r.id === item.rowId);
+    setEditingRowLabel(row?.label ?? item.title);
+  }, [rows]);
+
   const handleEditSave = useCallback(() => {
     if (!editingItem) return;
     setItems(prev => prev.map(i => i.id === editingItem.id ? editingItem : i));
     saveItem(editingItem);
+    // Also update the initiative (row) name shown in the left column, so the edit
+    // is visible on screen and not only inside the editor.
+    const newLabel = editingRowLabel.trim();
+    if (newLabel) {
+      setRows(prev => {
+        const idx = prev.findIndex(r => r.id === editingItem.rowId);
+        if (idx === -1 || prev[idx].label === newLabel) return prev;
+        const updated = prev.map(r => r.id === editingItem.rowId ? { ...r, label: newLabel } : r);
+        saveNewRow(updated[idx], idx);
+        return updated;
+      });
+    }
     setEditingItem(null);
-  }, [editingItem, saveItem]);
+  }, [editingItem, editingRowLabel, saveItem, saveNewRow]);
 
   const renderSection = (sectionRows: RowDef[], sectionLabel?: string) => (
     <>
@@ -623,7 +647,7 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
-            onEditItem={setEditingItem}
+            onEditItem={handleStartEdit}
             dropTarget={dropTarget}
             onRowDragStart={handleRowDragStart}
             onRowDragOver={handleRowDragOver}
@@ -725,7 +749,21 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
               onClick={() => setSprintCount(prev => Math.max(1, prev - 1))}
             >
               <Minus className="h-3 w-3" />
-              Eliminar sprint
+              Eliminar último sprint
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              disabled={sprintCount <= 1}
+              className="text-xs text-muted-foreground hover:text-foreground gap-1 disabled:opacity-40"
+              onClick={() => {
+                if (sprintCount <= 1) return;
+                setFirstSprint(prev => prev + 1);
+                setSprintCount(prev => Math.max(1, prev - 1));
+              }}
+            >
+              <Minus className="h-3 w-3" />
+              Eliminar primer sprint
             </Button>
           </div>
 
@@ -862,7 +900,15 @@ export function RoadmapGantt({ startSprint = 1, initialSprintCount = INITIAL_SPR
               </DialogHeader>
               <div className="space-y-4 mt-4">
                 <div className="space-y-2">
-                  <Label>Título</Label>
+                  <Label>Nombre de la iniciativa</Label>
+                  <Input
+                    value={editingRowLabel}
+                    onChange={e => setEditingRowLabel(e.target.value)}
+                    placeholder="Nombre visible en la columna izquierda"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Título del bloque</Label>
                   <Input
                     value={editingItem.title}
                     onChange={e => setEditingItem({ ...editingItem, title: e.target.value })}
