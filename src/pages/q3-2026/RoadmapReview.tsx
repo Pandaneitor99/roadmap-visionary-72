@@ -5713,12 +5713,13 @@ const tendenciaPerfilLogo = [
   { mes: "Jun '26", pct: 1.0 },
 ];
 
-// --- Funnel App Mobile por país (chart tnh09978) - solo CO, MX, CR, PE ---
-const funnelPorPais: Record<string, { perfil: number; onboarding: number; pql: number; logo: number; conv: number }> = {
-  Colombia: { perfil: 1236, onboarding: 1077, pql: 271, logo: 21, conv: 1.70 },
-  Mexico: { perfil: 569, onboarding: 498, pql: 78, logo: 5, conv: 0.88 },
-  "Costa Rica": { perfil: 126, onboarding: 111, pql: 25, logo: 2, conv: 1.59 },
-  "Rep. Dominicana": { perfil: 938, onboarding: 812, pql: 198, logo: 16, conv: 1.71 },
+// --- Funnel PQL App Mobile por país (chart tnh09978) - hasta PQL, sin Logo ---
+// conv = conversión a PQL (pql / perfil).
+const funnelPorPais: Record<string, { perfil: number; onboarding: number; pql: number; conv: number }> = {
+  Colombia: { perfil: 1236, onboarding: 1077, pql: 271, conv: 21.93 },
+  Mexico: { perfil: 569, onboarding: 498, pql: 78, conv: 13.71 },
+  "Costa Rica": { perfil: 126, onboarding: 111, pql: 25, conv: 19.84 },
+  "Rep. Dominicana": { perfil: 938, onboarding: 812, pql: 198, conv: 21.11 },
 };
 
 // --- Perfil por país (chart 42w27hn3) - totales últimas 24 semanas (sin USA) ---
@@ -6081,7 +6082,7 @@ function CountrySelectorCards({
             <p className="mt-1 text-2xl font-bold" style={{ color: isActive ? color : "#111827" }}>
               {d.conv.toFixed(2)}%
             </p>
-            <p className="text-[10px] text-neutral-500">{d.perfil.toLocaleString()} perfiles · conversión total</p>
+            <p className="text-[10px] text-neutral-500">{d.perfil.toLocaleString()} perfiles · conversión a PQL</p>
           </button>
         );
       })}
@@ -6097,8 +6098,8 @@ function FunnelByCountryCard({
   setSelected: (c: string | null) => void;
 }) {
   const countries = Object.keys(funnelPorPais);
-  const stepKeys = ["perfil", "onboarding", "pql", "logo"] as const;
-  const stepLabels = ["Perfil", "Onboarding", "PQL · Intento", "Logo · Pago"];
+  const stepKeys = ["perfil", "onboarding", "pql"] as const;
+  const stepLabels = ["Perfil", "Onboarding", "PQL · Intento"];
 
   const visibleCountries = selected ? [selected] : countries;
 
@@ -6123,7 +6124,7 @@ function FunnelByCountryCard({
           <h3 className="mt-1 text-base font-bold text-neutral-900">Funnel PQL App Mobile por País</h3>
         </div>
         <a
-          href="https://app.amplitude.com/analytics/alegra/chart/tnh09978"
+          href="https://app.amplitude.com/analytics/alegra/chart/tnh09978?sharingId=127E4YWh"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-500 hover:text-neutral-800"
@@ -6138,7 +6139,7 @@ function FunnelByCountryCard({
         </span>
         {selected ? (
           <span className="text-xs text-neutral-500">
-            conversión total{" "}
+            conversión a PQL{" "}
             <span className="font-semibold" style={{ color: COUNTRY_COLORS[selected] }}>
               {funnelPorPais[selected].conv.toFixed(2)}%
             </span>
