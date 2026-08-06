@@ -34,9 +34,9 @@ const sections = [
   { id: 2, title: "North Star y métricas clave", short: "North Star" },
   { id: 3, title: "Base de usuarios y MRR", short: "Usuarios & MRR" },
   { id: 4, title: "Comportamiento de usuarios", short: "Comportamiento" },
-  { id: 5, title: "Resultados del período", short: "Resultados" },
-  { id: 6, title: "Issues", short: "Issues" },
-  { id: 7, title: "Funnel", short: "Funnel" },
+  { id: 5, title: "Funnel", short: "Funnel" },
+  { id: 6, title: "Resultados del período", short: "Resultados" },
+  { id: 7, title: "Issues", short: "Issues" },
   { id: 8, title: "Diagnóstico y oportunidades", short: "Diagnóstico" },
 ];
 
@@ -136,11 +136,11 @@ export default function RoadmapReviewQ32026() {
           ) : current === 4 ? (
             <SectionComportamiento />
           ) : current === 5 ? (
-            <Section4 />
-          ) : current === 6 ? (
-            <SectionIssues />
-          ) : current === 7 ? (
             <SectionFunnel />
+          ) : current === 6 ? (
+            <Section4 />
+          ) : current === 7 ? (
+            <SectionIssues />
           ) : current === 8 ? (
             <Section5 />
           ) : (
@@ -5676,7 +5676,6 @@ const funnelComboPQL = [
   { step: "Perfil", todosCount: 3335, todosPct: 100, mobileCount: 10567, mobilePct: 100 },
   { step: "Onboarding", todosCount: 2886, todosPct: 86.54, mobileCount: 6960, mobilePct: 65.87 },
   { step: "PQL · Intento factura", todosCount: 589, todosPct: 17.66, mobileCount: 1593, mobilePct: 15.08 },
-  { step: "Logo · Pago", todosCount: 39, todosPct: 1.17, mobileCount: 105, mobilePct: 0.99 },
 ];
 
 // --- Funnels combinados sin PQL: Mobile App vs Mobile web ---
@@ -5736,7 +5735,6 @@ const perfilPorPaisTotal: { country: string; uniques: number }[] = [
 
 // --- Eventos Onboarding Mensual (chart j30yk1tu/edit/584t53it, Ene → Jun '26) ---
 const eventosOnboardingMensual = [
-  { mes: "Ene '26", perfil: 268, mql: 226, pql: 47 },
   { mes: "Feb '26", perfil: 884, mql: 738, pql: 158 },
   { mes: "Mar '26", perfil: 877, mql: 751, pql: 153 },
   { mes: "Abr '26", perfil: 1268, mql: 1089, pql: 222 },
@@ -5757,11 +5755,15 @@ function FunnelComboCard({
   subtitle,
   source,
   data,
+  appUrl,
+  webUrl,
 }: {
   title: string;
   subtitle: string;
   source?: string;
   data: FunnelComboDatum[];
+  appUrl?: string;
+  webUrl?: string;
 }) {
   const [mode, setMode] = useState<"pct" | "num">("pct");
   const finalTodos = data[data.length - 1].todosPct;
@@ -5774,6 +5776,30 @@ function FunnelComboCard({
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">{subtitle}</p>
           <h3 className="mt-1 text-base font-bold text-neutral-900">{title}</h3>
           {source && <p className="mt-1 text-xs text-neutral-500">{source}</p>}
+          {(appUrl || webUrl) && (
+            <div className="mt-1.5 flex items-center gap-3">
+              {appUrl && (
+                <a
+                  href={appUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-500 hover:text-neutral-800"
+                >
+                  <ExternalLink className="h-3 w-3" /> App
+                </a>
+              )}
+              {webUrl && (
+                <a
+                  href={webUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-500 hover:text-neutral-800"
+                >
+                  <ExternalLink className="h-3 w-3" /> Web
+                </a>
+              )}
+            </div>
+          )}
         </div>
         <div className="inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-0.5">
           <button
@@ -5896,14 +5922,14 @@ const trendsConfig: Record<
     label: "Perfil → PQL",
     subtitle: "Intento de factura",
     color: "#FF6B00",
-    url: "https://app.amplitude.com/analytics/alegra/chart/txoefzi7",
+    url: "https://app.amplitude.com/analytics/alegra/chart/b6xrlqln?sharingId=gw-WDBf2",
     data: tendenciaPerfilPQL,
   },
   logo: {
     label: "Perfil → Logo",
     subtitle: "Pago suscripción",
     color: "#0066FF",
-    url: "https://app.amplitude.com/analytics/alegra/chart/kcf69jc1",
+    url: "https://app.amplitude.com/analytics/alegra/chart/kcf69jc1?sharingId=1ZQFDudA",
     data: tendenciaPerfilLogo,
   },
 };
@@ -6094,7 +6120,7 @@ function FunnelByCountryCard({
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">App Mobile · por país</p>
-          <h3 className="mt-1 text-base font-bold text-neutral-900">Funnel Entero App Mobile por País</h3>
+          <h3 className="mt-1 text-base font-bold text-neutral-900">Funnel PQL App Mobile por País</h3>
         </div>
         <a
           href="https://app.amplitude.com/analytics/alegra/chart/tnh09978"
@@ -6193,43 +6219,27 @@ function PerfilPorPaisCard() {
         <span className="text-xs text-neutral-500">perfiles seleccionados (top {perfilPorPaisTotal.length} países)</span>
       </div>
 
-      <div className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-2">
-        <div className="h-[240px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={perfilPorPaisTotal}
-                dataKey="uniques"
-                nameKey="country"
-                cx="50%"
-                cy="50%"
-                outerRadius={85}
-                innerRadius={45}
-                paddingAngle={2}
-              >
-                {perfilPorPaisTotal.map((_, i) => (
-                  <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip
-                contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 12 }}
-                formatter={(v: number, n: string) => [v.toLocaleString(), n]}
-              />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-        <div className="space-y-1.5">
-          {perfilPorPaisTotal.map((row, i) => (
-            <div key={row.country} className="flex items-center gap-2 text-xs">
-              <span
-                className="h-2.5 w-2.5 shrink-0 rounded-sm"
-                style={{ backgroundColor: PIE_COLORS[i % PIE_COLORS.length] }}
-              />
-              <span className="flex-1 truncate font-medium text-neutral-700">{row.country}</span>
-              <span className="font-semibold text-neutral-900">{row.uniques.toLocaleString()}</span>
+      <div className="mt-5 space-y-3">
+        {perfilPorPaisTotal.map((row, i) => {
+          const pct = totalPerfiles > 0 ? (row.uniques / totalPerfiles) * 100 : 0;
+          return (
+            <div key={row.country} className="text-xs">
+              <div className="mb-1 flex items-center justify-between gap-2">
+                <span className="truncate font-medium text-neutral-700">{row.country}</span>
+                <span className="flex shrink-0 items-baseline gap-1.5">
+                  <span className="font-semibold text-neutral-900">{row.uniques.toLocaleString()}</span>
+                  <span className="tabular-nums text-neutral-400">{pct.toFixed(1)}%</span>
+                </span>
+              </div>
+              <div className="h-2 w-full overflow-hidden rounded-full bg-neutral-100">
+                <div
+                  className="h-full rounded-full"
+                  style={{ width: `${pct}%`, backgroundColor: PIE_COLORS[i % PIE_COLORS.length] }}
+                />
+              </div>
             </div>
-          ))}
-        </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -6267,7 +6277,7 @@ function EventosOnboardingSemanalCard() {
           </div>
         </div>
         <a
-          href="https://app.amplitude.com/analytics/alegra/chart/j30yk1tu/edit/584t53it"
+          href="https://app.amplitude.com/analytics/alegra/chart/j30yk1tu"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-500 hover:text-neutral-800"
@@ -6340,7 +6350,7 @@ function SectionFunnel() {
             </p>
             <h2 className="mt-1 text-2xl font-bold text-neutral-900">Funnel</h2>
             <p className="mt-2 text-sm leading-relaxed text-neutral-600">
-              Segmento <strong>entrepreneur</strong> · Año en curso. Comparamos el funnel <strong>Mobile App</strong> frente a <strong>Mobile web</strong>, con y sin PQL (intento de factura). Debajo, el funnel <strong>App Mobile por país</strong> y la distribución de perfiles por mercado.
+              Segmento <strong>entrepreneur</strong> · Año en curso. Comparamos el funnel <strong>Mobile App</strong> frente a <strong>Mobile web</strong>, hasta el <strong>PQL</strong> (intento de factura) y hasta el <strong>pago (logo)</strong>. Debajo, el funnel <strong>App Mobile por país</strong> y la distribución de perfiles por mercado.
             </p>
           </div>
         </div>
@@ -6349,14 +6359,17 @@ function SectionFunnel() {
       {/* Funnels combinados Mobile App vs Mobile web - 2 columnas */}
       <div className="grid gap-6 lg:grid-cols-2">
         <FunnelComboCard
-          title="Funnel Entero — Mobile App vs Mobile web"
-          subtitle="Con PQL · 4 pasos"
-          
+          title="Funnel PQL — Mobile App vs Mobile Web"
+          subtitle="Hasta PQL · 3 pasos"
+          appUrl="https://app.amplitude.com/analytics/alegra/chart/tgvpb7n5?linkingDashboardId=24u2xxhe&source=dashboard"
+          webUrl="https://app.amplitude.com/analytics/alegra/chart/ozsknaof?linkingDashboardId=24u2xxhe&source=dashboard"
           data={funnelComboPQL}
         />
         <FunnelComboCard
-          title="Funnel Entero sin PQL — Mobile App vs Mobile web"
-          subtitle="Sin PQL · 3 pasos"
+          title="Funnel a Logo — Mobile App vs Mobile web"
+          subtitle="Hasta Logo · 3 pasos"
+          appUrl="https://app.amplitude.com/analytics/alegra/chart/6lwwlzbl?linkingDashboardId=24u2xxhe&source=dashboard"
+          webUrl="https://app.amplitude.com/analytics/alegra/dashboard/24u2xxhe"
           data={funnelComboSinPQL}
         />
       </div>
@@ -6972,7 +6985,7 @@ function Section5() {
             </div>
             <div>
               <h3 className="text-base font-bold text-neutral-900">
-                Funnel Entero sin PQL — Mobile App vs Mobile web
+                Funnel a Logo — Mobile App vs Mobile web
               </h3>
               <p className="mt-0.5 text-xs text-neutral-500">
                 Comparativo de adquisición entre canales · Año en curso · entrepreneur
@@ -7023,9 +7036,10 @@ function Section5() {
           </div>
 
           <FunnelComboCard
-            title="Funnel Entero sin PQL — Mobile App vs Mobile web"
-            subtitle="Sin PQL · 3 pasos · Adquisición"
-            
+            title="Funnel a Logo — Mobile App vs Mobile web"
+            subtitle="Hasta Logo · 3 pasos · Adquisición"
+            appUrl="https://app.amplitude.com/analytics/alegra/chart/6lwwlzbl?linkingDashboardId=24u2xxhe&source=dashboard"
+            webUrl="https://app.amplitude.com/analytics/alegra/dashboard/24u2xxhe"
             data={funnelComboSinPQL}
           />
         </div>
@@ -7693,9 +7707,9 @@ function SectionAgenda() {
     "Visión",
     "North star metric",
     "Segmentación y comportamiento",
+    "Funnel",
     "Resultados",
     "Issues",
-    "Funnel",
     "Diagnóstico",
   ];
 
