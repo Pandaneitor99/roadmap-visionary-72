@@ -396,7 +396,7 @@ const segmentos: Segmento[] = [
     id: "contador",
     nombre: "Contador",
     badge: "Sub-servido",
-    tamano: "~3% del MAC (~266 usuarios)",
+    tamano: "~3% del MAC (~297 usuarios)",
     dolor: "Medio",
     impacto: "Adopción",
     alternativa: "Reportes en web, llamadas al cliente",
@@ -703,9 +703,9 @@ function SideMetricCard({
 function Section2() {
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
   const last = macTrendData[macTrendData.length - 1];
-  const prevMonth = macTrendData[macTrendData.length - 2];
+  const enero = macTrendData[0];
   const deltaPct = (((last.y2026 - last.y2025) / last.y2025) * 100).toFixed(1);
-  const deltaMonthPct = (((last.y2026 - prevMonth.y2026) / prevMonth.y2026) * 100).toFixed(1);
+  const deltaEneroPct = (((last.y2026 - enero.y2026) / enero.y2026) * 100).toFixed(1);
 
   return (
     <div className="space-y-8">
@@ -852,10 +852,10 @@ function Section2() {
           <SideMetricCard
             label="MAC actual"
             value={last.y2026}
-            delta={Number(deltaMonthPct)}
+            delta={Number(deltaEneroPct)}
             color={ALEGRA_GREEN}
             highlight
-            compareLabel="vs Jun '26"
+            compareLabel="vs Ene '26"
             delta2={Number(deltaPct)}
             compareLabel2="vs Jul '25"
           />
@@ -5296,7 +5296,7 @@ const q3Okrs: typeof okrs = [
     type: "adoption",
     keyResults: [
       { id: "kr-2.1", name: "Lograr que al menos 10000 usuarios pagos realicen una acción de valor desde la app durante el trimestre", baseline: "4k", target: "10000", percentage: "119.6%", currentResult: "8785", achievedIncrease: "119.6%" },
-      { id: "kr-2.2", name: "Alcanzar 6k usuarios que facturen mensualmente desde la app móvil al final del trimestre", baseline: "—", target: "6k", percentage: "—", currentResult: "4,6k", achievedIncrease: "—" },
+      { id: "kr-2.2", name: "Alcanzar 6k usuarios que facturen mensualmente desde la app móvil al final del trimestre", baseline: "4k", target: "6k", percentage: "15%", currentResult: "4,6k", achievedIncrease: "15%" },
       { id: "kr-2.3", name: "Incrementar de 2k usuarios a 3k usuarios creando contactos mensualmente desde la app", baseline: "2k", target: "3k", percentage: "25%", currentResult: "2,5k", achievedIncrease: "25%" },
     ],
   },
@@ -6624,6 +6624,13 @@ const featureColorOf = (feature: string) => {
 
 const oportunidades = [
   {
+    id: "factura-venta",
+    title: "Factura de venta",
+    tags: ["Adopción", "Experiencia"],
+    color: INICIATIVA_COLORS["factura-venta"],
+    resumen: "Faltan retenciones y remisiones en varias versiones y crear factura desde foto.",
+  },
+  {
     id: "pagos",
     title: "Pagos recibidos",
     tags: ["Adopción", "Engagement"],
@@ -6636,13 +6643,6 @@ const oportunidades = [
     tags: ["Experiencia", "Adopción"],
     color: INICIATIVA_COLORS["detalle-factura"],
     resumen: "Faltan imprimir y clonar; sumarlas al detalle para cerrar el ciclo sin volver al PC.",
-  },
-  {
-    id: "factura-venta",
-    title: "Factura de venta",
-    tags: ["Adopción", "Experiencia"],
-    color: INICIATIVA_COLORS["factura-venta"],
-    resumen: "Faltan retenciones y remisiones en varias versiones y crear factura desde foto.",
   },
   {
     id: "reportes",
