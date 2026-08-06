@@ -634,12 +634,12 @@ const macTrendData = [
   { month: "Jul", y2026: 9066, y2025: 7139 },
 ];
 
-// Variación por país (chart gxbjwfwt): Jul '26 vs Jun '26 (mes anterior) y vs Jul '25 (año pasado)
+// Variación por país (chart gxbjwfwt): Jul '26 vs Ene '26 (inicio de año) y vs Jul '25 (año pasado)
 const countryVariation = [
-  { country: "Colombia", current: 5760, prevMonth: 5571, prevYear: 4608, color: ALEGRA_GREEN },
-  { country: "República Dominicana", current: 1345, prevMonth: 1317, prevYear: 1063, color: "#0066FF" },
-  { country: "México", current: 897, prevMonth: 874, prevYear: 666, color: "#FF6B00" },
-  { country: "Costa Rica", current: 309, prevMonth: 313, prevYear: 201, color: "#06B6D4" },
+  { country: "Colombia", current: 5760, enero: 4660, prevYear: 4608, color: ALEGRA_GREEN },
+  { country: "República Dominicana", current: 1345, enero: 1034, prevYear: 1063, color: "#0066FF" },
+  { country: "México", current: 897, enero: 630, prevYear: 666, color: "#FF6B00" },
+  { country: "Costa Rica", current: 309, enero: 213, prevYear: 201, color: "#06B6D4" },
 ];
 
 function SideMetricCard({
@@ -862,11 +862,11 @@ function Section2() {
         </div>
       </div>
 
-      {/* Variación por país: Jun '26 vs Jun '25 — clic para filtrar la línea */}
+      {/* Variación por país: Jul '26 vs Ene '26 y vs Jul '25 — clic para filtrar la línea */}
       <div>
         <div className="mb-3 flex items-center justify-between gap-3">
           <h3 className="text-base font-bold text-neutral-900">
-            MAC por país — Jul '26 · vs Jun '26 y vs Jul '25
+            MAC por país — Jul '26 · vs Ene '26 y vs Jul '25
           </h3>
           {selectedCountry && (
             <button
@@ -880,7 +880,7 @@ function Section2() {
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {countryVariation.map((c) => {
-            const deltaMonth = ((c.current - c.prevMonth) / c.prevMonth) * 100;
+            const deltaEnero = ((c.current - c.enero) / c.enero) * 100;
             const deltaYear = ((c.current - c.prevYear) / c.prevYear) * 100;
             const isActive = selectedCountry === c.country;
             const DeltaPill = ({ value, label }: { value: number; label: string }) => {
@@ -922,7 +922,7 @@ function Section2() {
                   {c.current.toLocaleString("es-CO")}
                 </p>
                 <div className="mt-1.5 space-y-0.5">
-                  <DeltaPill value={deltaMonth} label="vs Jun '26" />
+                  <DeltaPill value={deltaEnero} label="vs Ene '26" />
                   <DeltaPill value={deltaYear} label="vs Jul '25" />
                 </div>
               </button>
